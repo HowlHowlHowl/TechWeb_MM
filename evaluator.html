@@ -1,10 +1,36 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    
+    
+	<script type="text/javascript">
+    $(document).ready(function() {  
+        $.ajax({
+            accepts: 'application/json',
+            url: 'stories',
+            success: function(data) {
+                let list = $('#stories-list');
+                data.forEach(function(s) {
+                    list.append($(document.createElement('li')).text(s));
+                });
+            },
+            error: function(data) {
+                alert("Errore di caricamento delle storie");
+            }
+        });
+    });
+    </script>
+    
     <meta charset="utf-8"/>
     <title>Evaluator</title>
 </head>
 <body>
     <h1>Evaluator</h1>
+    <ul id="stories-list">
+    </ul>
 </body>
 </html>
