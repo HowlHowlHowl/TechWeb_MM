@@ -8,21 +8,6 @@
     
     
 	<script type="text/javascript">
-    $(document).ready(function() {  
-        $.ajax({
-            accepts: 'application/json',
-            url: 'stories',
-            success: function(data) {
-                let list = $('#stories-list');
-                data.forEach(function(s) {
-                    list.append($(document.createElement('li')).text(s));
-                });
-            },
-            error: function(data) {
-                alert("Errore di caricamento delle storie");
-            }
-        });
-    });
     </script>
     
     <meta charset="utf-8"/>
@@ -30,7 +15,5 @@
 </head>
 <body>
     <h1>Evaluator</h1>
-    <ul id="stories-list">
-    </ul>
 </body>
 </html>

@@ -8,21 +8,119 @@
     
     
 	<script type="text/javascript">
-    $(document).ready(function() {  
+    
+    function updateStories() {
         $.ajax({
             accepts: 'application/json',
-            url: 'stories',
+            url: '/stories',
             success: function(data) {
-                let list = $('#stories-list');
+                let published_list = $('#stories-published');
+                let archived_list = $('#stories-archived');
+                published_list.empty();
+                archived_list.empty();
+                
                 data.forEach(function(s) {
-                    list.append($(document.createElement('li')).text(s));
+                    let item = $(document.createElement('li'));
+                    item.attr("story-id", s.id);
+                    let text = s.name + ' - ' + (s.accessible ? 'Accessibile!' : 'Non accessibile!');
+                    if(s.published) {
+                        published_list.append(item.text(text));
+                    } else {
+                        archived_list.append(item.text(text));
+                    }
                 });
             },
-            error: function(data) {
-                alert("Errore di caricamento delle storie");
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert(xhr.status + ' - ' + thrownError);
             }
         });
+    }
+    
+    $(document).ready(function() {
+        updateStories();
     });
+    
+    function postStory()
+    {
+        let story = {
+            name: "Storia",
+            accessible: true,
+            published: true,
+            missions: 
+            [
+                {
+                    activities:
+                    [
+                    ]
+                }
+            ]
+        };
+        
+        $.ajax({
+            url: '/stories',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(story),
+            
+            success: function(data) {
+                updateStories();
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert(xhr.status + ' - ' + thrownError);
+            }
+        });
+    }
+    
+    function updateStory()
+    {
+        let id = 3;
+        
+        let story = {
+            id: id,
+            name: "Storia updated",
+            accessible: false,
+            published: false,
+            missions: 
+            [
+                {
+                    activities:
+                    [
+                    ]
+                }
+            ]
+        };
+        
+        $.ajax({
+            url: '/stories/' + id,
+            type: 'PUT',
+            contentType: 'application/json',
+            data: JSON.stringify(story),
+            
+            success: function(data) {
+                updateStories();
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert(xhr.status + ' - ' + thrownError);
+            }
+        });
+    }
+    
+    function actionOnStory(action, id) {
+        $.ajax({
+            url: '/stories/' + id,
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ action: action}),
+            
+            success: function(data) {
+                updateStories();
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert(xhr.status + ' - ' + thrownError);
+            }
+        });
+    }
+    
     </script>
     
     <meta charset="utf-8"/>
@@ -30,7 +128,18 @@
 </head>
 <body>
     <h1>Author</h1>
-    <ul id="stories-list">
+    <h4>Published</h4>
+    <ul id="stories-published">
     </ul>
+    
+    <h4>Archived</h4>
+    <ul id="stories-archived">
+    </ul>
+    <button onclick="postStory()">POST!</button>
+    <button onclick="updateStory()">UPDATE!</button>
+    <button onclick="actionOnStory('archive', 4)">ARCHIVE!</button>
+    <button onclick="actionOnStory('publish', 4)">PUBLISH!</button>
+    <button onclick="actionOnStory('duplicate', 4)">DUPLICATE!</button>
+    <button onclick="actionOnStory('delete', 4)">DELETE!</button>
 </body>
 </html>
