@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
+	<meta charset="UTF-8">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
@@ -8,8 +9,72 @@
     
     
 	<script type="text/javascript">
+    var selectedStoryButton = null;
+    var loadedStory = null;
+    var editorDirty = false;
+    
+    function editorNameChange(element) {
+        if(loadedStory.name != element.value) {
+            loadedStory.name = element.value;
+            editorDirty = true;
+        }
+    }
+    
+    function editorAccessibleChange(element) {
+        loadedStory.accessible = element.checked;
+        editorDirty = true;
+    }
+    
+    function clearSelectedStory() {
+        selectedStoryButton = null;
+        loadedStory = null;
+        $("#editor-placeholder").removeClass("d-none");
+        $("#editor-area").addClass("d-none");
+    }
+    
+    function selectStory(id) {
+        $.ajax({
+            accepts: 'application/json',
+            url: '/stories/' + id,
+            success: function(data) {
+                editorDirty = false;
+                loadedStory = data;
+                $("#editor-placeholder").addClass("d-none");
+                $("#editor-area").removeClass("d-none");
+                $("#editor-name").val(loadedStory.name);
+                $("#editor-accessible").prop("checked", loadedStory.accessible);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert(xhr.status + ' - ' + thrownError);
+            }
+        });
+    }
+    
+    function onClickStory(element) {
+        if(editorDirty) {
+            $("#save-modal").modal();
+            return;
+        }
+        
+        if(selectedStoryButton) {
+            selectedStoryButton.removeClass("active");
+        }
+        selectedStoryButton = element;
+        element.addClass("active");
+        selectStory(element.attr("story-id"));
+    }
+    
+    function modalSave() {
+        updateSelectedStory();
+    }
+    
+    function modalDiscard() {
+        editorDirty = false;
+        updateStories();
+    }
     
     function updateStories() {
+        clearSelectedStory();
         $.ajax({
             accepts: 'application/json',
             url: '/stories',
@@ -20,15 +85,18 @@
                 archived_list.empty();
                 
                 data.forEach(function(s) {
-                    let item = $(document.createElement('li'));
+                    let item = $(document.createElement('button'));
+                    item.addClass("list-group-item list-group-item-action");
                     item.attr("story-id", s.id);
-                    let text = s.name + ' - ' + (s.accessible ? 'Accessibile!' : 'Non accessibile!');
+                    item.on("click", (event) => onClickStory(item));
+                    let text = s.name + (s.accessible ? ' <span style="float: right;">\uD83D\uDC41</span>' : '');
                     if(s.published) {
-                        published_list.append(item.text(text));
+                        published_list.append(item.html(text));
                     } else {
-                        archived_list.append(item.text(text));
+                        archived_list.append(item.html(text));
                     }
                 });
+                
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 alert(xhr.status + ' - ' + thrownError);
@@ -40,12 +108,17 @@
         updateStories();
     });
     
-    function postStory()
+    function newStory(published)
     {
+        if(editorDirty) {
+            $("#save-modal").modal();
+            return;
+        }
+        
         let story = {
-            name: "Storia",
-            accessible: true,
-            published: true,
+            name: "Nuova storia",
+            accessible: false,
+            published: published,
             missions: 
             [
                 {
@@ -71,54 +144,45 @@
         });
     }
     
-    function updateStory()
+    function updateSelectedStory()
     {
-        let id = 3;
-        
-        let story = {
-            id: id,
-            name: "Storia updated",
-            accessible: false,
-            published: false,
-            missions: 
-            [
-                {
-                    activities:
-                    [
-                    ]
+        if(loadedStory)
+        {
+            editorDirty = false;
+            let id = loadedStory.id;
+            $.ajax({
+                url: '/stories/' + id,
+                type: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify(loadedStory),
+                
+                success: function(data) {
+                    updateStories();
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert(xhr.status + ' - ' + thrownError);
                 }
-            ]
-        };
-        
-        $.ajax({
-            url: '/stories/' + id,
-            type: 'PUT',
-            contentType: 'application/json',
-            data: JSON.stringify(story),
-            
-            success: function(data) {
-                updateStories();
-            },
-            error: function (xhr, ajaxOptions, thrownError) {
-                alert(xhr.status + ' - ' + thrownError);
-            }
-        });
+            });
+        }
     }
     
-    function actionOnStory(action, id) {
-        $.ajax({
-            url: '/stories/' + id,
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify({ action: action}),
-            
-            success: function(data) {
-                updateStories();
-            },
-            error: function (xhr, ajaxOptions, thrownError) {
-                alert(xhr.status + ' - ' + thrownError);
-            }
-        });
+    function actionOnSelectedStory(action) {
+        if(loadedStory) {
+            let id = loadedStory.id;
+            $.ajax({
+                url: '/stories/' + id,
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ action: action}),
+                
+                success: function(data) {
+                    updateStories();
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert(xhr.status + ' - ' + thrownError);
+                }
+            });
+        }
     }
     
     </script>
@@ -128,18 +192,60 @@
 </head>
 <body>
     <h1>Author</h1>
-    <h4>Published</h4>
-    <ul id="stories-published">
-    </ul>
     
-    <h4>Archived</h4>
-    <ul id="stories-archived">
-    </ul>
-    <button onclick="postStory()">POST!</button>
-    <button onclick="updateStory()">UPDATE!</button>
-    <button onclick="actionOnStory('archive', 4)">ARCHIVE!</button>
-    <button onclick="actionOnStory('publish', 4)">PUBLISH!</button>
-    <button onclick="actionOnStory('duplicate', 4)">DUPLICATE!</button>
-    <button onclick="actionOnStory('delete', 4)">DELETE!</button>
+    <div class="row p-3">
+        <div class="col-2">
+            <button style="float: right;" onclick="newStory(true)">New</button>
+            <h4>Published</h4>
+            <div class="list-group" id="stories-published">
+            
+            </div> <div class="m-3"></div>
+            
+            <button style="float: right;" onclick="newStory(false)">New</button>
+            <h4>Archived</h4>
+            <div class="list-group" id="stories-archived">
+            </div>
+        </div>
+        <div class="col-6" id="editor-placeholder">
+            <p>Seleziona una storia da modificare</p>
+        </div>
+        <div class="col-6 d-none" id="editor-area">
+            <div class="form-group">
+                <label for="editor-name">Nome</label>
+                <input type="text" class="form-control" id="editor-name" onchange="editorNameChange(this)">
+            </div>
+            <div class="form-check">
+               <input type="checkbox" class="form-check-input" id="editor-accessible" onchange="editorAccessibleChange(this)">
+               <label class="form-check-label" for="editor-accessible">Accessibile</label>
+            </div>
+            <button onclick="actionOnSelectedStory('delete')">DELETE!</button>
+            <button onclick="actionOnSelectedStory('publish')">PUBLISH!</button>
+            <button onclick="actionOnSelectedStory('archive')">ARCHIVE!</button>
+            <button onclick="actionOnSelectedStory('duplicate')">DUPLICATE!</button>
+            <button onclick="updateSelectedStory()">Salva</button>
+        </div>
+    </div>
+    
+    <div class="modal" id="save-modal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Modifiche non salvate</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p>Salvare le modifiche effettuate?</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal" onClick="modalSave()">Salva</button>
+            <button type="button" class="btn btn-primary" data-dismiss="modal" onClick="modalDiscard()">Scarta</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Annulla</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
 </body>
 </html>

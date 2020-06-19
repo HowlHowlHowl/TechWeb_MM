@@ -43,12 +43,8 @@ app.post('/stories', function(req, res) {
     {
         new_id = nextStoryId++;
         story.id = new_id;
-        fs.writeFile("stories/story" + new_id + ".json", JSON.stringify(story), function(err) {
-            if(!err) {
-                res.status(200).send();
-            } else {
-                res.status(500).send();
-            }
+        fs.writeFile("stories/story" + new_id + ".json", JSON.stringify(story, null, 2), function(err) {
+            res.status(err ? 500 : 200).send();
         });
     } else {
         res.status(400).send();
@@ -62,12 +58,8 @@ app.put('/stories/:id', function(req, res) {
     if(checkStory(story)) {
         let path = "stories/story" + id + ".json";
         if(fs.existsSync(path)) {
-            fs.writeFile(path, JSON.stringify(story), function(err) {
-                if(!err) {
-                    res.status(200).send();
-                } else {
-                    res.status(500).send();
-                }
+            fs.writeFile(path, JSON.stringify(story, null, 2), function(err) {
+                res.status(err ? 500 : 200).send();
             });
         } else {
             res.status(400).send();
@@ -91,8 +83,10 @@ app.post('/stories/:id', function(req, res) {
                         res.status(500).send();
                     } else {
                         let new_id = nextStoryId++;
+                        let story = JSON.parse(data);
+                        story.id = new_id;
                         let path = "stories/story" + new_id + ".json";
-                        fs.writeFile(path, data, function(err) {
+                        fs.writeFile(path, JSON.stringify(story, null, 2), function(err) {
                             res.status(err ? 500 : 200).send();
                         });
                     }
@@ -109,7 +103,7 @@ app.post('/stories/:id', function(req, res) {
                         let path = "stories/story" + id + ".json";
                         
                         story.published = (action == "publish") ? true : false;
-                        fs.writeFile(path, JSON.stringify(story), function(err) {
+                        fs.writeFile(path, JSON.stringify(story, null, 2), function(err) {
                             res.status(err ? 500 : 200).send();
                         });
                     }
@@ -132,10 +126,10 @@ app.post('/stories/:id', function(req, res) {
 });
 
 //Get story by id
-app.post('/stories/:id', function(req, res) {
+app.get('/stories/:id', function(req, res) {
     let id = req.params.id;
     let path = "stories/story" + id + ".json";
-    readFile(path, (err, data) => {
+    fs.readFile(path, (err, data) => {
         if(!err) {
             res.writeHead(200, {'Content-Type': 'application/json'});
             res.write(data);
@@ -144,7 +138,7 @@ app.post('/stories/:id', function(req, res) {
             res.status(400).send();
         }
     });
-}
+});
 
 //Ambiente player
 app.get('/player', function(req, res) {

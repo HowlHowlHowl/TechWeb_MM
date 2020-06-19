@@ -1,26 +1,22 @@
 {
-    "id": 1,
-    "name": "Nome della storia 1",
-    "accessible": true,
-    "published": true,
-    
-    "missions": 
-    [
+  "id": 1,
+  "name": "Nome della storia 1",
+  "accessible": true,
+  "published": true,
+  "missions": [
+    {
+      "activities": [
         {
-            "activities":
-            [
-                {
-                    "title": "Titolo1",
-                    "challenge": true,
-                    "description": "sfida"
-                },
-                
-                {
-                    "title": "Titolo2",
-                    "challenge": false,
-                    "description": "spiegazione"
-                }
-            ]
+          "title": "Titolo1",
+          "challenge": true,
+          "description": "sfida"
+        },
+        {
+          "title": "Titolo2",
+          "challenge": false,
+          "description": "spiegazione"
         }
-    ]
+      ]
+    }
+  ]
 }
