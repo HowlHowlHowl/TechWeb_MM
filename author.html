@@ -7,6 +7,16 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     
+    <style>
+    .editable-name {
+        background-color: transparent;
+        border: 0px;
+        font-weight: bold;
+        font-size: 20pt;
+        display: inline-block;
+        width: 100%;
+    }
+    </style>
     
 	<script type="text/javascript">
     var selectedStoryButton = null;
@@ -25,9 +35,144 @@
         editorDirty = true;
     }
     
+    function createEditableHeader(object, name, font_size) {
+        //type="text" class="editable-name" id="editor-name" onchange="editorNameChange(this)"
+        
+        let div = $(document.createElement("div"));
+        div.css("overflow", "hidden");
+        
+        let head = $(document.createElement("input"));
+        head.attr("value", object[name]);
+        head.attr("type", "text");
+        head.addClass("editable-name");
+        head.css("font-size", font_size);
+        head.on("change", () => {
+            editorDirty = true;
+            object[name] = head.val();
+        });
+        
+        div.append(head);
+        
+        return div;
+    }
+    
+    function addActivityElement(activity, container, mission) {
+        let activity_div = $(document.createElement("div"));
+        activity_div.addClass("p-1");
+        
+        let activity_name = createEditableHeader(activity, "name", "13pt");
+        let group = $(document.createElement('div'));
+        group.addClass("btn-group")
+        group.css("float", "right");
+        group.attr("role", "group");
+        
+        let del = $(document.createElement('button'));
+        del.addClass("btn btn-info btn-sm");
+        del.attr("title", "Elimina");
+        del.text("Del");
+        del.on("click", (event) => {
+            let index = mission.activities.indexOf(activity);
+            if(index != -1) {
+                mission.activities.splice(index, 1);
+            }
+            activity_div.remove();
+            editorDirty = true;
+        });
+        
+        let copy = $(document.createElement('button'));
+        copy.addClass("btn btn-info btn-sm");
+        copy.attr("title", "Copia");
+        copy.text("Copy");
+        copy.on("click", (event) => {
+        });
+        
+        group.append(del);
+        group.append(copy);
+        
+        activity_div.append(group);
+        activity_div.append(activity_name);
+        container.append(activity_div);
+    }
+    
+    function editorNewActivity(mission, container) {
+        editorDirty = true;
+        let activity = {
+            name: "Nuova attività",
+            challenge: true
+        };
+        
+        mission.activities.push(activity);
+        addActivityElement(activity, container, mission);
+    }
+    
+    function addMissionElement(mission) {    
+        let mission_div = $(document.createElement("div"));
+        
+        let mission_name = createEditableHeader(mission, "name", "15pt");
+        
+        let group = $(document.createElement('div'));
+        group.addClass("btn-group float-right")
+        group.attr("role", "group");
+        
+        let del = $(document.createElement('button'));
+        del.addClass("btn btn-secondary btn-sm");
+        del.attr("title", "Elimina");
+        del.text("Del");
+        del.on("click", (event) => {
+            let index = loadedStory.missions.indexOf(mission);
+            if(index != -1) {
+                loadedStory.missions.splice(index, 1);
+            }
+            
+            mission_div.remove();
+            editorDirty = true;
+        });
+        
+        let copy = $(document.createElement('button'));
+        copy.addClass("btn btn-secondary btn-sm");
+        copy.attr("title", "Copia");
+        copy.text("Copy");
+        copy.on("click", (event) => {
+        });
+        
+        group.append(del);
+        group.append(copy);
+        
+        let activities_div = $(document.createElement("div"));
+        activities_div.addClass("p-3");
+        mission.activities.forEach((a) => addActivityElement(a, activities_div, mission));
+        
+        let new_activity = $(document.createElement("button"));
+        new_activity.addClass("btn btn-secondary btn-sm");
+        new_activity.text("Nuova attività");
+        new_activity.on("click", () => editorNewActivity(mission, activities_div));
+        
+        mission_div.append(group);
+        mission_div.append(mission_name);
+        mission_div.append(activities_div);
+        mission_div.append(new_activity);
+        mission_div.append($(document.createElement("hr")));
+        
+        $("#editor-missions").append(mission_div);
+    }
+    
+    function editorNewMission() {
+        editorDirty = true;
+        let mission = {
+            name: "Nuova missione",
+            activities: []
+        };
+        loadedStory.missions.push(mission);
+        addMissionElement(mission);
+    }
+    
     function clearSelectedStory() {
+        if(selectedStoryButton) {
+            selectedStoryButton.removeClass("active");
+        }
         selectedStoryButton = null;
         loadedStory = null;
+        editorDirty = false;
         $("#editor-placeholder").removeClass("d-none");
         $("#editor-area").addClass("d-none");
     }
@@ -43,6 +188,12 @@
                 $("#editor-area").removeClass("d-none");
                 $("#editor-name").val(loadedStory.name);
                 $("#editor-accessible").prop("checked", loadedStory.accessible);
+                
+                $("#editor-missions").empty();
+                loadedStory.missions.forEach((m) => {
+                    addMissionElement(m);
+                });
+                
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 alert(xhr.status + ' - ' + thrownError);
@@ -65,38 +216,73 @@
     }
     
     function modalSave() {
-        updateSelectedStory();
+        saveSelectedStory();
     }
     
     function modalDiscard() {
         editorDirty = false;
-        updateStories();
+        clearSelectedStory();
+    }
+    
+    function addStoryElement(s) {
+        let group = $(document.createElement('div'));
+        group.addClass("btn-group p-1")
+        group.attr("role", "group");
+        
+        let item = $(document.createElement('button'));
+        item.addClass("list-group-item list-group-item-action");
+        item.attr("story-id", s.id);
+        item.on("click", (event) => onClickStory(item));
+        item.html(s.name);
+        
+        if(loadedStory && loadedStory.id == s.id) {
+            selectedStoryButton = item;
+            item.addClass("active");
+        }
+        
+        let del = $(document.createElement('button'));
+        del.addClass("btn btn-outline-primary btn-sm");
+        del.attr("title", "Elimina");
+        del.text("Del");
+        del.on("click", (event) => {
+            $("#modal-delete-message").html("Sicuro di voler eliminare la storia: <b>" + s.name + "</b>?");
+            $("#modal-delete-button").attr("delete-id", s.id);
+            $("#delete-modal").modal();
+        });
+        
+        let swap = $(document.createElement('button'));
+        swap.addClass("btn btn-outline-primary btn-sm");
+        swap.attr("title", "Pubblica/Archivia");
+        swap.text("Swap");
+        swap.on("click", (event) => actionOnStory(s.id, (group.parent().attr("id") == "stories-published") ? "archive" : "publish"));
+        
+        let dup = $(document.createElement('button'));
+        dup.addClass("btn btn-outline-primary btn-sm");
+        dup.attr("title", "Duplica");
+        dup.text("Dup");
+        dup.on("click", (event) => actionOnStory(s.id, "duplicate"));
+        
+        group.append(item);
+        group.append(dup);
+        group.append(swap);
+        group.append(del);
+        
+        if(s.published) {
+            $('#stories-published').append(group);
+        } else {
+            $('#stories-archived').append(group);
+        }
     }
     
     function updateStories() {
-        clearSelectedStory();
         $.ajax({
             accepts: 'application/json',
             url: '/stories',
             success: function(data) {
-                let published_list = $('#stories-published');
-                let archived_list = $('#stories-archived');
-                published_list.empty();
-                archived_list.empty();
+                $('#stories-published').empty();
+                $('#stories-archived').empty();
                 
-                data.forEach(function(s) {
-                    let item = $(document.createElement('button'));
-                    item.addClass("list-group-item list-group-item-action");
-                    item.attr("story-id", s.id);
-                    item.on("click", (event) => onClickStory(item));
-                    let text = s.name + (s.accessible ? ' <span style="float: right;">\uD83D\uDC41</span>' : '');
-                    if(s.published) {
-                        published_list.append(item.html(text));
-                    } else {
-                        archived_list.append(item.html(text));
-                    }
-                });
-                
+                data.forEach(addStoryElement);
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 alert(xhr.status + ' - ' + thrownError);
@@ -110,22 +296,12 @@
     
     function newStory(published)
     {
-        if(editorDirty) {
-            $("#save-modal").modal();
-            return;
-        }
-        
         let story = {
             name: "Nuova storia",
             accessible: false,
             published: published,
             missions: 
             [
-                {
-                    activities:
-                    [
-                    ]
-                }
             ]
         };
         
@@ -144,7 +320,7 @@
         });
     }
     
-    function updateSelectedStory()
+    function saveSelectedStory()
     {
         if(loadedStory)
         {
@@ -166,23 +342,24 @@
         }
     }
     
-    function actionOnSelectedStory(action) {
-        if(loadedStory) {
-            let id = loadedStory.id;
-            $.ajax({
-                url: '/stories/' + id,
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({ action: action}),
-                
-                success: function(data) {
-                    updateStories();
-                },
-                error: function (xhr, ajaxOptions, thrownError) {
-                    alert(xhr.status + ' - ' + thrownError);
+    function actionOnStory(id, action) {
+        console.log("Action: " + action + " on story: " + id);
+        $.ajax({
+            url: '/stories/' + id,
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ action: action}),
+            
+            success: function(data) {
+                if(action == "delete" && loadedStory && loadedStory.id == id) {
+                    clearSelectedStory();
                 }
-            });
-        }
+                updateStories();
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert(xhr.status + ' - ' + thrownError);
+            }
+        });
     }
     
     </script>
@@ -194,38 +371,48 @@
     <h1>Author</h1>
     
     <div class="row p-3">
-        <div class="col-2">
-            <button style="float: right;" onclick="newStory(true)">New</button>
-            <h4>Published</h4>
+    
+    
+        <!-- Area gestione storie -->
+        <div class="col-3">
+            <h4>Pubblicate</h4>
+            <button class="btn btn-primary mb-1 btn-block" onclick="newStory(true)">Crea nuova storia</button>
             <div class="list-group" id="stories-published">
             
             </div> <div class="m-3"></div>
             
-            <button style="float: right;" onclick="newStory(false)">New</button>
-            <h4>Archived</h4>
+            <h4>Archiviate</h4>
+            <button class="btn btn-primary mb-1 btn-block" onclick="newStory(false)">Crea nuova storia</button>
+            
             <div class="list-group" id="stories-archived">
             </div>
         </div>
-        <div class="col-6" id="editor-placeholder">
+        
+        
+        <!-- Placeholder per area editor -->
+        <div class="col-9" id="editor-placeholder">
             <p>Seleziona una storia da modificare</p>
         </div>
-        <div class="col-6 d-none" id="editor-area">
-            <div class="form-group">
-                <label for="editor-name">Nome</label>
-                <input type="text" class="form-control" id="editor-name" onchange="editorNameChange(this)">
-            </div>
+        
+        <!-- Area editor -->
+        <div class="col-9 d-none" id="editor-area" style="background-color: #d2e7fc">
+            <input type="text" class="editable-name" id="editor-name" onchange="editorNameChange(this)">
             <div class="form-check">
                <input type="checkbox" class="form-check-input" id="editor-accessible" onchange="editorAccessibleChange(this)">
                <label class="form-check-label" for="editor-accessible">Accessibile</label>
             </div>
-            <button onclick="actionOnSelectedStory('delete')">DELETE!</button>
-            <button onclick="actionOnSelectedStory('publish')">PUBLISH!</button>
-            <button onclick="actionOnSelectedStory('archive')">ARCHIVE!</button>
-            <button onclick="actionOnSelectedStory('duplicate')">DUPLICATE!</button>
-            <button onclick="updateSelectedStory()">Salva</button>
+            
+            <hr>
+            <div id="editor-missions">
+            </div>
+            
+            <button class="btn btn-primary" onclick="editorNewMission()">Nuova missione</button>
+            <button class="btn btn-primary float-right btn-lg" onclick="saveSelectedStory()">Salva</button>
         </div>
+        
     </div>
     
+    <!-- Finestra modale di salvataggio -->
     <div class="modal" id="save-modal" tabindex="-1" role="dialog">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -241,6 +428,27 @@
           <div class="modal-footer">
             <button type="button" class="btn btn-primary" data-dismiss="modal" onClick="modalSave()">Salva</button>
             <button type="button" class="btn btn-primary" data-dismiss="modal" onClick="modalDiscard()">Scarta</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Annulla</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Finestra modale di eliminazione -->
+    <div class="modal" id="delete-modal" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Eliminazione</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <p id="modal-delete-message"></p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-dismiss="modal" id="modal-delete-button" onclick="actionOnStory($(this).attr('delete-id'), 'delete')">Elimina</button>
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Annulla</button>
           </div>
         </div>

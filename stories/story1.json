@@ -1,20 +1,28 @@
 {
   "id": 1,
-  "name": "Nome della storia 1",
-  "accessible": true,
+  "name": "Storia 35",
+  "accessible": false,
   "published": true,
   "missions": [
     {
+      "name": "Missione 1",
       "activities": [
         {
-          "title": "Titolo1",
-          "challenge": true,
-          "description": "sfida"
+          "name": "Activity 2",
+          "challenge": true
         },
         {
-          "title": "Titolo2",
-          "challenge": false,
-          "description": "spiegazione"
+          "name": "Activity 3",
+          "challenge": true
+        }
+      ]
+    },
+    {
+      "name": "Missione 2   asf",
+      "activities": [
+        {
+          "name": "Activity 4",
+          "challenge": true
         }
       ]
     }
