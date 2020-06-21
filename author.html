@@ -16,12 +16,54 @@
         display: inline-block;
         width: 100%;
     }
+    
+    
+    .activities-div {
+        padding: 15px;
+    }
+    
+    .editable-name-div {
+        overflow: hidden;
+    }
+    
+    .story-div {
+        padding: 5px;
+    }
+    
+    .mission-div {
+        background-color: #a8c5ff;
+        margin: 10px;
+    }
+    
+    .activity-div {
+        margin: 10px;
+        background-color: #87b3ff;
+    }
+    
+    .mission-name {
+        font-size: 15pt;
+    }
+    
+    .activity-name {
+        font-size: 13pt;
+    }
+    
+    
     </style>
     
 	<script type="text/javascript">
     var selectedStoryButton = null;
     var loadedStory = null;
     var editorDirty = false;
+    
+    function modalSave() {
+        saveSelectedStory();
+    }
+    
+    function modalDiscard() {
+        editorDirty = false;
+        clearSelectedStory();
+    }
     
     function editorNameChange(element) {
         if(loadedStory.name != element.value) {
@@ -35,42 +77,13 @@
         editorDirty = true;
     }
     
-    function createEditableHeader(object, name, font_size) {
-        //type="text" class="editable-name" id="editor-name" onchange="editorNameChange(this)"
-        
-        let div = $(document.createElement("div"));
-        div.css("overflow", "hidden");
-        
-        let head = $(document.createElement("input"));
-        head.attr("value", object[name]);
-        head.attr("type", "text");
-        head.addClass("editable-name");
-        head.css("font-size", font_size);
-        head.on("change", () => {
-            editorDirty = true;
-            object[name] = head.val();
-        });
-        
-        div.append(head);
-        
-        return div;
-    }
-    
     function addActivityElement(activity, container, mission) {
-        let activity_div = $(document.createElement("div"));
-        activity_div.addClass("p-1");
+        let activity_div = $($("#template-activity").html());
         
-        let activity_name = createEditableHeader(activity, "name", "13pt");
-        let group = $(document.createElement('div'));
-        group.addClass("btn-group")
-        group.css("float", "right");
-        group.attr("role", "group");
+        linkInputToProperty(activity, "name", activity_div.find(".activity-name"));
         
-        let del = $(document.createElement('button'));
-        del.addClass("btn btn-info btn-sm");
-        del.attr("title", "Elimina");
-        del.text("Del");
-        del.on("click", (event) => {
+        let del = activity_div.find(".activity-del");
+        del.on("click", () => {
             let index = mission.activities.indexOf(activity);
             if(index != -1) {
                 mission.activities.splice(index, 1);
@@ -79,19 +92,11 @@
             editorDirty = true;
         });
         
-        let copy = $(document.createElement('button'));
-        copy.addClass("btn btn-info btn-sm");
-        copy.attr("title", "Copia");
-        copy.text("Copy");
-        copy.on("click", (event) => {
+        let copy = activity_div.find(".activity-copy");
+        copy.on("click", () => {
         });
         
-        group.append(del);
-        group.append(copy);
-        
-        activity_div.append(group);
-        activity_div.append(activity_name);
-        container.append(activity_div);
+        activity_div.appendTo(container);
     }
     
     function editorNewActivity(mission, container) {
@@ -105,20 +110,22 @@
         addActivityElement(activity, container, mission);
     }
     
-    function addMissionElement(mission) {    
-        let mission_div = $(document.createElement("div"));
+    
+    function linkInputToProperty(object, name, input) {
+        input.attr("value", object[name]);
+        input.on("change", () => {
+            editorDirty = true;
+            object[name] = input.val();
+        });
+    }
+    
+    function addMissionElement(mission) {
+        let mission_div = $($("#template-mission").html());
         
-        let mission_name = createEditableHeader(mission, "name", "15pt");
+        linkInputToProperty(mission, "name", mission_div.find(".mission-name"));
         
-        let group = $(document.createElement('div'));
-        group.addClass("btn-group float-right")
-        group.attr("role", "group");
-        
-        let del = $(document.createElement('button'));
-        del.addClass("btn btn-secondary btn-sm");
-        del.attr("title", "Elimina");
-        del.text("Del");
-        del.on("click", (event) => {
+        let del = mission_div.find(".mission-del");
+        del.on("click", () => {
             let index = loadedStory.missions.indexOf(mission);
             if(index != -1) {
                 loadedStory.missions.splice(index, 1);
@@ -128,32 +135,18 @@
             editorDirty = true;
         });
         
-        let copy = $(document.createElement('button'));
-        copy.addClass("btn btn-secondary btn-sm");
-        copy.attr("title", "Copia");
-        copy.text("Copy");
-        copy.on("click", (event) => {
+        let copy = mission_div.find(".mission-copy");
+        copy.on("click", () => {
+            console.log("copy");
         });
         
-        group.append(del);
-        group.append(copy);
-        
-        let activities_div = $(document.createElement("div"));
-        activities_div.addClass("p-3");
+        let activities_div = mission_div.find(".activities-div");
         mission.activities.forEach((a) => addActivityElement(a, activities_div, mission));
         
-        let new_activity = $(document.createElement("button"));
-        new_activity.addClass("btn btn-secondary btn-sm");
-        new_activity.text("Nuova attività");
+        let new_activity = mission_div.find(".new-activity");
         new_activity.on("click", () => editorNewActivity(mission, activities_div));
         
-        mission_div.append(group);
-        mission_div.append(mission_name);
-        mission_div.append(activities_div);
-        mission_div.append(new_activity);
-        mission_div.append($(document.createElement("hr")));
-        
-        $("#editor-missions").append(mission_div);
+        mission_div.appendTo("#editor-missions");
     }
     
     function editorNewMission() {
@@ -201,76 +194,51 @@
         });
     }
     
-    function onClickStory(element) {
-        if(editorDirty) {
-            $("#save-modal").modal();
-            return;
-        }
-        
-        if(selectedStoryButton) {
-            selectedStoryButton.removeClass("active");
-        }
-        selectedStoryButton = element;
-        element.addClass("active");
-        selectStory(element.attr("story-id"));
-    }
-    
-    function modalSave() {
-        saveSelectedStory();
-    }
-    
-    function modalDiscard() {
-        editorDirty = false;
-        clearSelectedStory();
-    }
     
     function addStoryElement(s) {
-        let group = $(document.createElement('div'));
-        group.addClass("btn-group p-1")
-        group.attr("role", "group");
+        let story_div = $($("#template-story").html());
         
-        let item = $(document.createElement('button'));
-        item.addClass("list-group-item list-group-item-action");
-        item.attr("story-id", s.id);
-        item.on("click", (event) => onClickStory(item));
-        item.html(s.name);
+        let item = story_div.find(".list-group-item");
+        item.text(s.name);
+        item.on("click", () => {
+            if(editorDirty) {
+                $("#save-modal").modal();
+                return;
+            }
+            
+            if(selectedStoryButton) {
+                selectedStoryButton.removeClass("active");
+            }
+            selectedStoryButton = item;
+            item.addClass("active");
+            selectStory(s.id);
+        });
         
         if(loadedStory && loadedStory.id == s.id) {
             selectedStoryButton = item;
             item.addClass("active");
         }
         
-        let del = $(document.createElement('button'));
-        del.addClass("btn btn-outline-primary btn-sm");
-        del.attr("title", "Elimina");
-        del.text("Del");
+        let qr = story_div.find(".story-qr");
+        
+        let del = story_div.find(".story-del");
         del.on("click", (event) => {
             $("#modal-delete-message").html("Sicuro di voler eliminare la storia: <b>" + s.name + "</b>?");
             $("#modal-delete-button").attr("delete-id", s.id);
             $("#delete-modal").modal();
         });
         
-        let swap = $(document.createElement('button'));
-        swap.addClass("btn btn-outline-primary btn-sm");
-        swap.attr("title", "Pubblica/Archivia");
-        swap.text("Swap");
-        swap.on("click", (event) => actionOnStory(s.id, (group.parent().attr("id") == "stories-published") ? "archive" : "publish"));
         
-        let dup = $(document.createElement('button'));
-        dup.addClass("btn btn-outline-primary btn-sm");
-        dup.attr("title", "Duplica");
-        dup.text("Dup");
-        dup.on("click", (event) => actionOnStory(s.id, "duplicate"));
+        let swap = story_div.find(".story-swap");
+        swap.on("click", () => actionOnStory(s.id, s.published ? "archive" : "publish"));
         
-        group.append(item);
-        group.append(dup);
-        group.append(swap);
-        group.append(del);
+        let dup = story_div.find(".story-dup");
+        dup.on("click", () => actionOnStory(s.id, "duplicate"));
         
         if(s.published) {
-            $('#stories-published').append(group);
+            $('#stories-published').append(story_div);
         } else {
-            $('#stories-archived').append(group);
+            $('#stories-archived').append(story_div);
         }
     }
     
@@ -289,10 +257,6 @@
             }
         });
     }
-    
-    $(document).ready(function() {
-        updateStories();
-    });
     
     function newStory(published)
     {
@@ -362,6 +326,9 @@
         });
     }
     
+    $(document).ready(function() {
+        updateStories();
+    });
     </script>
     
     <meta charset="utf-8"/>
@@ -370,9 +337,8 @@
 <body>
     <h1>Author</h1>
     
+    <!-- Area principale -->
     <div class="row p-3">
-    
-    
         <!-- Area gestione storie -->
         <div class="col-3">
             <h4>Pubblicate</h4>
@@ -454,6 +420,51 @@
         </div>
       </div>
     </div>
+    
+    
+    <!-- template per widget della storia -->
+    <template id="template-story">
+        <div class="btn-group story-div" role="group">
+            <button class="list-group-item list-group-item-action"></button>
+            <button class="btn btn-outline-primary btn-sm story-qr" title="Genera QRCode">QR</button>
+            <button class="btn btn-outline-primary btn-sm story-del" title="Elimina">Del</button>
+            <button class="btn btn-outline-primary btn-sm story-swap" title="Pubblica/Archivia">Swap</button>
+            <button class="btn btn-outline-primary btn-sm story-dup" title="Duplica">Dup</button>
+        </div>
+    </template>
+    
+    <!-- template per editor attività -->
+    <template id="template-activity">
+        <div class="activity-div">
+            <div class="btn-group float-right" role="group">
+                <button class="btn btn-info btn-sm activity-del" title="Elimina">Del</button>
+                <button class="btn btn-info btn-sm activity-copy" title="Copia">Copy</button>
+            </div>
+            
+            <div class="editable-name-div">
+                <input type="text" class="editable-name activity-name">
+            </div>
+        </div>
+    </template>
+    
+    <!-- template per editor missioni -->
+    <template id="template-mission">
+        <div class="mission-div">
+            <div class="btn-group float-right" role="group">
+                <button class="btn btn-secondary btn-sm mission-del" title="Elimina">Del</button>
+                <button class="btn btn-secondary btn-sm mission-copy" title="Copia">Copy</button>
+            </div>
+            
+            <div class="editable-name-div">
+                <input type="text" class="editable-name mission-name">
+            </div>
+            
+            <div class="activities-div">
+            </div>
+            
+            <button class="btn btn-secondary btn-sm new-activity">Nuova attività</button>
+        </div>
+    </template>
     
 </body>
 </html>
