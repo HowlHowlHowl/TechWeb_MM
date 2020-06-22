@@ -2,12 +2,14 @@ var url = require('url');
 var fs = require('fs');
 var path = require('path');
 var express = require('express');
+var formidable = require('formidable');
 var app = express();
 var port = 8000;
 
 var nextStoryId = 0;
 
-//Fa parsing di body json nelle richieste che specificano application/json come content type
+
+//Parsing di body json nelle richieste che specificano application/json come content type
 app.use(express.json());
 
 //Story REST API
@@ -182,14 +184,44 @@ app.get('/evaluator', function(req, res) {
     });
 });
 
-//Rende disponibili tutti i file nella directory public e nelle sue subdirectory
-app.use(express.static('public'));
+//Upload di file
+app.post('/upload', function(req, res) {
+    let form = new formidable.IncomingForm();
+    form.parse(req);
+    
+    form.on('fileBegin', (name, file) => {
+        let dir = "public/uploads/";
+        let save_path = dir + file.name;
+        if(fs.existsSync(save_path)) {
+            let suffix = 1;
+            let ext = path.extname(file.name);
+            let basename = path.basename(file.name, ext);
+            do {
+                new_path = dir + basename + "_" + suffix + ext;
+                suffix++;
+            } while(fs.existsSync(new_path));
+            save_path = new_path;
+        }
+        
+        file.path = save_path;
+        
+        res.writeHead(200, {'Content-Type': 'application/json'});
+        res.write(JSON.stringify({url: "/" + save_path}));
+        res.end();
+    });
+    
+});
 
+//Rende disponibili tutti i file nella directory public e nelle sue subdirectory
+app.use("/public", express.static(path.resolve(__dirname, 'public')));
+
+/*
 //Handler in caso di richieste inesistenti
 app.use(function(req, res){
     res.writeHead(404, {'Content-Type': 'text/html'});
     return res.end("<h1>404 Not Found</h1>");
 });
+*/
 
 //Aggiorna la nuova nextStoryId
 fs.readdirSync('stories').forEach((f) => {

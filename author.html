@@ -48,6 +48,28 @@
         font-size: 13pt;
     }
     
+    .content-buttons {
+        float: left;
+        
+    }
+    
+    .content-div {
+        padding: 5px;
+    }
+    
+    .activity-add-group {
+        padding: 5px;
+    }
+    
+    .content-item {
+        width: 100%;
+        min-height: 100px;
+    }
+    textarea {
+        width: 80%;
+        height: 85px;
+    }
+    
     
     </style>
     
@@ -77,6 +99,152 @@
         editorDirty = true;
     }
     
+    function updateAllUpDownButtons(container, up_class, down_class) {
+        up_array = container.find(up_class);
+        for (i = 0; i < up_array.length; i++) {
+            $(up_array[i]).prop("disabled", i == 0);
+        }
+        
+        down_array = container.find(down_class); 
+        for (i = 0; i < down_array.length; i++) {
+            $(down_array[i]).prop("disabled", i == down_array.length - 1);
+        }
+    }
+    
+    function linkInputToProperty(object, name, input) {
+        input.val(object[name]);
+        input.on("change", () => {
+            editorDirty = true;
+            object[name] = input.val();
+        });
+    }
+    
+    function addContentElement(content, container, activity) {
+        let content_div = $($("#template-content").html());
+        
+        let item_div = content_div.find(".content-item");
+        switch(content.type) {
+            case "text": {
+                let textarea = $(document.createElement("textarea"));
+                textarea.appendTo(item_div);
+                linkInputToProperty(content, "text", textarea);
+            } break;
+            
+            case "image": {
+                let image_div = $($("#template-content-image").html());
+                
+                let image = image_div.find("img");
+                let input = image_div.find("input");
+                let name = image_div.find(".file-upload-name");
+                
+                if(content.url == "") {
+                    image.hide();
+                } else {
+                    image.attr("src", content.url);
+                }
+                
+                input.on("change", () => {
+                    editorDirty = true;
+                    name.text(input[0].files[0].name);
+                    image[0].src = URL.createObjectURL(input[0].files[0]);
+                    image.show();
+                    
+                    uploadFileAndStoreURL(input[0].files[0], content, "url");
+                });
+                
+                image_div.appendTo(item_div);
+                
+            } break;
+            
+            case "video": {
+                let video_div = $($("#template-content-video").html());
+                
+                let video = video_div.find("video");
+                let source = video_div.find("source");
+                let input = video_div.find("input");
+                let name = video_div.find(".file-upload-name");
+                
+                if(content.url == "") {
+                    video.hide();
+                } else {
+                    video.attr("src", content.url);
+                }
+                
+                input.on("change", () => {
+                    editorDirty = true;
+                    name.text(input[0].files[0].name);
+                    source[0].src = URL.createObjectURL(input[0].files[0]);
+                    video[0].load();
+                    video.show();
+                    
+                    uploadFileAndStoreURL(input[0].files[0], content, "url");
+                });
+                
+                video_div.appendTo(item_div);
+            } break;
+        }
+        
+        let del = content_div.find(".content-del");
+        del.on("click", () => {
+            let index = activity.contents.indexOf(content);
+            if(index != -1) {
+                activity.contents.splice(index, 1);
+            }
+            content_div.remove();
+            editorDirty = true;
+            
+            updateAllUpDownButtons(container, ".content-up", ".content-down");
+        });
+        
+        let i = activity.contents.indexOf(content);
+        
+        let up = content_div.find(".content-up");
+        up.prop("disabled", i == 0);
+        up.on("click", () => {
+            editorDirty = true;
+            
+            //order the contents in the story object
+            let array = activity.contents;
+            let index = array.indexOf(content);
+            let tmp = array[index];
+            array[index] = array[index - 1];
+            array[index - 1] = tmp;
+            
+            //order the widgets in the editor
+            content_div.insertBefore(content_div.prev());
+            
+            updateAllUpDownButtons(container, ".content-up", ".content-down");
+        });
+        
+        let down = content_div.find(".content-down");
+        down.prop("disabled", i == activity.contents.length - 1);
+        down.on("click", () => {
+            editorDirty = true;
+            
+            let array = activity.contents;
+            let index = array.indexOf(content);
+            
+            //order the contents in the story object
+            let tmp = array[index];
+            array[index] = array[index + 1];
+            array[index + 1] = tmp;
+            
+            //order the widgets in the editor
+            content_div.insertAfter(content_div.next());
+            
+            updateAllUpDownButtons(container, ".content-up", ".content-down");
+        });
+        
+        content_div.appendTo(container);
+    }
+    
+    function editorNewContent(content, container, activity)
+    {
+        editorDirty = true;
+        activity.contents.push(content);
+        addContentElement(content, container, activity);
+    }
+    
     function addActivityElement(activity, container, mission) {
         let activity_div = $($("#template-activity").html());
         
@@ -90,10 +258,73 @@
             }
             activity_div.remove();
             editorDirty = true;
+            
+            updateAllUpDownButtons(container, ".activity-up", ".activity-down");
         });
         
         let copy = activity_div.find(".activity-copy");
         copy.on("click", () => {
+        });
+        
+        
+        let i = mission.activities.indexOf(activity);
+        
+        let up = activity_div.find(".activity-up");
+        up.prop("disabled", i == 0);
+        up.on("click", () => {
+            editorDirty = true;
+            
+            let array = mission.activities;
+            let index = array.indexOf(activity);
+            
+            let tmp = array[index];
+            array[index] = array[index - 1];
+            array[index - 1] = tmp;
+            
+            //order the widgets in the editor
+            activity_div.insertBefore(activity_div.prev());
+            
+            updateAllUpDownButtons(container, ".activity-up", ".activity-down");
+        });
+        
+        let down = activity_div.find(".activity-down");
+        down.prop("disabled", i == mission.activities.length - 1);
+        down.on("click", () => {
+            editorDirty = true;
+            
+            let array = mission.activities;
+            let index = array.indexOf(activity);
+            
+            //order the activities in the story object
+            let tmp = array[index];
+            array[index] = array[index + 1];
+            array[index + 1] = tmp;
+            
+            //order the widgets in the editor
+            activity_div.insertAfter(activity_div.next());
+            
+            updateAllUpDownButtons(container, ".activity-up", ".activity-down");
+        });
+        
+        let contents = activity_div.find(".contents-div");
+        activity.contents.forEach((c) => addContentElement(c, contents, activity));
+        
+        let add_text = activity_div.find(".add-text");
+        add_text.on("click", () => {
+            editorNewContent({type: "text", text:""}, contents, activity);
+            updateAllUpDownButtons(contents, ".content-up", ".content-down");
+        });
+        
+        let add_image = activity_div.find(".add-image");
+        add_image.on("click", () => {
+            editorNewContent({type: "image", url:""}, contents, activity);
+            updateAllUpDownButtons(contents, ".content-up", ".content-down");
+        });
+        
+        let add_video = activity_div.find(".add-video");
+        add_video.on("click", () => {
+            editorNewContent({type: "video", url:""}, contents, activity);
+            updateAllUpDownButtons(contents, ".content-up", ".content-down");
         });
         
         activity_div.appendTo(container);
@@ -103,21 +334,14 @@
         editorDirty = true;
         let activity = {
             name: "Nuova attività",
-            challenge: true
+            contents: []
         };
         
         mission.activities.push(activity);
         addActivityElement(activity, container, mission);
+        updateAllUpDownButtons(container, ".activity-up", ".activity-down");
     }
     
-    
-    function linkInputToProperty(object, name, input) {
-        input.attr("value", object[name]);
-        input.on("change", () => {
-            editorDirty = true;
-            object[name] = input.val();
-        });
-    }
     
     function addMissionElement(mission) {
         let mission_div = $($("#template-mission").html());
@@ -145,6 +369,7 @@
         
         let new_activity = mission_div.find(".new-activity");
         new_activity.on("click", () => editorNewActivity(mission, activities_div));
+        
         
         mission_div.appendTo("#editor-missions");
     }
@@ -241,6 +466,31 @@
             $('#stories-archived').append(story_div);
         }
     }
+    
+    
+    function uploadFileAndStoreURL(file, object, name)
+    {   
+        let fd = new FormData();
+        fd.append(file.name, file);
+        
+        $.ajax({
+            accepts: 'application/json',
+            url: '/upload',
+            data: fd,
+            type: 'POST',
+            contentType: false,
+            processData: false,
+            
+            success: function(data) {
+                console.log(data.url);
+                object[name] = data.url;
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert(xhr.status + ' - ' + thrownError);
+            }
+        });
+    }
+    
     
     function updateStories() {
         $.ajax({
@@ -433,19 +683,6 @@
         </div>
     </template>
     
-    <!-- template per editor attività -->
-    <template id="template-activity">
-        <div class="activity-div">
-            <div class="btn-group float-right" role="group">
-                <button class="btn btn-info btn-sm activity-del" title="Elimina">Del</button>
-                <button class="btn btn-info btn-sm activity-copy" title="Copia">Copy</button>
-            </div>
-            
-            <div class="editable-name-div">
-                <input type="text" class="editable-name activity-name">
-            </div>
-        </div>
-    </template>
     
     <!-- template per editor missioni -->
     <template id="template-mission">
@@ -463,6 +700,74 @@
             </div>
             
             <button class="btn btn-secondary btn-sm new-activity">Nuova attività</button>
+        </div>
+    </template>
+    
+    <!-- template per editor attività -->
+    <template id="template-activity">
+        <div class="activity-div">
+            <div class="btn-group float-right" role="group">
+                <button class="btn btn-info btn-sm activity-up" title="Sposta in alto">Up</button>
+                <button class="btn btn-info btn-sm activity-down" title="Sposta in basso">Down</button>
+                <button class="btn btn-info btn-sm activity-del" title="Elimina">Del</button>
+                <button class="btn btn-info btn-sm activity-copy" title="Copia">Copy</button>
+            </div>
+            
+            <div class="editable-name-div">
+                <input type="text" class="editable-name activity-name">
+            </div>
+            
+            <div class="contents-div">
+            </div>
+            
+            <div class="btn-group activity-add-group" role="group">
+                <button class="btn btn-info btn-sm add-text" title="Testo">Text</button>
+                <button class="btn btn-info btn-sm add-image" title="Immagine">Image</button>
+                <button class="btn btn-info btn-sm add-video" title="Video">Video</button>
+            </div>
+        </div>
+    </template>
+    
+    
+    <!-- template per contenuto attività -->
+    <template id="template-content">
+        <div class="content-div">
+            <div class="btn-group-vertical content-buttons">
+                <button class="btn btn-info btn-sm content-del" title="Testo">Del</button>
+                <button class="btn btn-info btn-sm content-up" title="Testo">Up</button>
+                <button class="btn btn-info btn-sm content-down" title="Testo">Down</button>
+            </div>
+            <div class="content-item">
+            </div>
+        </div>
+    </template>
+    
+    <!-- template per contenuto immagine -->
+    <template id="template-content-image">
+        <div class="content-image">
+            <image src="" style="max-height: 200px; max-width : 800px;">
+            
+            <label class="file-upload-label btn btn-success btn-sm">
+                <input type="file" name="file[]" accept="image/*" style="display: none;">
+                Carica immagine
+            </label>
+            <span class="file-upload-name"></span>
+        </div>
+    </template>
+    
+    <!-- template per contenuto video -->
+    <template id="template-content-video">
+        <div class="content-video">
+            <video controls>
+              <source src="">
+                Your browser does not support HTML5 video.
+            </video>
+            
+            <label class="file-upload-label btn btn-success btn-sm">
+                <input type="file" name="file[]" accept="video/*" style="display: none;">
+                Carica video
+            </label>
+            <span class="file-upload-name"></span>
         </div>
     </template>
     
