@@ -5,7 +5,6 @@ var express = require('express');
 var formidable = require('formidable');
 var app = express();
 var port = 8000;
-
 var nextStoryId = 0;
 
 
@@ -142,48 +141,6 @@ app.get('/stories/:id', function(req, res) {
     });
 });
 
-//Ambiente player
-app.get('/player', function(req, res) {
-    fs.readFile("player.html", function(err, data) {
-        if(err) {
-            res.writeHead(404, {'Content-Type': 'text/html'});
-            return res.end("<h1>404 Not Found</h1>");
-        }
-        
-        res.writeHead(200, {'Content-Type': 'text/html'});
-        res.write(data);
-        return res.end();
-    });
-});
-
-//Ambiente author
-app.get('/author', function(req, res) {
-    fs.readFile("author.html", function(err, data) {
-        if(err) {
-            res.writeHead(404, {'Content-Type': 'text/html'});
-            return res.end("<h1>404 Not Found</h1>");
-        }
-        
-        res.writeHead(200, {'Content-Type': 'text/html'});
-        res.write(data);
-        return res.end();
-    });
-});
-
-//Ambiente evaluator
-app.get('/evaluator', function(req, res) {
-    fs.readFile("evaluator.html", function(err, data) {
-        if(err) {
-            res.writeHead(404, {'Content-Type': 'text/html'});
-            return res.end("<h1>404 Not Found</h1>");
-        }
-        
-        res.writeHead(200, {'Content-Type': 'text/html'});
-        res.write(data);
-        return res.end();
-    });
-});
-
 //Upload di file
 app.post('/upload', function(req, res) {
     let form = new formidable.IncomingForm();
@@ -202,9 +159,7 @@ app.post('/upload', function(req, res) {
             } while(fs.existsSync(new_path));
             save_path = new_path;
         }
-        
         file.path = save_path;
-        
         res.writeHead(200, {'Content-Type': 'application/json'});
         res.write(JSON.stringify({url: "/" + save_path}));
         res.end();
@@ -212,25 +167,50 @@ app.post('/upload', function(req, res) {
     
 });
 
-//Rende disponibili tutti i file nella directory public e nelle sue subdirectory
-app.use("/public", express.static(path.resolve(__dirname, 'public')));
-
-/*
-//Handler in caso di richieste inesistenti
-app.use(function(req, res){
-    res.writeHead(404, {'Content-Type': 'text/html'});
-    return res.end("<h1>404 Not Found</h1>");
-});
-*/
-
 //Aggiorna la nuova nextStoryId
 fs.readdirSync('stories').forEach((f) => {
     matches = f.match(/(\d+)/);
-    if(matches)
-    {
+    if (matches) {
         nextStoryId = Math.max(nextStoryId, Number(matches[0]) + 1);
     }
 });
 
-app.listen(port, function() {});
+//Rende disponibili tutti i file nella directory public e nelle sue subdirectory
+app.use("/public", express.static(path.resolve(__dirname, 'public')));
 
+
+//Home page
+app.get("/",function (req, res) {
+    fs.readFile("home.html", function (err, data) {
+        if (err) {
+            res.writeHead(404, { 'Content-Type': 'text/html' });
+            return res.end("<h1>404 Not Found</h1>");
+        }
+
+        res.writeHead(200, { 'Content-Type': 'text/html' });
+        res.write(data);
+        return res.end();
+    }); 
+    
+});
+
+//Ambiente player
+app.get('/player', function (req, res) {
+    console.log("Navigation: " + path.join(__dirname + '/author.html'));
+    res.sendFile(path.join(__dirname + "/player.html"));
+});
+
+//Ambiente author
+app.get('/author', function (req, res) {
+    res.sendFile(path.join(__dirname + "/author.html"));
+});
+
+//Ambiente evaluator
+app.get('/evaluator', function (req, res) {
+    console.log("Navigation: " + path.join(__dirname + '/author.html'));
+    res.sendFile(path.join(__dirname + "/evaluator.html"));
+    
+});
+
+app.listen(port, function() {});
+console.log("Server Started");
