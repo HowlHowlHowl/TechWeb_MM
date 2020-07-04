@@ -1,0 +1,53 @@
+{
+  "id": 100,
+  "name": "Nuova storia",
+  "accessible": false,
+  "published": true,
+  "canvas_offset": {
+    "x": 962.6446667557206,
+    "y": 95.23360369433507
+  },
+  "canvas_scale": 0.7846070941802509,
+  "missions": [
+    {
+      "name": "Missione A",
+      "color": "#FF0000"
+    },
+    {
+      "name": "Missione B",
+      "color": "#152de0"
+    },
+    {
+      "name": "Missione C",
+      "color": "#21c115"
+    }
+  ],
+  "activities": [
+    {
+      "name": "Presa bene",
+      "contents": [],
+      "position": {
+        "x": -773.9843612297972,
+        "y": 21.672768804191236
+      }
+    },
+    {
+      "name": "Yoyo",
+      "contents": [],
+      "mission_index": null,
+      "position": {
+        "x": -456.1503539358975,
+        "y": 97.6024304319876
+      }
+    },
+    {
+      "name": "Saec",
+      "contents": [],
+      "mission_index": null,
+      "position": {
+        "x": -1013,
+        "y": 181
+      }
+    }
+  ]
+}
