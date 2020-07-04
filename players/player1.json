@@ -1,0 +1,13 @@
+{
+  "id": 1,
+  "chat": [
+    {
+      "hour": "11",
+      "mins": "30",
+      "text": "Buongiorno Prof, lei è maleodorante",
+      "auth": "player1",
+      "seen": true
+    }
+  ],
+  "lst-answr-timestamp": "10:25"
+}

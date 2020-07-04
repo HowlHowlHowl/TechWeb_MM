@@ -1,0 +1,12 @@
+{
+  "id": 3,
+  "chat": [
+    {
+      "hour": "11",
+      "mins": "00",
+      "text": "Ci sei?",
+      "auth": "Valutatore",
+      "seen": false
+    }
+  ]
+}
