@@ -36,6 +36,9 @@ function updateAllUpDownButtons(container, up_class, down_class) {
 }
 
 function linkInputToProperty(object, name, input) {
+    //Clear previous handlers
+    input.off("change");
+    
     input.val(object[name]);
     input.on("change", () => {
         editorDirty = true;
@@ -169,97 +172,118 @@ function editorNewContent(content, container, activity)
     addContentElement(content, container, activity);
 }
 
-function addActivityElement(activity, container, mission) {
-    let activity_div = $($("#template-activity").html());
+function colorFromMissionIndex(i) {
+    if(i == null) {
+        return "#FFFFFF";
+    } else {
+        return loadedStory.missions[i].color;
+    }
+}
+
+function openActivityEditor(activity, node) {
+    let editor = $("#activity-modal");
     
-    linkInputToProperty(activity, "name", activity_div.find(".activity-name"));
+    let name = editor.find(".activity-name");
+    name.off("change");
+    name.val(activity.name);
+    name.on("change", (e) => {
+        editorDirty = true;
+        activity.name = name.val();
+        node.setName(name.val());
+    });
     
-    let del = activity_div.find(".activity-del");
-    del.on("click", () => {
-        let index = mission.activities.indexOf(activity);
-        if(index != -1) {
-            mission.activities.splice(index, 1);
+    let select = editor.find(".select-mission");
+    select.text(activity.mission_index == null ? "Nessuna missione" : loadedStory.missions[activity.mission_index].name);
+    let options = editor.find(".mission-options");
+    options.empty();
+    
+    let none = $('<button class="dropdown-item" type="button">Nessuna missione</button>');
+    none.on("click", () => {
+        if(activity.mission_index != null) {
+            editorDirty = true;
+            activity.mission_index = null;
+            node.setColor(colorFromMissionIndex(activity.mission_index));
+            select.text("Nessuna missione");
         }
-        activity_div.remove();
-        editorDirty = true;
-        
-        updateAllUpDownButtons(container, ".activity-up", ".activity-down");
     });
     
-    let copy = activity_div.find(".activity-copy");
-    copy.on("click", () => {
-    });
+    none.appendTo(options);
+    let divider = $('<div class="dropdown-divider"></div>');
+    divider.appendTo(options);
     
+    for(let i = 0; i < loadedStory.missions.length; i++) {
+        let m = loadedStory.missions[i];
+        let button = $('<button class="dropdown-item" type="button">' + m.name + '</button>');
+        button.on("click", () => {
+            if(activity.mission_index != i) {
+                editorDirty = true;
+                activity.mission_index = i;
+                node.setColor(colorFromMissionIndex(activity.mission_index));
+                select.text(m.name);
+            }
+        });
+        button.appendTo(options);
+    }
     
-    let i = mission.activities.indexOf(activity);
+    let contents = editor.find(".contents-div");
+    contents.empty();
     
-    let up = activity_div.find(".activity-up");
-    up.prop("disabled", i == 0);
-    up.on("click", () => {
-        editorDirty = true;
-        
-        let array = mission.activities;
-        let index = array.indexOf(activity);
-        
-        let tmp = array[index];
-        array[index] = array[index - 1];
-        array[index - 1] = tmp;
-        
-        //order the widgets in the editor
-        activity_div.insertBefore(activity_div.prev());
-        
-        updateAllUpDownButtons(container, ".activity-up", ".activity-down");
-    });
-    
-    let down = activity_div.find(".activity-down");
-    down.prop("disabled", i == mission.activities.length - 1);
-    down.on("click", () => {
-        editorDirty = true;
-        
-        let array = mission.activities;
-        let index = array.indexOf(activity);
-        
-        //order the activities in the story object
-        let tmp = array[index];
-        array[index] = array[index + 1];
-        array[index + 1] = tmp;
-        
-        //order the widgets in the editor
-        activity_div.insertAfter(activity_div.next());
-        
-        updateAllUpDownButtons(container, ".activity-up", ".activity-down");
-    });
-    
-    let contents = activity_div.find(".contents-div");
     activity.contents.forEach((c) => addContentElement(c, contents, activity));
     
-    let add_text = activity_div.find(".add-text");
+    let add_text = editor.find(".add-text");
+    add_text.off("click");
     add_text.on("click", () => {
         editorNewContent({type: "text", text:""}, contents, activity);
         updateAllUpDownButtons(contents, ".content-up", ".content-down");
     });
     
-    let add_image = activity_div.find(".add-image");
+    let add_image = editor.find(".add-image");
+    add_image.off("click");
     add_image.on("click", () => {
         editorNewContent({type: "image", url:""}, contents, activity);
         updateAllUpDownButtons(contents, ".content-up", ".content-down");
     });
     
-    let add_video = activity_div.find(".add-video");
+    let add_video = editor.find(".add-video");
+    add_video.off("click");
     add_video.on("click", () => {
         editorNewContent({type: "video", url:""}, contents, activity);
         updateAllUpDownButtons(contents, ".content-up", ".content-down");
     });
     
-    activity_div.appendTo(container);
-}
-
-function colorFromMissionIndex(i) {
-    if(!i) {
-        return "#FFFFFF";
-    } else {
-        return loadedStory.missions[i].color;
-    }
+    let input_text = editor.find(".input-text");
+    input_text.toggleClass("active", activity.input_type == "text");
+    input_text.off("click");
+    input_text.on("click", () => {
+        editorDirty = true;
+        activity.input_type = "text";
+    });
+    
+    let input_number = editor.find(".input-number");
+    input_number.toggleClass("active", activity.input_type == "number");
+    input_number.off("click");
+    input_number.on("click", () => {
+        editorDirty = true;
+        activity.input_type = "number";
+    });
+    
+    let input_photo = editor.find(".input-photo");
+    input_photo.toggleClass("active", activity.input_type == "photo");
+    input_photo.off("click");
+    input_photo.on("click", () => {
+        editorDirty = true;
+        activity.input_type = "photo";
+    });
+    
+    let input_none = editor.find(".input-none");
+    input_none.toggleClass("active", activity.input_type == "none");
+    input_none.off("click");
+    input_none.on("click", () => {
+        editorDirty = true;
+        activity.input_type = "none";
+    });
+    
+    editor.modal();
 }
 
 function addActivityNode(activity) {
@@ -286,6 +310,10 @@ function addActivityNode(activity) {
     
     n.setColor(colorFromMissionIndex(activity.mission_index));
     
+    let modify = $('<button class="btn btn-success btn-sm">Modifica</button>');
+    modify.on("click", (e) => openActivityEditor(activity, n));
+    n.body().append(modify);
+    
     n.addOutput({ 
         single: true, 
         onConnect: (c) => {
@@ -309,10 +337,10 @@ function editorNewActivity() {
         name: "Nuova attività",
         contents: [],
         mission_index: null, //Assigned to no mission when created
+        input_type: "none",
         position: getNextAvailablePoint()
     };
     
-    console.log(activity);
     loadedStory.activities.push(activity);
     addActivityNode(activity);
 }
@@ -322,32 +350,34 @@ function addMissionElement(mission) {
     let mission_div = $($("#template-mission").html());
     
     linkInputToProperty(mission, "name", mission_div.find(".mission-name"));
-    linkInputToProperty(mission, "color", mission_div.find(".mission-col"));
+    let color = mission_div.find(".mission-col");
+    linkInputToProperty(mission, "color", color);
+    color.on("change", () => {
+        loadActivities();
+    });
     
     let del = mission_div.find(".mission-del");
     del.on("click", () => {
-        let index = loadedStory.missions.indexOf(mission);
-        if(index != -1) {
-            loadedStory.missions.splice(index, 1);
-        }
-        
-        mission_div.remove();
         editorDirty = true;
+        mission_div.remove();
+        
+        let index = loadedStory.missions.indexOf(mission);
+        loadedStory.missions.splice(index, 1);
+        
+        loadedStory.activities.forEach( (a) => {
+            if(a.mission_index == index) {
+                a.mission_index = null;
+            } else if(a.mission_index > index) {
+                a.mission_index--;
+            }
+        });
+        
+        loadActivities();
     });
     
     let copy = mission_div.find(".mission-copy");
     copy.on("click", () => {
-        console.log("copy");
     });
-    
-    /*
-    let activities_div = mission_div.find(".activities-div");
-    mission.activities.forEach((a) => addActivityElement(a, activities_div, mission));
-    
-    let new_activity = mission_div.find(".new-activity");
-    new_activity.on("click", () => editorNewActivity(mission, activities_div));
-    */
-    
     
     mission_div.appendTo("#editor-missions");
 }
@@ -374,6 +404,13 @@ function clearSelectedStory() {
     $("#editor-area-missions").addClass("d-none");
 }
 
+function loadActivities() {
+    clearCanvas();
+    loadedStory.activities.forEach((a) => {
+        addActivityNode(a);
+    });
+}
+
 function selectStory(id) {
     $.ajax({
         accepts: 'application/json',
@@ -392,11 +429,8 @@ function selectStory(id) {
                 addMissionElement(m);
             });
             
-            clearCanvas();
             setCanvasOffsetAndScale(loadedStory.canvas_offset, loadedStory.canvas_scale);
-            loadedStory.activities.forEach((a) => {
-                addActivityNode(a);
-            });
+            loadActivities();
         },
         error: function (xhr, ajaxOptions, thrownError) {
             alert(xhr.status + ' - ' + thrownError);
@@ -467,7 +501,6 @@ function uploadFileAndStoreURL(file, object, name)
         processData: false,
         
         success: function(data) {
-            console.log(data.url);
             object[name] = data.url;
         },
         error: function (xhr, ajaxOptions, thrownError) {
@@ -546,7 +579,6 @@ function saveSelectedStory()
 }
 
 function actionOnStory(id, action) {
-    console.log("Action: " + action + " on story: " + id);
     $.ajax({
         url: '/stories/' + id,
         type: 'POST',

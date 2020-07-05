@@ -4,50 +4,89 @@
   "accessible": false,
   "published": true,
   "canvas_offset": {
-    "x": 962.6446667557206,
-    "y": 95.23360369433507
+    "x": 1003.7573915075102,
+    "y": 106.51027803251839
   },
-  "canvas_scale": 0.7846070941802509,
+  "canvas_scale": 0.7703019404190007,
   "missions": [
     {
       "name": "Missione A",
       "color": "#FF0000"
     },
     {
-      "name": "Missione B",
-      "color": "#152de0"
+      "name": "Missione C",
+      "color": "#c11571"
     },
     {
-      "name": "Missione C",
-      "color": "#21c115"
+      "name": "Nuova missione",
+      "color": "#c7b80f"
     }
   ],
   "activities": [
     {
       "name": "Presa bene",
-      "contents": [],
+      "contents": [
+        {
+          "type": "text",
+          "text": ""
+        },
+        {
+          "type": "text",
+          "text": ""
+        },
+        {
+          "type": "image",
+          "url": "/public/uploads/sample.jpg"
+        },
+        {
+          "type": "text",
+          "text": ""
+        }
+      ],
       "position": {
-        "x": -773.9843612297972,
-        "y": 21.672768804191236
-      }
+        "x": -898.3163144569535,
+        "y": 224.80332719139696
+      },
+      "input_type": "number",
+      "mission_index": 2
     },
     {
-      "name": "Yoyo",
-      "contents": [],
-      "mission_index": null,
+      "name": "Lets go boys",
+      "contents": [
+        {
+          "type": "text",
+          "text": "Hello mah dude"
+        },
+        {
+          "type": "text",
+          "text": "Hey hello there"
+        }
+      ],
+      "mission_index": 0,
       "position": {
-        "x": -456.1503539358975,
-        "y": 97.6024304319876
-      }
+        "x": -1106.8844288138066,
+        "y": -19.7182686255926
+      },
+      "input_type": "text"
     },
     {
       "name": "Saec",
-      "contents": [],
-      "mission_index": null,
+      "contents": [
+        {
+          "type": "text",
+          "text": ""
+        },
+        {
+          "type": "image",
+          "url": ""
+        }
+      ],
+      "mission_index": 1,
       "position": {
-        "x": -1013,
-        "y": 181
-      }
+        "x": -580.877240207066,
+        "y": -49.35636099057187
+      },
+      "input_type": "photo"
     }
   ]
 }

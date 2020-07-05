@@ -207,10 +207,6 @@ function Node(name, pos, callbacks) {
         if(this.onNameChange) this.onNameChange(name_input.val());
     });
     
-    element.find('.test').on("click", (e) => {
-        this.body().append($("<div><button>Hey</button></div>"));
-    });
-    
     element.find('.delete').on("click", (e) => {
         if(this.onDelete) this.onDelete();
         
@@ -257,6 +253,9 @@ function Node(name, pos, callbacks) {
         this.element.find(".node-outputs").append(output.element);
     }
     
+    this.setName = (name) => {
+        this.element.find(".name").val(name);
+    }
     this.setColor = (color) => {
         this.element.css("border-color", color);
     }

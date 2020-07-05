@@ -76,8 +76,69 @@
         
     </div>
     
+    <!-- Finestra modale di editing delle attività -->
+    <div class="modal" id="activity-modal" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Modifica attività</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <h6>Nome:</h6>
+            <div class="editable-name-div">
+                <input type="text" class="editable-name activity-name">
+            </div>
+            
+            <hr>
+            
+            <h6>Missione:</h6>
+            <div class="dropdown">
+              <button class="btn btn-info dropdown-toggle select-mission" type="button" data-toggle="dropdown"></button>
+              <div class="dropdown-menu mission-options">
+                <button class="dropdown-item" type="button">Action</button>
+              </div>
+            </div>
+            
+            <hr>
+            
+            <h6>Contenuti:</h6>
+            <div class="contents-div">
+            </div>
+            
+            <div class="btn-group activity-add-group" role="group">
+                <button class="btn btn-info btn-sm add-text" title="Testo">Text</button>
+                <button class="btn btn-info btn-sm add-image" title="Immagine">Image</button>
+                <button class="btn btn-info btn-sm add-video" title="Video">Video</button>
+            </div>
+            
+            <hr>
+            
+            <h6>Input:</h6>
+            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+              <label class="btn btn-info active input-text">
+                <input type="radio" name="options">Testo
+              </label>
+              <label class="btn btn-info input-number">
+                <input type="radio" name="options">Numero
+              </label>
+              <label class="btn btn-info input-photo">
+                <input type="radio" name="options">Foto
+              </label>
+              <label class="btn btn-info input-none">
+                <input type="radio" name="options">Niente
+              </label>
+            </div>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    
     <!-- Finestra modale di salvataggio -->
-    <div class="modal" id="save-modal" tabindex="-1" role="dialog">
+    <div class="modal" id="save-modal" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
@@ -147,39 +208,13 @@
         </div>
     </template>
     
-    <!-- template per editor attività -->
-    <template id="template-activity">
-        <div class="activity-div">
-            <div class="btn-group float-right" role="group">
-                <button class="btn btn-info btn-sm activity-up" title="Sposta in alto">Up</button>
-                <button class="btn btn-info btn-sm activity-down" title="Sposta in basso">Down</button>
-                <button class="btn btn-info btn-sm activity-del" title="Elimina">Del</button>
-                <button class="btn btn-info btn-sm activity-copy" title="Copia">Copy</button>
-            </div>
-            
-            <div class="editable-name-div">
-                <input type="text" class="editable-name activity-name">
-            </div>
-            
-            <div class="contents-div">
-            </div>
-            
-            <div class="btn-group activity-add-group" role="group">
-                <button class="btn btn-info btn-sm add-text" title="Testo">Text</button>
-                <button class="btn btn-info btn-sm add-image" title="Immagine">Image</button>
-                <button class="btn btn-info btn-sm add-video" title="Video">Video</button>
-            </div>
-        </div>
-    </template>
-    
-    
     <!-- template per contenuto attività -->
     <template id="template-content">
         <div class="content-div">
             <div class="btn-group-vertical content-buttons">
-                <button class="btn btn-info btn-sm content-del" title="Testo">Del</button>
-                <button class="btn btn-info btn-sm content-up" title="Testo">Up</button>
-                <button class="btn btn-info btn-sm content-down" title="Testo">Down</button>
+                <button class="btn btn-info btn-sm content-del" title="Elimina">Del</button>
+                <button class="btn btn-info btn-sm content-up" title="Sposta in alto">Up</button>
+                <button class="btn btn-info btn-sm content-down" title="Sposta in basso">Down</button>
             </div>
             <div class="content-item">
             </div>
@@ -227,7 +262,6 @@
                 <input class="name" type="text">
             </div>
             <div class="node-body">
-                <button class="btn btn-success btn-sm test">Modifica</button>
             </div>
             <div class="node-inouts">
                 <div class="node-inputs">
