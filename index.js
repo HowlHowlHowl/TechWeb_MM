@@ -255,29 +255,23 @@ app.put('/players/:id', function (req, res) {
 app.put('/players/:id/mark_as_seen', function (req, res) {
     let id = req.params.id;
     let path = 'players/' + id + '.json';
-    fs.readFileSync(path, function (err, data) {
-        if (!err) {
-            let content = JSON.parse(data);
-            content.chat.forEach(function(chatLog){
-                chatLog.senn = true;
-            });
-            fs.writeFile(path, JSON.stringify(content, null, 2), function (err) {
-                res.status(err ? 500 : 200).send();
-                res.end();
-            });
-        } else {
+    console.log(path);
+    let data = fs.readFileSync(path, function (err) {
+        if (err) {
+            console.log("err");
             res.status(500).send();
             res.end();
         }
-        
-
     });
-    let content = JSON.parse(fs.readFileSync(path));
-    content.chat.forEach(function (chatlog) {
-        chatlog.seen = true;
+    console.log(data);
+    let content = JSON.parse(data);
+    content.chat.forEach(function (chatLog) {
+        chatLog.seen = true;
     });
-    
-    res.end();
+    fs.writeFile(path, JSON.stringify(content, null, 2), function (err) {
+        res.status(err ? 500 : 200).send();
+        res.end();
+    });
 });
 
 //Ambiente author

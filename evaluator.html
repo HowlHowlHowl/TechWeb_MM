@@ -13,15 +13,15 @@
     
     <style type="text/css">
      
-        /*Navbar*/
+        /*Navbar*/ 
         .navbar-brand {
-            font-size:4vw;
+            font-size:3vw;
         }
         .nav-link {
-            font-size: 3vw;
+            font-size: 2vw;
         }
         .dropdown-item {
-            font-size:2vw;
+            font-size:1vw;
         }
         .navbar {
            margin-bottom:0;
@@ -32,198 +32,163 @@
             background-color: #fff;
         }
         #helpNotification {
-            font-size: 2vw;
+            font-size: 1vw;
         }
         /*Container correzioni*/
-        
         .list-group {
             width: 15%;
             height:100%;
             overflow-y: auto;
             position: fixed;
-        
         }
         .list-group > a {
-            font-size: 2vw;
+            font-size: 1vw;
         }
         .list-group-item:first-child {
             border-top-left-radius: 0;
             border-top-right-radius: 0;
         }
         /*Stile del container della chat*/
-        /*.chatperson:hover {
-            text-decoration: none;
-            border-bottom: 1px solid orange;
+        /*ADDED BY ME*/
+        .chat-popup {
+            position:fixed;
+            right:0;
+            bottom:0;
         }
-        */
-        .namechat {
-            display: inline-block;
-            vertical-align: middle;
+        .panel-primary > .panel-heading {
+            color: #fff;
+            background-color: #428bca;
+            border-color: #428bca;
+            padding-top:2px;
+            padding-bottom:2px;
         }
-        .chatperson .pname {
-            font-size: 2vw;
-            padding-left: 5pt;
+        .col-sm-8 {
+            width:100%;
+            max-width:100%;
         }
-        .chatperson .lastmsg {
-            font-size: 2vw;
-            padding-left: 5pt;
-            color: #ccc;
+        .col-md-8 {
+            padding-left:0;
+            padding-right:0;
+            float:left;
+            width:80%;
         }
         .container {
-            height: 25%;
-            width: 30%;
-            position: absolute;
-            bottom: 0;
-            right: 0;
+            padding-left:0;
+            padding-right:0;
         }
-        .chat-popup {
-            display: none;
-            position: fixed;
-            bottom: 0;
-            right: 15pt;
-            border: 3px solid #f1f1f1;
-            z-index: 9;
+        .col-md-4 {
+            width: 10%;
+            float: right;
+            top: 2px;
         }
-
-        /*Stile della chat*/
+        .glyphicon-remove {
+            color:red;
+            right:0;
+            top:0;   
+        }
+        .glyphicon-send {
+            top:2px
+        }
+        /*Not anymore   */
         .col-md-2, .col-md-10 {
             padding: 0;
         }
-        .col-md-8, .col-xs-8 {
-            heigth:20%;
-        }
+
         .panel {
-            margin-bottom: 0;
+            margin-bottom: 0px;
         }
+
         .chat-window {
             bottom: 0;
             position: fixed;
             float: right;
-            margin-left: 10pt;
+            margin-left: 10px;
         }
+
         .chat-window > div > .panel {
             border-radius: 5px 5px 0 0;
         }
-        .icon_close {
-            color:black;
-        }
-        .glyphicon-comment {
-            font-size:2vw;
-        }
-        .glyphicon-remove{
-            font-size:2vw;
-            color:red;
-        }
-        .glyphicon-send{
-            font-size:2vw;
-        }
-        .chatbody {
-            position:fixed;
-            width: 100%%;
-            right:5px;
-            bottom:0;
-        }
-        #chat-msgs {
-            overflow-y: auto;
-        }
-        #chat-title {
-            font-size:2vw;
-        }
-        #new_msg_text {
-            font-size:2vw;
 
-        }
         .msg_container_base {
             background: #e5e5e5;
             margin: 0;
-            padding: 0 10pt 10pt;
-            max-height: 25%;
+            padding: 0 10px 10px;
+            max-height: 30vh;
             overflow-x: hidden;
         }
+
         .top-bar {
             background: #666;
             color: white;
-            padding: 10pt;
+            padding: 10px;
             position: relative;
             overflow: hidden;
         }
+
         .msg_receive {
             padding-left: 0;
             margin-left: 0;
+            margin-right:7vw;
         }
+
         .msg_sent {
             padding-bottom: 20px !important;
             margin-right: 0;
+            margin-left:7vw;
         }
+
         .messages {
             background: white;
-            padding: 10pt;
+            padding: 10px;
             border-radius: 2px;
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
             max-width: 100%;
         }
-        .sent-msgs {
-            background: #b8d4fb;
-        }
+
         .messages > p {
-            font-size: 2vw;
+            font-size: 13px;
             margin: 0 0 0.2rem 0;
         }
+
         .messages > time {
-            font-size: 1vw;
-            color: #656565;
+            font-size: 11px;
+            color: #ccc;
         }
+
         .msg_container {
             padding: 10px;
+            overflow: hidden;
             display: flex;
         }
+
         .base_sent {
             justify-content: flex-end;
             align-items: flex-end;
+            
         }
-        .base_sent > .avatar:after {
-            content: "";
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 0;
-            border: 5px solid white;
-            border-right-color: transparent;
-            border-top-color: transparent;
-        }
-        .base_receive > .avatar:after {
-            content: "";
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 0;
-            height: 0;
-            border: 5px solid #FFF;
-            border-left-color: rgba(0, 0, 0, 0);
-            border-bottom-color: rgba(0, 0, 0, 0);
-        }
+
         .msg_sent > time {
             float: right;
         }
-        .input-group {
-            width:100%;
-        }
+
         .msg_container_base::-webkit-scrollbar-track {
             -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
             background-color: #F5F5F5;
         }
+
         .msg_container_base::-webkit-scrollbar {
-            width: 12pt;
+            width: 12px;
             background-color: #F5F5F5;
         }
+
         .msg_container_base::-webkit-scrollbar-thumb {
             -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
             background-color: #555;
         }
+
         .btn-group.dropup {
             position: fixed;
-            left: 0 ;
+            left: 0px;
             bottom: 0;
         }
         /*TODO: AGGIUSTARE L?HEADER DELLA CHAT NELLA VISUALIZZAZIONE MOBILE*/
@@ -238,7 +203,7 @@
 
         //Sets the layout of the chat messages
         function setChatView(data) {
-            $('#chat-user').append('<div class="glyphicon glyphicon-comment"></div><p id="chat-title">Chat - Player' + data.id+'</p>');
+            $('#chat-user').append('<div class="glyphicon glyphicon-comment"></div><p id="chat-title">Player' + data.id+'</p>');
             data.chat.forEach((chatlog) => {
                 if((chatlog.auth.localeCompare("Valutatore"))==0)
                 {
@@ -279,7 +244,7 @@
         function setChatList(data) {
             if (data.urgent) {
                 helpLength++;
-                $('#helpDropdown').append('<a class="dropdown-item help-list-el"  id="player'+ data.id +'">Player ' + data.id + '</a>');
+                $('#helpDropdown').append('<a class="dropdown-item help-list-el" id="player'+ data.id +'">Player ' + data.id + '</a>');
             }
             $('#chatDropdown').append('<a class="dropdown-item list-element" id="player' + data.id + '">Player ' + data.id + '</a>');
             chatLength++;
@@ -328,7 +293,6 @@
                 type: 'PUT',
                 contentType: 'application/json',
                 success: function () {
-                    console.log("success");
                     updateChat();
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
@@ -379,6 +343,7 @@
         //Call updateChat() method when the document is ready
         $(document).ready(function () {
             updateChat();
+            openChat("player5");
         });
      
         //Event to open chat with selected player
@@ -427,10 +392,8 @@
         </div>
     </nav>
     <!--ANSWER LIST-->
-    
-        <!-- List group -->
+    <!-- List group -->
     <div>
-
         <div class="list-group" id="correction-list" role="tablist">
             <a class="list-group-item list-group-item-action active" data-toggle="list" href="#home" role="tab">1</a>
             <a class="list-group-item list-group-item-action" data-toggle="list" href="#profile" role="tab">2</a>
@@ -470,17 +433,18 @@
     <div class="chat-popup" id="chat">
         <form autocomplete="off" onsubmit="sendMsg()" class="form-container">
             <div class="container">
-                <div class="row">
+               
                     <div class="col-sm-8">
                         <div class="chatbody">
                             <div class="panel panel-primary">
                                 <div class="panel-heading top-bar">
-                                    <div class="col-md-8 col-xs-8">
-                                        <h3 class="panel-title" id="chat-user"><!--Nome utente chat--></h3>
-                                    </div>
                                     <div class="col-md-4 col-xs-4" style="text-align: right;">
                                         <a onclick="closeChat()"><span class="glyphicon glyphicon-remove icon_close" data-id="chat_window_1"></span></a>
                                     </div>
+                                    <div class="col-md-8 col-xs-8">
+                                        <p class="panel-title" id="chat-user"><!--Nome utente chat--></p>
+                                    </div>
+
                                 </div>
                                 <div id="chat-msgs" class="panel-body msg_container_base">
                                     <!--MESSAGGI-->
@@ -496,10 +460,9 @@
                             </div>
                         </div>
                     </div>
-                </div>
+               
             </div>
         </form>
     </div>
-
 </body>
 </html>

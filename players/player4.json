@@ -1,0 +1,26 @@
+{
+  "id": 4,
+  "chat": [
+    {
+      "hour": "11",
+      "mins": "43",
+      "text": "Buongiorno Prof",
+      "auth": "player4",
+      "seen": true
+    },
+    {
+      "hour": "11",
+      "mins": "43",
+      "text": "Buongiorno",
+      "auth": "Valutatore",
+      "seen": true
+    },
+    {
+      "hour": "11",
+      "mins": "45",
+      "text": "Non capisco come risolvere il quesito 99, può aiutarmi?",
+      "auth": "player4",
+      "seen": true
+    }
+  ]
+}

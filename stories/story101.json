@@ -1,0 +1,13 @@
+{
+  "name": "Nuova storia",
+  "accessible": false,
+  "published": true,
+  "canvas_offset": {
+    "x": 0,
+    "y": 0
+  },
+  "canvas_scale": 1,
+  "missions": [],
+  "activities": [],
+  "id": 101
+}

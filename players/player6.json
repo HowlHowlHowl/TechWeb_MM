@@ -1,0 +1,19 @@
+{
+  "id": 6,
+  "chat": [
+    {
+      "hour": "11",
+      "mins": "43",
+      "text": "Ci sei 5?",
+      "auth": "Valutatore",
+      "seen": true
+    },
+    {
+      "hour": "11",
+      "mins": "45",
+      "text": "Eccomi prof",
+      "auth": "player6",
+      "seen": false
+    }
+  ]
+}
