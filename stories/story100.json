@@ -1,13 +1,13 @@
 {
   "id": 100,
-  "name": "Nuova storia",
+  "name": "Real crazy ",
   "accessible": false,
   "published": true,
   "canvas_offset": {
-    "x": 1003.7573915075102,
-    "y": 106.51027803251839
+    "x": 920.4712785613476,
+    "y": 406.71044603743286
   },
-  "canvas_scale": 0.7703019404190007,
+  "canvas_scale": 0.5096329073467462,
   "missions": [
     {
       "name": "Missione A",
@@ -44,10 +44,14 @@
         }
       ],
       "position": {
-        "x": -898.3163144569535,
-        "y": 224.80332719139696
+        "x": -781.8318353140376,
+        "y": -366.6327487647755
       },
-      "input_type": "number",
+      "input_type": "text",
+      "input": {
+        "evaluation_type": "any",
+        "next_index": 2
+      },
       "mission_index": 2
     },
     {
@@ -64,10 +68,14 @@
       ],
       "mission_index": 0,
       "position": {
-        "x": -1106.8844288138066,
-        "y": -19.7182686255926
+        "x": -1161.640065629545,
+        "y": -28.888449941117546
       },
-      "input_type": "text"
+      "input_type": "photo",
+      "input": {
+        "evaluation_type": "any",
+        "next_index": 0
+      }
     },
     {
       "name": "Saec",
@@ -83,10 +91,31 @@
       ],
       "mission_index": 1,
       "position": {
-        "x": -580.877240207066,
-        "y": -49.35636099057187
+        "x": -678.774734664353,
+        "y": -733.3682026816145
       },
-      "input_type": "photo"
+      "input_type": "text",
+      "input": {
+        "evaluation_type": "evaluator",
+        "options": [],
+        "wrong_next_index": null,
+        "correct_next_index": 0
+      }
+    },
+    {
+      "name": "Nuova attività",
+      "contents": [],
+      "mission_index": null,
+      "input_type": "text",
+      "input": {
+        "evaluation_type": "evaluator",
+        "correct_next_index": null,
+        "wrong_next_index": null
+      },
+      "position": {
+        "x": -1589.3996125094532,
+        "y": -461.6970708049683
+      }
     }
   ]
 }

@@ -1,6 +1,15 @@
+//Button for the current selected story.
 var selectedStoryButton = null;
+
+//Story that is currently being edited
 var loadedStory = null;
+
+//Flag used to mark that a change has been made and we need to save before quitting the editor.
 var editorDirty = false;
+
+//This array contains all the nodes currently in the canvas and is kept in sync with the array of activities in the loaded story 
+//so that the node at position i is related to the activity at position i in the loadedStory.activities array.
+var nodesArray = [];
 
 function modalSave() {
     saveSelectedStory();
@@ -180,9 +189,130 @@ function colorFromMissionIndex(i) {
     }
 }
 
+function refreshOptions(options, activity) {
+    options.find("button").each( (j, e) => {
+        if(j == 0) {
+            $(e).toggleClass("active", activity.mission_index == null);
+        } else {
+            $(e).toggleClass("active", (j - 1) == activity.mission_index);
+        }
+    });
+}
+
+function makeOutput(object, property, node) {
+    if(object[property] === undefined) {
+        object[property] = null;
+    }
+    
+    let output = node.addOutput({
+        single: true, 
+        onConnect: (c) => {
+            let new_index = nodesArray.indexOf(c.input.node);
+            if(object[property] != new_index) {
+                editorDirty = true;
+                object[property] = new_index;
+            }
+        },
+        onDisconnect: (c) => {
+            if(object[property] != null) {
+                editorDirty = true;
+                object[property] = null;
+            }
+        }
+    });
+    
+    let target_index = object[property];
+    if(target_index !== null) {
+        console.log(target_index);
+        let input = nodesArray[target_index].inputs[0];
+        
+        let c = new Connection(input, output);
+        input.addConnection(c);
+        output.addConnection(c);
+    }
+}
+
+function setNodeOutputs(activity, node) {
+    let type = activity.input_type;
+    let input = activity.input;
+    
+    node.clearOutputs();
+    
+    
+    if(type == "none") {
+        //add the 1 default output.
+        makeOutput(input, "next_index", node);
+    } else {
+        switch(input.evaluation_type) {
+            case "any":
+                //add the 1 default output.
+                makeOutput(input, "next_index", node);
+                break;
+            case "correct":
+                //add 1 for each case and the default if present
+                input.options.forEach( (o) => {
+                    makeOutput(o, "next_index", node);
+                });
+                if(input.option_default) {
+                    makeOutput(input.option_default, "next_index", node);
+                }
+                break;
+                
+            case "evaluator":
+                //add 1 for correct and 1 for wrong
+                makeOutput(input, "correct_next_index", node);
+                makeOutput(input, "wrong_next_index", node);
+                break;
+        }
+    }
+}
+
+function setInputElement(activity, node)
+{
+    let container = $("#activity-input-div");
+    container.empty();
+    
+    let type = activity.input_type;
+    
+    if(type != "none") {
+        //Evaluation options
+        let label = $('<label for="input-evaluation-select">Tipologia di valutazione:</label>');
+        let select = $('<select class="custom-select" id="input-evaluation-select"></select>');
+        
+        select.empty();    
+        let options = [ 
+            { text: "Qualsiasi", value: "any"},
+            { text: "Corretta", value: "correct"},
+            { text: "Valutata", value: "evaluator"},
+        ];
+        if(type == "photo") {
+            removeFromArray(options, options[1]);
+        }
+        
+        options.forEach( (o) => {
+            let option = $('<option value="' + o.value + '" >' + o.text + '</option>');
+            option.prop("selected", o.value == activity.input.evaluation_type);
+            select.append(option);
+        });
+        
+        select.on("change", (e) => {
+            editorDirty = true;
+            activity.input = { evaluation_type: select.val() };
+            setNodeOutputs(activity, node);
+        });
+        
+        container.append(label);
+        container.append(select);
+    }
+    
+    setNodeOutputs(activity, node);
+}
+
+
 function openActivityEditor(activity, node) {
     let editor = $("#activity-modal");
     
+    //Activity name
     let name = editor.find(".activity-name");
     name.off("change");
     name.val(activity.name);
@@ -192,18 +322,21 @@ function openActivityEditor(activity, node) {
         node.setName(name.val());
     });
     
+    //Mission
     let select = editor.find(".select-mission");
     select.text(activity.mission_index == null ? "Nessuna missione" : loadedStory.missions[activity.mission_index].name);
     let options = editor.find(".mission-options");
     options.empty();
     
     let none = $('<button class="dropdown-item" type="button">Nessuna missione</button>');
+    none.toggleClass("active", activity.mission_index == null);
     none.on("click", () => {
         if(activity.mission_index != null) {
             editorDirty = true;
             activity.mission_index = null;
             node.setColor(colorFromMissionIndex(activity.mission_index));
             select.text("Nessuna missione");
+            refreshOptions(options, activity);
         }
     });
     
@@ -214,17 +347,21 @@ function openActivityEditor(activity, node) {
     for(let i = 0; i < loadedStory.missions.length; i++) {
         let m = loadedStory.missions[i];
         let button = $('<button class="dropdown-item" type="button">' + m.name + '</button>');
+        button.toggleClass("active", i == activity.mission_index);
+        
         button.on("click", () => {
             if(activity.mission_index != i) {
                 editorDirty = true;
                 activity.mission_index = i;
                 node.setColor(colorFromMissionIndex(activity.mission_index));
                 select.text(m.name);
+                refreshOptions(options, activity);
             }
         });
         button.appendTo(options);
     }
     
+    //Contents
     let contents = editor.find(".contents-div");
     contents.empty();
     
@@ -251,39 +388,39 @@ function openActivityEditor(activity, node) {
         updateAllUpDownButtons(contents, ".content-up", ".content-down");
     });
     
-    let input_text = editor.find(".input-text");
-    input_text.toggleClass("active", activity.input_type == "text");
-    input_text.off("click");
-    input_text.on("click", () => {
-        editorDirty = true;
-        activity.input_type = "text";
+    //Input
+    let input_types = ["text", "number", "photo", "none"];
+    input_types.forEach((type) => {
+        let input = editor.find(".input-" + type);
+        input.toggleClass("active", activity.input_type == type);
+        input.off("click");
+        input.on("click", () => {
+            if(activity.input_type != type) {
+                editorDirty = true;
+                activity.input_type = type;
+                
+                activity.input = {};
+                if(type != null) {
+                    activity.input.evaluation_type = "any";
+                }
+                activity.input.next_index = null;
+                
+                setInputElement(activity, node);
+            }
+        });
     });
     
-    let input_number = editor.find(".input-number");
-    input_number.toggleClass("active", activity.input_type == "number");
-    input_number.off("click");
-    input_number.on("click", () => {
-        editorDirty = true;
-        activity.input_type = "number";
-    });
-    
-    let input_photo = editor.find(".input-photo");
-    input_photo.toggleClass("active", activity.input_type == "photo");
-    input_photo.off("click");
-    input_photo.on("click", () => {
-        editorDirty = true;
-        activity.input_type = "photo";
-    });
-    
-    let input_none = editor.find(".input-none");
-    input_none.toggleClass("active", activity.input_type == "none");
-    input_none.off("click");
-    input_none.on("click", () => {
-        editorDirty = true;
-        activity.input_type = "none";
-    });
+    setInputElement(activity, node);
     
     editor.modal();
+}
+
+function deleteActivity(activity) {
+    let index = loadedStory.activities.indexOf(activity);
+    if(index != -1) {
+        loadedStory.activities.splice(index, 1);
+        nodesArray.splice(index, 1);
+    }
 }
 
 function addActivityNode(activity) {
@@ -294,7 +431,7 @@ function addActivityNode(activity) {
         
         onDelete: () => {
             editorDirty = true;
-            removeFromArray(loadedStory.activities, activity);
+            deleteActivity(activity);
         },
         
         onNameChange: (name) => {
@@ -314,21 +451,13 @@ function addActivityNode(activity) {
     modify.on("click", (e) => openActivityEditor(activity, n));
     n.body().append(modify);
     
-    n.addOutput({ 
-        single: true, 
-        onConnect: (c) => {
-            console.log("Output Connect!");
-        },
-        onDisconnect: (c) => {
-            console.log ("Output Disconnect!");
-        }
-    });
-    
     n.addInput({
         single: false,
         onConnect: (c) => console.log("Input Connect!"),
         onDisconnect: (c) => console.log ("Input Disconnect!"),
     });
+    
+    nodesArray.push(n);
 }
 
 function editorNewActivity() {
@@ -338,6 +467,10 @@ function editorNewActivity() {
         contents: [],
         mission_index: null, //Assigned to no mission when created
         input_type: "none",
+        input: {
+            evaluation_type: "none",
+            next_index: null
+        },
         position: getNextAvailablePoint()
     };
     
@@ -406,8 +539,14 @@ function clearSelectedStory() {
 
 function loadActivities() {
     clearCanvas();
+    nodesArray = [];
     loadedStory.activities.forEach((a) => {
         addActivityNode(a);
+    });
+    
+    //After we created all nodes we create all outputs and make the connections
+    loadedStory.activities.forEach((a, index) => {
+        setNodeOutputs(a, nodesArray[index]);
     });
 }
 
