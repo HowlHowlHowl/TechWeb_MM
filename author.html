@@ -133,6 +133,40 @@
             </div>
             
             <div id="activity-input-div">
+                <div class="form-group" id="activity-input-select-div">
+                    <label for="input-evaluation-select">Tipologia di valutazione:</label>
+                    <select class="custom-select" id="input-evaluation-select">
+                    </select>  
+                </div>
+                
+                <div id="activity-correct-div">                    
+                    <div class="form-row m-1">
+                        <div class="col-1"></div>
+                        <div class="col-6">Risposta</div>
+                        <div class="col-2">Punti</div>
+                    </div>
+                    
+                    <div id="correct-options">
+                    </div>
+                                  
+                    <div class="form-row m-1">
+                        <div class="col-1"></div>
+                        <div class="col-6">
+                            <button id="correct-new" class="btn btn-info btn-sm">Nuova opzione</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div id="activity-input-wrong-div">
+                    <div class="form-check">
+                        <input id="wrong-stay" class="form-check-input" type="checkbox">
+                        <label for="wrong-stay" class="form-check-label">Riprova in caso di errore</label>
+                    </div>
+                    <div id="wrong-message" class="form-group">
+                        <label for="wrong-text">Messaggio di errore:</label>
+                        <input class="form-control" id="wrong-text" type="text">
+                    </div>
+                </div>
             </div>
             
           </div>
@@ -250,6 +284,37 @@
                 Carica video
             </label>
             <span class="file-upload-name"></span>
+        </div>
+    </template>
+    
+    
+    <!-- template per widget input di testo-->
+    <template id="template-option-text">
+        <div class="form-row m-1">
+            <div class="col-1">
+                <button class="option-del btn btn-info float-right">Del</button>
+            </div>
+            <div class="col-6">
+                <input type="text" class="option-text form-control" placeholder="Risposta">
+            </div>
+            <div class="col-2">
+                <input type="number" class="option-points form-control">
+            </div>
+        </div>
+    </template>
+    
+    <!-- template per widget input di numero-->
+    <template id="template-option-number">
+        <div class="form-row m-1">
+            <div class="col-1">
+                <button class="option-del btn btn-info float-right">Del</button>
+            </div>
+            <div class="col-6">
+                <input type="number" step="any" class="option-number form-control" placeholder="Risposta">
+            </div>
+            <div class="col-2">
+                <input type="number" class="option-points form-control">
+            </div>
         </div>
     </template>
     
