@@ -9,80 +9,100 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-   <!-- <script type="text/javascript" src="llqrcode.js"></script>-->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style type="text/css">
-        #video-container {
-            margin: 0px auto;
-            width: 500px;
-            height: 375px;
-            margin-top: 2vh;
-            border: 10px #333 solid;
-        }
-
-        #videoElement {
-            width: 500px;
-            height: 375px;
-            background-color: #666;    
-        }
-        #generico {
-            width: 80vw;
-            height: 80vh;
-            margin: 5vw;
-            font-size: 1vw;
+    @font-face {
+        font-family: 'All The Roll';
+        src: url('public/font/AllTheRollPersonalUse.woff2') format('woff2'),
+            url('public/font/AllTheRollPersonalUse.woff') format('woff');
+        font-weight: normal;
+        font-style: normal;
+        font-display: swap;
+         }
+    h1 {
+            font-size: 6vw;
             text-align: center;
-            overflow-y: auto;
-            border: 2px solid;
-            border-color: #007bff;
-            overflow-x :hidden;
+            color: white;
+            margin-top: 20px;
+            font-family: "All The Roll", Arial;
         }
-        #testo1 {
-            width :80vw;
-            margin-bottom :2vh;
+     #divGrande {
+        margin: 0 7vw 0 7vw;
+        border: 3px #007bff solid;
+        height: 80vh;
+        overflow-y: auto;
+        background-color: white;
         }
-        .bottone {
-            margin-top :1vh;
-        }
+     .bottonechat {
+         bottom: 0;
+         right: 0;
+         position: fixed;
+         font-size: 3vh;
+         margin-right: 0.5vw;     
+             }
+
+     .divGrandevideo {
+         margin: auto;
+         width: 560px;
+         float: right;
+         margin-right: 15px;
+         margin-top: 5px;
+     }
+     #nomeAttivita {
+         text-align: center;
+         font-size: 2vw;
+         font-family: 'Helvetica Neue LT Std';
+         
+     }
+     body {
+         background-color: #007bff;
+         }
+    
+     .testoAttivita {
+         width: 50%;
+         float: left;
+         margin-left: 15px;
+         margin-top: 1px;
+         font-size: 2.5vh;
+         text-align: justify;
+         font-family: 'Helvetica Neue LT Std'; 
+         
+         }
+
+
+     
     </style>
-    <script type="text/javascript">
-       // qrcode.callback = function (data) { alert(data); }; // QR CODE READER
-       // qrcode.decode("qrcode.png");
-        var video = document.getElementById("#videoElement");
-        if (navigator.mediaDevices.getUserMedia) {
-            navigator.mediaDevices.getUserMedia({ video: true })
-                .then(function (stream) {
-                    video.src = window.URL.createObjectURL(stream);
-                    video.play();
-                })
-                .catch(function (error) {
-                    alert("Oops, Qualcosa è andato storto!");
-                });
-        }
-        function opencam() {
-            
-        }
-    </script>
 </head>
 <body> 
     
     <div id="generico">
-        <button onclick="opencam()" type="button" class="btn btn-primary btn-lg bottone">Prosegui</button>
-        <div id="video-container">
-            <video autoplay id="videoElement">
-            </video>
-        </div>
-        <!--
-    <h1>Spiegazione</h1>
-    <div id="testo1">
-        Quanto cazzo è Loooser Gabriele Fogu!
+        <button type="button" class="btn btn-light bottonechat">Chat</button>
     </div>
-    <div class="video">
-        <iframe width="560" height="315" src="https://www.youtube.com/embed/mOYZaiDZ7BM" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-    </div>
+        <h1>(Nome Storia)</h1>
+        <div id="divGrande">
 
-       -->
-    </div>
-    
+            <div id="nomeAttivita">
+                Nome Attività 
+            </div>
+            <div class="testoAttivita">
+                Accessing your webcam via your browser used to involve a...pardon the profanity, a plugin. That's right. In order to connect to a webcam and gain access to its video stream, you had to rely on something primarily created in Flash or Silverlight. While that approach certainly worked for browsers that supported plug-ins, it didn't help for the increasing number of browsers that aim to be plugin-free. This inability to natively access the webcam without relying on 3rd party components was certainly a gap in the HTML development story. At least, that was the case until pretty recently.
+
+                The W3C has been attempting to fill this gap by encouraging browser vendors to implement the proposals outlined in the Media Capture and Streams spec. This spec defines, among various other things, how to communicate with a webcam device using just a little bit of JavaScript. The good news is, despite its newness, various browsers have already implemented support for accessing the webcam in their latest versions.
+
+                Note: Browser Support
+                Because accessing the webcam natively is a recent introduction, check out caniuse's statistics to see the level of support it has among the major browsers.) In writing this tutorial, I used the latest version of Google's Chrome where everything works swimmingly.
+
+                So...while the rest of the world is getting upgraded to browsers that support native webcam access, now is a great time for you to get ahead of the program and learn all about it. That's where this tutorial comes in. By the time you reach the bottom of this page, you will have learned how to take your webcam's video stream and display it using only some HTML and JavaScript.
+
+                Onwards.
+            </div>
+            <div class="divGrandevideo">
+                <div class="video">
+                    <iframe width="560" height="315" src="https://www.youtube.com/embed/mOYZaiDZ7BM" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            </div>
+      
+        </div>
 </body>
 </html>
