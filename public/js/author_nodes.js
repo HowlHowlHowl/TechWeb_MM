@@ -66,13 +66,16 @@ function removeConnection(c) {
     removeFromArray(c.output.connections, c);
 }
 
-function Output(node, single, onConnect, onDisconnect) {
+function Output(node, single, color, onConnect, onDisconnect) {
     this.element = $('<div class="output input-output"></div>');
     this.node = node;
     this.single = single;
     this.onConnect = onConnect;
     this.onDisconnect = onDisconnect;
     this.connections = [];
+    
+    if(color)
+        this.element.css("background-color", color);
     
     this.element.on('mousedown', (e) => {
         let point = getCenter(this.element);
@@ -115,13 +118,16 @@ function Output(node, single, onConnect, onDisconnect) {
     };
 }
 
-function Input(node, single, onConnect, onDisconnect) {
+function Input(node, single, color, onConnect, onDisconnect) {
     this.element = $('<div class="input input-output"></div>');
     this.node = node;
     this.single = single;
     this.onConnect = onConnect;
     this.onDisconnect = onDisconnect;
     this.connections = [];
+    
+    if(color)
+        this.element.css("background-color", color);
     
     this.element.on('mousedown', (e) => {
         let point = getCenter(this.element);
@@ -240,7 +246,7 @@ function Node(name, pos, callbacks) {
     
     
     this.addInput = (info) => {
-        let input = new Input(this, info.single, info.onConnect, info.onDisconnect);
+        let input = new Input(this, info.single, info.color, info.onConnect, info.onDisconnect);
         this.inputs.push(input);
         
         this.element.find(".node-inputs").append(input.element);
@@ -249,7 +255,7 @@ function Node(name, pos, callbacks) {
     };
     
     this.addOutput = (info) => {
-        let output = new Output(this, info.single, info.onConnect, info.onDisconnect);
+        let output = new Output(this, info.single, info.color, info.onConnect, info.onDisconnect);
         this.outputs.push(output);
         
         this.element.find(".node-outputs").append(output.element);
