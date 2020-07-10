@@ -283,6 +283,26 @@ function setWrongInputElement(activity, node) {
     }
 }
 
+function setNumberOption(element, option, checked) {
+    element.find(".option-range").toggle(checked);
+    element.find(".option-single").toggle(!checked);
+    
+    if(checked) {
+        linkInputToProperty(option, "from", element.find(".option-from"));
+        linkInputToProperty(option, "to", element.find(".option-to"));
+    } else {
+        let number = element.find(".option-number");
+        number.val(option.from);
+        
+        number.off();
+        number.on("change", (e) => {
+            editorDirty = true;
+            option.from = number.val();
+            option.to = number.val();
+        });
+    }
+}
+
 function addCorrectOptionElement(activity, option) {
     let element;
     if(activity.input_type == "text") {
@@ -292,8 +312,18 @@ function addCorrectOptionElement(activity, option) {
     } else {
         element = $($("#template-option-number").html());
         
-        let number = element.find(".option-number");
-        linkInputToProperty(option, "from", number);
+        let range_checkbox = element.find(".option-range-checkbox");
+        range_checkbox[0].checked = option.from != option.to;
+        setNumberOption(element, option, range_checkbox[0].checked);
+        
+        range_checkbox.on("change", (e) => {
+            editorDirty = true;
+            let checked = e.target.checked;
+            if(!checked) {
+                option.to = option.from;
+            }
+            setNumberOption(element, option, checked);
+        });
     }
     
     let points = element.find(".option-points");
@@ -570,7 +600,7 @@ function addActivityNode(activity) {
     
     n.setColor(colorFromMissionIndex(activity.mission_index));
     
-    let modify = $('<button class="btn btn-success btn-sm">Modifica</button>');
+    let modify = $('<button class="btn btn-success btn-sm btn-block">Modifica attività</button>');
     modify.on("click", (e) => openActivityEditor(activity, n));
     n.body().append(modify);
     

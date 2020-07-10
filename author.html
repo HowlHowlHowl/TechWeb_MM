@@ -307,11 +307,27 @@
     <template id="template-option-number">
         <div class="form-row m-1">
             <div class="col-1">
-                <button class="option-del btn btn-info float-right">Del</button>
+                <button class="option-del btn btn-info">Del</button>
             </div>
-            <div class="col-6">
-                <input type="number" step="any" class="option-number form-control" placeholder="Risposta">
+            
+            
+            <div class="col-2">
+                <label class="form-check-label">
+                    <input class="form-check-input option-range-checkbox" type="checkbox">Intervallo (da - a)
+                </label>
             </div>
+            
+            <div class="col-2 option-range">
+                <input type="number" class="option-from form-control">
+            </div>
+            <div class="col-2 option-range">
+                <input type="number" class="option-to form-control">
+            </div>
+            
+            <div class="col-4 option-single">
+                <input type="number" class="option-number form-control">
+            </div>
+            
             <div class="col-2">
                 <input type="number" class="option-points form-control">
             </div>
