@@ -778,6 +778,7 @@ function addStoryElement(s) {
     
     let swap = story_div.find(".story-swap");
     swap.on("click", () => actionOnStory(s.id, s.published ? "archive" : "publish"));
+    swap.text(s.published ? "Archivia" : "Pubblica");
     
     let dup = story_div.find(".story-dup");
     dup.on("click", () => actionOnStory(s.id, "duplicate"));
@@ -882,11 +883,12 @@ function saveSelectedStory()
 }
 
 function actionOnStory(id, action) {
+    let action_url = action == "delete" ? "" : ("/" + action);
+    let method = action == "delete" ? "DELETE" : "POST";
+    
     $.ajax({
-        url: '/stories/' + id,
-        type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify({ action: action}),
+        url: '/stories/' + id + action_url,
+        type: method,
         
         success: function(data) {
             if(action == "delete" && loadedStory && loadedStory.id == id) {

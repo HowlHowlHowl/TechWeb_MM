@@ -1,12 +1,12 @@
 {
-  "name": "Nuova storia",
+  "name": "Storia",
   "accessible": false,
   "published": true,
   "canvas_offset": {
-    "x": 253.28656694465957,
-    "y": 289.0106179286038
+    "x": 134.16211258811992,
+    "y": 288.89430830291525
   },
-  "canvas_scale": 0.42175916851386924,
+  "canvas_scale": 0.6524823023620708,
   "missions": [
     {
       "name": "A",
@@ -33,7 +33,7 @@
       "input_type": "number",
       "input": {
         "evaluation_type": "correct",
-        "next_index": null,
+        "next_index": 1,
         "correct_options": [
           {
             "points": 0,
@@ -52,11 +52,11 @@
           }
         ],
         "wrong_stay": false,
-        "wrong_next_index": null
+        "wrong_next_index": 2
       },
       "position": {
-        "x": -41.59152380173398,
-        "y": 59.96942763373005
+        "x": 67.23707606849548,
+        "y": 3.2622188086280777
       }
     },
     {
@@ -82,7 +82,7 @@
           }
         ],
         "wrong_stay": false,
-        "wrong_next_index": null
+        "wrong_next_index": 2
       },
       "position": {
         "x": 463.46043798788435,
@@ -99,8 +99,8 @@
         "next_index": 4
       },
       "position": {
-        "x": 769.7066900141085,
-        "y": 406.05245395482683
+        "x": 409.5265117570249,
+        "y": 148.55709853684075
       }
     },
     {
@@ -113,8 +113,8 @@
         "next_index": 4
       },
       "position": {
-        "x": 881.817780505437,
-        "y": -338.3825487082906
+        "x": 910.9320870129372,
+        "y": -260.21194872506265
       }
     },
     {
@@ -127,8 +127,8 @@
         "next_index": null
       },
       "position": {
-        "x": 1226.8236755207993,
-        "y": 34.518230340437476
+        "x": 1375.4679668864921,
+        "y": -8.402173158203444
       }
     }
   ],
