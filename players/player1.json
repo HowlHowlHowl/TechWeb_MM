@@ -1,5 +1,12 @@
 {
   "id": 1,
+  "active": true,
+  "score": 1000,
+  "username": "",
+  "current_quest_start_timestamp": [
+    "16",
+    "32"
+  ],
   "chat": [
     {
       "hour": "11",

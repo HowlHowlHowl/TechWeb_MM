@@ -1,12 +1,19 @@
 {
   "id": 3,
+  "active": true,
+  "score": 1000,
+  "username": "Pelo",
+  "current_quest_start_timestamp": [
+    "16",
+    "32"
+  ],
   "chat": [
     {
       "hour": "11",
       "mins": "00",
       "text": "Ci sei?",
       "auth": "Valutatore",
-      "seen": false
+      "seen": true
     }
   ]
 }

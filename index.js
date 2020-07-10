@@ -210,6 +210,7 @@ app.get('/players/', function (req, res) {
                 let player = {};
                 player.id = data.id;
                 player.urgent = false;
+                player.usrname = data.username;
                 data.chat.forEach(function (dataChatLog) {
                     if ((dataChatLog.auth ).localeCompare("player"+data.id)==0) {
                         player.urgent = !dataChatLog.seen;
@@ -240,7 +241,7 @@ app.get('/players/:id', function(req, res){
 });
 //Aggiunge un messaggio in chat inviato dal valutatore, funziona sull'assunto che 
 //venga creato un file per ogni giocatore appena entra in game.
-app.put('/players/:id', function (req, res) {
+app.post('/players/:id', function (req, res) {
     let id = req.params.id;
     let msg = req.body;
     let path = 'players/' + id + '.json';
@@ -251,14 +252,12 @@ app.put('/players/:id', function (req, res) {
     });
     res.end();
 });
-
-app.put('/players/:id/mark_as_seen', function (req, res) {
+//Segna come letti i chatlog del player specificato
+app.post('/players/:id/mark_as_seen', function (req, res) {
     let id = req.params.id;
     let path = 'players/' + id + '.json';
-    console.log(path);
     let data = fs.readFileSync(path, function (err) {
         if (err) {
-            console.log("err");
             res.status(500).send();
             res.end();
         }

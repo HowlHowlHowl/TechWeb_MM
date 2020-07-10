@@ -3,91 +3,111 @@
 <head>
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-    
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-    
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    
+
+    <title>Evaluator</title>
+
     <style type="text/css">
-     
-        /*Navbar*/ 
+
+        /*Navbar*/
         .navbar-brand {
-            font-size:3vw;
+            font-size: 3vw;
         }
+
         .nav-link {
-            font-size: 2vw;
+            font-size: 2vh;
         }
+
         .dropdown-item {
-            font-size:1vw;
+            font-size: 2vh;
         }
+
         .navbar {
-           margin-bottom:0;
-           border-radius:0;
+            margin-bottom: 0;
+            left: 15vw;
+            width: 85vw;
+            border-radius: 0;
         }
+
         .badge-secondary {
             color: #007bff !important;
             background-color: #fff;
         }
+
         #helpNotification {
             font-size: 1vw;
         }
         /*Container correzioni*/
         .list-group {
             width: 15%;
-            height:100%;
+            height: 100%;
             overflow-y: auto;
             position: fixed;
         }
-        .list-group > a {
-            font-size: 1vw;
-        }
+
+            .list-group > a {
+                font-size: 1vw;
+            }
+
         .list-group-item:first-child {
             border-top-left-radius: 0;
             border-top-right-radius: 0;
         }
-        /*Stile del container della chat*/
+        /*Chat Styling*/
         /*ADDED BY ME*/
         .chat-popup {
-            position:fixed;
-            right:0;
-            bottom:0;
+            position: fixed;
+            right: 0;
+            bottom: 0;
+            width: 35vh;
+            display: none;
         }
+
         .panel-primary > .panel-heading {
             color: #fff;
             background-color: #428bca;
             border-color: #428bca;
-            padding-top:2px;
-            padding-bottom:2px;
+            padding-top: 2px;
+            padding-bottom: 2px;
         }
+
         .col-sm-8 {
-            width:100%;
-            max-width:100%;
+            width: 100%;
+            max-width: 100%;
         }
+
         .col-md-8 {
-            padding-left:0;
-            padding-right:0;
-            float:left;
-            width:80%;
+            padding-left: 0;
+            padding-right: 0;
+            float: left;
+            width: 80%;
         }
+
         .container {
-            padding-left:0;
-            padding-right:0;
+            padding-left: 0;
+            padding-right: 0;
+            width: 100%;
         }
+
         .col-md-4 {
             width: 10%;
             float: right;
             top: 2px;
         }
+
         .glyphicon-remove {
-            color:red;
-            right:0;
-            top:0;   
+            right: 0;
+            top: 10px;
         }
+
         .glyphicon-send {
-            top:2px
+            top: 2px
         }
         /*Not anymore   */
         .col-md-2, .col-md-10 {
@@ -105,15 +125,15 @@
             margin-left: 10px;
         }
 
-        .chat-window > div > .panel {
-            border-radius: 5px 5px 0 0;
-        }
+            .chat-window > div > .panel {
+                border-radius: 5px 5px 0 0;
+            }
 
         .msg_container_base {
             background: #e5e5e5;
             margin: 0;
             padding: 0 10px 10px;
-            max-height: 30vh;
+            height: 30vh;
             overflow-x: hidden;
         }
 
@@ -126,15 +146,12 @@
         }
 
         .msg_receive {
-            padding-left: 0;
-            margin-left: 0;
-            margin-right:7vw;
+            width: 100%;
         }
 
         .msg_sent {
             padding-bottom: 20px !important;
-            margin-right: 0;
-            margin-left:7vw;
+            width: 100%;
         }
 
         .messages {
@@ -145,14 +162,20 @@
             max-width: 100%;
         }
 
+        .sent-msgs {
+            background: rgba(66, 139, 202, 0.78);
+        }
+
         .messages > p {
             font-size: 13px;
+            color: black;
             margin: 0 0 0.2rem 0;
+            max-width: 100%;
         }
 
         .messages > time {
             font-size: 11px;
-            color: #ccc;
+            color: black;
         }
 
         .msg_container {
@@ -164,7 +187,6 @@
         .base_sent {
             justify-content: flex-end;
             align-items: flex-end;
-            
         }
 
         .msg_sent > time {
@@ -185,21 +207,199 @@
             -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
             background-color: #555;
         }
-
-        .btn-group.dropup {
-            position: fixed;
-            left: 0px;
+        /*Sidebar*/
+        .answer-list {
+            border-right: solid 1px;
+            border-right-color: rgba(66, 139, 202, 0.75);
+            min-width: 15vw;
+            min-height: 100%;
+            overflow-y: auto;
+            top: 0;
             bottom: 0;
         }
-        /*TODO: AGGIUSTARE L?HEADER DELLA CHAT NELLA VISUALIZZAZIONE MOBILE*/
+
+            .answer-list > a {
+                font-size: 2vh;
+            }
+
+        .waiting-player:nth-child(1) {
+            background: #007bff;
+            color: white;
+            font-size: 2vh;
+        }
+
+        .waiting-player {
+            border: inset;
+            border-left: 0;
+            border-right: 0;
+            border-top: 0;
+            text-align: center;
+            vertical-align: middle;
+            padding: 0.5vw;
+        }
+        /*Correction Pane*/
+        .tab-pane {
+            overflow-y: auto;
+        }
+
+        .panel-default {
+            margin-left: 15vw;
+        }
+
+        #correction-header {
+            text-align: center;
+            font-size: 4vh;
+            background-color: rgba(66, 139, 202, 0.77);
+            color: white;
+        }
+
+        #correction-pane {
+            padding-left: 1vw;
+            padding-right: 1vw
+        }
+
+        .description-div {
+            max-height: 30vh;
+        }
+
+        .inline-divs:nth-child(1) {
+            width: 80vw;
+            height: 5vh;
+            border-radius: 20px 20px 0 0;
+            background: #007bff;
+            text-align: center;
+            vertical-align: middle;
+            border: inset;
+            border-bottom-width: 0;
+            font-size: 3vh;
+            color: #fff;
+            display: block;
+            flex-direction: column;
+            justify-content: center;
+            margin-left: 1vw;
+        }
+
+        .inline-divs:nth-child(2) {
+            width: 80vw;
+            height: 10vh;
+            border: inset;
+            border-top-width: 0;
+            border-bottom-width: 0;
+            overflow-y: auto;
+            vertical-align: top;
+            margin-left: 1vw;
+        }
+
+        .inline-divs:nth-child(3) {
+            width: 80vw;
+            height: 5vh;
+            border-radius: 0 0 20px 20px;
+            background: #077bff;
+            text-align: center;
+            vertical-align: middle;
+            border: inset;
+            border-top-width: 0;
+            font-size: 3vh;
+            color: #fff;
+            display: block;
+            flex-direction: column;
+            justify-content: center;
+            margin-left: 1vw;
+        }
+
+        .inline-divs:nth-child(1) > a {
+            margin-right: 2vw;
+            margin-top: 1vh;
+            float: right;
+            background-color: transparent;
+            border-width: 0;
+        }
+
+        .inline-divs:nth-child(2) > p {
+            font-size: 1.5vh;
+            margin: .5vw;
+        }
+
+        .inline-divs:nth-child(2)::-webkit-scrollbar {
+            width: 0.5vw;
+        }
+
+        .inline-divs:nth-child(2)::-webkit-scrollbar-thumb {
+            border-radius: 0.5vw;
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+        }
+
+        .rate-sec {
+            width: 60vw;
+            font-size: 2vw;
+        }
+
+        .bool-valutation {
+        }
+
+        /*User space*/
+        .user-space {
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            border: #007bff 10px solid;
+            background-color: white;
+            padding-top: 1vh;
+        }
+
+        .borders {
+            width: 50vw;
+            height: 50vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            margin: 25vh 25vw 25vh 25vw;
+            border: white 2px solid;
+        }
+
+        .inline-info {
+            float: left;
+            font-size: 3vw;
+            margin-right: 5vw;
+            margin-top: 2vh;
+            margin-bottom: 2vh;
+        }
+
+        .icon_close_tab {
+            float: right;
+            margin-bottom: 2vw;
+        }
+
+        #rename-button {
+            margin-left: 10vh;
+            margin-right: 5vh;
+            display:inline-block;
+        }
+        #rename-button-container {
+            text-align:center;
+        }
+
+        #playername-label {
+            width: 20vh;
+            display:inline-block;
+        }
+        #playername-container {
+            text-align: center;
+        }
+
     </style>
 
     <script type="text/javascript">
-
         var chatLength = 0;
         var helpLength = 0;
         var currentPlayer = null;
         var helpIntervalID = null;
+
+        //Sets layout of correction panel
+        function setCorrectionPane() {
+
+        }
 
         //Sets the layout of the chat messages
         function setChatView(data) {
@@ -215,7 +415,6 @@
                 }
             });
         }
-
         //Open the pop-up chat with the selected player
         function openChat(id) {
             $.ajax({
@@ -224,7 +423,7 @@
                 success: function (data) {
                     $('#chat-user').empty();
                     $('#chat-msgs').empty();
-                    setChatView(data); 
+                    setChatView(data);
                     currentPlayer = 'player' + data.id;
                     document.getElementById("chat").style.display = "block";
                     scrollToBottom();
@@ -234,22 +433,20 @@
                 }
             });
         }
-
         //Close the pop-up chat
         function closeChat() {
             document.getElementById("chat").style.display = "none";
         }
-
         //Fill the lists of player avaiable for conversation and in need for help
-        function setChatList(data) {
+        function setPlayerList(data) {
+            let name = (data.usrname ? data.usrname : "Player " + data.id);
             if (data.urgent) {
                 helpLength++;
-                $('#helpDropdown').append('<a class="dropdown-item help-list-el" id="player'+ data.id +'">Player ' + data.id + '</a>');
+                $('#helpDropdown').append('<a class="dropdown-item chat-list-el" id="player'+ data.id +'">' + name + '</a>');
             }
-            $('#chatDropdown').append('<a class="dropdown-item list-element" id="player' + data.id + '">Player ' + data.id + '</a>');
+            $('#playersDropdown').append('<a class="dropdown-item chat-list-el" id="player' + data.id + '">' + name + '</a>');
             chatLength++;
         }
-
         //Make the notification mark blink
         function blinkNotify(selector) {
             var element = $(selector);
@@ -259,26 +456,24 @@
                         element.fadeIn(1000);
                     });
                 });
-            }, 2000);   
+            }, 2000);
         }
-
         //AJAX connection to get the players data for chats
         function updateChat() {
             $.ajax({
                 accepts: 'application/json',
                 url: '/players',
                 success: function (data) {
-                    $('#chatDropdown').empty();
+                    $('#playersDropdown').empty();
                     $('#helpDropdown').empty();
                     helpLength = 0;
                     chatLength = 0;
-                    data.forEach(setChatList);
-                    console.log(helpLength);
+                    data.forEach(setPlayerList);
                     clearInterval(helpIntervalID);
                     $('#helpDropdownButton').find('#helpNotification').remove();
-                    if (chatLength == 0) $('#chatDropdown').append('<a class="dropdown-item">Non ci sono chat disponibili</a>');
+                    if (chatLength == 0) $('#playersDropdown').append('<a class="dropdown-item">Non ci sono chat disponibili</a>');
                     if (helpLength == 0) {
-                        $('#helpDropdown').append('<a class="dropdown-item">Non ci sono richieste di aiuto</a>'); 
+                        $('#helpDropdown').append('<a class="dropdown-item">Non ci sono richieste di aiuto</a>');
                     } else {
                         $('#helpDropdownButton').append('<span class="badge badge-secondary" id="helpNotification">'+ helpLength +' New</span>');
                         blinkNotify('#helpNotification');
@@ -290,7 +485,7 @@
         function markAsSeen(id) {
             $.ajax({
                 url: '/players/' + id + '/mark_as_seen',
-                type: 'PUT',
+                type: 'POST',
                 contentType: 'application/json',
                 success: function () {
                     updateChat();
@@ -320,7 +515,7 @@
                 let id = currentPlayer;
                 $.ajax({
                     url: '/players/' + id,
-                    type: 'PUT',
+                    type: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify(msg),
 
@@ -333,32 +528,40 @@
                 });
             }
         }
-
         //Scroll to the last received message in the current chat
         function scrollToBottom() {
             let chatVBox = document.getElementById('chat-msgs');
             chatVBox.scrollTop = chatVBox.scrollHeight;
         }
-
+        $(document).on('click', '.plus_min', function (event) {
+            id = event.currentTarget.id;
+            let elem = $("#" + id + "-details").children().eq(1);
+            elem.animate({
+                height: "toggle"
+            }, {
+                step: function (now, fx) {
+                    $('#' + id).empty();
+                    if (fx.end == 0) {
+                        $('#' + id).append('<span class="glyphicon glyphicon-plus"></span>');
+                    } else {
+                        $('#' + id).append('<span class="glyphicon glyphicon-minus"></span>');
+                    }
+                }
+            }, 250);
+        });
         //Call updateChat() method when the document is ready
         $(document).ready(function () {
             updateChat();
-            openChat("player5");
-        });
-     
-        //Event to open chat with selected player
-        $(document).on('click', '.list-element', function (event) {
-            openChat(event.target.id);
         });
 
-        //Event to open chat with selected in-need player
-        $(document).on('click', '.help-list-el', function (event) {
+        //Event to open chat with selected player
+        $(document).on('click', '.chat-list-el', function (event) {
             openChat(event.target.id);
-            markAsSeen(event.target.id); 
+            markAsSeen(event.currentTarget.id);
         });
 
     </script>
-    <title>Evaluator</title>
+
 </head>
 <body>
 
@@ -373,9 +576,9 @@
             <ul class="navbar-nav">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Chat
+                        Player
                     </a>
-                    <div class="dropdown-menu" id="chatDropdown" aria-labelledby="navbarDropdown">
+                    <div class="dropdown-menu" id="playersDropdown" aria-labelledby="navbarDropdown">
                         <!--Lista degli utenti in chat-->
                     </div>
                 </li>
@@ -393,76 +596,125 @@
     </nav>
     <!--ANSWER LIST-->
     <!-- List group -->
-    <div>
-        <div class="list-group" id="correction-list" role="tablist">
-            <a class="list-group-item list-group-item-action active" data-toggle="list" href="#home" role="tab">1</a>
-            <a class="list-group-item list-group-item-action" data-toggle="list" href="#profile" role="tab">2</a>
-            <a class="list-group-item list-group-item-action" data-toggle="list" href="#messages" role="tab">3</a>
-            <a class="list-group-item list-group-item-action" data-toggle="list" href="#profile" role="tab">4</a>
-            <a class="list-group-item list-group-item-action" data-toggle="list" href="#messages" role="tab">5</a>
-            <a class="list-group-item list-group-item-action" data-toggle="list" href="#profile" role="tab">6</a>
-            <a class="list-group-item list-group-item-action" data-toggle="list" href="#messages" role="tab">7</a>
-            <a class="list-group-item list-group-item-action" data-toggle="list" href="#profile" role="tab">8</a>
-            <a class="list-group-item list-group-item-action" data-toggle="list" href="#messages" role="tab">9</a>
-            <a class="list-group-item list-group-item-action" data-toggle="list" href="#profile" role="tab">10</a>
-            <a class="list-group-item list-group-item-action" data-toggle="list" href="#messages" role="tab">11</a>
-            <a class="list-group-item list-group-item-action" data-toggle="list" href="#profile" role="tab">12</a>
-            <a class="list-group-item list-group-item-action" data-toggle="list" href="#messages" role="tab">13</a>
-            <a class="list-group-item list-group-item-action" data-toggle="list" href="#profile" role="tab">14</a>
-            <a class="list-group-item list-group-item-action" data-toggle="list" href="#messages" role="tab">15</a>
-            <a class="list-group-item list-group-item-action" data-toggle="list" href="#profile" role="tab">16</a>
-            <a class="list-group-item list-group-item-action" data-toggle="list" href="#messages" role="tab">17</a>
-            <a class="list-group-item list-group-item-action" data-toggle="list" href="#profile" role="tab">18</a>
-            <a class="list-group-item list-group-item-action" data-toggle="list" href="#messages" role="tab">19</a>
-            <a class="list-group-item list-group-item-action" data-toggle="list" href="#settings" role="tab">20</a>
-            <a class="list-group-item list-group-item-action" data-toggle="list" href="#home    " role="tab">21</a>
-            <a class="list-group-item list-group-item-action" data-toggle="list" href="#profile" role="tab">22</a>
-            <a class="list-group-item list-group-item-action" data-toggle="list" href="#messages" role="tab">23</a>
-            <a class="list-group-item list-group-item-action" data-toggle="list" href="#profile" role="tab">24</a>
-            <a class="list-group-item list-group-item-action" data-toggle="list" href="#messages" role="tab">25</a>
-        </div>
+    <div class="answer-list list-group" id="correction-list" role="tablist">
+        <a class="waiting-player list-group-item list-group-item-action disabled" data-toggle="list"  role="tab">Pending Answers</a>
+        <a class="waiting-player list-group-item list-group-item-action active" data-toggle="list"  role="tab">Player 1</a>
+        <a class="waiting-player list-group-item list-group-item-action" data-toggle="list"  role="tab">3</a>
+        <a class="waiting-player list-group-item list-group-item-action" data-toggle="list"  role="tab">4</a>
+        <a class="waiting-player list-group-item list-group-item-action" data-toggle="list"  role="tab">5</a>
+        <a class="waiting-player list-group-item list-group-item-action" data-toggle="list"  role="tab">6</a>
+        <a class="waiting-player list-group-item list-group-item-action" data-toggle="list"  role="tab">7</a>
+        <a class="waiting-player list-group-item list-group-item-action" data-toggle="list"  role="tab">8</a>
+        <a class="waiting-player list-group-item list-group-item-action" data-toggle="list"  role="tab">9</a>
+        <a class="waiting-player list-group-item list-group-item-action" data-toggle="list"  role="tab">10</a>
     </div>
     <!-- Tab panes -->
     <div class="tab-content">
-        <div class="tab-pane active" id="home" role="tabpanel">...</div>
-        <div class="tab-pane" id="profile" role="tabpanel">...</div>
-        <div class="tab-pane" id="messages" role="tabpanel">...</div>
-        <div class="tab-pane" id="settings" role="tabpanel">...</div>
+        <div class="tab-pane active" role="tabpanel">
+            <div class="panel panel-default">
+                <div class="panel-heading" id="correction-header">Player 1</div>
+                <div class="panel-body" id="correction-pane">
+                    <div id="story-details" class="description-div">
+                        <div class="inline-divs">
+                            Story : story:id <a id="story" class="plus_min btn btn-info btn-sm"><span class="glyphicon glyphicon-minus"></span></a>
+                        </div>
+                        <div class="inline-divs">
+                            <p>
+                                <b>Question: </b><br> question:text - "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+                            </p>
+                        </div>
+                        <div class="inline-divs">
+                        </div>
+                    </div>
+                    <div id="answer-details" class="description-div">
+                        <div class="inline-divs">
+                            Answer : <a id="answer" class="plus_min btn btn-info btn-sm"><span class="glyphicon glyphicon-minus"></span></a>
+                        </div>
+                        <div class="inline-divs">
+                            <p>
+                                answer:text - "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur."
+                            </p>
+                            <img src="public/uploads/no_image.png" class="img-fluid img-thumbnail" alt="Responsive image">
+                        </div>
+                        <div class="inline-divs">
+                        </div>
+                    </div>
+                    <div class="valutation-input">
+                        <form>
+                            <p>Come valuti la risposta data?</p>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="true">
+                                <label class="form-check-label" for="inlineRadio1">Corretta</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="false">
+                                <label class="form-check-label" for="inlineRadio2">Non corretta</label>
+                            </div>
+                            <br>
+                            <br>
+                            <button type="button" class="btn btn-outline-primary">Submit <span class="glyphicon glyphicon-ok"></span></button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
-    <!--CHAT START-->
+    <!--CHAT-->
     <div class="chat-popup" id="chat">
         <form autocomplete="off" onsubmit="sendMsg()" class="form-container">
             <div class="container">
-               
-                    <div class="col-sm-8">
-                        <div class="chatbody">
-                            <div class="panel panel-primary">
-                                <div class="panel-heading top-bar">
-                                    <div class="col-md-4 col-xs-4" style="text-align: right;">
-                                        <a onclick="closeChat()"><span class="glyphicon glyphicon-remove icon_close" data-id="chat_window_1"></span></a>
-                                    </div>
-                                    <div class="col-md-8 col-xs-8">
-                                        <p class="panel-title" id="chat-user"><!--Nome utente chat--></p>
-                                    </div>
+                <div class="col-sm-8">
+                    <div class="chatbody">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading top-bar">
+                                <div class="col-md-4 col-xs-4" style="text-align: right;">
+                                    <a onclick="closeChat()"><span class="glyphicon glyphicon-remove icon_close" data-id="chat_window_1"></span></a>
+                                </div>
+                                <div class="col-md-8 col-xs-8">
+                                    <p class="panel-title" id="chat-user"><!--Nome utente chat--></p>
+                                </div>
 
-                                </div>
-                                <div id="chat-msgs" class="panel-body msg_container_base">
-                                    <!--MESSAGGI-->
-                                </div>
-                                <div class="panel-footer">
-                                    <div class="input-group">
-                                        <input id="new_msg_text" type="text" autocomplete="off" class="form-control input-sm chat_input" placeholder="Write your message here..." />
-                                        <a class="btn btn-info btn-sm" onclick="sendMsg()">
-                                            <span class="glyphicon glyphicon-send"></span> Send
-                                        </a>
-                                    </div>
+                            </div>
+                            <div id="chat-msgs" class="panel-body msg_container_base">
+                                <!--MESSAGGI-->
+                            </div>
+                            <div class="panel-footer">
+                                <div class="input-group">
+                                    <input id="new_msg_text" type="text" autocomplete="off" class="form-control input-sm chat_input" placeholder="Write your message here..." />
+                                    <a class="btn btn-info btn-sm" onclick="sendMsg()">
+                                        <span class="glyphicon glyphicon-send"></span> Send
+                                    </a>
                                 </div>
                             </div>
                         </div>
                     </div>
-               
+                </div>
+
             </div>
         </form>
+    </div>
+    <!--USER PAGE-->
+    
+    <div class="borders">
+        <div class="panel-body user-space">
+
+            <a onclick="closeUserTab()"><span class="glyphicon glyphicon-remove icon_close_tab"></span></a>
+            <div class="input-group input-group-lg inline-info">
+                <div class="input-group-prepend" id="playername-container">
+                    <div class="input-group-text" id="playername-label">Nome del Player</div>
+                </div>
+                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
+                <div id="rename-button-container">
+                    <button type="button" id ="rename-button" class="btn btn-primary btn-lg">Rename</button>
+                </div>
+            </div>
+            <div class="inline-info">
+                <p>Score: player_score</p>
+            </div>
+
+
+        </div>
     </div>
 </body>
 </html>
