@@ -275,9 +275,10 @@ app.put('/players/:id/mark_as_seen', function (req, res) {
 });
 
 //Richiesta della storia dal player
-app.get('/player:storyId', function (req,res) {
+app.get('/player/:storyId', function (req,res) {
     let story_Id = req.params.storyId;
     let path = "stories/" + story_Id + ".json";
+    console.log(path);
     fs.readFile(path, function (err, data) {
         if (!err) {
             res.writeHead(200, { "Content-Type": "application/json" });
