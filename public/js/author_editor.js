@@ -1,6 +1,15 @@
+//Button for the current selected story.
 var selectedStoryButton = null;
+
+//Story that is currently being edited
 var loadedStory = null;
+
+//Flag used to mark that a change has been made and we need to save before quitting the editor.
 var editorDirty = false;
+
+//This array contains all the nodes currently in the canvas and is kept in sync with the array of activities in the loaded story 
+//so that the node at position i is related to the activity at position i in the loadedStory.activities array.
+var nodesArray = [];
 
 function modalSave() {
     saveSelectedStory();
@@ -180,9 +189,234 @@ function colorFromMissionIndex(i) {
     }
 }
 
+function refreshOptions(options, activity) {
+    options.find("button").each( (j, e) => {
+        if(j == 0) {
+            $(e).toggleClass("active", activity.mission_index == null);
+        } else {
+            $(e).toggleClass("active", (j - 1) == activity.mission_index);
+        }
+    });
+}
+
+function makeOutput(object, property, node, color) {
+    let output = node.addOutput({
+        single: true, 
+        color: color,
+        onConnect: (c) => {
+            let new_index = nodesArray.indexOf(c.input.node);
+            if(object[property] != new_index) {
+                editorDirty = true;
+                object[property] = new_index;
+            }
+        },
+        onDisconnect: (c) => {
+            if(object[property] != null) {
+                editorDirty = true;
+                object[property] = null;
+            }
+        }
+    });
+    
+    let target_index = object[property];
+    if(target_index !== null) {
+        let input = nodesArray[target_index].inputs[0];
+        
+        let c = new Connection(input, output);
+        input.addConnection(c);
+        output.addConnection(c);
+    }
+}
+
+function setNodeOutputs(activity, node) {
+    let type = activity.input_type;
+    let input = activity.input;
+    
+    node.clearOutputs();
+    
+    //Add the 1 default output.
+    makeOutput(input, "next_index", node, "green");
+    
+    //Add the output for a wrong answer
+    if(input.wrong_next_index !== undefined) {
+        makeOutput(input, "wrong_next_index", node, "red");
+    }
+}
+
+function setWrongInputElement(activity, node) {
+    let input = activity.input;
+    
+    let evaluation_type = input.evaluation_type;
+    let wrong_div = $("#activity-input-wrong-div");
+    if(evaluation_type == "any") {
+        wrong_div.toggle(false);
+    } else {
+        wrong_div.toggle(true);
+        
+        let wrong_message = $("#wrong-message");
+        wrong_message.toggle(input.wrong_stay);
+        
+        let wrong_text = $("#wrong-text");
+        if(input.wrong_stay)
+            linkInputToProperty(input, "wrong_message", wrong_text);
+        
+        let wrong_checkbox = $("#wrong-stay");
+        wrong_checkbox[0].checked = input.wrong_stay;
+        wrong_checkbox.off();
+        wrong_checkbox.on("change", (e) => {
+            editorDirty = true;
+            
+            input.wrong_stay = wrong_checkbox[0].checked;
+            wrong_message.toggle(input.wrong_stay);
+            
+            if(input.wrong_stay) {
+                delete input.wrong_next_index;
+                input.wrong_message = "";
+                linkInputToProperty(input, "wrong_message", wrong_text);
+            } else {
+                delete input.wrong_message;
+                input.wrong_next_index = null;
+            }
+            
+            setNodeOutputs(activity, node);
+        });
+    }
+}
+
+function addCorrectOptionElement(activity, option) {
+    let element;
+    if(activity.input_type == "text") {
+        element = $($("#template-option-text").html());
+        let text = element.find(".option-text");
+        linkInputToProperty(option, "text", text);
+    } else {
+        element = $($("#template-option-number").html());
+        
+        let number = element.find(".option-number");
+        linkInputToProperty(option, "from", number);
+    }
+    
+    let points = element.find(".option-points");
+    linkInputToProperty(option, "points", points);
+    
+    let del = element.find(".option-del");
+    del.on("click", (e) => {   
+        editorDirty = true;
+        
+        let options = activity.input.correct_options;
+        removeFromArray(options, option);
+        element.remove();
+        
+        $(".option-del").prop("disabled", options.length == 1);
+    });
+    
+    $("#correct-options").append(element);
+}
+
+function setCorrectInputElement(activity) {
+    let input = activity.input;
+    
+    let container = $("#activity-correct-div");
+    if(input.evaluation_type != "correct") {
+        container.toggle(false);
+    } else {
+        container.toggle(true);
+        
+        let options = $("#correct-options");
+        options.empty();
+        input.correct_options.forEach( (o) => {
+            addCorrectOptionElement(activity, o);
+        });
+        $(".option-del").prop("disabled", input.correct_options.length == 1);
+        
+        let new_option = $("#correct-new");
+        new_option.off();
+        new_option.on("click", (e) => {
+            editorDirty = true;
+            
+            let o = { points: 0 };
+            if(activity.input_type == "text") {
+                o.text = "";
+            } else {
+                o.from = 0;
+                o.to = 0;
+            }
+            
+            input.correct_options.push(o);
+            addCorrectOptionElement(activity, o);
+            
+            $(".option-del").prop("disabled", input.correct_options.length == 1);
+        });
+    }
+}
+
+function setInputElement(activity, node)
+{
+    let type = activity.input_type;   
+    
+    let input_container = $("#activity-input-div");
+    if(type == "none") {
+        input_container.toggle(false);
+    } else {
+        input_container.toggle(true);
+        
+        //Evaluation options
+        let select = $("#input-evaluation-select");
+        select.empty();
+        select.off();
+        
+        let options = [ 
+            { text: "Qualsiasi", value: "any"},
+            { text: "Corretta", value: "correct"},
+            { text: "Valutata", value: "evaluator"},
+        ];
+        if(type == "photo") {
+            removeFromArray(options, options[1]);
+        }
+        
+        options.forEach( (o) => {
+            let option = $('<option value="' + o.value + '" >' + o.text + '</option>');
+            option.prop("selected", o.value == activity.input.evaluation_type);
+            select.append(option);
+        });
+        
+        select.on("change", (e) => {
+            editorDirty = true;
+            
+            let evaluation_type = select.val();
+            activity.input = {
+                evaluation_type: evaluation_type,
+                next_index: null
+            };
+            if(evaluation_type == "correct") {
+                if(type == "text") {
+                    activity.input.correct_options = [ { points : 0, text : "" } ];
+                } else {
+                    activity.input.correct_options = [ { points : 0, from : 0, to: 0 } ];
+                }
+            }
+            if(evaluation_type != "any") {
+                activity.input.wrong_stay = false;
+                activity.input.wrong_next_index = null;
+            }
+            
+            setCorrectInputElement(activity);
+            setWrongInputElement(activity, node);
+            setNodeOutputs(activity, node);
+        });
+        
+        setCorrectInputElement(activity);
+        setWrongInputElement(activity, node);
+    }
+    
+    setNodeOutputs(activity, node);
+}
+
+
 function openActivityEditor(activity, node) {
     let editor = $("#activity-modal");
     
+    //Activity name
     let name = editor.find(".activity-name");
     name.off("change");
     name.val(activity.name);
@@ -192,18 +426,21 @@ function openActivityEditor(activity, node) {
         node.setName(name.val());
     });
     
+    //Mission
     let select = editor.find(".select-mission");
     select.text(activity.mission_index == null ? "Nessuna missione" : loadedStory.missions[activity.mission_index].name);
     let options = editor.find(".mission-options");
     options.empty();
     
     let none = $('<button class="dropdown-item" type="button">Nessuna missione</button>');
+    none.toggleClass("active", activity.mission_index == null);
     none.on("click", () => {
         if(activity.mission_index != null) {
             editorDirty = true;
             activity.mission_index = null;
             node.setColor(colorFromMissionIndex(activity.mission_index));
             select.text("Nessuna missione");
+            refreshOptions(options, activity);
         }
     });
     
@@ -214,17 +451,21 @@ function openActivityEditor(activity, node) {
     for(let i = 0; i < loadedStory.missions.length; i++) {
         let m = loadedStory.missions[i];
         let button = $('<button class="dropdown-item" type="button">' + m.name + '</button>');
+        button.toggleClass("active", i == activity.mission_index);
+        
         button.on("click", () => {
             if(activity.mission_index != i) {
                 editorDirty = true;
                 activity.mission_index = i;
                 node.setColor(colorFromMissionIndex(activity.mission_index));
                 select.text(m.name);
+                refreshOptions(options, activity);
             }
         });
         button.appendTo(options);
     }
     
+    //Contents
     let contents = editor.find(".contents-div");
     contents.empty();
     
@@ -251,39 +492,58 @@ function openActivityEditor(activity, node) {
         updateAllUpDownButtons(contents, ".content-up", ".content-down");
     });
     
-    let input_text = editor.find(".input-text");
-    input_text.toggleClass("active", activity.input_type == "text");
-    input_text.off("click");
-    input_text.on("click", () => {
-        editorDirty = true;
-        activity.input_type = "text";
+    //Input
+    let input_types = ["text", "number", "photo", "none"];
+    input_types.forEach((type) => {
+        let input = editor.find(".input-" + type);
+        input.toggleClass("active", activity.input_type == type);
+        input.off("click");
+        input.on("click", () => {
+            if(activity.input_type != type) {
+                editorDirty = true;
+                activity.input_type = type;
+                
+                activity.input = {};
+                if(type != "none") {
+                    activity.input.evaluation_type = "any";
+                }
+                activity.input.next_index = null;
+                
+                setInputElement(activity, node);
+            }
+        });
     });
     
-    let input_number = editor.find(".input-number");
-    input_number.toggleClass("active", activity.input_type == "number");
-    input_number.off("click");
-    input_number.on("click", () => {
-        editorDirty = true;
-        activity.input_type = "number";
-    });
-    
-    let input_photo = editor.find(".input-photo");
-    input_photo.toggleClass("active", activity.input_type == "photo");
-    input_photo.off("click");
-    input_photo.on("click", () => {
-        editorDirty = true;
-        activity.input_type = "photo";
-    });
-    
-    let input_none = editor.find(".input-none");
-    input_none.toggleClass("active", activity.input_type == "none");
-    input_none.off("click");
-    input_none.on("click", () => {
-        editorDirty = true;
-        activity.input_type = "none";
-    });
+    setInputElement(activity, node);
     
     editor.modal();
+}
+
+function updateIndexAfterDelete(object, property, index) {
+    if(object[property] !== null) {
+        if(object[property] == index) {
+            //Set null if the target has been deleted
+            object[property] = null;
+        } else if(object[property] > index) {
+            //Decrement if the target has been shifted down in the array
+            object[property] = object[property] - 1;
+        }
+    }
+}
+
+function deleteActivity(activity) {
+    let index = loadedStory.activities.indexOf(activity);
+    if(index != -1) {
+        loadedStory.activities.splice(index, 1);
+        nodesArray.splice(index, 1);
+        
+        loadedStory.activities.forEach( (a) => {
+            updateIndexAfterDelete(a.input, "next_index", index);
+            if(a.input.wrong_next_index !== undefined) {
+                updateIndexAfterDelete(a.input, "wrong_next_index", index);
+            }
+        });
+    }
 }
 
 function addActivityNode(activity) {
@@ -294,7 +554,7 @@ function addActivityNode(activity) {
         
         onDelete: () => {
             editorDirty = true;
-            removeFromArray(loadedStory.activities, activity);
+            deleteActivity(activity);
         },
         
         onNameChange: (name) => {
@@ -314,21 +574,13 @@ function addActivityNode(activity) {
     modify.on("click", (e) => openActivityEditor(activity, n));
     n.body().append(modify);
     
-    n.addOutput({ 
-        single: true, 
-        onConnect: (c) => {
-            console.log("Output Connect!");
-        },
-        onDisconnect: (c) => {
-            console.log ("Output Disconnect!");
-        }
+    n.addInput({
+        single: false
     });
     
-    n.addInput({
-        single: false,
-        onConnect: (c) => console.log("Input Connect!"),
-        onDisconnect: (c) => console.log ("Input Disconnect!"),
-    });
+    nodesArray.push(n);
+    
+    return n;
 }
 
 function editorNewActivity() {
@@ -338,11 +590,16 @@ function editorNewActivity() {
         contents: [],
         mission_index: null, //Assigned to no mission when created
         input_type: "none",
+        input: {
+            evaluation_type: "none",
+            next_index: null
+        },
         position: getNextAvailablePoint()
     };
     
     loadedStory.activities.push(activity);
-    addActivityNode(activity);
+    let node = addActivityNode(activity);
+    setNodeOutputs(activity, node);
 }
 
 
@@ -353,7 +610,17 @@ function addMissionElement(mission) {
     let color = mission_div.find(".mission-col");
     linkInputToProperty(mission, "color", color);
     color.on("change", () => {
-        loadActivities();
+        //Update the color of all nodes related to this mission
+        for(let i = 0; i < loadedStory.activities.length; i++)
+        {
+            let a = loadedStory.activities[i];
+            let n = nodesArray[i];
+            
+            let mission_index = loadedStory.missions.indexOf(mission);
+            if(mission_index == a.mission_index) {
+                n.setColor(color.val());
+            }
+        }
     });
     
     let del = mission_div.find(".mission-del");
@@ -406,8 +673,14 @@ function clearSelectedStory() {
 
 function loadActivities() {
     clearCanvas();
+    nodesArray = [];
     loadedStory.activities.forEach((a) => {
         addActivityNode(a);
+    });
+    
+    //After we created all nodes we create all outputs and make the connections
+    loadedStory.activities.forEach((a, index) => {
+        setNodeOutputs(a, nodesArray[index]);
     });
 }
 

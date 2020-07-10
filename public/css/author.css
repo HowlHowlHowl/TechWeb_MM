@@ -98,7 +98,6 @@ html, body {
     height: 20px;
     border-radius: 16px;
     
-    display: inline-block;
     box-sizing: content-box !important;
 }
 .input {
@@ -114,12 +113,10 @@ html, body {
 }
 
 .output {
-    float: right;
-    
     border: 2px solid white;
     padding: 2px;
     background-color: green;
-    left: 20px;
+    left: 55px;
 }
 
 .output:hover {

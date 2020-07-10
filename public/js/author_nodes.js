@@ -66,13 +66,16 @@ function removeConnection(c) {
     removeFromArray(c.output.connections, c);
 }
 
-function Output(node, single, onConnect, onDisconnect) {
+function Output(node, single, color, onConnect, onDisconnect) {
     this.element = $('<div class="output input-output"></div>');
     this.node = node;
     this.single = single;
     this.onConnect = onConnect;
     this.onDisconnect = onDisconnect;
     this.connections = [];
+    
+    if(color)
+        this.element.css("background-color", color);
     
     this.element.on('mousedown', (e) => {
         let point = getCenter(this.element);
@@ -115,13 +118,16 @@ function Output(node, single, onConnect, onDisconnect) {
     };
 }
 
-function Input(node, single, onConnect, onDisconnect) {
+function Input(node, single, color, onConnect, onDisconnect) {
     this.element = $('<div class="input input-output"></div>');
     this.node = node;
     this.single = single;
     this.onConnect = onConnect;
     this.onDisconnect = onDisconnect;
     this.connections = [];
+    
+    if(color)
+        this.element.css("background-color", color);
     
     this.element.on('mousedown', (e) => {
         let point = getCenter(this.element);
@@ -240,25 +246,52 @@ function Node(name, pos, callbacks) {
     
     
     this.addInput = (info) => {
-        let input = new Input(this, info.single, info.onConnect, info.onDisconnect);
+        let input = new Input(this, info.single, info.color, info.onConnect, info.onDisconnect);
         this.inputs.push(input);
         
         this.element.find(".node-inputs").append(input.element);
-    }
+        
+        return input;
+    };
     
     this.addOutput = (info) => {
-        let output = new Output(this, info.single, info.onConnect, info.onDisconnect);
+        let output = new Output(this, info.single, info.color, info.onConnect, info.onDisconnect);
         this.outputs.push(output);
         
         this.element.find(".node-outputs").append(output.element);
-    }
+        
+        return output;
+    };
+    
+    this.clearInputs = () => {
+        this.inputs.forEach( (i) => {
+            while(i.connections.length) {
+                removeConnection(i.connections[i.connections.length - 1]);
+            }
+        });
+        
+        this.inputs = [];
+        this.element.find(".node-inputs").clear();
+    };
+    
+    this.clearOutputs = () => {
+        this.outputs.forEach( (o) => {
+            while(o.connections.length) {
+                removeConnection(o.connections[o.connections.length - 1]);
+            }
+        });
+        
+        this.outputs = [];
+        this.element.find(".node-outputs").empty();
+    };
     
     this.setName = (name) => {
         this.element.find(".name").val(name);
-    }
+    };
+    
     this.setColor = (color) => {
         this.element.css("border-color", color);
-    }
+    };
     
     this.body = () => {
         return element.find(".node-body");

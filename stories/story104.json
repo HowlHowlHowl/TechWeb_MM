@@ -1,0 +1,136 @@
+{
+  "name": "Nuova storia",
+  "accessible": false,
+  "published": true,
+  "canvas_offset": {
+    "x": 308.78676670750883,
+    "y": 284.6355504591002
+  },
+  "canvas_scale": 0.2895670625973109,
+  "missions": [
+    {
+      "name": "A",
+      "color": "#16e33f"
+    },
+    {
+      "name": "B",
+      "color": "#1016d1"
+    },
+    {
+      "name": "C",
+      "color": "#f0144b"
+    },
+    {
+      "name": "D",
+      "color": "#f1d104"
+    }
+  ],
+  "activities": [
+    {
+      "name": "One",
+      "contents": [],
+      "mission_index": 0,
+      "input_type": "number",
+      "input": {
+        "evaluation_type": "correct",
+        "next_index": null,
+        "correct_options": [
+          {
+            "points": 0,
+            "from": "43",
+            "to": 0
+          },
+          {
+            "points": 0,
+            "from": "96",
+            "to": 0
+          },
+          {
+            "points": "235",
+            "from": 0,
+            "to": 0
+          }
+        ],
+        "wrong_stay": false,
+        "wrong_next_index": null
+      },
+      "position": {
+        "x": 21.281116270181986,
+        "y": 173.24996252103247
+      }
+    },
+    {
+      "name": "Two",
+      "contents": [],
+      "mission_index": 1,
+      "input_type": "text",
+      "input": {
+        "evaluation_type": "correct",
+        "next_index": null,
+        "correct_options": [
+          {
+            "points": 0,
+            "text": "Yo"
+          },
+          {
+            "points": 0,
+            "text": "Yoho"
+          },
+          {
+            "points": "346",
+            "text": ""
+          }
+        ],
+        "wrong_stay": false,
+        "wrong_next_index": null
+      },
+      "position": {
+        "x": 440.11047794015644,
+        "y": -21.971476102398125
+      }
+    },
+    {
+      "name": "Three",
+      "contents": [],
+      "mission_index": 2,
+      "input_type": "none",
+      "input": {
+        "evaluation_type": "none",
+        "next_index": 4
+      },
+      "position": {
+        "x": 771.9966801877615,
+        "y": 283.0756047354482
+      }
+    },
+    {
+      "name": "Four",
+      "contents": [],
+      "mission_index": 0,
+      "input_type": "none",
+      "input": {
+        "evaluation_type": "none",
+        "next_index": 4
+      },
+      "position": {
+        "x": 921.3489492740596,
+        "y": -4.515965609178295
+      }
+    },
+    {
+      "name": "Five",
+      "contents": [],
+      "mission_index": 3,
+      "input_type": "none",
+      "input": {
+        "evaluation_type": "none",
+        "next_index": null
+      },
+      "position": {
+        "x": 1406.9691034853538,
+        "y": 245.79458342356705
+      }
+    }
+  ],
+  "id": 104
+}
