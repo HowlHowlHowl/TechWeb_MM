@@ -40,22 +40,6 @@ app.get('/player', function (req, res) {
     res.sendFile(path.join(__dirname + "/player.html"));
 });
 
-//Richiesta della storia dal player
-app.get('/player/:storyId', function (req,res) {
-    let story_Id = req.params.storyId;
-    let path = "stories/" + story_Id + ".json";
-    console.log(path);
-    fs.readFile(path, function (err, data) {
-        if (!err) {
-            res.writeHead(200, { "Content-Type": "application/json" });
-            res.write(data);
-            res.end();
-
-        } else {
-            res.status(400).send();
-        }     
-    }); 
-});
 //Ambiente author
 app.get('/author', function (req, res) {
     res.sendFile(path.join(__dirname + "/author.html"));
