@@ -33,7 +33,7 @@
       "input_type": "number",
       "input": {
         "evaluation_type": "correct",
-        "next_index": 1,
+        "next_index": null,
         "correct_options": [
           {
             "points": 0,
@@ -52,11 +52,11 @@
           }
         ],
         "wrong_stay": false,
-        "wrong_next_index": 2
+        "wrong_next_index": null
       },
       "position": {
-        "x": 67.23707606849548,
-        "y": 3.2622188086280777
+        "x": 79.49523226907613,
+        "y": -45.793464344796355
       }
     },
     {
@@ -85,8 +85,8 @@
         "wrong_next_index": 2
       },
       "position": {
-        "x": 463.46043798788435,
-        "y": -204.18713872898434
+        "x": 415.9422524007298,
+        "y": -251.68274416403426
       }
     },
     {

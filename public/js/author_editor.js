@@ -7,6 +7,10 @@ var loadedStory = null;
 //Flag used to mark that a change has been made and we need to save before quitting the editor.
 var editorDirty = false;
 
+//Clipboard for copied activitiy and mission
+var copiedActivity = null;
+var copiedMissionData = null;
+
 //This array contains all the nodes currently in the canvas and is kept in sync with the array of activities in the loaded story 
 //so that the node at position i is related to the activity at position i in the loadedStory.activities array.
 var nodesArray = [];
@@ -576,10 +580,30 @@ function deleteActivity(activity) {
     }
 }
 
+function editorPasteActivity() {
+    if(copiedActivity) {
+        let a = JSON.parse(copiedActivity);
+        
+        //Clear the mission
+        a.mission_index = null;
+        
+        //Clear activity next indices
+        if(a.input.next_index !== undefined) a.input.next_index = null;
+        if(a.input.wrong_next_index !== undefined) a.input.wrong_next_index = null;
+        a.position = getNextAvailablePoint();
+        
+        
+        loadedStory.activities.push(a);
+        let node = addActivityNode(a);
+        setNodeOutputs(a, node);
+    }
+}
+
 function addActivityNode(activity) {
     let n = new Node(activity.name, activity.position, {
         onCopy:  () => {
-            console.log("Copied");
+            copiedActivity = JSON.stringify(activity);
+            $("#activity-paste").prop("disabled", false);
         }, 
         
         onDelete: () => {
@@ -674,6 +698,8 @@ function addMissionElement(mission) {
     
     let copy = mission_div.find(".mission-copy");
     copy.on("click", () => {
+        //TODO!!!
+        copiedMission = {};
     });
     
     mission_div.appendTo("#editor-missions");
@@ -778,7 +804,9 @@ function addStoryElement(s) {
     
     let swap = story_div.find(".story-swap");
     swap.on("click", () => actionOnStory(s.id, s.published ? "archive" : "publish"));
-    swap.text(s.published ? "Archivia" : "Pubblica");
+    let swap_publish = '<img class="story-icon" src="/public/images/icons/publish.png">Pubblica';
+    let swap_archive = '<img class="story-icon" src="/public/images/icons/archive.png">Archivia';
+    swap.html(s.published ? swap_publish : swap_archive);
     
     let dup = story_div.find(".story-dup");
     dup.on("click", () => actionOnStory(s.id, "duplicate"));
@@ -906,3 +934,13 @@ $(() => {
     //Load stories
     updateStories();
 });
+
+/*
+$(window).bind('beforeunload', function() {
+   if(editorDirty)
+   {
+       return 'Ci sono modifiche non salvate, procedere ugualmente?';
+   }
+});
+*/
+

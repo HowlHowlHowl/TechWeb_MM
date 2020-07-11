@@ -192,6 +192,23 @@ html, body {
     min-height: 100px;
 }
 textarea {
-    width: 80%;
-    height: 85px;
+    width: 100%;
+    height: 100%;
+}
+
+.story-icon {
+    position: relative;
+    left: -10px;
+    width: 24px;
+    height: 24px;
+}
+
+.mission-icon {
+    width: 24px;
+    height: 24px;
+}
+
+.content-icon {
+    width: 24px;
+    height: 24px;
 }

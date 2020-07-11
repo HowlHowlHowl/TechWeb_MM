@@ -50,6 +50,7 @@
                         <label class="form-check-label" for="editor-accessible">Accessibile</label>
                     </div>
                     <button class="btn btn-primary" onclick="editorNewActivity()">Nuova attività</button>
+                    <button id="activity-paste" class="btn btn-info" onclick="editorPasteActivity()" disabled>Incolla attività</button>
                 </div>
                 
                 <div class="flex-content">
@@ -219,10 +220,10 @@
             <button class="list-group-item list-group-item-action"></button>
             <button class="btn btn-outline-primary dropdown-toggle" type="button" data-toggle="dropdown"></button>
             <div class="dropdown-menu dropdown-menu-right">
-              <button class="dropdown-item story-qr">Genera QR Code</button>
+              <button class="dropdown-item story-qr">  <img class="story-icon" src="/public/images/icons/qr.png">Genera QR Code</button>
               <button class="dropdown-item story-swap"></button>
-              <button class="dropdown-item story-dup">Duplica</button>
-              <button class="dropdown-item story-del">Elimina</button>
+              <button class="dropdown-item story-dup"> <img class="story-icon" src="/public/images/icons/duplicate.png">Duplica</button>
+              <button class="dropdown-item story-del"> <img class="story-icon" src="/public/images/icons/delete.svg">Elimina</button>
             </div>
         </div>
     </template>
@@ -232,8 +233,8 @@
     <template id="template-mission">
         <div class="p-3 mission-div">
             <div class="btn-group float-right" role="group">
-                <button class="btn btn-secondary btn-sm mission-del" title="Elimina">Del</button>
-                <button class="btn btn-secondary btn-sm mission-copy" title="Copia">Copy</button>
+                <button class="btn btn-secondary btn-sm mission-copy" title="Copia"><img class="mission-icon" src="/public/images/icons/copy.svg"></button>
+                <button class="btn btn-secondary btn-sm mission-del" title="Elimina"><img class="mission-icon" src="/public/images/icons/delete.svg"></button>
             </div>
             
             <div class="editable-name-div">
@@ -245,13 +246,22 @@
     
     <!-- template per contenuto attività -->
     <template id="template-content">
-        <div class="content-div">
-            <div class="btn-group-vertical content-buttons">
-                <button class="btn btn-info btn-sm content-del" title="Elimina">Del</button>
-                <button class="btn btn-info btn-sm content-up" title="Sposta in alto">Up</button>
-                <button class="btn btn-info btn-sm content-down" title="Sposta in basso">Down</button>
+        <div class="content-div row">
+            <div class="col-1">
+                <div class="btn-group-vertical content-buttons">
+                    <button class="btn btn-info btn-sm content-del " title="Elimina">
+                        <img class="content-icon" src="/public/images/icons/delete.svg">
+                    </button>
+                    <button class="btn btn-info btn-sm content-up float-right" title="Sposta in alto">
+                        <img class="content-icon" src="/public/images/icons/up.png">
+                    </button>
+                    <button class="btn btn-info btn-sm content-down float-right" title="Sposta in basso">
+                        <img class="content-icon" src="/public/images/icons/down.png">
+                    </button>
+                </div>
             </div>
-            <div class="content-item">
+            <div class="content-item col-11">
+            
             </div>
         </div>
     </template>
@@ -337,8 +347,8 @@
         <div class="node ui-widget-content">
             <div class="node-header">
                 <div class="buttons">
-                    <button class="btn btn-success btn-sm copy">C</button>
-                    <button class="btn btn-success btn-sm delete">D</button>
+                    <button class="btn btn-success btn-sm copy" title="Copia"><img src="/public/images/icons/copy.svg" width="24" height="24"></button>
+                    <button class="btn btn-success btn-sm delete" title="Elimina"><img src="/public/images/icons/delete.svg" width="24" height="24"></button>
                 </div>
                 
                 <input class="name" type="text">
