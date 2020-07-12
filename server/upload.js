@@ -5,10 +5,10 @@ var md5file = require('md5-file');
 
 module.exports = function(app) {
     
-    //Maps file hash to file name
+    //Tabella di file gia' uploadati
     var uploaded_files = [];
     
-    //Aggiorna la nuova nextStoryId
+    //Aggiorna la tabella dei file uploadati
     fs.readdirSync('public/uploads/').forEach((f) => {
         let p = path.join('public/uploads', f);
         let hash = md5file.sync(p);

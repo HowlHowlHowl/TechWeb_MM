@@ -69,6 +69,7 @@
             <div id="editor-missions">
             </div>
             <button class="btn btn-primary" onclick="editorNewMission()">Nuova missione</button>
+            <button id="mission-paste" class="btn btn-info" onclick="editorPasteMission()" disabled>Incolla missione</button>
         </div>
         
     </div>
@@ -234,7 +235,7 @@
         <div class="p-3 mission-div">
             <div class="btn-group float-right" role="group">
                 <button class="btn btn-secondary btn-sm mission-copy" title="Copia"><img class="mission-icon" src="/public/images/icons/copy.svg"></button>
-                <button class="btn btn-secondary btn-sm mission-del" title="Elimina"><img class="mission-icon" src="/public/images/icons/delete.svg"></button>
+                <button class="btn btn-secondary btn-sm mission-del" title="Elimina"><img class="mission-icon" src="/public/images/icons/cross.png"></button>
             </div>
             
             <div class="editable-name-div">
@@ -250,7 +251,7 @@
             <div class="col-1">
                 <div class="btn-group-vertical content-buttons">
                     <button class="btn btn-info btn-sm content-del " title="Elimina">
-                        <img class="content-icon" src="/public/images/icons/delete.svg">
+                        <img class="content-icon" src="/public/images/icons/cross.png">
                     </button>
                     <button class="btn btn-info btn-sm content-up float-right" title="Sposta in alto">
                         <img class="content-icon" src="/public/images/icons/up.png">
@@ -348,7 +349,7 @@
             <div class="node-header">
                 <div class="buttons">
                     <button class="btn btn-success btn-sm copy" title="Copia"><img src="/public/images/icons/copy.svg" width="24" height="24"></button>
-                    <button class="btn btn-success btn-sm delete" title="Elimina"><img src="/public/images/icons/delete.svg" width="24" height="24"></button>
+                    <button class="btn btn-success btn-sm delete" title="Elimina"><img src="/public/images/icons/cross.png" width="24" height="24"></button>
                 </div>
                 
                 <input class="name" type="text">
