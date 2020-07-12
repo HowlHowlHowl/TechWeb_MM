@@ -4,8 +4,8 @@
   "score": 1000,
   "username": "",
   "current_quest_start_timestamp": [
-    "16",
-    "32"
+    16,
+    32
   ],
   "chat": [
     {
@@ -48,14 +48,14 @@
       "mins": "45",
       "text": "Eccomi prof",
       "auth": "player5",
-      "seen": true
+      "seen": false
     },
     {
       "hour": "11",
       "mins": "45",
       "text": "ok",
       "auth": "player5",
-      "seen": true
+      "seen": false
     }
   ]
 }
