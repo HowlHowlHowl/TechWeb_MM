@@ -7,6 +7,10 @@ var loadedStory = null;
 //Flag used to mark that a change has been made and we need to save before quitting the editor.
 var editorDirty = false;
 
+//Clipboard for copied activitiy and mission
+var copiedActivity = null;
+var copiedMissionData = null;
+
 //This array contains all the nodes currently in the canvas and is kept in sync with the array of activities in the loaded story 
 //so that the node at position i is related to the activity at position i in the loadedStory.activities array.
 var nodesArray = [];
@@ -232,15 +236,18 @@ function setNodeOutputs(activity, node) {
     let type = activity.input_type;
     let input = activity.input;
     
-    node.clearOutputs();
-    
     //Add the 1 default output.
     makeOutput(input, "next_index", node, "green");
     
-    //Add the output for a wrong answer
+    //Add the output for a wrong answer if needed
     if(input.wrong_next_index !== undefined) {
         makeOutput(input, "wrong_next_index", node, "red");
     }
+}
+
+function clearAndSetNodeOutputs(activity, node) {
+    node.clearOutputs();
+    setNodeOutputs(activity, node);
 }
 
 function setWrongInputElement(activity, node) {
@@ -278,7 +285,7 @@ function setWrongInputElement(activity, node) {
                 input.wrong_next_index = null;
             }
             
-            setNodeOutputs(activity, node);
+            clearAndSetNodeOutputs(activity, node);
         });
     }
 }
@@ -432,14 +439,12 @@ function setInputElement(activity, node)
             
             setCorrectInputElement(activity);
             setWrongInputElement(activity, node);
-            setNodeOutputs(activity, node);
+            clearAndSetNodeOutputs(activity, node);
         });
         
         setCorrectInputElement(activity);
         setWrongInputElement(activity, node);
     }
-    
-    setNodeOutputs(activity, node);
 }
 
 
@@ -540,12 +545,12 @@ function openActivityEditor(activity, node) {
                 activity.input.next_index = null;
                 
                 setInputElement(activity, node);
+                clearAndSetNodeOutputs(activity, node);
             }
         });
     });
     
     setInputElement(activity, node);
-    
     editor.modal();
 }
 
@@ -576,10 +581,30 @@ function deleteActivity(activity) {
     }
 }
 
+function editorPasteActivity() {
+    if(copiedActivity) {
+        let a = JSON.parse(copiedActivity);
+        
+        //Clear the mission
+        a.mission_index = null;
+        
+        //Clear activity next indices
+        if(a.input.next_index !== undefined) a.input.next_index = null;
+        if(a.input.wrong_next_index !== undefined) a.input.wrong_next_index = null;
+        a.position = getNextAvailablePoint();
+        
+        
+        loadedStory.activities.push(a);
+        let node = addActivityNode(a);
+        setNodeOutputs(a, node);
+    }
+}
+
 function addActivityNode(activity) {
     let n = new Node(activity.name, activity.position, {
         onCopy:  () => {
-            console.log("Copied");
+            copiedActivity = JSON.stringify(activity);
+            $("#activity-paste").prop("disabled", false);
         }, 
         
         onDelete: () => {
@@ -632,6 +657,65 @@ function editorNewActivity() {
     setNodeOutputs(activity, node);
 }
 
+function editorPasteMission() {
+    if(copiedMission) {
+        //Add the new mission
+        let mission = JSON.parse(copiedMission.mission);
+        let mission_index = loadedStory.missions.length;
+        loadedStory.missions.push(mission);
+        addMissionElement(mission);
+        
+        let new_base_index = loadedStory.activities.length;
+        //Add the new activities
+        copiedMission.activities.forEach( (a, i) => {
+            let activity = JSON.parse(a.data);
+            activity.mission_index = mission_index;
+            let center = getCanvasCenter();
+            activity.position.x += center.x - copiedMission.center.x + 20;
+            activity.position.y += center.y - copiedMission.center.y + 20;
+            loadedStory.activities.push(activity);
+        });
+        
+        //Preserve the old connections that are internal to the mission
+        for(let new_index = new_base_index; new_index < loadedStory.activities.length; new_index++) {
+            let a = loadedStory.activities[new_index];
+            
+            let fixIndex = (property) => {
+                if(a.input[property] !== undefined) {
+                    let updated = false;
+                    for(let other_index = 0; other_index < copiedMission.activities.length; other_index++) {
+                        let other = copiedMission.activities[other_index];
+                        //If the activity was connected to the other when copied
+                        if(a.input[property] == other.old_index) {
+                            //Update next index to the current index
+                            a.input[property] = new_base_index + other_index;
+                            updated = true;
+                            break;
+                        }
+                    }
+                    //If it's not connected to a node in the mission
+                    if(!updated) {
+                        a.input[property] = null;
+                    }
+                }
+            };
+            
+            fixIndex("next_index");
+            fixIndex("wrong_next_index");
+        }
+        
+        //Add the nodes for the new activities
+        for(let i = new_base_index; i < loadedStory.activities.length; i++) {
+            let a = loadedStory.activities[i];
+            addActivityNode(a);
+        }
+        //After we created all nodes we create all outputs and make the connections
+        for(let i = new_base_index; i < loadedStory.activities.length; i++) {
+            let a = loadedStory.activities[i];
+            setNodeOutputs(a, nodesArray[i]);
+        }
+    }
+}
 
 function addMissionElement(mission) {
     let mission_div = $($("#template-mission").html());
@@ -674,6 +758,22 @@ function addMissionElement(mission) {
     
     let copy = mission_div.find(".mission-copy");
     copy.on("click", () => {
+        copiedMission = {};
+        copiedMission.mission = JSON.stringify(mission);
+        copiedMission.activities = [];
+        copiedMission.center = getCanvasCenter();
+        
+        let mission_index = loadedStory.missions.indexOf(mission);
+        loadedStory.activities.forEach( (a, i) => {
+            if(a.mission_index == mission_index) {
+                copiedMission.activities.push( {
+                    data: JSON.stringify(a),
+                    old_index: i
+                });
+            }
+        });
+        
+        $("#mission-paste").prop("disabled", false);
     });
     
     mission_div.appendTo("#editor-missions");
@@ -778,6 +878,9 @@ function addStoryElement(s) {
     
     let swap = story_div.find(".story-swap");
     swap.on("click", () => actionOnStory(s.id, s.published ? "archive" : "publish"));
+    let swap_publish = '<img class="story-icon" src="/public/images/icons/publish.png">Pubblica';
+    let swap_archive = '<img class="story-icon" src="/public/images/icons/archive.png">Archivia';
+    swap.html(s.published ? swap_publish : swap_archive);
     
     let dup = story_div.find(".story-dup");
     dup.on("click", () => actionOnStory(s.id, "duplicate"));
@@ -882,11 +985,12 @@ function saveSelectedStory()
 }
 
 function actionOnStory(id, action) {
+    let action_url = action == "delete" ? "" : ("/" + action);
+    let method = action == "delete" ? "DELETE" : "POST";
+    
     $.ajax({
-        url: '/stories/' + id,
-        type: 'POST',
-        contentType: 'application/json',
-        data: JSON.stringify({ action: action}),
+        url: '/stories/' + id + action_url,
+        type: method,
         
         success: function(data) {
             if(action == "delete" && loadedStory && loadedStory.id == id) {
@@ -904,3 +1008,13 @@ $(() => {
     //Load stories
     updateStories();
 });
+
+/*
+$(window).bind('beforeunload', function() {
+   if(editorDirty)
+   {
+       return 'Ci sono modifiche non salvate, procedere ugualmente?';
+   }
+});
+*/
+

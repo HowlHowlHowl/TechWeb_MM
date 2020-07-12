@@ -1,0 +1,171 @@
+{
+  "name": "Mission c&p",
+  "accessible": false,
+  "published": false,
+  "canvas_offset": {
+    "x": 536.8065646321726,
+    "y": 202.90974158313608
+  },
+  "canvas_scale": 0.25418658283290013,
+  "missions": [
+    {
+      "name": "A",
+      "color": "#bd1414"
+    },
+    {
+      "name": "B",
+      "color": "#23be61"
+    },
+    {
+      "name": "C",
+      "color": "#271cca"
+    }
+  ],
+  "activities": [
+    {
+      "name": "Nuova attività",
+      "contents": [],
+      "mission_index": 0,
+      "input_type": "none",
+      "input": {
+        "evaluation_type": "none",
+        "next_index": 5
+      },
+      "position": {
+        "x": 386.57976320513455,
+        "y": 558.7804668456353
+      }
+    },
+    {
+      "name": "Nuova attività",
+      "contents": [],
+      "mission_index": 2,
+      "input_type": "none",
+      "input": {
+        "evaluation_type": "none",
+        "next_index": 8
+      },
+      "position": {
+        "x": -897.6375420396947,
+        "y": 976.4181100607475
+      }
+    },
+    {
+      "name": "Nuova attività",
+      "contents": [],
+      "mission_index": 0,
+      "input_type": "text",
+      "input": {
+        "evaluation_type": "correct",
+        "next_index": 6,
+        "correct_options": [
+          {
+            "points": 0,
+            "text": ""
+          }
+        ],
+        "wrong_stay": false,
+        "wrong_next_index": 3
+      },
+      "position": {
+        "x": -171.68278297840612,
+        "y": 430.46107377471606
+      }
+    },
+    {
+      "name": "Nuova attività",
+      "contents": [],
+      "mission_index": 0,
+      "input_type": "none",
+      "input": {
+        "evaluation_type": "none",
+        "next_index": 0
+      },
+      "position": {
+        "x": 179.20354239044252,
+        "y": 546.7686460452097
+      }
+    },
+    {
+      "name": "Nuova attività",
+      "contents": [],
+      "mission_index": 0,
+      "input_type": "text",
+      "input": {
+        "evaluation_type": "correct",
+        "next_index": 0,
+        "correct_options": [
+          {
+            "points": 0,
+            "text": ""
+          }
+        ],
+        "wrong_stay": false,
+        "wrong_next_index": 3
+      },
+      "position": {
+        "x": -126.52545768558973,
+        "y": 692.9999805906542
+      }
+    },
+    {
+      "name": "Nuova attività",
+      "contents": [],
+      "mission_index": 1,
+      "input_type": "none",
+      "input": {
+        "evaluation_type": "none",
+        "next_index": 6
+      },
+      "position": {
+        "x": 623.2626526876522,
+        "y": 439.9484350498479
+      }
+    },
+    {
+      "name": "Nuova attività",
+      "contents": [],
+      "mission_index": 1,
+      "input_type": "none",
+      "input": {
+        "evaluation_type": "none",
+        "next_index": null
+      },
+      "position": {
+        "x": 404.06757895803605,
+        "y": 221.98135711309575
+      }
+    },
+    {
+      "name": "Nuova attività",
+      "contents": [],
+      "mission_index": 2,
+      "input_type": "none",
+      "input": {
+        "evaluation_type": "none",
+        "next_index": 1
+      },
+      "position": {
+        "x": -1219.6145056109626,
+        "y": 755.385224989333
+      }
+    },
+    {
+      "name": "Nuova attività",
+      "contents": [],
+      "mission_index": 0,
+      "input_type": "text",
+      "input": {
+        "evaluation_type": "evaluator",
+        "next_index": 2,
+        "wrong_stay": false,
+        "wrong_next_index": 4
+      },
+      "position": {
+        "x": -415.1855257054595,
+        "y": 562.5156397665781
+      }
+    }
+  ],
+  "id": 105
+}

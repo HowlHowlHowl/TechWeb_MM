@@ -1,6 +1,5 @@
 var fs = require('fs');
 var path = require('path');
-var formidable = require('formidable');
 
 module.exports = function(app) {
     var nextStoryId = 0;
@@ -13,6 +12,7 @@ module.exports = function(app) {
         }
     });
 
+    //Get list of stories
     app.get('/stories', function(req, res) {
         res.writeHead(200, {'Content-Type': 'application/json'});
         fs.readdir('stories', function(err, files) {
@@ -32,7 +32,22 @@ module.exports = function(app) {
             res.end();
         });
     });
-
+    
+    //Get story by id
+    app.get('/stories/:id', function(req, res) {
+        let id = req.params.id;
+        let path = "stories/story" + id + ".json";
+        fs.readFile(path, (err, data) => {
+            if(!err) {
+                res.writeHead(200, {'Content-Type': 'application/json'});
+                res.write(data);
+                return res.end();
+            } else {
+                res.status(400).send();
+            }
+        });
+    });
+    
     function checkStory(s)
     {
         return true;
@@ -71,13 +86,21 @@ module.exports = function(app) {
         }
     });
 
-    //Duplicate, archive, publish, delete
-    app.post('/stories/:id', function(req, res) {
+    app.delete('/stories/:id', function(req, res) {
         let id = req.params.id;
         let path = "stories/story" + id + ".json";
-        
         if(fs.existsSync(path)) {
-            let action = req.body.action;
+            fs.unlink(path, (err) => {
+                res.status(err ? 500 : 200).send();
+            });
+        }
+    });
+    
+    app.post('/stories/:id/:action', function(req, res) {
+        let id = req.params.id;
+        let path = "stories/story" + id + ".json";
+        let action = req.params.action;
+        if(fs.existsSync(path)) {
             switch(action) {
                 case "duplicate":
                     fs.readFile(path, (err, data) => {
@@ -111,12 +134,6 @@ module.exports = function(app) {
                         }
                     });
                     break;
-                    
-                case "delete":
-                    fs.unlink(path, (err) => {
-                        res.status(err ? 500 : 200).send();
-                    });
-                    break;
                 
                 default:
                     res.status(400).send();
@@ -125,20 +142,5 @@ module.exports = function(app) {
         } else { 
             res.status(400).send();
         }
-    });
-
-    //Get story by id
-    app.get('/stories/:id', function(req, res) {
-        let id = req.params.id;
-        let path = "stories/story" + id + ".json";
-        fs.readFile(path, (err, data) => {
-            if(!err) {
-                res.writeHead(200, {'Content-Type': 'application/json'});
-                res.write(data);
-                return res.end();
-            } else {
-                res.status(400).send();
-            }
-        });
     });
 };

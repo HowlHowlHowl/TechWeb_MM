@@ -1,12 +1,12 @@
 {
-  "name": "Nuova storia",
+  "name": "Storia",
   "accessible": false,
   "published": true,
   "canvas_offset": {
-    "x": 253.28656694465957,
-    "y": 289.0106179286038
+    "x": 230.95266540275009,
+    "y": 237.16901883473528
   },
-  "canvas_scale": 0.42175916851386924,
+  "canvas_scale": 0.3327500000000001,
   "missions": [
     {
       "name": "A",
@@ -23,6 +23,10 @@
     {
       "name": "D",
       "color": "#f1d104"
+    },
+    {
+      "name": "A",
+      "color": "#bd1414"
     }
   ],
   "activities": [
@@ -32,31 +36,14 @@
       "mission_index": 0,
       "input_type": "number",
       "input": {
-        "evaluation_type": "correct",
-        "next_index": null,
-        "correct_options": [
-          {
-            "points": 0,
-            "from": "98",
-            "to": 0
-          },
-          {
-            "points": 0,
-            "from": "96",
-            "to": 0
-          },
-          {
-            "points": "235",
-            "from": 0,
-            "to": 0
-          }
-        ],
+        "evaluation_type": "evaluator",
+        "next_index": 1,
         "wrong_stay": false,
-        "wrong_next_index": null
+        "wrong_next_index": 2
       },
       "position": {
-        "x": -41.59152380173398,
-        "y": 59.96942763373005
+        "x": 45.93365538129225,
+        "y": -57.04636434072125
       }
     },
     {
@@ -82,11 +69,11 @@
           }
         ],
         "wrong_stay": false,
-        "wrong_next_index": null
+        "wrong_next_index": 2
       },
       "position": {
-        "x": 463.46043798788435,
-        "y": -204.18713872898434
+        "x": 314.78531288830334,
+        "y": -253.20450179375158
       }
     },
     {
@@ -99,8 +86,8 @@
         "next_index": 4
       },
       "position": {
-        "x": 769.7066900141085,
-        "y": 406.05245395482683
+        "x": 527.1507853587526,
+        "y": -13.707826587152512
       }
     },
     {
@@ -113,8 +100,8 @@
         "next_index": 4
       },
       "position": {
-        "x": 881.817780505437,
-        "y": -338.3825487082906
+        "x": 762.2587612905221,
+        "y": -266.3335433848331
       }
     },
     {
@@ -127,8 +114,96 @@
         "next_index": null
       },
       "position": {
-        "x": 1226.8236755207993,
-        "y": 34.518230340437476
+        "x": 1163.9531977424485,
+        "y": -134.0645273115341
+      }
+    },
+    {
+      "name": "Nuova attività",
+      "contents": [],
+      "mission_index": 4,
+      "input_type": "none",
+      "input": {
+        "evaluation_type": "none",
+        "next_index": null
+      },
+      "position": {
+        "x": 1615.3899206423737,
+        "y": 779.8845733940644
+      }
+    },
+    {
+      "name": "Nuova attività",
+      "contents": [],
+      "mission_index": 4,
+      "input_type": "text",
+      "input": {
+        "evaluation_type": "correct",
+        "next_index": null,
+        "correct_options": [
+          {
+            "points": 0,
+            "text": ""
+          }
+        ],
+        "wrong_stay": false,
+        "wrong_next_index": 7
+      },
+      "position": {
+        "x": 991.21875,
+        "y": 564.671875
+      }
+    },
+    {
+      "name": "Nuova attività",
+      "contents": [],
+      "mission_index": 4,
+      "input_type": "none",
+      "input": {
+        "evaluation_type": "none",
+        "next_index": 5
+      },
+      "position": {
+        "x": 1347.9093785217876,
+        "y": 758.8688530123026
+      }
+    },
+    {
+      "name": "Nuova attività",
+      "contents": [],
+      "mission_index": 4,
+      "input_type": "text",
+      "input": {
+        "evaluation_type": "correct",
+        "next_index": 5,
+        "correct_options": [
+          {
+            "points": 0,
+            "text": ""
+          }
+        ],
+        "wrong_stay": false,
+        "wrong_next_index": 7
+      },
+      "position": {
+        "x": 884.375,
+        "y": 899.2032470703125
+      }
+    },
+    {
+      "name": "Nuova attività",
+      "contents": [],
+      "mission_index": 4,
+      "input_type": "text",
+      "input": {
+        "evaluation_type": "evaluator",
+        "next_index": 6,
+        "wrong_stay": false,
+        "wrong_next_index": 8
+      },
+      "position": {
+        "x": 527.71875,
+        "y": 688.7188720703125
       }
     }
   ],

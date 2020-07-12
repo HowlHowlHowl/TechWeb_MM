@@ -337,6 +337,15 @@ function setCanvasOffsetAndScale(offset, scale) {
     updateCanvasTransform();
 }
 
+function getCanvasCenter() {
+    let canvas_rect = $("#node-canvas")[0].getBoundingClientRect();
+    let x = window.pageXOffset + canvas_rect.left + canvas_rect.width / 2;
+    let y = window.pageYOffset + canvas_rect.top + canvas_rect.height / 2;
+    let p = viewToCanvas(new Point(x, y));
+    
+    return p;
+}
+
 function getNextAvailablePoint() {
     let canvas_rect = $("#node-canvas")[0].getBoundingClientRect();
     let x = window.pageXOffset + canvas_rect.left + 20;
