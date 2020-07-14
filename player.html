@@ -11,12 +11,16 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <script type="text/javascript">
         function getStoryData() {
-        let storyId= 'story100'
+            let story_id = '104';
             $.ajax({
-                    accepts: 'application/json', url: '/player/'+storyId,
-                    success: function (data) {
+                accepts: 'application/json',
+                url: '/stories/' + story_id,
+                success: function (data) {
                         console.log(data);
                         console.log('ciao');
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert(xhr.status + ' - ' + thrownError);
                 }
             });
         }

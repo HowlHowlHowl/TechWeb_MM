@@ -4,8 +4,8 @@
   "score": 1000,
   "username": "",
   "current_quest_start_timestamp": [
-    "16",
-    "32"
+    16,
+    32
   ],
   "chat": [
     {
@@ -27,7 +27,7 @@
       "mins": "45",
       "text": "Non capisco come risolvere il quesito 99, può aiutarmi?",
       "auth": "player4",
-      "seen": true
+      "seen": false
     }
   ]
 }

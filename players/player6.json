@@ -2,10 +2,10 @@
   "id": 6,
   "active": true,
   "score": 1000,
-  "username": "",
+  "username": "Paolo",
   "current_quest_start_timestamp": [
-    "16",
-    "32"
+    16,
+    32
   ],
   "chat": [
     {
@@ -20,7 +20,7 @@
       "mins": "45",
       "text": "Eccomi prof",
       "auth": "player6",
-      "seen": false
+      "seen": true
     }
   ]
 }
