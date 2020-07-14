@@ -1,6 +1,6 @@
 {
   "name": "Mission c&p",
-  "accessible": false,
+  "accessible": "false",
   "published": false,
   "canvas_offset": {
     "x": 536.8065646321726,

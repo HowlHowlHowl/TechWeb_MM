@@ -48,39 +48,25 @@ module.exports = function(app) {
         });
     });
     
-    function checkStory(s)
-    {
-        return true;
-    }
-
     //Create new story
     app.post('/stories', function(req, res) {
         let story = req.body;
-        if(checkStory(story))
-        {
-            new_id = nextStoryId++;
-            story.id = new_id;
-            fs.writeFile("stories/story" + new_id + ".json", JSON.stringify(story, null, 2), function(err) {
-                res.status(err ? 500 : 200).send();
-            });
-        } else {
-            res.status(400).send();
-        }
+        new_id = nextStoryId++;
+        story.id = new_id;
+        fs.writeFile("stories/story" + new_id + ".json", JSON.stringify(story, null, 2), function(err) {
+            res.status(err ? 500 : 200).send();
+        });
     });
 
     //Update existing story
     app.put('/stories/:id', function(req, res) {
         let story = req.body;
         let id = req.params.id;
-        if(checkStory(story)) {
-            let path = "stories/story" + id + ".json";
-            if(fs.existsSync(path)) {
-                fs.writeFile(path, JSON.stringify(story, null, 2), function(err) {
-                    res.status(err ? 500 : 200).send();
-                });
-            } else {
-                res.status(400).send();
-            }
+        let path = "stories/story" + id + ".json";
+        if(fs.existsSync(path)) {
+            fs.writeFile(path, JSON.stringify(story, null, 2), function(err) {
+                res.status(err ? 500 : 200).send();
+            });
         } else {
             res.status(400).send();
         }

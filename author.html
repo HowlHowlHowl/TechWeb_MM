@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.qrcode/1.0/jquery.qrcode.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     
@@ -43,12 +44,26 @@
         <div class="col-8 d-none" id="editor-area-activities">
             <div class="flex-container">
                 <div class="flex-header">
-                    <input type="text" class="editable-name" id="editor-name" onchange="editorNameChange(this)">
-                    <div class="form-check p-3">
-                        <button class="btn btn-primary float-right btn-lg" onclick="saveSelectedStory()">Salva</button>
-                        <input type="checkbox" class="form-check-input" id="editor-accessible" onchange="editorAccessibleChange(this)">
-                        <label class="form-check-label" for="editor-accessible">Accessibile</label>
+                    <input type="text" class="editable-name" id="editor-name">
+                    <button class="btn btn-primary float-right btn-lg" onclick="saveSelectedStory()">Salva</button>
+                    <div class="form-row align-items-center m-1">
+                        <div class="col-2">
+                            <div class="custom-control custom-checkbox mr-sm-2">
+                                <input type="checkbox" class="custom-control-input" id="editor-accessible" onchange="editorStoryAccessibleChange(this)">
+                                <label class="custom-control-label" for="editor-accessible">Accessibile</label>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <select class="custom-select" id="editor-style">
+                                <option value="" selected>Aspetto storia</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                        </div>
                     </div>
+                
+                    
                     <button class="btn btn-primary" onclick="editorNewActivity()">Nuova attività</button>
                     <button id="activity-paste" class="btn btn-info" onclick="editorPasteActivity()" disabled>Incolla attività</button>
                 </div>
@@ -106,9 +121,9 @@
             </div>
             
             <div class="btn-group activity-add-group" role="group">
-                <button class="btn btn-info btn-sm add-text" title="Testo">Text</button>
-                <button class="btn btn-info btn-sm add-image" title="Immagine">Image</button>
-                <button class="btn btn-info btn-sm add-video" title="Video">Video</button>
+                <button class="btn btn-success btn-sm add-text" title="Testo"><img class="content-icon" src="/public/images/icons/text.png"></button>
+                <button class="btn btn-success btn-sm add-image" title="Immagine"><img class="content-icon" src="/public/images/icons/image.png"></button>
+                <button class="btn btn-success btn-sm add-video" title="Video"><img class="content-icon" src="/public/images/icons/video.png"></button>
             </div>
             
             <hr>
@@ -129,7 +144,17 @@
               </label>
             </div>
             
-            <div id="activity-input-div">
+            <div id="activity-input-div" class="p-3">
+                <div class="form-group">
+                    <label for="input-style">Stile widget di input:</label>
+                    <select class="custom-select" id="input-style">
+                        <option value="" selected>Nessuno</option>
+                        <option value="1">One</option>
+                        <option value="2">Two</option>
+                        <option value="3">Three</option>
+                    </select>
+                </div>
+                
                 <div class="form-group" id="activity-input-select-div">
                     <label for="input-evaluation-select">Tipologia di valutazione:</label>
                     <select class="custom-select" id="input-evaluation-select">
@@ -171,49 +196,28 @@
       </div>
     </div>
     
-    <!-- Finestra modale di salvataggio -->
-    <div class="modal" id="save-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <!-- Finestra modale -->
+    <div class="modal" id="mod" tabindex="-1" role="dialog" aria-hidden="true">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title">Modifiche non salvate</h5>
+            <h5 id="mod-title" class="modal-title"></h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
+          
           <div class="modal-body">
-            <p>Salvare le modifiche effettuate?</p>
+            <p id="mod-text"></p>
+            <div id="mod-body">
+            </div>
           </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary" data-dismiss="modal" onClick="modalSave()">Salva</button>
-            <button type="button" class="btn btn-primary" data-dismiss="modal" onClick="modalDiscard()">Scarta</button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Annulla</button>
+          
+          <div class="modal-footer" id="mod-buttons">
           </div>
         </div>
       </div>
     </div>
-    
-    <!-- Finestra modale di eliminazione -->
-    <div class="modal" id="delete-modal" tabindex="-1" role="dialog">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title">Eliminazione</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <p id="modal-delete-message"></p>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary" data-dismiss="modal" id="modal-delete-button" onclick="actionOnStory($(this).attr('delete-id'), 'delete')">Elimina</button>
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Annulla</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    
     
     <!-- template per widget della storia -->
     <template id="template-story">
@@ -247,9 +251,9 @@
     
     <!-- template per contenuto attività -->
     <template id="template-content">
-        <div class="content-div row">
+        <div class="content-div row mx-5 my-1 py-3">
             <div class="col-1">
-                <div class="btn-group-vertical content-buttons">
+                <div class="btn-group-vertical content-buttons float-right">
                     <button class="btn btn-info btn-sm content-del " title="Elimina">
                         <img class="content-icon" src="/public/images/icons/cross.png">
                     </button>
@@ -270,29 +274,37 @@
     <!-- template per contenuto immagine -->
     <template id="template-content-image">
         <div class="content-image">
-            <image src="" style="max-height: 200px; max-width : 800px;">
-            
-            <label class="file-upload-label btn btn-success btn-sm">
-                <input type="file" name="file[]" accept="image/*" style="display: none;">
-                Carica immagine
-            </label>
-            <span class="file-upload-name"></span>
+            <div>
+                <image src="" style="max-height: 200px; max-width : 800px;">
+                
+                <label class="file-upload-label btn btn-success btn-sm">
+                    <input type="file" name="file[]" accept="image/*" style="display: none;">
+                    Carica immagine
+                </label>
+                <span class="file-upload-name"></span>
+            </div>
+            <label>Descrizione:</label>
+            <textarea class="form-control"></textarea>
         </div>
     </template>
     
     <!-- template per contenuto video -->
     <template id="template-content-video">
         <div class="content-video">
-            <video controls>
-              <source src="">
-                Your browser does not support HTML5 video.
-            </video>
-            
-            <label class="file-upload-label btn btn-success btn-sm">
-                <input type="file" name="file[]" accept="video/*" style="display: none;">
-                Carica video
-            </label>
-            <span class="file-upload-name"></span>
+            <div>
+                <video controls>
+                  <source src="">
+                    Your browser does not support HTML5 video.
+                </video>
+                
+                <label class="file-upload-label btn btn-success btn-sm">
+                    <input type="file" name="file[]" accept="video/*" style="display: none;">
+                    Carica video
+                </label>
+                <span class="file-upload-name"></span>
+            </div>
+            <label>Descrizione:</label>
+            <textarea class="form-control"></textarea>
         </div>
     </template>
     
@@ -347,15 +359,17 @@
     <template id="template-node">
         <div class="node ui-widget-content">
             <div class="node-header">
-                <div class="buttons">
-                    <button class="btn btn-success btn-sm copy" title="Copia"><img src="/public/images/icons/copy.svg" width="24" height="24"></button>
-                    <button class="btn btn-success btn-sm delete" title="Elimina"><img src="/public/images/icons/cross.png" width="24" height="24"></button>
+                <div class="btn-group float-right">
+                    <button class="btn btn-success btn-sm node-button copy" title="Copia"><img src="/public/images/icons/copy.svg" width="24" height="24"></button>
+                    <button class="btn btn-success btn-sm node-button delete" title="Elimina"><img src="/public/images/icons/cross.png" width="24" height="24"></button>
                 </div>
                 
                 <input class="name" type="text">
             </div>
+            
             <div class="node-body">
             </div>
+            
             <div class="node-inouts">
                 <div class="node-inputs">
                 </div>

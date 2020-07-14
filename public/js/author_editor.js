@@ -15,23 +15,45 @@ var copiedMissionData = null;
 //so that the node at position i is related to the activity at position i in the loadedStory.activities array.
 var nodesArray = [];
 
-function modalSave() {
-    saveSelectedStory();
-}
 
-function modalDiscard() {
-    editorDirty = false;
-    clearSelectedStory();
-}
 
-function editorNameChange(element) {
-    if(loadedStory.name != element.value) {
-        loadedStory.name = element.value;
-        editorDirty = true;
+/* Example options:
+    {
+        title: "title",
+        text: "text",
+        body: $('<p>Body</p>'),
+        buttons: 
+        [
+            {
+                text: "",
+                onclick: () => console.log("hello");
+                secondary: true
+            }
+        ]
     }
+*/
+function openModal(opt) {    
+    $("#mod-title").text(opt.title || "");
+    $("#mod-text").html(opt.text || "");
+    $("#mod-body").empty();
+    if(opt.body) {
+        $("#mod-body").append(opt.body);
+    }
+    
+    let buttons = $("#mod-buttons");
+    buttons.empty();
+    for(let b of opt.buttons) {
+        let button = $('<button type="button" class="btn" data-dismiss="modal">' + b.text + '</button>');
+        button.addClass(b.secondary ? "btn-secondary" : "btn-primary");
+        if(b.onclick) 
+            button.on('click', b.onclick);
+        buttons.append(button);
+    }
+    
+    $("#mod").modal();
 }
 
-function editorAccessibleChange(element) {
+function editorStoryAccessibleChange(element) {
     loadedStory.accessible = element.checked;
     editorDirty = true;
 }
@@ -66,6 +88,7 @@ function addContentElement(content, container, activity) {
     switch(content.type) {
         case "text": {
             let textarea = $(document.createElement("textarea"));
+            textarea.addClass("form-control");
             textarea.appendTo(item_div);
             linkInputToProperty(content, "text", textarea);
         } break;
@@ -91,6 +114,8 @@ function addContentElement(content, container, activity) {
                 
                 uploadFileAndStoreURL(input[0].files[0], content, "url");
             });
+            
+            linkInputToProperty(content, "description", image_div.find("textarea"));
             
             image_div.appendTo(item_div);
             
@@ -119,6 +144,9 @@ function addContentElement(content, container, activity) {
                 
                 uploadFileAndStoreURL(input[0].files[0], content, "url");
             });
+            
+            
+            linkInputToProperty(content, "description", video_div.find("textarea"));
             
             video_div.appendTo(item_div);
         } break;
@@ -516,14 +544,14 @@ function openActivityEditor(activity, node) {
     let add_image = editor.find(".add-image");
     add_image.off("click");
     add_image.on("click", () => {
-        editorNewContent({type: "image", url:""}, contents, activity);
+        editorNewContent({type: "image", url:"", description: ""}, contents, activity);
         updateAllUpDownButtons(contents, ".content-up", ".content-down");
     });
     
     let add_video = editor.find(".add-video");
     add_video.off("click");
     add_video.on("click", () => {
-        editorNewContent({type: "video", url:""}, contents, activity);
+        editorNewContent({type: "video", url:"", description: ""}, contents, activity);
         updateAllUpDownButtons(contents, ".content-up", ".content-down");
     });
     
@@ -824,8 +852,10 @@ function selectStory(id) {
             $("#editor-placeholder").addClass("d-none");
             $("#editor-area-activities").removeClass("d-none");
             $("#editor-area-missions").removeClass("d-none");
-            $("#editor-name").val(loadedStory.name);
             $("#editor-accessible").prop("checked", loadedStory.accessible);
+            
+            linkInputToProperty(loadedStory, "name", $("#editor-name"));
+            linkInputToProperty(loadedStory, "style", $("#editor-style"));
             
             $("#editor-missions").empty();
             loadedStory.missions.forEach((m) => {
@@ -841,24 +871,49 @@ function selectStory(id) {
     });
 }
 
-
 function addStoryElement(s) {
     let story_div = $($("#template-story").html());
     
     let item = story_div.find(".list-group-item");
     item.text(s.name);
-    item.on("click", () => {
-        if(editorDirty) {
-            $("#save-modal").modal();
-            return;
-        }
-        
+    let openStory = function () {
         if(selectedStoryButton) {
             selectedStoryButton.removeClass("active");
         }
         selectedStoryButton = item;
         item.addClass("active");
         selectStory(s.id);
+    };
+    
+    item.on("click", () => {
+        if(editorDirty) {
+            openModal({
+                title: "Modifiche non salvate",
+                text: "Salvare le modifiche effettuate?",
+                buttons: [ 
+                    {   
+                        text: "Salva", 
+                        onclick: () => {
+                            saveSelectedStory();
+                            openStory();
+                        }
+                    },
+                    { 
+                        text: "Scarta", 
+                        onclick: () => {
+                            editorDirty = false;
+                            openStory();
+                        }
+                    },
+                    { 
+                        text: "Annulla",
+                        secondary: true
+                    }
+                ]
+            });   
+        } else {
+            openStory();
+        }
     });
     
     if(loadedStory && loadedStory.id == s.id) {
@@ -867,12 +922,57 @@ function addStoryElement(s) {
     }
     
     let qr = story_div.find(".story-qr");
+    qr.on('click', () => {
+        let qr = $(document.createElement('div'));
+        qr.qrcode({
+            'text' : 'http://www.site.com/player?id=' + s.id,  // users will be redirected to this URL when scanning the QR-Code
+            'size' : 150                                       // image width in pixel
+        });
+        
+        openModal({
+            title: "QR Code",
+            text: 'QR Code per la storia <b>' + s.name + '</b>:',
+            body: qr,
+            buttons: [
+                {   
+                    text: "Scarica",
+                    onclick: () => {                        
+                        let canvas = qr.find('canvas')[0];
+                        let dataUrl = canvas.toDataURL();
+                        let a = document.createElement('a');
+                        a.href = dataUrl;
+                        a.download = 'qrcode.png';
+                        document.body.appendChild(a);
+                        a.click();
+                        a.remove();
+                    }
+                },
+                { 
+                    text: "Annulla",
+                    secondary: true
+                }
+            ]
+        });
+    });
     
     let del = story_div.find(".story-del");
     del.on("click", (event) => {
-        $("#modal-delete-message").html("Sicuro di voler eliminare la storia: <b>" + s.name + "</b>?");
-        $("#modal-delete-button").attr("delete-id", s.id);
-        $("#delete-modal").modal();
+        openModal( {
+            title: "Eliminazione",
+            text: 'Sicuro di voler eliminare la storia: <b>' + s.name + '</b>?',
+            buttons: [ 
+                {   
+                    text: "Elimina", 
+                    onclick: () => {
+                        actionOnStory(s.id, 'delete');
+                    }
+                },
+                { 
+                    text: "Annulla",
+                    secondary: true
+                }
+            ]
+        });
     });
     
     
@@ -937,6 +1037,7 @@ function newStory(published)
     let story = {
         name: "Nuova storia",
         accessible: false,
+        style: "",
         published: published,
         canvas_offset: { x: 0, y: 0 },
         canvas_scale: 1.0,
