@@ -1,0 +1,45 @@
+{
+  "name": "Nuova storia",
+  "accessible": false,
+  "style": "",
+  "published": false,
+  "canvas_offset": {
+    "x": 0,
+    "y": 0
+  },
+  "canvas_scale": 1,
+  "missions": [],
+  "activities": [
+    {
+      "name": "Inizio",
+      "contents": [],
+      "mission_index": null,
+      "special": "begin",
+      "input_type": "none",
+      "input": {
+        "evaluation_type": "none",
+        "next_index": null
+      },
+      "position": {
+        "x": 50,
+        "y": 50
+      }
+    },
+    {
+      "name": "Fine",
+      "contents": [],
+      "mission_index": null,
+      "special": "end",
+      "input_type": "none",
+      "input": {
+        "evaluation_type": "none",
+        "next_index": null
+      },
+      "position": {
+        "x": 250,
+        "y": 50
+      }
+    }
+  ],
+  "id": 108
+}

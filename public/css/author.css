@@ -45,23 +45,6 @@ html, body {
     box-sizing: content-box !important;
 }
 
-.node-button {
-    width: 30px;
-    height: 30px;
-    padding: 0px;
-    margin: 0px;
-}
-
-.node-enable {
-    width: 30px;
-    height: 30px;
-}
-
-.node-enable {
-    width: 30px;
-    height: 30px;
-}
-
 .node-header input[type="text"] {
     width: 100%;
     background-color: transparent;

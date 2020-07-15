@@ -154,10 +154,7 @@ function addContentElement(content, container, activity) {
     
     let del = content_div.find(".content-del");
     del.on("click", () => {
-        let index = activity.contents.indexOf(content);
-        if(index != -1) {
-            activity.contents.splice(index, 1);
-        }
+        removeFromArray(activity.contents, content);
         content_div.remove();
         editorDirty = true;
         
@@ -213,11 +210,13 @@ function editorNewContent(content, container, activity)
     addContentElement(content, container, activity);
 }
 
-function colorFromMissionIndex(i) {
-    if(i == null) {
+function activityColor(a) {
+    if(a.special) {
+        return "#000000";
+    } else if(a.mission_index == null) {
         return "#FFFFFF";
     } else {
-        return loadedStory.missions[i].color;
+        return loadedStory.missions[a.mission_index].color;
     }
 }
 
@@ -264,12 +263,14 @@ function setNodeOutputs(activity, node) {
     let type = activity.input_type;
     let input = activity.input;
     
-    //Add the 1 default output.
-    makeOutput(input, "next_index", node, "green");
-    
-    //Add the output for a wrong answer if needed
-    if(input.wrong_next_index !== undefined) {
-        makeOutput(input, "wrong_next_index", node, "red");
+    if (activity.special != "end") {
+        //Add the 1 default output.
+        makeOutput(input, "next_index", node, "green");
+        
+        //Add the output for a wrong answer if needed
+        if(input.wrong_next_index !== undefined) {
+            makeOutput(input, "wrong_next_index", node, "red");
+        }
     }
 }
 
@@ -501,7 +502,7 @@ function openActivityEditor(activity, node) {
         if(activity.mission_index != null) {
             editorDirty = true;
             activity.mission_index = null;
-            node.setColor(colorFromMissionIndex(activity.mission_index));
+            node.setColor(activityColor(activity));
             select.text("Nessuna missione");
             refreshOptions(options, activity);
         }
@@ -520,7 +521,7 @@ function openActivityEditor(activity, node) {
             if(activity.mission_index != i) {
                 editorDirty = true;
                 activity.mission_index = i;
-                node.setColor(colorFromMissionIndex(activity.mission_index));
+                node.setColor(activityColor(activity));
                 select.text(m.name);
                 refreshOptions(options, activity);
             }
@@ -579,6 +580,11 @@ function openActivityEditor(activity, node) {
     });
     
     setInputElement(activity, node);
+    
+    //Don't show some elements if the activity is a begin or end activity
+    $("#hide-input").toggle(activity.special ? false : true);
+    $("#hide-mission").toggle(activity.special ? false : true);
+    
     editor.modal();
 }
 
@@ -611,6 +617,8 @@ function deleteActivity(activity) {
 
 function editorPasteActivity() {
     if(copiedActivity) {
+        editorDirty = true;
+        
         let a = JSON.parse(copiedActivity);
         
         //Clear the mission
@@ -651,15 +659,20 @@ function addActivityNode(activity) {
         }
     });
     
-    n.setColor(colorFromMissionIndex(activity.mission_index));
+    if(activity.special)
+        n.hideButtons();
+    
+    n.setColor(activityColor(activity));
     
     let modify = $('<button class="btn btn-success btn-sm btn-block">Modifica attività</button>');
     modify.on("click", (e) => openActivityEditor(activity, n));
     n.body().append(modify);
     
-    n.addInput({
-        single: false
-    });
+    if(activity.special != "begin") {
+        n.addInput({
+            single: false
+        });
+    }
     
     nodesArray.push(n);
     
@@ -687,6 +700,8 @@ function editorNewActivity() {
 
 function editorPasteMission() {
     if(copiedMission) {
+        editorDirty = true;
+        
         //Add the new mission
         let mission = JSON.parse(copiedMission.mission);
         let mission_index = loadedStory.missions.length;
@@ -745,6 +760,36 @@ function editorPasteMission() {
     }
 }
 
+function deleteMission(mission_div, mission) {
+    mission_div.remove();
+    
+    let mission_index = loadedStory.missions.indexOf(mission);
+    
+    //Remove all activities of that mission
+    for(let i = 0; i < nodesArray.length;) {
+        let a = loadedStory.activities[i];
+        let n = nodesArray[i];
+        
+        if(a.mission_index == mission_index) {
+            n.remove();
+        } else {
+            i++; //Only increment if we did not remove
+        }
+    }
+    
+    //Remove the mission
+    loadedStory.missions.splice(mission_index, 1);
+    
+    //Update all activities mission indices
+    loadedStory.activities.forEach( (a) => {
+        if(a.mission_index == mission_index) {
+            a.mission_index = null;
+        } else if(a.mission_index > mission_index) {
+            a.mission_index--;
+        }
+    });
+}
+
 function addMissionElement(mission) {
     let mission_div = $($("#template-mission").html());
     
@@ -767,21 +812,23 @@ function addMissionElement(mission) {
     
     let del = mission_div.find(".mission-del");
     del.on("click", () => {
-        editorDirty = true;
-        mission_div.remove();
-        
-        let index = loadedStory.missions.indexOf(mission);
-        loadedStory.missions.splice(index, 1);
-        
-        loadedStory.activities.forEach( (a) => {
-            if(a.mission_index == index) {
-                a.mission_index = null;
-            } else if(a.mission_index > index) {
-                a.mission_index--;
-            }
+        openModal({
+            title: "Elimina missione",
+            text: "Tutte le attività della missione saranno eliminate, procedere?",
+            buttons: [ 
+                {   
+                    text: "Elimina", 
+                    onclick: () => {
+                        editorDirty = true;
+                        deleteMission(mission_div, mission);
+                    }
+                },
+                { 
+                    text: "Annulla",
+                    secondary: true
+                }
+            ]
         });
-        
-        loadActivities();
     });
     
     let copy = mission_div.find(".mission-copy");
@@ -980,7 +1027,7 @@ function addStoryElement(s) {
     swap.on("click", () => actionOnStory(s.id, s.published ? "archive" : "publish"));
     let swap_publish = '<img class="story-icon" src="/public/images/icons/publish.png">Pubblica';
     let swap_archive = '<img class="story-icon" src="/public/images/icons/archive.png">Archivia';
-    swap.html(s.published ? swap_publish : swap_archive);
+    swap.html(s.published ? swap_archive : swap_publish);
     
     let dup = story_div.find(".story-dup");
     dup.on("click", () => actionOnStory(s.id, "duplicate"));
@@ -1042,7 +1089,32 @@ function newStory(published)
         canvas_offset: { x: 0, y: 0 },
         canvas_scale: 1.0,
         missions: [],
-        activities: [],
+        activities: [
+            {
+                name: "Inizio",
+                contents: [],
+                mission_index: null,
+                special: "begin",
+                input_type: "none",
+                input: {
+                    evaluation_type: "none",
+                    next_index: null
+                },
+                position: {x: 50, y: 50}
+            },
+            {
+                name: "Fine",
+                contents: [],
+                mission_index: null,
+                special: "end",
+                input_type: "none",
+                input: {
+                    evaluation_type: "none",
+                    next_index: null
+                },
+                position: {x: 250, y: 50}
+            }
+        ]
     };
     
     $.ajax({

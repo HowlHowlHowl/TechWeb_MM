@@ -105,13 +105,15 @@
                 <input type="text" class="editable-name activity-name">
             </div>
             
-            <hr>
             
-            <h6>Missione:</h6>
-            <div class="dropdown">
-              <button class="btn btn-info dropdown-toggle select-mission" type="button" data-toggle="dropdown"></button>
-              <div class="dropdown-menu mission-options">
-              </div>
+            <div id="hide-mission">
+                <hr>
+                <h6>Missione:</h6>
+                <div class="dropdown">
+                  <button class="btn btn-info dropdown-toggle select-mission" type="button" data-toggle="dropdown"></button>
+                  <div class="dropdown-menu mission-options">
+                  </div>
+                </div>
             </div>
             
             <hr>
@@ -126,67 +128,69 @@
                 <button class="btn btn-success btn-sm add-video" title="Video"><img class="content-icon" src="/public/images/icons/video.png"></button>
             </div>
             
-            <hr>
             
-            <h6>Input:</h6>
-            <div class="btn-group btn-group-toggle" data-toggle="buttons">
-              <label class="btn btn-info active input-text">
-                <input type="radio" name="options">Testo
-              </label>
-              <label class="btn btn-info input-number">
-                <input type="radio" name="options">Numero
-              </label>
-              <label class="btn btn-info input-photo">
-                <input type="radio" name="options">Foto
-              </label>
-              <label class="btn btn-info input-none">
-                <input type="radio" name="options">Niente
-              </label>
-            </div>
-            
-            <div id="activity-input-div" class="p-3">
-                <div class="form-group">
-                    <label for="input-style">Stile widget di input:</label>
-                    <select class="custom-select" id="input-style">
-                        <option value="" selected>Nessuno</option>
-                        <option value="1">One</option>
-                        <option value="2">Two</option>
-                        <option value="3">Three</option>
-                    </select>
+            <div id="hide-input">
+                <hr>
+                <h6>Input:</h6>
+                <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                  <label class="btn btn-info active input-text">
+                    <input type="radio" name="options">Testo
+                  </label>
+                  <label class="btn btn-info input-number">
+                    <input type="radio" name="options">Numero
+                  </label>
+                  <label class="btn btn-info input-photo">
+                    <input type="radio" name="options">Foto
+                  </label>
+                  <label class="btn btn-info input-none">
+                    <input type="radio" name="options">Niente
+                  </label>
                 </div>
                 
-                <div class="form-group" id="activity-input-select-div">
-                    <label for="input-evaluation-select">Tipologia di valutazione:</label>
-                    <select class="custom-select" id="input-evaluation-select">
-                    </select>  
-                </div>
-                
-                <div id="activity-correct-div">                    
-                    <div class="form-row m-1">
-                        <div class="col-1"></div>
-                        <div class="col-6">Risposta</div>
-                        <div class="col-2">Punti</div>
+                <div id="activity-input-div" class="p-3">
+                    <div class="form-group">
+                        <label for="input-style">Stile widget di input:</label>
+                        <select class="custom-select" id="input-style">
+                            <option value="" selected>Nessuno</option>
+                            <option value="1">One</option>
+                            <option value="2">Two</option>
+                            <option value="3">Three</option>
+                        </select>
                     </div>
                     
-                    <div id="correct-options">
+                    <div class="form-group" id="activity-input-select-div">
+                        <label for="input-evaluation-select">Tipologia di valutazione:</label>
+                        <select class="custom-select" id="input-evaluation-select">
+                        </select>  
                     </div>
-                                  
-                    <div class="form-row m-1">
-                        <div class="col-1"></div>
-                        <div class="col-6">
-                            <button id="correct-new" class="btn btn-info btn-sm">Nuova opzione</button>
+                    
+                    <div id="activity-correct-div">                    
+                        <div class="form-row m-1">
+                            <div class="col-1"></div>
+                            <div class="col-6">Risposta</div>
+                            <div class="col-2">Punti</div>
+                        </div>
+                        
+                        <div id="correct-options">
+                        </div>
+                                      
+                        <div class="form-row m-1">
+                            <div class="col-1"></div>
+                            <div class="col-6">
+                                <button id="correct-new" class="btn btn-info btn-sm">Nuova opzione</button>
+                            </div>
                         </div>
                     </div>
-                </div>
-                
-                <div id="activity-input-wrong-div">
-                    <div class="form-check">
-                        <input id="wrong-stay" class="form-check-input" type="checkbox">
-                        <label for="wrong-stay" class="form-check-label">Riprova in caso di errore</label>
-                    </div>
-                    <div id="wrong-message" class="form-group">
-                        <label for="wrong-text">Messaggio di errore:</label>
-                        <input class="form-control" id="wrong-text" type="text">
+                    
+                    <div id="activity-input-wrong-div">
+                        <div class="form-check">
+                            <input id="wrong-stay" class="form-check-input" type="checkbox">
+                            <label for="wrong-stay" class="form-check-label">Riprova in caso di errore</label>
+                        </div>
+                        <div id="wrong-message" class="form-group">
+                            <label for="wrong-text">Messaggio di errore:</label>
+                            <input class="form-control" id="wrong-text" type="text">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -359,7 +363,7 @@
     <template id="template-node">
         <div class="node ui-widget-content">
             <div class="node-header">
-                <div class="btn-group float-right">
+                <div class="btn-group float-right node-buttons">
                     <button class="btn btn-success btn-sm node-button copy" title="Copia"><img src="/public/images/icons/copy.svg" width="24" height="24"></button>
                     <button class="btn btn-success btn-sm node-button delete" title="Elimina"><img src="/public/images/icons/cross.png" width="24" height="24"></button>
                 </div>

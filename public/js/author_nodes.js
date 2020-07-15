@@ -175,6 +175,10 @@ function redrawNodeConnections(node) {
     node.outputs.forEach( (o) => redrawConnections(o.connections));
 }
 
+function deleteNode(n) {
+    
+}
+
 function Node(name, pos, callbacks) {
     let element = $($("#template-node").html());
     let canvas = $("#canvas-transform");
@@ -214,20 +218,7 @@ function Node(name, pos, callbacks) {
     });
     
     element.find('.delete').on("click", (e) => {
-        if(this.onDelete) this.onDelete();
-        
-        this.inputs.forEach( (i) => {
-            while(i.connections.length) {
-                removeConnection(i.connections[i.connections.length - 1]);
-            }
-        });
-        this.outputs.forEach( (o) => {
-            while(o.connections.length) {
-                removeConnection(o.connections[o.connections.length - 1]);
-            }
-        });
-        
-        this.element.remove();
+        this.remove();
     });
     
     element.find('.copy').on("click", (e) => {
@@ -295,6 +286,27 @@ function Node(name, pos, callbacks) {
     
     this.body = () => {
         return element.find(".node-body");
+    };
+    
+    this.hideButtons = () => {
+        element.find(".node-buttons").css("display", "none");
+    };
+    
+    this.remove = () => {
+        if(this.onDelete) this.onDelete();
+        
+        this.inputs.forEach( (i) => {
+            while(i.connections.length) {
+                removeConnection(i.connections[i.connections.length - 1]);
+            }
+        });
+        this.outputs.forEach( (o) => {
+            while(o.connections.length) {
+                removeConnection(o.connections[o.connections.length - 1]);
+            }
+        });
+        
+        this.element.remove();
     };
     
 }
