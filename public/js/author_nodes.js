@@ -211,7 +211,7 @@ function Node(name, pos, callbacks) {
     });
     
     element.css({ left: pos.x, top: pos.y });
-    let name_input = element.find('.name');
+    let name_input = element.find('.node-name');
     name_input.val(name);
     name_input.on("change", () => {
         if(this.onNameChange) this.onNameChange(name_input.val());
@@ -277,7 +277,7 @@ function Node(name, pos, callbacks) {
     };
     
     this.setName = (name) => {
-        this.element.find(".name").val(name);
+        this.element.find(".node-name").val(name);
     };
     
     this.setColor = (color) => {

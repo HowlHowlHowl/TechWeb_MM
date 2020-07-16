@@ -20,7 +20,7 @@
 </head>
 <body>
     <!-- Area principale -->
-    <div class="row p-3" id="editor">
+    <div class="row m-0 p-2" id="editor">
         <!-- Area gestione storie -->
         <div class="col-2" id="editor-stories">
             <h4>Pubblicate</h4>
@@ -40,10 +40,11 @@
             <p>Seleziona una storia da modificare</p>
         </div>
         
+        
         <!-- Area editor -->
         <div class="col-8 d-none" id="editor-area-activities">
             <div class="flex-container">
-                <div class="flex-header">
+                <div class="flex-header m-1">
                     <input type="text" class="editable-name" id="editor-name">
                     <button class="btn btn-primary float-right btn-lg" onclick="saveSelectedStory()">Salva</button>
                     <div class="form-row align-items-center m-1">
@@ -65,7 +66,7 @@
                 
                     
                     <button class="btn btn-primary" onclick="editorNewActivity()">Nuova attività</button>
-                    <button id="activity-paste" class="btn btn-info" onclick="editorPasteActivity()" disabled>Incolla attività</button>
+                    <button id="activity-paste" class="btn btn-primary" onclick="editorPasteActivity()" disabled>Incolla attività</button>
                 </div>
                 
                 <div class="flex-content">
@@ -84,9 +85,8 @@
             <div id="editor-missions">
             </div>
             <button class="btn btn-primary" onclick="editorNewMission()">Nuova missione</button>
-            <button id="mission-paste" class="btn btn-info" onclick="editorPasteMission()" disabled>Incolla missione</button>
+            <button id="mission-paste" class="btn btn-primary" onclick="editorPasteMission()" disabled>Incolla missione</button>
         </div>
-        
     </div>
     
     <!-- Finestra modale di editing delle attività -->
@@ -110,7 +110,7 @@
                 <hr>
                 <h6>Missione:</h6>
                 <div class="dropdown">
-                  <button class="btn btn-info dropdown-toggle select-mission" type="button" data-toggle="dropdown"></button>
+                  <button class="btn btn-primary dropdown-toggle select-mission" type="button" data-toggle="dropdown"></button>
                   <div class="dropdown-menu mission-options">
                   </div>
                 </div>
@@ -123,9 +123,9 @@
             </div>
             
             <div class="btn-group activity-add-group" role="group">
-                <button class="btn btn-success btn-sm add-text" title="Testo"><img class="content-icon" src="/public/images/icons/text.png"></button>
-                <button class="btn btn-success btn-sm add-image" title="Immagine"><img class="content-icon" src="/public/images/icons/image.png"></button>
-                <button class="btn btn-success btn-sm add-video" title="Video"><img class="content-icon" src="/public/images/icons/video.png"></button>
+                <button class="btn btn-primary btn-sm add-text" title="Testo"><img class="content-icon" src="/public/images/icons/textwhite.png"></button>
+                <button class="btn btn-primary btn-sm add-image" title="Immagine"><img class="content-icon" src="/public/images/icons/imagewhite.png"></button>
+                <button class="btn btn-primary btn-sm add-video" title="Video"><img class="content-icon" src="/public/images/icons/videowhite.png"></button>
             </div>
             
             
@@ -133,16 +133,16 @@
                 <hr>
                 <h6>Input:</h6>
                 <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                  <label class="btn btn-info active input-text">
+                  <label class="btn btn-primary active input-text">
                     <input type="radio" name="options">Testo
                   </label>
-                  <label class="btn btn-info input-number">
+                  <label class="btn btn-primary input-number">
                     <input type="radio" name="options">Numero
                   </label>
-                  <label class="btn btn-info input-photo">
+                  <label class="btn btn-primary input-photo">
                     <input type="radio" name="options">Foto
                   </label>
-                  <label class="btn btn-info input-none">
+                  <label class="btn btn-primary input-none">
                     <input type="radio" name="options">Niente
                   </label>
                 </div>
@@ -159,7 +159,7 @@
                     </div>
                     
                     <div class="form-group" id="activity-input-select-div">
-                        <label for="input-evaluation-select">Tipologia di valutazione:</label>
+                        <label for="input-evaluation-select">Tipologia di verifica della risposta:</label>
                         <select class="custom-select" id="input-evaluation-select">
                         </select>  
                     </div>
@@ -177,7 +177,7 @@
                         <div class="form-row m-1">
                             <div class="col-1"></div>
                             <div class="col-6">
-                                <button id="correct-new" class="btn btn-info btn-sm">Nuova opzione</button>
+                                <button id="correct-new" class="btn btn-primary btn-sm">Nuova opzione</button>
                             </div>
                         </div>
                     </div>
@@ -225,7 +225,7 @@
     
     <!-- template per widget della storia -->
     <template id="template-story">
-        <div class="btn-group story-div" role="group">
+        <div class="btn-group story-div m-1" role="group">
             <button class="list-group-item list-group-item-action"></button>
             <button class="btn btn-outline-primary dropdown-toggle" type="button" data-toggle="dropdown"></button>
             <div class="dropdown-menu dropdown-menu-right">
@@ -240,16 +240,16 @@
     
     <!-- template per editor missione -->
     <template id="template-mission">
-        <div class="p-3 mission-div">
+        <div class="p-3 mission-div m-1">
             <div class="btn-group float-right" role="group">
-                <button class="btn btn-secondary btn-sm mission-copy" title="Copia"><img class="mission-icon" src="/public/images/icons/copy.svg"></button>
-                <button class="btn btn-secondary btn-sm mission-del" title="Elimina"><img class="mission-icon" src="/public/images/icons/cross.png"></button>
+                <input class="mission-col" type="color" value="#563d7c" id="example-color-input">
+                <button class="mission-button mission-copy" title="Copia"><img class="mission-icon" src="/public/images/icons/copy.svg"></button>
+                <button class="mission-button mission-del" title="Elimina"><img class="mission-icon" src="/public/images/icons/crosswhite.png"></button>
             </div>
             
             <div class="editable-name-div">
                 <input type="text" class="editable-name mission-name">
             </div>
-            <input class="form-control mission-col" type="color" value="#563d7c" id="example-color-input">
         </div>
     </template>
     
@@ -257,15 +257,15 @@
     <template id="template-content">
         <div class="content-div row mx-5 my-1 py-3">
             <div class="col-1">
-                <div class="btn-group-vertical content-buttons float-right">
-                    <button class="btn btn-info btn-sm content-del " title="Elimina">
-                        <img class="content-icon" src="/public/images/icons/cross.png">
+                <div class="btn-group-vertical content-buttons mx-auto">
+                    <button class="btn btn-primary btn-sm content-del " title="Elimina">
+                        <img class="content-icon" src="/public/images/icons/crosswhite.png">
                     </button>
-                    <button class="btn btn-info btn-sm content-up float-right" title="Sposta in alto">
-                        <img class="content-icon" src="/public/images/icons/up.png">
+                    <button class="btn btn-primary btn-sm content-up float-right" title="Sposta in alto">
+                        <img class="content-icon" src="/public/images/icons/upwhite.png">
                     </button>
-                    <button class="btn btn-info btn-sm content-down float-right" title="Sposta in basso">
-                        <img class="content-icon" src="/public/images/icons/down.png">
+                    <button class="btn btn-primary btn-sm content-down float-right" title="Sposta in basso">
+                        <img class="content-icon" src="/public/images/icons/downwhite.png">
                     </button>
                 </div>
             </div>
@@ -317,7 +317,7 @@
     <template id="template-option-text">
         <div class="form-row m-1">
             <div class="col-1">
-                <button class="option-del btn btn-info float-right">Del</button>
+                <button class="option-del btn btn-sm btn-primary float-right"><img class="input-icon" src="/public/images/icons/crosswhite.png"></button>
             </div>
             <div class="col-6">
                 <input type="text" class="option-text form-control" placeholder="Risposta">
@@ -332,7 +332,7 @@
     <template id="template-option-number">
         <div class="form-row m-1">
             <div class="col-1">
-                <button class="option-del btn btn-info">Del</button>
+                <button class="option-del btn btn-sm btn-primary"><img class="input-icon" src="/public/images/icons/crosswhite.png"></button>
             </div>
             
             
@@ -364,11 +364,11 @@
         <div class="node ui-widget-content">
             <div class="node-header">
                 <div class="btn-group float-right node-buttons">
-                    <button class="btn btn-success btn-sm node-button copy" title="Copia"><img src="/public/images/icons/copy.svg" width="24" height="24"></button>
-                    <button class="btn btn-success btn-sm node-button delete" title="Elimina"><img src="/public/images/icons/cross.png" width="24" height="24"></button>
+                    <button class="node-button copy" title="Copia"><img class="node-icon" src="/public/images/icons/copy.svg"></button>
+                    <button class="node-button delete" title="Elimina"><img class="node-icon" src="/public/images/icons/crosswhite.png"></button>
                 </div>
                 
-                <input class="name" type="text">
+                <input class="node-name" type="text">
             </div>
             
             <div class="node-body">

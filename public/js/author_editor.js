@@ -89,6 +89,7 @@ function addContentElement(content, container, activity) {
         case "text": {
             let textarea = $(document.createElement("textarea"));
             textarea.addClass("form-control");
+            textarea.attr("rows", "4");
             textarea.appendTo(item_div);
             linkInputToProperty(content, "text", textarea);
         } break;
@@ -432,9 +433,9 @@ function setInputElement(activity, node)
         select.off();
         
         let options = [ 
-            { text: "Qualsiasi", value: "any"},
-            { text: "Corretta", value: "correct"},
-            { text: "Valutata", value: "evaluator"},
+            { text: "Risposta qualsiasi", value: "any"},
+            { text: "Risposta corretta", value: "correct"},
+            { text: "Risposta valutata", value: "evaluator"},
         ];
         if(type == "photo") {
             removeFromArray(options, options[1]);
@@ -664,7 +665,7 @@ function addActivityNode(activity) {
     
     n.setColor(activityColor(activity));
     
-    let modify = $('<button class="btn btn-success btn-sm btn-block">Modifica attività</button>');
+    let modify = $('<button class="node-modify">Modifica attività</button>');
     modify.on("click", (e) => openActivityEditor(activity, n));
     n.body().append(modify);
     
@@ -808,7 +809,10 @@ function addMissionElement(mission) {
                 n.setColor(color.val());
             }
         }
+        
+        mission_div.css("border-color", color.val());
     });
+    mission_div.css("border-color", color.val());
     
     let del = mission_div.find(".mission-del");
     del.on("click", () => {

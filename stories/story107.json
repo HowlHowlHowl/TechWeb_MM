@@ -4,29 +4,29 @@
   "style": "",
   "published": true,
   "canvas_offset": {
-    "x": 217.0055488927739,
-    "y": 188.4632537068768
+    "x": 163.78465416215067,
+    "y": 128.99076542157783
   },
-  "canvas_scale": 0.4369324675679588,
+  "canvas_scale": 0.5314410000000002,
   "missions": [
     {
-      "name": "A",
+      "name": "Missione A",
       "color": "#16e33f"
     },
     {
-      "name": "A",
+      "name": "Missione A",
       "color": "#bd1414"
     },
     {
-      "name": "B",
+      "name": "Missione B",
       "color": "#1016d1"
     },
     {
-      "name": "C",
+      "name": "Missione C",
       "color": "#f0144b"
     },
     {
-      "name": "D",
+      "name": "Missione D",
       "color": "#f1d104"
     }
   ],
