@@ -27,7 +27,7 @@
       "mins": "45",
       "text": "Non capisco come risolvere il quesito 99, può aiutarmi?",
       "auth": "player4",
-      "seen": true
+      "seen": false
     }
   ],
   "pending_count": 1,
@@ -40,7 +40,7 @@
       "input_type": "text",
       "answer": "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.",
       "comment": "brav1",
-      "quest_score": 50
+      "quest_score": 0
     }
   ]
 }
