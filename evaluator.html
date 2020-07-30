@@ -604,7 +604,7 @@
         			setHistory(data);
         		},
         		error: function (xhr, ajaxOptions, thrownError) {
-        			alert(xhr.status + ' - ' + thrownError);
+        			alert('openHistory() - ' + xhr.status + ' - ' + thrownError);
         		}
         	});
 		}
@@ -698,7 +698,7 @@
         			setPendingCorrectionList();
         		},
         		error: function (xhr, ajaxOptions, thrownError) {
-        			alert(xhr.status + ' - ' + thrownError);
+        			alert('submitCorrection() - ' + xhr.status + ' - ' + thrownError);
         		}
         	});
         }
@@ -719,12 +719,14 @@
         //Open the pop-up chat with the selected player
         function openChat(id) {
             $.ajax({
+                accepts: 'application/json',
                 url: '/players/' + id,
                 success: function (data) {
                 	setChatView(data);
+                    markAsSeen(id);
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
-                    alert(xhr.status + ' - ' + thrownError);
+                    alert('openChat() - ' + xhr.status + ' - ' + thrownError);
                 }
             });
         }
@@ -737,7 +739,7 @@
         			setUserTab(data);
         		},
         		error: function (xhr, ajaxOptions, thrownError) {
-        			alert(xhr.status + ' - ' + thrownError);
+        			alert('openUserTab() - ' + xhr.status + ' - ' + thrownError);
         		}
         	});
         }
@@ -755,7 +757,7 @@
                     updateChat();
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
-                    alert(xhr.status + ' - ' + thrownError);
+                    alert('markAsSeen() - ' + xhr.status + ' - ' + thrownError);
                 }
             });
         }
@@ -786,7 +788,7 @@
                         openChat(id);
                     },
                     error: function (xhr, ajaxOptions, thrownError) {
-                        alert(xhr.status + ' - ' + thrownError);
+                        alert('sendMsg() - ' + xhr.status + ' - ' + thrownError);
                     }
                 });
             }
@@ -802,7 +804,7 @@
                 	currentCorrectionPlayerId = real_id;
                 },
                 error: function (xhr, ajaxOptions, thrownError) {      
-                	alert(xhr.status + ' - ' + thrownError);
+                	alert('requestWaitingUserData() - ' +xhr.status + ' - ' + thrownError);
                 }
             });
         }        
@@ -872,7 +874,7 @@
                     }
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
-                    alert(xhr.status + ' - ' + thrownError);
+                    alert('updateChat() - ' + xhr.status + ' - ' + thrownError);
                 }
             });
         }
@@ -893,7 +895,7 @@
                     data.forEach(addPendingPlayer);
                 }, 
                 error: function (xhr, ajaxOptions, thrownError) {
-                	alert(xhr.status + ' - ' + thrownError);
+                	alert('setPendingCorrectionList()' + xhr.status + ' - ' + thrownError);
                 }
             });
         }
@@ -909,7 +911,7 @@
         			setPendingCorrectionList();
         		},
         		error: function (xhr, ajaxOptions, thrownError) {
-        			alert(xhr.status + ' - ' + thrownError);
+        			alert('renamePlayer() - ' + xhr.status + ' - ' + thrownError);
         			
 				}
 
@@ -924,14 +926,12 @@
         //Event to open chat with in-need player
         $(document).on('click', '.help-list-el', function (event) {
             openChat(event.target.id);
-            markAsSeen(event.currentTarget.id);
 		
         });
 		//Event to open chat with selected player
         $(document).on('click', '#chat-button', function (event) {
         	let id = $('#rename-field').attr('name');
         	openChat(id);
-        	markAsSeen(id);
 
         });
 		//Event to open user tab of selected player
