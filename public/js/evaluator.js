@@ -492,6 +492,7 @@ function openChat(id) {
         url: '/players/' + id,
         success: function (data) {
             setChatView(data);
+            markAsSeen(id);
         },
         error: function (xhr, ajaxOptions, thrownError) {
             alert(xhr.status + ' - ' + thrownError);
@@ -556,15 +557,11 @@ $(document).on('click', '.send-correction', function (event) {
 $(document).on('click', '.help-list-el', function (event) {
     let id = (event.target.id).replace('help-', '');
     openChat(id);
-    markAsSeen(id);
-
 });
 //Event to open chat with selected player
 $(document).on('click', '#chat-button', function (event) {
     let id = $('#rename-field').attr('name');
     openChat(id);
-    markAsSeen(id);
-
 });
 //Event to open user tab of selected player
 $(document).on('click', '.player-list-el', function (event) {
