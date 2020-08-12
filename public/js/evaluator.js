@@ -72,7 +72,7 @@ function setUserTab(data) {
                             + '<p>Punteggio: ' + data.score + '</p>'
                             + '</div>'
                             + '<div class="block-info">'
-                            + '<p id="time-count">Missione "' + actual_quest.mission_name + '" attività: "' + actual_quest.activity_name + '" da ' + (hours > 0 ? (hours + ':' + minutes + ' ore ') : (minutes + ' minuti ')) + '</span></p>'
+                            + '<p id="time-count">Missione "' + actual_quest.mission_name + '" attivitÃ : "' + actual_quest.activity_name + '" da ' + (hours > 0 ? (hours + ':' + minutes + ' ore ') : (minutes + ' minuti ')) + '</span></p>'
                             + '</div>'
                             + '<div class="block-info">'
                             + '<p>ID: player' + data.id + '</p>'
@@ -148,7 +148,7 @@ function setCorrectionPane(data) {
         if (!quest.corrected) {
             let pane;
             //Attach header:
-            let quest_header = '<p class="quest_header">Missione: ' + quest.mission_name + '<br>Attività: ' + quest.activity_name+ '</p>';
+            let quest_header = '<p class="quest_header">Missione: ' + quest.mission_name + '<br>AttivitÃ : ' + quest.activity_name+ '</p>';
             //Attach question:
             let quest_widget =  '<div class="description-div">'
                                 + '<div class="inline-divs">Domanda :'
@@ -549,7 +549,7 @@ $(document).on('click', '.send-correction', function (event) {
         submitCorrection(questValutation);
     } else {
         $('#no-score').remove();
-        $('#input1-' + questIndex).append('<p id="no-score"class="unexpected-str">*Questo campo è obbligatorio</p>');
+        $('#input1-' + questIndex).append('<p id="no-score"class="unexpected-str">*Questo campo Ã¨ obbligatorio</p>');
         $('#score-input-' + questIndex).focus();
     }
 });
@@ -573,10 +573,10 @@ $(document).on('click', '#rename-button', function () {
     let id = $('#rename-field').attr('name');
     $('.unexpected-str').remove();
     if (!(/\S/.test(str))) {
-        $('#user-space-input').after('<div class="unexpected-str"><p>*Il nome non può essere vuoto</p></div>');
+        $('#user-space-input').after('<div class="unexpected-str"><p>*Il nome non puÃ² essere vuoto</p></div>');
     }
     else if(str.length > 20) {
-        $('#user-space-input').after('<div class="unexpected-str"><p>*Il nome non può essere lungo più di 20 caratteri compresi gli spazi, ci sono '+str.length+' caratteri</p></div>');
+        $('#user-space-input').after('<div class="unexpected-str"><p>*Il nome non puÃ² essere lungo piÃ¹ di 20 caratteri compresi gli spazi, ci sono '+str.length+' caratteri</p></div>');
     }
     else {
         renamePlayer(id, str);
