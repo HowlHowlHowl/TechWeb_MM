@@ -41,7 +41,7 @@ module.exports = function(app) {
             if(!err) {
                 res.writeHead(200, {'Content-Type': 'application/json'});
                 res.write(data);
-                return res.end();
+                res.end();
             } else {
                 res.status(400).send();
             }
