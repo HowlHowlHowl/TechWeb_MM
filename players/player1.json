@@ -1,6 +1,5 @@
 {
   "id": 1,
-  "active": true,
   "score": 1190,
   "username": "Anetha Bhela",
   "current_quest_start_timestamp": [
@@ -17,10 +16,12 @@
     }
   ],
   "pending_count": 0,
-  "story_id": 104,
-  "story_name": "Bella Rega",
+  "story_id": 107,
+  "story_name": "Big Storia",
   "quest_list": [
     {
+      "mission_name": "Mission A",
+      "activity_name": "Nuova attività",
       "corrected": true,
       "question": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et?",
       "input_type": "text",

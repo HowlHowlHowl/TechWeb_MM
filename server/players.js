@@ -13,10 +13,19 @@ module.exports = function(app) {
                     player.id = data.id;
                     player.urgent = false;
                     player.username = data.username;
+                    player.score = data.score;
+
+                    let date = new Date();
+                    let elapsed_mins = (((date.getHours() * 60) + date.getMinutes()) - ((data.current_quest_start_timestamp[0] * 60) + data.current_quest_start_timestamp[1])) / 60;
+                    let hours = Math.floor(elapsed_mins);
+                    let minutes = (((elapsed_mins % 1) * 60).toFixed() < 0 ? 0 : ((elapsed_mins % 1) * 60).toFixed());
+                    minutes = (minutes < 10 ? '0' + minutes : minutes);
+
+                    player.too_long = (hours > 0 || minutes > 15);
                     data.chat.forEach(function (dataChatLog) {
                         if ((dataChatLog.auth ).localeCompare("player"+data.id)==0) {
                             player.urgent = !dataChatLog.seen;
-                        }      
+                        }
                     });
 
                     players.push(player);
@@ -75,9 +84,9 @@ module.exports = function(app) {
                 res.write(data);
                 res.end();
             }
-        });
-        
+        }); 
     });
+
     //Associa un username ad un player
     app.post('/rename_player/:id', function (req, res) {
         let id = req.params.id;

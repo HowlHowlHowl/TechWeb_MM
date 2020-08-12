@@ -1,10 +1,9 @@
 {
   "id": 4,
-  "active": true,
   "score": 1050,
-  "username": "Why?",
+  "username": "Why",
   "current_quest_start_timestamp": [
-    16,
+    10,
     32
   ],
   "chat": [
@@ -27,14 +26,16 @@
       "mins": "45",
       "text": "Non capisco come risolvere il quesito 99, può aiutarmi?",
       "auth": "player4",
-      "seen": false
+      "seen": true
     }
   ],
   "pending_count": 1,
-  "story_id": 104,
-  "story_name": "Bella Rega",
+  "story_id": 107,
+  "story_name": "Big Storia",
   "quest_list": [
     {
+      "mission_name": "Mission A",
+      "activity_name": "Nuova attività",
       "corrected": false,
       "question": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et?",
       "input_type": "text",
