@@ -1,15 +1,16 @@
 ﻿<!DOCTYPE html>
 <html lang="it">
 <head>
-    <meta charset="utf-8">
-    <title>Player</title>
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"> <!--codice boostrap per attivare le funzionalità bootstrap-->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+	<meta charset="utf-8">
+	<title>Player</title>
+	<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"> <!--codice boostrap per attivare le funzionalità bootstrap-->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+	<link rel="icon" type="image/png" sizes="16x16" href="/public/images/icons/site16x16.ico">
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-    <script type="text/javascript">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+	<script type="text/javascript">
         function getStoryData() {
             let story_id = '104';
             $.ajax({
@@ -27,71 +28,70 @@
             $(document).ready(function() {
                         getStoryData();
                     });
-    </script>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <style type="text/css">
-    @font-face {
-        font-family: 'All The Roll';
-        src: url('public/font/AllTheRollPersonalUse.woff2') format('woff2'),
-            url('public/font/AllTheRollPersonalUse.woff') format('woff');
-        font-weight: normal;
-        font-style: normal;
-        font-display: swap;
-         }
-    h1 {
-            font-size: 6vw;
-            text-align: center;
-            color: white;
-            margin-top: 20px;
-            font-family: "All The Roll", Arial;
-        }
-     #divGrande {
-        margin: 0 7vw 0 7vw;
-        border: 3px #007bff solid;
-        height: 80vh;
-        overflow-y: auto;
-        background-color: white;
-        }
-     .bottonechat {
-         bottom: 0;
-         right: 0;
-         position: fixed;
-         font-size: 3vh;
-         margin-right: 0.5vw;     
-             }
+	</script>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<style type="text/css">
+		@font-face {
+			font-family: 'All The Roll';
+			src: url('public/font/AllTheRollPersonalUse.woff2') format('woff2'), url('public/font/AllTheRollPersonalUse.woff') format('woff');
+			font-weight: normal;
+			font-style: normal;
+			font-display: swap;
+		}
 
-     .divGrandevideo {
-         margin: auto;
-         width: 560px;
-         float: right;
-         margin-right: 15px;
-         margin-top: 5px;
-     }
-     #nomeAttivita {
-         text-align: center;
-         font-size: 2vw;
-         font-family: 'Helvetica Neue LT Std';
-         
-     }
-     body {
-         background-color: #007bff;
-         }
-    
-     .testoAttivita {
-         width: 50%;
-         float: left;
-         margin-left: 15px;
-         margin-top: 1px;
-         font-size: 2.5vh;
-         text-align: justify;
-         font-family: 'Helvetica Neue LT Std'; 
-         
-         }
+		h1 {
+			font-size: 6vw;
+			text-align: center;
+			color: white;
+			margin-top: 20px;
+			font-family: "All The Roll", Arial;
+		}
 
+		#divGrande {
+			margin: 0 7vw 0 7vw;
+			border: 3px #007bff solid;
+			height: 80vh;
+			overflow-y: auto;
+			background-color: white;
+		}
 
-     
-    </style>
+		.bottonechat {
+			bottom: 0;
+			right: 0;
+			position: fixed;
+			font-size: 3vh;
+			margin-right: 0.5vw;
+		}
+
+		.divGrandevideo {
+			margin: auto;
+			width: 560px;
+			float: right;
+			margin-right: 15px;
+			margin-top: 5px;
+		}
+
+		#nomeAttivita {
+			text-align: center;
+			font-size: 2vw;
+			font-family: 'Helvetica Neue LT Std';
+		}
+
+		body {
+			background-color: #007bff;
+		}
+
+		.testoAttivita {
+			width: 50%;
+			float: left;
+			margin-left: 15px;
+			margin-top: 1px;
+			font-size: 2.5vh;
+			text-align: justify;
+			font-family: 'Helvetica Neue LT Std';
+		}
+	</style>
 </head>
 <body>
 

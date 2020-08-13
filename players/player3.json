@@ -21,9 +21,9 @@
   "quest_list": [
     {
       "mission_name": "Mission A",
-      "activity_name": "Nuova attivit�",
+      "activity_name": "Nuova attività",
       "corrected": false,
-      "question": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et?",
+      "question": "Lorem ipsum dolor sit è amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et?",
       "input_type": "text",
       "answer": "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.",
       "comment": "",

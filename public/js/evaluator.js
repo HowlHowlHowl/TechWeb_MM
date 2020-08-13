@@ -26,6 +26,7 @@ setInterval(function () {
         openChat(currentChatPlayerId);
     }
 }, 1000);
+
 //User tab or Classification update every minute
 setInterval(function () {
     if (currentUserTabId) {
@@ -35,6 +36,33 @@ setInterval(function () {
         openClassification();
     }
 }, 60000);
+
+//Correction pane updated every 5 minutes if no input is insert
+setInterval(function () {
+    if (currentCorrectionPlayerId) {
+        let i = 1;
+        let update = true;
+        let input1 = $('#score-input-' + i);
+        let input2 = $('#comment-input-' + i);
+        //Esistono?
+        while (input1.length > 0 && input2.length > 0) {
+            //Hanno un valore scritto?
+            let in1 = input1.val();
+            let in2 = input2.val();
+            if (in1 && in1.length > 0 ||
+                in2 && in2.length > 0) {
+                update = false;
+                break;
+            }
+            i++
+            input1 = $('#input1-' + i);
+            input2 = $('#input2-' + i);
+        }
+        if (update) {
+            openCorrectionPane(currentCorrectionPlayerId);
+        }
+    }
+}, 5 * 60000);
 
 //GENERIC FUNCTIONS
 //Scroll to the last received message in the current chat
@@ -103,7 +131,8 @@ function closeUserTab() {
 }
 //Sets layout of history panel
 function setHistory(data) {
-    openClassification = false;
+    classificationOpen = false;
+    currentCorrectionPlayerId = null;
     $('#main-placeholder').empty();
     let header = '<div class="panel-heading" id="history-header">'
         + (data.username ? data.username : 'Player ' + data.id) + ' - Storico'
@@ -134,7 +163,7 @@ function setHistory(data) {
 //Sets layout of correction panel
 //TODO:immagini e video(?)
 function setCorrectionPane(data) {
-    openClassification = false;
+    classificationOpen = false;
     $('#main-placeholder').empty();
     let header = '<div class="panel-heading" id="correction-header">'
         + (data.username ? data.username : 'Player ' + data.id) + ' - ' + data.story_name
@@ -189,9 +218,9 @@ function setCorrectionPane(data) {
                                 + '<form>'
                                 + '<div class="form-group row">'
                                 + '<div class="col-12">'
-                                + '<div class="input1" id="input1-' + i + '"><label for="score-input-' + i + '">Attribuisci un punteggio</label><br>'
+                                + '<div class="col-sm-6 input1" id="input1-' + i + '"><label for="score-input-' + i + '">Attribuisci un punteggio</label><br>'
                                 + '<input class="form-control number-input" type="number" id="score-input-' + i + '"></div>'
-                                + '<div class="input2" id="input2-' + i + '"><label for="comment-input-' + i + '">Aggiungi un commento</label><br>'
+                                + '<div class="col-sm-6 input2" id="input2-' + i + '"><label for="comment-input-' + i + '">Aggiungi un commento</label><br>'
                                 + '<textarea class="comment-input" id="comment-input-' + i + '"></textarea></div>'
                                 + '</div>'
                                 + '</div>'
@@ -274,6 +303,7 @@ function addPendingPlayer(data) {
 function setClassification(data) {
     $('#main-placeholder').empty();
     classificationOpen = true;
+    currentCorrectionPlayerId = null;
     let header = '<div class="panel-heading" id="history-header">'
         + 'Classifica'
         + '</div><div class="panel-body" id="classification-pane">'
@@ -459,7 +489,7 @@ function updateAllData() {
     });
 }
 //Request data for correction pane of selected player
-function requestWaitingUserData(id) {
+function openCorrectionPane(id) {
     let real_id = id.replace('sidebar-player-', 'player');
     $.ajax({
         accepts: 'application/json',
@@ -584,7 +614,7 @@ $(document).on('click', '#rename-button', function () {
 });
 //Event to open correction pane of selected player
 $(document).on('click', '.waiting-player', function (event) {
-    requestWaitingUserData(event.currentTarget.id);
+    openCorrectionPane(event.currentTarget.id);
 });
 //Event to expand or reduce the answer and question sub-panes
 $(document).on('click', '.plus_min', function (event) {
