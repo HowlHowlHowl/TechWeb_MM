@@ -86,7 +86,7 @@ function setUserTab(data) {
     let actual_quest = data.quest_list[data.quest_list.length - 1];
     
     $('#user-space').empty();
-    $('#user-space').append(  '<a onclick="closeUserTab()" class="close_user_tab"><span class="glyphicon glyphicon-remove icon_close" id="close_tab"></span></a>'
+    $('#user-space').append(  '<a onclick="closeUserTab()"><span class="glyphicon glyphicon-remove icon-close"></span></a>'
                             + '<a id="prevUser" class="arrows_tab" data-toggle="tooltip" data-placement="top" title="Scheda utente precedente"><span class="glyphicon glyphicon-arrow-left" id="prev_tab"></span></a>'
                             + '<a id="nextUser" class="arrows_tab" data-toggle="tooltip" data-placement="top" title="Scheda utente successivo"><span class="glyphicon glyphicon-arrow-right" id="next_tab"></span></a>'
                             + '<div id = "user-space-input" class="input-group input-group-lg inline-info">'
@@ -160,6 +160,7 @@ function setHistory(data) {
     body+='</tbody></table></div>';
     $('#main-placeholder').append(header + body);
 }
+
 //Sets layout of correction panel
 //TODO:immagini e video(?)
 function setCorrectionPane(data) {
@@ -215,7 +216,7 @@ function setCorrectionPane(data) {
                                 + '</div>';
             //Attach corretion input
             let valu_widget = '<div class="valutation-input">'
-                                + '<form>'
+                                + '<form class="form-correction">'
                                 + '<div class="form-group row">'
                                 + '<div class="col-12">'
                                 + '<div class="col-sm-6 input1" id="input1-' + i + '"><label for="score-input-' + i + '">Attribuisci un punteggio</label><br>'
@@ -433,6 +434,7 @@ function submitCorrection(data) {
 
 //GET
 //Get story by ID
+//TODO: success
 function getStory(id) {
     $.ajax({
         url: "/stories/story" + id,
@@ -563,6 +565,7 @@ function openClassification() {
 $(document).ready(function () {
     updateAllData();
     setPendingCorrectionList();
+    go();
 });
 //Event to open history of selected player
 $(document).on('click', '#history-button', function (event) {
@@ -634,8 +637,13 @@ $(document).on('click', '.plus_min', function (event) {
         }
     }, 250);
 });
+//Open classification from navbar
 $(document).on('click', '#classification-button', function () {
     openClassification();
+});
+//Prevent default sumbit in correction pane
+$(document).on('submit', '.form-correction', function (event) {
+    event.preventDefault();
 });
 //Event to open user pane from correction pane
 $(document).on('click', '.user-info-tab', function (event) {
@@ -647,3 +655,33 @@ $(document).on('click', '.user-info-tab', function (event) {
 $(function () {
     $('[data-toggle="tooltip"]').tooltip()
 });
+//DIS IS FOR DOWNLOD EZ
+function go() {
+
+    //Download CLassifiction 
+    $.ajax({
+        url: '/players/downloads/classification',
+        success: function () {
+            link = document.createElement("a"); //create 'a' element
+            link.setAttribute("href", "public/downloads/classification.html"); //replace "file" with link to file you want to download
+            link.setAttribute("download", "Classifica");// replace "file" here too
+            link.click(); //virtually click <a> element to initiate download
+            link.remove();
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            alert(xhr.status + ' - ' + thrownError);
+        }
+    });
+}
+function setDownloadsWindow() {
+    $('#downloads-body').append('<a onclick="closeDownloads()"><span class="glyphicon glyphicon-remove icon_close"></span></a>');
+
+}
+
+function openDownloads() {
+    $('#downloadsWindow').css({ 'display': 'block' });
+}
+
+function closeDownloads() {
+    $('#downloadsWindow').css({'display':'none'});
+}

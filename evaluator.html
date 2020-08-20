@@ -20,109 +20,100 @@
 </head>
 <body>
 
-    <!--NAVBAR-->
+	<!--NAVBAR-->
 	<nav class="navbar navbar-expand-sm navbar-dark bg-primary">
 		<a class="navbar-brand" href="/">Home</a>
 		<button id="collapse-button" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 			<div id="dot-space"></div>
 		</button>
-			<div class="collapse navbar-collapse" id="navbarSupportedContent">
-				<ul class="navbar-nav">
-					<li class="nav-item">
-						<a class="nav-link" id="classification-button">Classifica</a>
-					</li>
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" id="playerDropdownButton" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							Giocatori
-						</a>
-						<div class="dropdown-menu" id="playersDropdown" aria-labelledby="navbarDropdown">
-							<!--Lista degli utenti in chat-->
-						</div>
-</li>
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" id="helpDropdownButton" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							Aiuti Richiesti
-						</a>
-						<div class="dropdown-menu" id="helpDropdown" aria-labelledby="navbarDropdown">
-							<!--Lista degli utenti in attesa di aiuto-->
-						</div>
-					</li>
-				</ul>
-			</div>
-	</nav>
-    <!--ANSWER LIST-->
-    <!-- List group -->
-    <div class="answer-list list-group" id="correction-list" role="tablist">
-		<!-- PENDING ANSWERS -->
-    </div>
-    <!-- Tab panes -->
-    <div class="tab-content">
-        <div class="tab-pane active" role="tabpanel">
-            <div class="panel panel-default" id="main-placeholder">
-				<!--    -->
-            </div>
-        </div>
-    </div>
-    <!--CHAT-->
-    <div class="chat-popup" id="chat">
-        <form autocomplete="off" onsubmit="sendMsg()" class="form-container">
-            <div class="container">
-                <div class="col-sm-8">
-                    <div class="chatbody">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading top-bar">
-                                <div class="col-md-4 col-xs-4" style="text-align: right;">
-                                    <a onclick="closeChat()"><span class="glyphicon glyphicon-remove icon_close" data-id="chat_window_1"></span></a>
-                                </div>
-                                <div class="col-md-8 col-xs-8">
-                                    <p class="panel-title" id="chat-user"><!--Nome utente chat--></p>
-                                </div>
-
-                            </div>
-                            <div id="chat-msgs" class="panel-body msg_container_base">
-                                <!--MESSAGGI-->
-                            </div>
-                            <div class="panel-footer">
-                                <div class="input-group">
-                                    <input id="new_msg_text" type="text" autocomplete="off" class="form-control input-sm chat_input" placeholder="Write your message here..." />
-                                    <a class="btn btn-info btn-sm" onclick="sendMsg()">
-                                        <span class="glyphicon glyphicon-send"></span> Send
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
-    <!--USER PAGE-->
-    <div class="borders" id="user-pane">
-		<div class="panel-body user-space" id="user-space">
-		<!--
-			<template user-tab-template>
-				<a onclick="closeUserTab()" class="close_user_tab"><span class="glyphicon glyphicon-remove icon_close" id="close_tab"></span></a>
-				<div class="input-group input-group-lg inline-info">
-					<div class="input-group-prepend" id="playername-container">
-						<div class="input-group-text" id="playername-label">Nome del Player</div>
+		<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<ul class="navbar-nav">
+				<li class="nav-item">
+					<a class="nav-link" id="classification-button">Classifica</a>
+				</li>
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" id="playerDropdownButton" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Giocatori
+					</a>
+					<div class="dropdown-menu" id="playersDropdown" aria-labelledby="navbarDropdown">
+						<!--Lista degli utenti in chat-->
 					</div>
-					<input id="rename-field" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
-					<button type="button" id="rename-button" class="btn btn-primary btn-lg">Rinomina</button>
-				</div>
-				<div class="block-info">
-					<p>Score: player_score</p>
-				</div>
-				<div class="block-info">
-					<p id="time-count">Sulla domanda attuale da: time  </span></p>
-				</div>
-				<div class="block-info">
-					<p>ID: player_n</p>
-				</div>
-				<button type="button" id="chat-button" class="btn btn-primary btn-lg">Chat</button>
-			</template>
-		--> 
+				</li>
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" id="helpDropdownButton" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Aiuti Richiesti
+					</a>
+					<div class="dropdown-menu" id="helpDropdown" aria-labelledby="navbarDropdown">
+						<!--Lista degli utenti in attesa di aiuto-->
+					</div>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" onclick="openDownloads()">
+						Downloads
+					</a>
+				</li>
+			</ul>
 		</div>
-    </div>
+	</nav>
+	<!--ANSWER LIST-->
+	<!-- List group -->
+	<div class="answer-list list-group" id="correction-list" role="tablist">
+		<!-- PENDING ANSWERS -->
+	</div>
+	<!-- Tab panes -->
+	<div class="tab-content">
+		<div class="tab-pane active" role="tabpanel">
+			<div class="panel panel-default" id="main-placeholder">
+				<!--    -->
+			</div>
+		</div>
+	</div>
+	<!--CHAT-->
+	<div class="chat-popup" id="chat">
+		<form autocomplete="off" onsubmit="sendMsg()" class="form-container">
+			<div class="container">
+				<div class="col-sm-8">
+					<div class="chatbody">
+						<div class="panel panel-primary">
+							<div class="panel-heading top-bar">
+								<div class="col-md-4 col-xs-4" style="text-align: right;">
+									<a onclick="closeChat()"><span class="glyphicon glyphicon-remove icon_close" data-id="chat_window_1"></span></a>
+								</div>
+								<div class="col-md-8 col-xs-8">
+									<p class="panel-title" id="chat-user"><!--Nome utente chat--></p>
+								</div>
+
+							</div>
+							<div id="chat-msgs" class="panel-body msg_container_base">
+								<!--MESSAGGI-->
+							</div>
+							<div class="panel-footer">
+								<div class="input-group">
+									<input id="new_msg_text" type="text" autocomplete="off" class="form-control input-sm chat_input" placeholder="Write your message here..." />
+									<a class="btn btn-info btn-sm" onclick="sendMsg()">
+										<span class="glyphicon glyphicon-send"></span> Send
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
+	</div>
+	<!--USER PAGE-->
+	<div class="borders" id="user-pane">
+		<div class="panel-body pop-space" id="user-space">
+		</div>
+	</div>
+	<!-- Downloads -->
+	<div class="borders" id="downloadsWindow">
+		<div class="panel-body pop-space" id="downloads-body">
+			<a onclick="closeDownloads()"><span class="glyphicon glyphicon-remove icon-close"></span></a>
+			<p>Seleziona cosa vuoi scaricare</p>
+
+		</div>
+	</div>
 </body>
 </html>
