@@ -37,7 +37,7 @@
 						Giocatori
 					</a>
 					<div class="dropdown-menu" id="playersDropdown" aria-labelledby="navbarDropdown">
-						<!--Lista degli utenti in chat-->
+						<!--Lista degli utenti-->
 					</div>
 				</li>
 				<li class="nav-item dropdown">
@@ -83,7 +83,6 @@
 								<div class="col-md-8 col-xs-8">
 									<p class="panel-title" id="chat-user"><!--Nome utente chat--></p>
 								</div>
-
 							</div>
 							<div id="chat-msgs" class="panel-body msg_container_base">
 								<!--MESSAGGI-->
@@ -108,11 +107,28 @@
 		</div>
 	</div>
 	<!-- Downloads -->
-	<div class="borders" id="downloadsWindow">
+	<div class="borders" id="downloads-window">
 		<div class="panel-body pop-space" id="downloads-body">
 			<a onclick="closeDownloads()"><span class="glyphicon glyphicon-remove icon-close"></span></a>
-			<p>Seleziona cosa vuoi scaricare</p>
-
+			<div id="downloads-content">
+				<div>		
+					<p id="downloads-up">Seleziona i contenuti che vuoi scaricare</p>
+				</div>
+				<div id="downloads-mid-left">
+					<input type="checkbox" name="classification.html" id="classification-checkbox"/>
+					<label for="classification-checkbox">Scarica classifica attuale</label>
+				</div>
+				<div id="downloads-mid-right">
+					<input type="checkbox" id="selectAllPlayersCheckbox" />
+					<label for="selectAllPlayersCheckbox">Seleziona tutti i player</label>
+					<div id="player-checkbox">
+						<ul id="player-checkbox-list"></ul>
+					</div>
+				</div>
+				<div id="downloads-bottom">
+					<button type="button" class="btn btn-primary" id="download-files">Download</button>
+				</div>
+			</div>
 		</div>
 	</div>
 </body>

@@ -13,6 +13,7 @@ var currentChatPlayerId = null;
 var currentCorrectionPlayerId = null;
 var currentUserTabId = null;
 var classificationOpen = false;
+var downloadsOpen = false;
 /*The displayed elements can be:
 - Correction pane
 - History
@@ -473,6 +474,8 @@ function updateAllData() {
             helpLength = 0;
             chatLength = 0;
             data.forEach(setPlayerList);
+            setDownloadsWindow();
+            
             $('#helpDropdownButton').find('#helpNotification').remove();
             if (chatLength == 0) {
                 $('#playersDropdown').append('<a class="dropdown-item">Non ci sono chat disponibili</a>');
@@ -565,7 +568,7 @@ function openClassification() {
 $(document).ready(function () {
     updateAllData();
     setPendingCorrectionList();
-    go();
+    openDownloads();
 });
 //Event to open history of selected player
 $(document).on('click', '#history-button', function (event) {
@@ -655,10 +658,8 @@ $(document).on('click', '.user-info-tab', function (event) {
 $(function () {
     $('[data-toggle="tooltip"]').tooltip()
 });
-//DIS IS FOR DOWNLOD EZ
-function go() {
-
-    //Download CLassifiction 
+//Download Classification
+function downloadClassification() {
     $.ajax({
         url: '/players/downloads/classification',
         success: function () {
@@ -673,15 +674,109 @@ function go() {
         }
     });
 }
+//TODO: Server-side, finire player e checkare, ANNA DEVE INIZIALIZZARE IL JSON DEL PLAYER
+//Function to download all players stats
+function downloadAllPlayers() {
+    let children = Array.from($('#playersDropdown').children());
+    children.forEach((player) => {
+        downloadPlayer(player.id);
+    });
+}
+
+//Download Player history 
+function downloadPlayer(id) {
+    $.ajax({
+        url: '/players/downloads/' + id,
+        success: function (data) {
+            console.log(data);
+            link = document.createElement("a"); //create 'a' element
+            link.setAttribute("href", "public/downloads/" + data + ".html"); //replace "file" with link to file you want to download
+            link.setAttribute("download", data);// replace "file" here too
+            link.click(); //virtually click <a> element to initiate download
+            link.remove();
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            alert(xhr.status + ' - ' + thrownError);
+        }
+    });
+}
+
+//Prepare the download window
 function setDownloadsWindow() {
-    $('#downloads-body').append('<a onclick="closeDownloads()"><span class="glyphicon glyphicon-remove icon_close"></span></a>');
-
+    $('#player-checkbox-list').empty();
+    let children = Array.from($('#playersDropdown').children());
+    children.forEach((player) => {
+        let id = player.id;
+         
+        let input  = document.createElement('input');
+        input.setAttribute('value', id);
+        input.setAttribute('class','player-download')
+        //input.setAttribute('id', id + '-checkbox' );
+        input.setAttribute('type', 'checkbox');
+        let label  = document.createElement('label');
+        label.setAttribute('for', id + '-checkbox');
+        label.textContent = id;
+        
+        let li = document.createElement('li');
+        li.setAttribute('name', id);
+        li.append(input, label);
+        li.setAttribute('type', 'none');
+        $('#player-checkbox-list').append(li);
+    });
 }
-
+//Open download window
 function openDownloads() {
-    $('#downloadsWindow').css({ 'display': 'block' });
+    downloadsOpen = true;
+    $('#downloads-window').css({ 'display': 'block' });
+}
+//Close download window
+function closeDownloads() {
+    downloadsOpen = false;
+    $('#downloads-window').css({ 'display':'none' });
 }
 
-function closeDownloads() {
-    $('#downloadsWindow').css({'display':'none'});
-}
+//Event binded to the download button
+$(document).on('click', '#download-files', function () {
+    if (document.getElementById('classification-checkbox').checked) {
+        downloadClassification();
+    }
+    if (document.getElementById('selectAllPlayersCheckbox').checked) {
+        downloadAllPlayers();
+    } else {
+        $('.player-download').each(function () {
+            if (this.checked) {
+                downloadPlayer(this.value);
+            }
+        });
+    }
+});
+
+//Event bindend to 'select all' checkbox
+$(document).on('click', '#selectAllPlayersCheckbox', function () {
+    if (this.checked) {
+        $('.player-download').each(function () {
+           this.checked = true;
+        });
+    } else {
+        $('.player-download').each(function () {
+            this.checked = false;
+        });
+    }
+});
+
+//Event to handle the selection of the checkboxes
+$(document).on('click', '.player-download', function (event) {
+    let box = event.currentTarget;
+    if (!box.checked) {
+        document.getElementById('selectAllPlayersCheckbox').checked = false;
+    } else {
+        let check = true;
+        $('.player-download').each(function () {
+            if (!this.checked) {
+                check = false;
+            }
+        });
+        document.getElementById('selectAllPlayersCheckbox').checked = check;
+    }
+    
+});
