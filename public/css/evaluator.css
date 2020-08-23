@@ -246,11 +246,11 @@ body {
     bottom: 0;
 }
 
-    .answer-list > a {
-        font-size: 2vh;
-        word-wrap: break-word;
-        padding: .5px .5px .5px .5px;
-    }
+.answer-list > a {
+    font-size: 2vh;
+    word-wrap: break-word;
+    padding: .5px .5px .5px .5px;
+}
 
 .waiting-player:first-child {
     background: #007bff;
@@ -431,7 +431,7 @@ body {
 }
 
 /*User space*/
-#user-pane {
+.borders{
     display: none;
     width: 60vw;
     height: 50vh;
@@ -442,7 +442,7 @@ body {
     border: white 2px solid;
 }
 
-.user-space {
+.pop-space {
     width: 100%;
     height: 100%;
     top: 0;
@@ -465,7 +465,7 @@ body {
     font-size: 2vh;
 }
 
-#close_tab {
+.icon-close {
     float: right;
     margin-bottom: 2vw;
     color: #007bff;
@@ -590,18 +590,52 @@ td, th {
     border-left:0;
 }
 /*Classification*/
-#classification-table > tbody > tr:nth-child(1) {
+#classification-table > tbody > tr:nth-child(1) > td:nth-child(1) {
     background:linear-gradient(#f3b114, transparent, #f3b114);
     color:#6b0202;
 }
-#classification-table > tbody > tr:nth-child(2) {
+#classification-table > tbody > tr:nth-child(2) > td:nth-child(1) {
     background: linear-gradient(#636363, transparent, #636363);
     color: #6b0202;
 }
-#classification-table > tbody > tr:nth-child(3) {
+#classification-table > tbody > tr:nth-child(3) > td:nth-child(1) {
     background: linear-gradient(#ea9621, transparent, #ea9621);
     color: #6b0202;
 }
 #classification-table {
     font-size:2vh;
+}
+/*Downloads Window*/
+#downloads-up {
+    font-size:2.5vh;
+    margin-top:2.5vh;
+}
+#downloads-mid-left {
+    display: inline-block;
+}
+#downloads-mid-right {
+    margin-top:2vh;
+}
+#downloads-mid-right ul {
+    padding: 0;
+    border: 1px solid black;
+    overflow-y:auto;
+    height:15vh;
+}
+#downloads-mid-right li:nth-child(2n+1) {
+    background: gray;
+}
+#downloads-body label {
+    font-size:1.5vh;
+    margin-left:1vw;
+    vertical-align:middle;
+}
+#downloads-body ul input{
+    margin-left:1.5vw;
+}
+#download-files {
+    width:100%;
+}
+#downloads-content{
+    padding:1vh;
 }
