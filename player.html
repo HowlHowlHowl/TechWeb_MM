@@ -11,30 +11,70 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 	<script type="text/javascript">
-        function getStoryData() {
-            let story_id = '104';
+		var next_index;
+		function setBeginning(data) {
+			$('h1').text('(' + data.name + ')'); // per recuperare l'h1 dal DOM (oggetto documento)
+			$('#nome-attivita').text(data.activities[0].name);
+			data.activities[0].contents.forEach(function (elem) {
+				if (elem.type == 'text') {
+					$('.testo-attivita').append(elem.text);
+				}
+				if (elem.type == 'video') {
+					var video = document.createElement('video');
+					var source = document.createElement('source');
+					source.setAttribute('src', elem.url);
+					video.setAttribute('width', '400');
+					video.setAttribute('controls', '');
+					video.appendChild(source);
+					$('.video').appendChild(video);
+					$('.div-grande-video').append(elem.description);
+				}
+				if (elem.type == 'image') {
+					var image = document.createElement('img');
+					image.setAttribute('src', elem.url);
+					image.setAttribute('alt', elem.description);
+					image.setAttribute('width', '400');
+					$('.div-grande-img').append(elem.description);
+					$('.img').append(image);
+                }
+			});
+			next_index=data.activities[0].input.next_index;
+		}
+		$('#bottone-avanti').on('click', function () {
+
+		});
+		function setPlayer(data) {
+			$.ajax({
+				url: '/players'
+				success:
+			});
+        }
+		$(document).ready(function () {
+			// richiesta storia
+            var url_string = window.location.href;
+            var url = new URL(url_string);
+            var id = url.searchParams.get("id");
             $.ajax({
-                accepts: 'application/json',
-                url: '/stories/' + story_id,
+                type: 'GET',
+                url: '/stories/' + id,
                 success: function (data) {
-                        console.log(data);
-                        console.log('ciao');
+					setBeginning(data);
+					setPlayer(data);
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
-                    alert(xhr.status + ' - ' + thrownError);
+					alert(xhr.status + ' - ' + thrownError);
                 }
             });
-        }
-            $(document).ready(function() {
-                        getStoryData();
-                    });
+        });
+
+
 	</script>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<style type="text/css">
 		@font-face {
 			font-family: 'All The Roll';
-			src: url('public/font/AllTheRollPersonalUse.woff2') format('woff2'), url('public/font/AllTheRollPersonalUse.woff') format('woff');
+			src: url('public/fonts/AllTheRollPersonalUse.woff2') format('woff2'), url('public/fonts/AllTheRollPersonalUse.woff') format('woff');
 			font-weight: normal;
 			font-style: normal;
 			font-display: swap;
@@ -45,10 +85,10 @@
 			text-align: center;
 			color: white;
 			margin-top: 20px;
-			font-family: "All The Roll", Arial;
+			font-family: "All The Roll";
 		}
 
-		#divGrande {
+		#div-grande {
 			margin: 0 7vw 0 7vw;
 			border: 3px #007bff solid;
 			height: 80vh;
@@ -63,66 +103,54 @@
 			font-size: 3vh;
 			margin-right: 0.5vw;
 		}
-
-		.divGrandevideo {
-			margin: auto;
-			width: 560px;
-			float: right;
-			margin-right: 15px;
-			margin-top: 5px;
-		}
-
-		#nomeAttivita {
+		#nome-attivita {
 			text-align: center;
 			font-size: 2vw;
 			font-family: 'Helvetica Neue LT Std';
 		}
+        .testo-attivita {
+            width: 50%;
+            float: left;
+            margin-left: 15px;
+            margin-top: 1px;
+            font-size: 2.5vh;
+            text-align: justify;
+            font-family: 'Helvetica Neue LT Std';
+        }
 
 		body {
 			background-color: #007bff;
 		}
-
-		.testoAttivita {
-			width: 50%;
-			float: left;
-			margin-left: 15px;
-			margin-top: 1px;
-			font-size: 2.5vh;
-			text-align: justify;
-			font-family: 'Helvetica Neue LT Std';
-		}
 	</style>
 </head>
-<body>
+<body >
 
     <div id="generico">
-        <button type="button" class="btn btn-light bottonechat">Chat</button>
+        <button type="button" id="chat-button" class="btn btn-light bottonechat">Chat</button>
     </div>
-    <h1>(Nome Storia)</h1>
-    <div id="divGrande">
+    <h1></h1>
+	<div id="div-grande">
 
-        <div id="nomeAttivita">
-            Nome Attività
-        </div>
-        <div class="testoAttivita">
-            Accessing your webcam via your browser used to involve a...pardon the profanity, a plugin. That's right. In order to connect to a webcam and gain access to its video stream, you had to rely on something primarily created in Flash or Silverlight. While that approach certainly worked for browsers that supported plug-ins, it didn't help for the increasing number of browsers that aim to be plugin-free. This inability to natively access the webcam without relying on 3rd party components was certainly a gap in the HTML development story. At least, that was the case until pretty recently.
+		<!--TITOLO MISSIONE-->
+		<div id="nome-missione">
+		</div>
+		<div id="nome-attivita">
+			<button id="bottone-avanti" type="button" class="btn btn-primary">Avanti</button>
+		</div>
+		<!--TESTO ATTIVITA VISUALIZZATA-->
+		<div class="testo-attivita">
+		</div>
 
-            The W3C has been attempting to fill this gap by encouraging browser vendors to implement the proposals outlined in the Media Capture and Streams spec. This spec defines, among various other things, how to communicate with a webcam device using just a little bit of JavaScript. The good news is, despite its newness, various browsers have already implemented support for accessing the webcam in their latest versions.
-
-            Note: Browser Support
-            Because accessing the webcam natively is a recent introduction, check out caniuse's statistics to see the level of support it has among the major browsers.) In writing this tutorial, I used the latest version of Google's Chrome where everything works swimmingly.
-
-            So...while the rest of the world is getting upgraded to browsers that support native webcam access, now is a great time for you to get ahead of the program and learn all about it. That's where this tutorial comes in. By the time you reach the bottom of this page, you will have learned how to take your webcam's video stream and display it using only some HTML and JavaScript.
-
-            Onwards.
-        </div>
-        <div class="divGrandevideo">
-            <div class="video">
-              <!---  <iframe width="560" height="315" src="https://www.youtube.com/embed/mOYZaiDZ7BM" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe> --->
-            </div>
-        </div>
-
-    </div>
+		<!--SPAZIO VIDEO-->
+		<div class="div-grande-video">
+			<div class="video">
+			</div>
+		</div>
+		<!--SPAZIO IMMAGINE-->
+		<div class="div-grande-img">
+			<div class="img"></div>
+		</div>
+	</div>
    
 </body>
 </html>
