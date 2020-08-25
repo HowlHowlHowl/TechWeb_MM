@@ -30,7 +30,7 @@ body {
 
 .nav-link {
     font-size: 2vh;
-    color:white;
+    color:white !important;
 }
 
 .dropdown-item {
@@ -51,7 +51,7 @@ body {
 }
 
 #helpNotification {
-    font-size: 2vh;
+    font-size: 1.5vh;
 }
 
 .dropdown-menu {
@@ -548,15 +548,13 @@ body {
 }
 
 #timeNotification {
-    width: 3vh;
-    height: 3vh;
     background-color: #eedd1a;
     color: black;
     text-align: center;
     padding-top: 0.2vh;
     padding-left: 0.2vh;
     border-radius: 0.5vh;
-    font-size: 2vh;
+    font-size: 1.5vh;
     vertical-align: middle;
 }
 /*Notifications dot*/
