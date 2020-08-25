@@ -1,6 +1,7 @@
 var fs = require('fs');
 
-module.exports = function(app) {
+module.exports = function (app) {
+    var next_id = 0;
     //Ritorna una lista dei player con l'informazione relativa all'ultimo messaggio inviato
     app.get('/players/', function (req, res) {
         fs.readdir('players', function (err, files) {
@@ -23,7 +24,7 @@ module.exports = function(app) {
 
                     player.too_long = (hours > 0 || minutes > 15);
                     data.chat.forEach(function (dataChatLog) {
-                        if ((dataChatLog.auth ).localeCompare("player"+data.id)==0) {
+                        if ((dataChatLog.auth).localeCompare("player" + data.id) == 0) {
                             player.urgent = !dataChatLog.seen;
                         }
                     });
@@ -67,13 +68,13 @@ module.exports = function(app) {
                 res.writeHead(200, { 'Content-Type': 'application/json' });
                 res.write(data);
                 res.end();
-            } else { 
+            } else {
                 res.status(400).send();
             }
         });
     });
     //Ritorna l'oggetto player:id
-    app.get('/players/:id', function(req, res){
+    app.get('/players/:id', function (req, res) {
         let id = req.params.id;
         let path = 'players/' + id + '.json';
         fs.readFile(path, function (err, data) {
@@ -84,24 +85,24 @@ module.exports = function(app) {
                 res.write(data);
                 res.end();
             }
-        }); 
+        });
     });
     //Genera il file player per il download
     app.get('/players/download/:id', function (req, res) {
-       
+
     });
     //Genera il file classifica per il download
     app.get('/players/downloads/classification', function (req, res) {
         let html = '<head><style type="text/css">'
-                    + 'tbody > tr:nth-child(1) { background: linear-gradient(#f3b114, transparent, #f3b114); color:#6b0202; } '
-                    + 'tbody > tr:nth-child(2) { background: linear-gradient(#636363, transparent, #636363); color: #6b0202; } '
-                    + 'tbody > tr:nth-child(3) { background: linear-gradient(#ea9621, transparent, #ea9621); color: #6b0202; } '
-                    + 'table { font-size:6vh; margin:auto; width:100%; border-collapse:collapse;} '
-                    + 'th, td { text-align:center; border:1px black solid; } '
-                    + '</style></head>'
-                    + '<body><table><thead><tr><th scope="col">ID</th>'
-                    + '<th scope="col">Nome</th>'
-                    + '<th scope="col">Punteggio</th></tr></thead><tbody>';
+            + 'tbody > tr:nth-child(1) { background: linear-gradient(#f3b114, transparent, #f3b114); color:#6b0202; } '
+            + 'tbody > tr:nth-child(2) { background: linear-gradient(#636363, transparent, #636363); color: #6b0202; } '
+            + 'tbody > tr:nth-child(3) { background: linear-gradient(#ea9621, transparent, #ea9621); color: #6b0202; } '
+            + 'table { font-size:6vh; margin:auto; width:100%; border-collapse:collapse;} '
+            + 'th, td { text-align:center; border:1px black solid; } '
+            + '</style></head>'
+            + '<body><table><thead><tr><th scope="col">ID</th>'
+            + '<th scope="col">Nome</th>'
+            + '<th scope="col">Punteggio</th></tr></thead><tbody>';
         fs.readdir('players', function (err, files) {
             if (!err) {
                 res.writeHead(200);
@@ -114,13 +115,13 @@ module.exports = function(app) {
                         score: data.score
                     });
                 });
-                players.sort((a,b) => { 
+                players.sort((a, b) => {
                     return (b.score - a.score);
                 });
                 players.forEach((player) => {
                     html = html + '<tr><td>player' + player.id + '</td>'
-                                    + '<td>' + player.username + '</td>'
-                                    + '<td>' + player.score + '</td></tr>';
+                        + '<td>' + player.username + '</td>'
+                        + '<td>' + player.score + '</td></tr>';
                 });
 
                 html = html + '</tbody></table></body>';
@@ -132,8 +133,8 @@ module.exports = function(app) {
                 res.end();
             }
         });
-       
-        
+
+
     });
     //Genera il file classifica per il download
     app.get('/players/downloads/:id', function (req, res) {
@@ -166,6 +167,8 @@ module.exports = function(app) {
             + ' - <b>Punteggio Finale:</b>' + data.score + '</p><table>'
             + '<tr><th colspan="6">' + data.story_name + '</th></tr>'
 		    + '<tr><th>Missione</th><th>Attivit&aacute;</th><th>Domanda</th><th>Risposta</th><th>Commento</th><th>Punteggio</th></tr>';
+            + '<tr><th>Missione</th><th>Attività</th><th>Domanda</th><th>Risposta</th><th>Commento</th><th>Punteggio</th></tr>'
+            + '</table></body>';
         data.quest_list.forEach((quest) => {
             html += '<tr><td>' + quest.mission_name + '</td><td>' + quest.activity_name
                  + '</td><td>' + quest.question + '</td><td>' + quest.answer
@@ -180,15 +183,15 @@ module.exports = function(app) {
     //Genera il file classifica per il download
     app.get('/players/downloads/classification', function (req, res) {
         let html = '<head><style type="text/css">'
-                    + 'tbody > tr:nth-child(1) { background: linear-gradient(#f3b114, transparent, #f3b114); color:#6b0202; } '
-                    + 'tbody > tr:nth-child(2) { background: linear-gradient(#636363, transparent, #636363); color: #6b0202; } '
-                    + 'tbody > tr:nth-child(3) { background: linear-gradient(#ea9621, transparent, #ea9621); color: #6b0202; } '
-                    + 'table { font-size:6vh; margin:auto; width:100%; border-collapse:collapse;} '
-                    + 'th, td { text-align:center; border:1px black solid; } '
-                    + '</style></head>'
-                    + '<body><table><thead><tr><th scope="col">ID</th>'
-                    + '<th scope="col">Nome</th>'
-                    + '<th scope="col">Punteggio</th></tr></thead><tbody>';
+            + 'tbody > tr:nth-child(1) { background: linear-gradient(#f3b114, transparent, #f3b114); color:#6b0202; } '
+            + 'tbody > tr:nth-child(2) { background: linear-gradient(#636363, transparent, #636363); color: #6b0202; } '
+            + 'tbody > tr:nth-child(3) { background: linear-gradient(#ea9621, transparent, #ea9621); color: #6b0202; } '
+            + 'table { font-size:6vh; margin:auto; width:100%; border-collapse:collapse;} '
+            + 'th, td { text-align:center; border:1px black solid; } '
+            + '</style></head>'
+            + '<body><table><thead><tr><th scope="col">ID</th>'
+            + '<th scope="col">Nome</th>'
+            + '<th scope="col">Punteggio</th></tr></thead><tbody>';
         fs.readdir('players', function (err, files) {
             if (!err) {
                 res.writeHead(200);
@@ -285,4 +288,40 @@ module.exports = function(app) {
             }
         });
     });
+
+    //Crea il file del player quando accede all'applicazione
+    app.put('/players/create_player', function (req, res) {
+        var data = req.body;     
+        if (next_id == 0) {
+            var files = fs.readdirSync('players'); 
+            files.forEach(function (file) {
+                var id = file.replace('player', '');
+                id = id.replace('.json', '');
+                if (Number(id) > next_id) {
+                    next_id = Number(id) + 1;
+                }
+            });
+        } else {
+            next_id = next_id + 1;
+        }
+        console.log('ID assigned to new player: ' + next_id);
+        var date = new Date();
+        var player = {
+            id: next_id,
+            score: 0,
+            username: '',
+            current_quest_start_timestamp: [
+                date.getHours(),
+                date.getMinutes()
+            ],
+            chat: [],
+            pending_count: 0,
+            story_name: data.name,
+            quest_list: []
+        };    
+        fs.writeFileSync('players/player' + next_id + '.json', JSON.stringify(player, null, 2));
+        res.writeHead(200, { 'Content-Type': 'text/plain' });
+        res.write(next_id.toString());
+        res.end();
+    });  
 };
