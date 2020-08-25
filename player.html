@@ -11,7 +11,12 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 	<script type="text/javascript">
+        var player_id;
 		var next_index;
+		
+		function nextPage(next_index) {
+
+        }
 		function setBeginning(data) {
 			$('h1').text('(' + data.name + ')'); // per recuperare l'h1 dal DOM (oggetto documento)
 			$('#nome-attivita').text(data.activities[0].name);
@@ -30,6 +35,7 @@
 					$('.div-grande-video').append(elem.description);
 				}
 				if (elem.type == 'image') {
+					console.log(ehi);
 					var image = document.createElement('img');
 					image.setAttribute('src', elem.url);
 					image.setAttribute('alt', elem.description);
@@ -45,8 +51,17 @@
 		});
 		function setPlayer(data) {
 			$.ajax({
-				url: '/players'
-				success:
+				url: '/players/create_player',
+				type: 'PUT',
+				data: JSON.stringify(data),
+				contentType: 'application/json',
+				success: function (id) {
+					player_id = id;
+
+				},
+				error: function (xhr, ajaxOptions, thrownError) {
+					alert(xhr.status + ' - ' + thrownError);
+				}
 			});
         }
 		$(document).ready(function () {
@@ -57,7 +72,7 @@
             $.ajax({
                 type: 'GET',
                 url: '/stories/' + id,
-                success: function (data) {
+				success: function (data) {
 					setBeginning(data);
 					setPlayer(data);
                 },
