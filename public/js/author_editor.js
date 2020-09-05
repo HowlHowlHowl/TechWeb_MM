@@ -285,7 +285,7 @@ function setWrongInputElement(activity, node) {
     
     let evaluation_type = input.evaluation_type;
     let wrong_div = $("#activity-input-wrong-div");
-    if(evaluation_type == "any") {
+    if(evaluation_type != "correct") {
         wrong_div.toggle(false);
     } else {
         wrong_div.toggle(true);
@@ -461,8 +461,7 @@ function setInputElement(activity, node)
                 } else {
                     activity.input.correct_options = [ { points : 0, from : 0, to: 0 } ];
                 }
-            }
-            if(evaluation_type != "any") {
+                
                 activity.input.wrong_stay = false;
                 activity.input.wrong_next_index = null;
             }
