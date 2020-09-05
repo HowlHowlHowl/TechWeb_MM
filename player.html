@@ -11,14 +11,17 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 	<script type="text/javascript">
-        var player_id;
-		var next_index;
-		
+        var player_id = 9; //TODO null e riattivare l'assegnamento 
+		var index = null;
+		var next_index = null;
+		var storyJSON = null;
+		var answer = null;
+
 		function nextPage(next_index) {
 
         }
 		function setBeginning(data) {
-			$('h1').text('(' + data.name + ')'); // per recuperare l'h1 dal DOM (oggetto documento)
+			$('h1').text('(' + data.name + ')'); 
 			$('#nome-attivita').text(data.activities[0].name);
 			data.activities[0].contents.forEach(function (elem) {
 				if (elem.type == 'text') {
@@ -44,11 +47,14 @@
 					$('.img').append(image);
                 }
 			});
-			next_index=data.activities[0].input.next_index;
+            $('#footer').append('<button id="bottone-avanti" type="button" class="btn btn-light">Avanti</button>');
+			index = 0;
+			next_index = storyJSON.activities[0].input.next_index;
+            let date = new Date();
+            let hour = date.getHours();
+            let minutes = date.getMinutes();
+            setCurrentQuestTimeStamp(hour, minutes);
 		}
-		$('#bottone-avanti').on('click', function () {
-
-		});
 		function setPlayer(data) {
 			$.ajax({
 				url: '/players/create_player',
@@ -73,16 +79,199 @@
                 type: 'GET',
                 url: '/stories/' + id,
 				success: function (data) {
-					setBeginning(data);
-					setPlayer(data);
+					storyJSON = data;
+					setBeginning(storyJSON);
+					//setPlayer(storyJSON);
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
 					alert(xhr.status + ' - ' + thrownError);
                 }
             });
         });
+		// Questa funzione serve a controllare l'eventuale input dell'attività attuale
+		function checkInput() {
+			// TODO gestire i casi di errore alle risposte
+			let answer_data, type;
+			let score = 0;
+			let corrected_bool = true;
+            let question_text='';
+			if (storyJSON.activities[index].input_type == 'photo') {
+				type = 'photo';
+				if (storyJSON.activities[index].input.evaluation_type == 'any') {
+					next_index = storyJSON.activities[index].input.next_index;
+				}
+				else {
+					//Da valutare
+					let mission_index = storyJSON.activities[next_index].mission_index;
+					storyJSON.activities[next_index].contents.forEach(function (elem) {
+						if (elem.type == 'text') {
+							question_text += elem.text;
+						}
+						/*
+                        if (elem.type == 'video') {
+                            
+                        }
+                        if (elem.type == 'image') {
+                            
+                        } TODO aggiungere al testo della domanda dei player contenuto video e immagine*/
+					});
+				}
+				//Se corrected = false, aumentare pending_count server side
+			} else if (storyJSON.activities[index].input_type == 'number') {
+				type = 'number';
+				answer = $('#input-num').val();
+				
+				if (storyJSON.activities[index].input.evaluation_type == 'any') {
+					next_index = storyJSON.activities[index].input.next_index;
+				} else if (storyJSON.activities[index].input.evaluation_type == 'correct') {
+					next_index = storyJSON.activities[index].input.next_index;
 
+					//Controllo che per ogni possibile opzione corretta rientri, la prima che rientra esce dal ciclo
+					storyJSON.activities[index].input.correct_options.forEach(function (option) {
+						if (answer >= option.from && answer <= option.to) {
+							score = option.points;
+						}
+					});
+				} else {
+					//Da correggere
+				}
 
+			} else if (storyJSON.activities[index].input_type == 'text') {
+				type = 'text';
+				answer = $('input-text').val();
+				if (storyJSON.activities[index].input.evaluation_type == 'any') {
+					next_index = storyJSON.activities[index].input.next_index;
+					
+				} else if (storyJSON.activities[index].input.evaluation_type == 'correct') {
+					next_index = storyJSON.activities[index].input.next_index;
+					storyJSON.activities[index].input.correct_options.forEach((option) => {
+						if (answer.toLowerCase().replace(' ', '') == option.text.toLowerCase().replace(' ', '')) 
+						{
+							score = option.points;
+                        }
+					});
+				} else {
+					next_index = storyJSON.activities[index].input.next_index;
+					//No input
+				}
+			}
+            let mission_index = storyJSON.activities[next_index].mission_index;
+            answer_data = {
+                mission_name: storyJSON.missions[mission_index].name,
+				activity_name: storyJSON.activities[next_index].name,
+				corrected: corrected_bool,
+				question: question_text,
+				input_type: type,
+                answer: answer,
+				comment: '',
+				quest_score: score
+			}; 
+			sendAnswerToServer(answer_data);
+		}
+		//Funzione per mandare il descrittore dell'attività completata al server ed aggiungerlo al file del player
+		function sendAnswerToServer(answer_data) {
+			$.ajax({
+				url: '/players/add_answer/player' + player_id,
+				type: 'PUT',
+				data: answer_data,
+				success: function (data) {},
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert(xhr.status + ' - ' + thrownError);
+                }
+			}); 
+        }
+		// Questa funzione serve a impostare la finestra per la prossima attività
+		function setWindow() {
+			let mission_index = storyJSON.activities[next_index].mission_index;
+			console.log(storyJSON);
+			$('#nome-attivita').text(storyJSON.activities[next_index].name);
+            $('#nome-missione').text(storyJSON.missions[mission_index].name);
+			storyJSON.activities[next_index].contents.forEach(function (elem) {
+                if (elem.type == 'text') {
+                    $('.testo-attivita').append(elem.text);
+                }
+                if (elem.type == 'video') {
+                    var video = document.createElement('video');
+                    var source = document.createElement('source');
+                    source.setAttribute('src', elem.url);
+                    video.setAttribute('width', '400');
+                    video.setAttribute('controls', '');
+                    video.appendChild(source);
+                    $('.video').appendChild(video);
+                    $('.div-grande-video').append(elem.description);
+                }
+                if (elem.type == 'image') {
+                    var image = document.createElement('img');
+                    image.setAttribute('src', elem.url);
+                    image.setAttribute('alt', elem.description);
+                    image.setAttribute('width', '400');
+                    $('.div-grande-img').append(elem.description);
+                    $('.img').append(image);
+                }
+			});
+			$('#footer').empty();
+            if (storyJSON.activities[next_index].input_type == 'photo') {
+				$('#footer').append('<input id="input-immagine" type="file">');
+
+            } else if (storyJSON.activities[next_index].input_type == 'number') {
+				$('#footer').append('<input id="input-num" type="number">');
+            } else if (storyJSON.activities[next_index].input_type == 'text') {
+                $('#footer').append('<textarea id="input-text"');
+			}
+            $('#footer').append('<button id="bottone-avanti" type="button" class="btn btn-light">Avanti</button>');
+			let date = new Date();
+			let hour = date.getHours();
+			let minutes = date.getMinutes();
+			setCurrentQuestTimeStamp(hour, minutes);
+		}
+		function setCurrentQuestTimeStamp(h, m) {
+			$.ajax({
+				url: '/players/set_current_quest_time_stamp/player' + player_id, 
+				type: 'PUT',
+				data: JSON.stringify({minutes: m, hour: h}),
+				success: function () {},
+				error: function (xhr, ajaxOptions, thrownError) {
+                    alert(xhr.status + ' - ' + thrownError);
+                }
+			});
+        }
+		$(document).on('click', '#bottone-avanti', function (){ 
+			switch (storyJSON.activities[index].input_type) {
+				case 'photo':
+					uploadFile($('#input_immagine').files[0]);
+					break;
+				case 'number':
+					sendNum();
+					break;
+				case 'text':
+					sendText();
+					break;
+			}
+            checkInput();
+            setWindow();
+		});
+
+        function uploadFile(file) {
+            let fd = new FormData();
+            fd.append(file.name, file);
+			let path = '/players/upload_photo/' + 'player' + player_id + '_' + index;
+            $.ajax({
+				accepts: 'application/json',
+				url: path,
+                data: fd,
+                type: 'POST',
+                contentType: false,
+                processData: false,
+
+				success: function (data) {
+					$('#footer').append('<image src="' + data + '">');
+					answer = data;
+				},
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert(xhr.status + ' - ' + thrownError);
+                }
+            });
+        }
 	</script>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -94,12 +283,14 @@
 			font-style: normal;
 			font-display: swap;
 		}
-
+		/*
+			TODO aggiustare css di input e bottone avanti in modo da separarli e centrarli 
+		*/
 		h1 {
-			font-size: 6vw;
+			font-size: 9vh;
 			text-align: center;
 			color: white;
-			margin-top: 20px;
+			margin-top: 2vh;
 			font-family: "All The Roll";
 		}
 
@@ -120,19 +311,39 @@
 		}
 		#nome-attivita {
 			text-align: center;
-			font-size: 2vw;
+			font-size: 2.5vh;
 			font-family: 'Helvetica Neue LT Std';
 		}
+		#nome-missione {
+			text-align: center;
+			font-size: 4vh;
+			font-family: 'Helvetica Neue LT Std';
+			margin-bottom: 0.5vh;
+		}
         .testo-attivita {
-            width: 50%;
-            float: left;
-            margin-left: 15px;
-            margin-top: 1px;
+            margin-left: 1.5vh;
+			margin-right:1.5vh;
+            margin-top: .5vh;
             font-size: 2.5vh;
             text-align: justify;
             font-family: 'Helvetica Neue LT Std';
         }
-
+		#footer{
+			width:85vw;
+			margin:auto;
+			text-align:center;	
+			position: absolute;
+			bottom: 13vh;
+		}
+        #bottone-avanti {
+			font-size:2vh;
+			bottom: 0.5vh;
+			position: fixed;
+			margin-top: 
+		}
+		.img {
+			text-align: center;
+		}
 		body {
 			background-color: #007bff;
 		}
@@ -150,7 +361,6 @@
 		<div id="nome-missione">
 		</div>
 		<div id="nome-attivita">
-			<button id="bottone-avanti" type="button" class="btn btn-primary">Avanti</button>
 		</div>
 		<!--TESTO ATTIVITA VISUALIZZATA-->
 		<div class="testo-attivita">
@@ -165,7 +375,8 @@
 		<div class="div-grande-img">
 			<div class="img"></div>
 		</div>
+		<div id="footer">
+		</div>
 	</div>
-   
 </body>
 </html>
