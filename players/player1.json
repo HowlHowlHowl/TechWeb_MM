@@ -15,6 +15,15 @@
       "seen": true
     }
   ],
+  "help": [
+    {
+      "mission_name": "Mission A",
+      "activity_name": "Nuova attività",
+      "question": "Prof sono bloccato",
+      "answer": "",
+      "to_help": true
+    }
+  ],
   "pending_count": 0,
   "story_name": "Big Storia",
   "quest_list": [

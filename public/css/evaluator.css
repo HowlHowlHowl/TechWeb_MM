@@ -6,17 +6,14 @@ body {
     width:100%;
 }
 /*Navbar*/
-.navbar-brand {
-    font-size: 5vh;
-    padding: 0;
+.nav-item > a {
+    text-align:center;
 }
-
 .navbar-dark .navbar-toggler {
     color: white;
     padding:0;
     margin:0 auto;
 }
-
 .navbar-nav, navbar-nav.collapse, navbar-nav.collapsing, navbar-collapse.collapse, navbar-collapse.show {
     background: #007bff;
     padding: 0;
@@ -50,7 +47,7 @@ body {
     background-color: #fff;
 }
 
-#helpNotification {
+#new_msgNotification {
     font-size: 1.5vh;
 }
 
@@ -558,7 +555,7 @@ body {
     vertical-align: middle;
 }
 /*Notifications dot*/
-.time-dot, .help-dot {
+.time-dot, .new_msg-dot, .help-dot {
     width: 1.5vh;
     height: 1.5vh;
     margin: auto;
@@ -568,8 +565,12 @@ body {
     display: inline-block;
     background: radial-gradient(#eedd1a 10%, transparent);
 }
-.help-dot {
+.new_msg-dot {
     background: radial-gradient(#f80606 10%, transparent);
+}
+.help-dot {
+    background: radial-gradient(#ff5e00 10%, transparent);
+}
 }
 /*History*/
 table {

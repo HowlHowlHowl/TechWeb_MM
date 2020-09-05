@@ -4,11 +4,9 @@ NEI JSON STORIA
 PLAYER
 - Messaggio conclusivo a seconda del punteggio finale
 - Richiesta e risposta d'Aiuto diverso da chat
-APP
-- Esportare dati riassuntivi dei giocatori
 */
 var chatLength = 0;
-var helpLength = 0;
+var new_msgLength = 0;
 var currentChatPlayerId = null;
 var currentCorrectionPlayerId = null;
 var currentUserTabId = null;
@@ -18,6 +16,7 @@ var downloadsOpen = false;
 - Correction pane
 - History
 - Classification
+- Downloads Window
 */
 
 //APPLICATION UPDATE FUNCTIONS
@@ -38,7 +37,7 @@ setInterval(function () {
     }
 }, 60000);
 
-//Correction pane updated every 5 minutes if no input is insert
+//Correction pane updated every 5 minutes if no input is given
 setInterval(function () {
     if (currentCorrectionPlayerId) {
         let i = 1;
@@ -89,33 +88,33 @@ function setUserTab(data) {
     
     $('#user-space').empty();
     $('#user-space').append(  '<a onclick="closeUserTab()"><span class="glyphicon glyphicon-remove icon-close"></span></a>'
-                            + '<a id="prevUser" class="arrows_tab" data-toggle="tooltip" data-placement="top" title="Scheda utente precedente"><span class="glyphicon glyphicon-arrow-left" id="prev_tab"></span></a>'
-                            + '<a id="nextUser" class="arrows_tab" data-toggle="tooltip" data-placement="top" title="Scheda utente successivo"><span class="glyphicon glyphicon-arrow-right" id="next_tab"></span></a>'
-                            + '<div id = "user-space-input" class="input-group input-group-lg inline-info">'
-                            + '<div class="input-group-prepend" id="playername-container">'
-                            + '<div class="input-group-text" id="playername-label">Nome del Player</div>'
-                            + '</div>'
-                            + '<input value="' + name + '" name="player' + data.id + '" id="rename-field" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">'
-                            + '<button type="button" id="rename-button" class="btn btn-primary btn-lg">Rinomina</button>'
-                            + '</div>'
-                            + '<div class="block-info">'
-                            + '<p>Punteggio: ' + data.score + '</p>'
-                            + '</div>'
-                            + '<div class="block-info">'
-                            + '<p id="time-count">Missione "' + actual_quest.mission_name + '" attività: "' + actual_quest.activity_name + '" da ' + (hours > 0 ? (hours + ':' + minutes + ' ore ') : (minutes + ' minuti ')) + '</span></p>'
-                            + '</div>'
-                            + '<div class="block-info">'
-                            + '<p>ID: player' + data.id + '</p>'
-                            + '</div>'
-                            + '</div>'
-                            + '<div class="block-info">'
-                            + '<button type="button" id="history-button" name="player' + data.id + '" class="btn btn-primary btn-lg">Storico</button>'
-                            + '</div>'
-                            + '<div id ="user-chat-div">'
-                            + '<button type="button" id="chat-button" class="btn btn-primary btn-lg">Chat</button>'
-                            + '</div>');
+        + '<a id="prevUser" class="arrows_tab" data-toggle="tooltip" data-placement="top" title="Scheda utente precedente"><span class="glyphicon glyphicon-arrow-left" id="prev_tab"></span></a>'
+        + '<a id="nextUser" class="arrows_tab" data-toggle="tooltip" data-placement="top" title="Scheda utente successivo"><span class="glyphicon glyphicon-arrow-right" id="next_tab"></span></a>'
+        + '<div id = "user-space-input" class="input-group input-group-lg inline-info">'
+        + '<div class="input-group-prepend" id="playername-container">'
+        + '<div class="input-group-text" id="playername-label">Nome del Player</div>'
+        + '</div>'
+        + '<input value="' + name + '" name="player' + data.id + '" id="rename-field" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">'
+        + '<button type="button" id="rename-button" class="btn btn-primary btn-lg">Rinomina</button>'
+        + '</div>'
+        + '<div class="block-info">'
+        + '<p>Punteggio: ' + data.score + '</p>'
+        + '</div>'
+        + '<div class="block-info">'
+        + '<p id="time-count">Missione "' + (actual_quest ? actual_quest.mission_name : 'nessuna') + '" attività: "' + (actual_quest ? actual_quest.activity_name : 'nessuna')+ '" da ' + (hours > 0 ? (hours + ' : '  + minutes + ' ore ') : (minutes + ' minuti')) + '</span></p>'
+        + '</div>'
+        + '<div class="block-info">'
+        + '<p>ID: player' + data.id + '</p>'
+        + '</div>'
+        + '</div>'
+        + '<div class="block-info">'
+        + '<button type="button" id="history-button" name="player' + data.id + '" class="btn btn-primary btn-lg">Storico</button>'
+        + '</div>'
+        + '<div id ="user-chat-div">'
+        + '<button type="button" id="chat-button" class="btn btn-primary btn-lg">Chat</button>'
+        + '</div>');
     if (hours > 0 || minutes > 15) {
-        $('#time-count').append('<span class="glyphicon glyphicon-warning-sign" id="timeNotification">');
+        $('#time-count').append('<span class="glyphicon glyphicon-time" id="timeNotification">');
         blinkNotify('#timeNotification');
     }
     if (unread > 0) {
@@ -133,6 +132,7 @@ function closeUserTab() {
 }
 //Sets layout of history panel
 function setHistory(data) {
+    //TODO: immagini e video fra risposte e domande
     classificationOpen = false;
     currentCorrectionPlayerId = null;
     $('#main-placeholder').empty();
@@ -157,14 +157,13 @@ function setHistory(data) {
         + '<td>' + quest.comment + '</td>'
         + '<td>' + quest.quest_score + '</td></tr>';
         i++;
-        body += row;
     });
     body+='</tbody></table></div>';
     $('#main-placeholder').append(header + body);
 }
 
 //Sets layout of correction panel
-//TODO:immagini e video(?)
+//TODO:immagini e video
 function setCorrectionPane(data) {
     classificationOpen = false;
     $('#main-placeholder').empty();
@@ -264,27 +263,67 @@ function setChatView(data) {
         }
     });
 }
+
+
+//Connection to get the players data and update for the navbar dropdown lists and notifications
+function updateAllData() {
+    $.ajax({
+        accepts: 'application/json',
+        url: '/players',
+        success: function (data) {
+            //Rimuove gli elementi dai dropdown
+            $('#playersDropdown').empty();
+            $('#new_msgDropdown').empty();
+            $('#helpDropdown').empty();
+
+            new_msgLength = 0;
+            chatLength = 0;
+
+            data.forEach(setPlayerList);
+            setDownloadsWindow();
+
+            if (chatLength == 0) {
+                $('#playersDropdown').append('<a class="dropdown-item">Non ci sono chat disponibili</a>');
+            }
+            if (new_msgLength == 0) {
+                $('#new_msgDropdown').append('<a class="dropdown-item">Non ci sono nuovi messaggi</a>');
+            }
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            alert(xhr.status + ' - ' + thrownError);
+        }
+    });
+}
 //Fill the lists of player avaiable for conversation and in need for help
 function setPlayerList(data) {
     let name = (data.username ? data.username : "Player " + data.id);
-    if (data.urgent) {
-        helpLength++;
-        $('#helpDropdown').append('<a class="dropdown-item help-list-el" id="help-player' + data.id + '">' + name + '</a>');
-        $('.help-dot').remove();
-        $('#dot-space').append('<span class="help-dot"></span>');
-    }
     $('#playersDropdown').append('<a class="dropdown-item player-list-el" id="player' + data.id + '">' + name + '</a>');
-    if (data.too_long) {
+    chatLength++;
+    if (data.urgent) {
+        new_msgLength++;
+        $('.new_msg-dot').remove();
+        $('#new_msgNotification').remove();
+        $('#new_msgDropdown').append('<a class="dropdown-item new_msg-list-el" id="new_msg-player' + data.id + '">' + name + '</a>');
+        $('#dot-space').append('<span class="new_msg-dot"></span>');
+        $('#new_msgDropdownButton').append('<span class="badge badge-secondary" id="new_msgNotification">' + new_msgLength + ' new</span>');
+       
+        blinkNotify('#new_msgNotification');
+    }
+    if (data.too_long) {  
+        //Un dot per ogni player e uno per il bottone collapse
         $('.time-dot-collapse').remove();
         $('#navTimeNotification').remove();
-        $('#playerDropdownButton').append('<span class="glyphicon glyphicon-warning-sign" id="navTimeNotification">');
+        $('#playerDropdownButton').append('<span class="glyphicon glyphicon-time color" id="navTimeNotification">');
         blinkNotify('#navTimeNotification');
-
         $('#player' + data.id).append('<span class="time-dot"></span>');
-        $('#dot-space').append('<span class="time-dot time-dot-collapse"></span>');
-        
+        $('#dot-space').append('<span class="time-dot time-dot-collapse"></span>');   
     }
-    chatLength++;
+    if (data.to_help) {
+        $('.help-dot').remove();
+        $('#dot-space').append('<span class="help-dot"></span>');
+        $('#helpDropdown').append('<a class="dropdown-item help-list-el" id="help-player' + data.id + '">' + name + '</a>');
+    }
+    
 }
 //Make the notification mark blink
 function blinkNotify(selector) {
@@ -360,7 +399,7 @@ function setDownloadsWindow() {
 
         let input = document.createElement('input');
         input.setAttribute('value', id);
-        input.setAttribute('class', 'player-download')
+        input.setAttribute('class', 'player-download');
         //input.setAttribute('id', id + '-checkbox' );
         input.setAttribute('type', 'checkbox');
         let label = document.createElement('label');
@@ -472,7 +511,7 @@ function submitCorrection(data) {
 
 //GET
 //Get story by ID
-//TODO: success
+//TODO: success, ma la uso?
 function getStory(id) {
     $.ajax({
         url: "/stories/story" + id,
@@ -489,12 +528,19 @@ function getStory(id) {
 function downloadClassification() {
     $.ajax({
         url: '/players/downloads/classification',
-        success: function () {
-            link = document.createElement("a"); //create 'a' element
-            link.setAttribute("href", "public/downloads/classification.html"); //replace "file" with link to file you want to download
-            link.setAttribute("download", "Classifica");// replace "file" here too
-            link.click(); //virtually click <a> element to initiate download
-            link.remove();
+        success: function (data) {
+            let html = '<body><h1>Classifica</h1><table><thead><tr><th scope="col">ID</th>'
+            + '<th scope="col">Nome</th>'
+            + '<th scope="col">Punteggio</th></tr></thead><tbody>';
+            JSON.parse(data).forEach((player) => {
+                console.log(player);
+                html = html + '<tr><td>player' + player.id + '</td><td>' + (player.username || '---') + '</td><td>' + player.score + '</td></tr>';
+            });
+            html = html + '</tbody></table></body>';
+            let nodes = new DOMParser().parseFromString(html, "text/xml");
+            let doc = new jsPDF();
+            doc.fromHTML(html, 30, 15);
+            doc.save('classification.pdf');
         },
         error: function (xhr, ajaxOptions, thrownError) {
             alert(xhr.status + ' - ' + thrownError);
@@ -507,13 +553,9 @@ function downloadAllPlayers() {
     $.ajax({
         url: '/players/downloads/all',
         success: function (data) {
-            console.log(data);
-            data.split(',').forEach((filename) => {
-                link = document.createElement("a");
-                link.setAttribute("href", "public/downloads/" + filename);
-                link.setAttribute("download", filename);
-                link.click();
-                link.remove();
+            let players = JSON.parse(data);
+            players.forEach((player) => {
+                download(player);
             });
         },
         error: function (xhr, ajaxOptions, thrownError) {
@@ -521,24 +563,41 @@ function downloadAllPlayers() {
         }
     });
 }
-
 //Download Player history 
 function downloadPlayer(id) {
     $.ajax({
         url: '/players/downloads/' + id,
         success: function (data) {
-            link = document.createElement("a");
-            link.setAttribute("href", "public/downloads/" + data);
-            link.setAttribute("download", data);
-            link.click();
-            link.remove();
+            let player = JSON.parse(data);
+            download(player);
         },
         error: function (xhr, ajaxOptions, thrownError) {
             alert(xhr.status + ' - ' + thrownError);
         }
     });
 }
-
+//Download del player tramite JSON
+function download(player) {
+    //TODO: immagini e video fra risposte e domande
+    let pdf = new jsPDF();
+    pdf.setFontSize(26);
+    pdf.text(pdf.internal.pageSize.width / 2, 20, player.story_name, 'center' );
+    pdf.setFontSize(16);
+    pdf.text(pdf.internal.pageSize.width / 2, 40,
+        'ID player: ' + player.id + ' - Nome Player: ' + (player.username || 'Nessuno') + ' - Punteggio Finale: ' + player.score
+       , 'center');
+    let table_body = [];
+    player.quest_list.forEach((quest) => {
+        table_body.push([quest.mission_name, quest.activity_name, quest.question, quest.answer, quest.comment, quest.quest_score]);
+    });
+               
+    pdf.autoTable({
+        head: [['Missione', 'Attività', 'Domanda', 'Risposta', 'Commento', 'Punteggio']],
+        body: table_body,
+        margin: {top: 60}
+    });
+    pdf.save((player.username || 'player' + player.id) + '.pdf');
+}
 //Richiesta al server dei file con richieste di correzione in attesa
 function setPendingCorrectionList() {
     $.ajax({
@@ -554,36 +613,7 @@ function setPendingCorrectionList() {
         }
     });
 }
-//Connection to get the players data and update for the navbar dropdown lists and notifications
-function updateAllData() {
-    $.ajax({
-        accepts: 'application/json',
-        url: '/players',
-        success: function (data) {
-            $('#playersDropdown').empty();
-            $('#helpDropdown').empty();
-            helpLength = 0;
-            chatLength = 0;
-            data.forEach(setPlayerList);
-            setDownloadsWindow();
-            
-            $('#helpDropdownButton').find('#helpNotification').remove();
-            if (chatLength == 0) {
-                $('#playersDropdown').append('<a class="dropdown-item">Non ci sono chat disponibili</a>');
-            }
-            if (helpLength == 0) {
-                $('#helpDropdown').append('<a class="dropdown-item">Non ci sono richieste di aiuto</a>');
-                $('.help-dot').remove();
-            } else {
-                $('#helpDropdownButton').append('<span class="badge badge-secondary" id="helpNotification">' + helpLength + ' New</span>');
-                blinkNotify('#helpNotification');
-            }
-        },
-        error: function (xhr, ajaxOptions, thrownError) {
-            alert(xhr.status + ' - ' + thrownError);
-        }
-    });
-}
+
 //Request data for correction pane of selected player
 function openCorrectionPane(id) {
     let real_id = id.replace('sidebar-player-', 'player');
@@ -658,7 +688,6 @@ function openClassification() {
 $(document).ready(function () {
     updateAllData();
     setPendingCorrectionList();
-    openDownloads();
 });
 //Event to open history of selected player
 $(document).on('click', '#history-button', function (event) {
@@ -680,8 +709,8 @@ $(document).on('click', '.send-correction', function (event) {
     }
 });
 //Event to open chat with in-need player
-$(document).on('click', '.help-list-el', function (event) {
-    let id = (event.target.id).replace('help-', '');
+$(document).on('click', '.new_msg-list-el', function (event) {
+    let id = (event.target.id).replace('new_msg-', '');
     openChat(id);
 });
 //Event to open chat with selected player

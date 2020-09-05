@@ -6,6 +6,15 @@
     18,
     4
   ],
+  "help": [
+    {
+      "mission_name": "Mission A",
+      "activity_name": "Nuova attività",
+      "question": "Prof sono bloccato",
+      "answer": "",
+      "to_help": true
+    }
+  ],
   "chat": [],
   "pending_count": 0,
   "story_name": "Giro col coltello quando giro per Tufello",

@@ -6,6 +6,15 @@
     10,
     32
   ],
+  "help": [
+    {
+      "mission_name": "Mission A",
+      "activity_name": "Nuova attività",
+      "question": "Prof sono bloccato",
+      "answer": "",
+      "to_help": true
+    }
+  ],
   "chat": [
     {
       "hour": "11",
@@ -26,7 +35,7 @@
       "mins": "45",
       "text": "Non capisco come risolvere il quesito 99, può aiutarmi?",
       "auth": "player4",
-      "seen": true
+      "seen": false
     }
   ],
   "pending_count": 1,

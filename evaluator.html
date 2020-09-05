@@ -5,6 +5,8 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 	<link rel="icon" type="image/png" sizes="16x16" href="/public/images/icons/site16x16.ico">
 
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
+	<script src="https://unpkg.com/jspdf-autotable@3.5.9/dist/jspdf.plugin.autotable.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
@@ -28,8 +30,13 @@
 		</button>
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav">
-				<li class="nav-item">
-					<a class="nav-link" id="classification-button">Classifica</a>
+				<li class="nav-item dropdown">
+					<a class="nav-link dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Richieste d'aiuto
+					</a>
+					<div class="dropdown-menu" id="helpDropdown" aria-labelledby="navbarDropdown">
+						<!--Lista degli utenti in attesa di aiuto-->
+					</div>
 				</li>
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" id="playerDropdownButton" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -40,12 +47,17 @@
 					</div>
 				</li>
 				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" id="helpDropdownButton" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						Aiuti Richiesti
+					<a class="nav-link dropdown-toggle" id="new_msgDropdownButton" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						Messaggi non letti
 					</a>
-					<div class="dropdown-menu" id="helpDropdown" aria-labelledby="navbarDropdown">
-						<!--Lista degli utenti in attesa di aiuto-->
+					<div class="dropdown-menu" id="new_msgDropdown" aria-labelledby="navbarDropdown">
+						<!--Lista degli utenti con messaggi non letti-->
 					</div>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" id="classification-button">
+						Classifica
+					</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-link" onclick="openDownloads()">

@@ -6,6 +6,15 @@
     16,
     32
   ],
+  "help": [
+    {
+      "mission_name": "Mission A",
+      "activity_name": "Nuova attività",
+      "question": "Prof sono bloccato",
+      "answer": "",
+      "to_help": true
+    }
+  ],
   "chat": [
     {
       "hour": "11",
@@ -26,12 +35,12 @@
       "mins": "34",
       "text": "Ehi",
       "auth": "player2",
-      "seen": false
+      "seen": true
     }
   ],
   "pending_count": 2,
   "story_id": 107,
-  "story_name":  "Big Storia",
+  "story_name": "Big Storia",
   "quest_list": [
     {
       "mission_name": "Mission A",
@@ -44,7 +53,6 @@
       "quest_score": 100
     },
     {
-
       "mission_name": "Mission A",
       "activity_name": "Nuova attività",
       "corrected": true,
@@ -55,7 +63,6 @@
       "quest_score": 120
     },
     {
-
       "mission_name": "Mission A",
       "activity_name": "Nuova attività",
       "corrected": true,

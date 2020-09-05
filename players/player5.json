@@ -1,11 +1,20 @@
 {
-  
+
   "id": 5,
   "score": 2020,
   "username": "Buzz Lightyear",
   "current_quest_start_timestamp": [
     19,
     44
+  ],
+  "help": [
+    {
+      "mission_name": "Mission A",
+      "activity_name": "Nuova attività",
+      "question": "Prof sono bloccato",
+      "answer": "",
+      "to_help": true
+    }
   ],
   "chat": [
     {
