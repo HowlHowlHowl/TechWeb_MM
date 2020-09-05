@@ -12,7 +12,12 @@
   "activities": [
     {
       "name": "Inizio",
-      "contents": [],
+      "contents": [
+        {
+          "type": "text",
+          "text": ""
+        }
+      ],
       "mission_index": null,
       "special": "begin",
       "input_type": "none",
@@ -21,8 +26,8 @@
         "next_index": null
       },
       "position": {
-        "x": 50,
-        "y": 50
+        "x": 60,
+        "y": 106
       }
     },
     {
@@ -36,8 +41,22 @@
         "next_index": null
       },
       "position": {
-        "x": 250,
-        "y": 50
+        "x": 643,
+        "y": 113
+      }
+    },
+    {
+      "name": "Nuova attività",
+      "contents": [],
+      "mission_index": null,
+      "input_type": "text",
+      "input": {
+        "evaluation_type": "evaluator",
+        "next_index": null
+      },
+      "position": {
+        "x": 349,
+        "y": 148
       }
     }
   ],
