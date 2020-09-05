@@ -140,7 +140,23 @@ module.exports = function (app) {
     //Genera il file classifica per il download
     app.get('/players/downloads/:id', function (req, res) {
         let id = req.params.id;
-        let data = JSON.parse(fs.readFileSync('players/' + id + '.json'));
+        if (id.localeCompare('all')==0) {
+            var files = fs.readdirSync('players');
+            var names = [];
+            files.forEach((filename) => {
+                  names.push(writePlayerHTML(filename));
+            });
+            res.write(names.toString());
+            res.status(200).send();
+        } else {
+            let name = writePlayerHTML(id + '.json');
+            res.write(name);
+            res.status(200).send();
+        }
+    });
+    //TODO debug this, senza sync in writefile scrive con no, sembra essere un prob di sync
+    function writePlayerHTML(id) {
+        let data = JSON.parse(fs.readFileSync('players/' + id));
         let html = '<head><style type="text/css">'
             + 'th, td { border:1px solid black; }'
             + 'th { font-size:3vh; }'
@@ -151,21 +167,19 @@ module.exports = function (app) {
             + ' - <b>Nome Player:</b> ' + (data.username || '<strong> Nessuno </strong>')
             + ' - <b>Punteggio Finale:</b>' + data.score + '</p><table>'
             + '<tr><th colspan="6">' + data.story_name + '</th></tr>'
+		    + '<tr><th>Missione</th><th>Attivit&aacute;</th><th>Domanda</th><th>Risposta</th><th>Commento</th><th>Punteggio</th></tr>';
             + '<tr><th>Missione</th><th>Attività</th><th>Domanda</th><th>Risposta</th><th>Commento</th><th>Punteggio</th></tr>'
             + '</table></body>';
         data.quest_list.forEach((quest) => {
-            html += '<tr><td>' + quest.mission_name + '</td><td>' + quest.activity_name + '</td><td>' + quest.question + '</td><td>' + quest.answer + '</td><td' + quest.comment + '</td><td>' + quest.score + '</td></tr>';
+            html += '<tr><td>' + quest.mission_name + '</td><td>' + quest.activity_name
+                 + '</td><td>' + quest.question + '</td><td>' + quest.answer
+                 + '</td><td>' + quest.comment + '</td><td>' + quest.quest_score
+                 + '</td></tr>';
         });
         html += '</table></body>';
-        fs.writeFile('public/downloads/' + id + '.html', html, function (err) {
-            if (err) {
-                rest.status(500).send();
-            } else {
-                res.status(200).send();
-                // res.write((data.username || 'player' + data.id));
-            }
-        });
-    });
+        fs.writeFileSync('public/downloads/' + (data.username || 'player' + data.id) + '.html', html);
+        return ((data.username || 'player' + data.id) + '.html');    
+    }
 
     //Genera il file classifica per il download
     app.get('/players/downloads/classification', function (req, res) {

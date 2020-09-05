@@ -63,6 +63,7 @@ setInterval(function () {
             openCorrectionPane(currentCorrectionPlayerId);
         }
     }
+    setDownloadsWindow();
 }, 5 * 60000);
 
 //GENERIC FUNCTIONS
@@ -349,6 +350,41 @@ function sort() {
         }
     }
 }
+
+//Prepare the download window
+function setDownloadsWindow() {
+    $('#player-checkbox-list').empty();
+    let children = Array.from($('#playersDropdown').children());
+    children.forEach((player) => {
+        let id = player.id;
+
+        let input = document.createElement('input');
+        input.setAttribute('value', id);
+        input.setAttribute('class', 'player-download')
+        //input.setAttribute('id', id + '-checkbox' );
+        input.setAttribute('type', 'checkbox');
+        let label = document.createElement('label');
+        label.setAttribute('for', id + '-checkbox');
+        label.textContent = player.text;
+
+        let li = document.createElement('li');
+        li.setAttribute('name', id);
+        li.append(input, label);
+        li.setAttribute('type', 'none');
+        $('#player-checkbox-list').append(li);
+    });
+}
+//Open download window
+function openDownloads() {
+    downloadsOpen = true;
+    $('#downloads-window').css({ 'display': 'block' });
+}
+//Close download window
+function closeDownloads() {
+    downloadsOpen = false;
+    $('#downloads-window').css({ 'display': 'none' });
+}
+
 //AJAX CONNECTIONS
 
 //POST 
@@ -362,6 +398,7 @@ function renamePlayer(id, str) {
         success:function(){
             updateAllData();
             setPendingCorrectionList();
+            setDownloadsWindow();
         },
         error: function (xhr, ajaxOptions, thrownError) {
             alert(xhr.status + ' - ' + thrownError);
@@ -448,6 +485,60 @@ function getStory(id) {
         }
     });
 }
+//Download Classification
+function downloadClassification() {
+    $.ajax({
+        url: '/players/downloads/classification',
+        success: function () {
+            link = document.createElement("a"); //create 'a' element
+            link.setAttribute("href", "public/downloads/classification.html"); //replace "file" with link to file you want to download
+            link.setAttribute("download", "Classifica");// replace "file" here too
+            link.click(); //virtually click <a> element to initiate download
+            link.remove();
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            alert(xhr.status + ' - ' + thrownError);
+        }
+    });
+}
+
+//Function to download all players stats
+function downloadAllPlayers() {
+    $.ajax({
+        url: '/players/downloads/all',
+        success: function (data) {
+            console.log(data);
+            data.split(',').forEach((filename) => {
+                link = document.createElement("a");
+                link.setAttribute("href", "public/downloads/" + filename);
+                link.setAttribute("download", filename);
+                link.click();
+                link.remove();
+            });
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            alert(xhr.status + ' - ' + thrownError);
+        }
+    });
+}
+
+//Download Player history 
+function downloadPlayer(id) {
+    $.ajax({
+        url: '/players/downloads/' + id,
+        success: function (data) {
+            link = document.createElement("a");
+            link.setAttribute("href", "public/downloads/" + data);
+            link.setAttribute("download", data);
+            link.click();
+            link.remove();
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            alert(xhr.status + ' - ' + thrownError);
+        }
+    });
+}
+
 //Richiesta al server dei file con richieste di correzione in attesa
 function setPendingCorrectionList() {
     $.ajax({
@@ -561,7 +652,6 @@ function openClassification() {
         }
     });
 }
-//TODO: Rimuovere le notifiche del tempo e dell'aiuto quando necessario (Mi pare sia fatto)
 
 //EVENTS
 //Function to run when the document is ready
@@ -654,87 +744,6 @@ $(document).on('click', '.user-info-tab', function (event) {
     id = id.replace('user-info-tab-', '');
     openUserTab(id);
 });
-//Enable tooltips
-$(function () {
-    $('[data-toggle="tooltip"]').tooltip()
-});
-//Download Classification
-function downloadClassification() {
-    $.ajax({
-        url: '/players/downloads/classification',
-        success: function () {
-            link = document.createElement("a"); //create 'a' element
-            link.setAttribute("href", "public/downloads/classification.html"); //replace "file" with link to file you want to download
-            link.setAttribute("download", "Classifica");// replace "file" here too
-            link.click(); //virtually click <a> element to initiate download
-            link.remove();
-        },
-        error: function (xhr, ajaxOptions, thrownError) {
-            alert(xhr.status + ' - ' + thrownError);
-        }
-    });
-}
-//TODO: Server-side, finire player e checkare, ANNA DEVE INIZIALIZZARE IL JSON DEL PLAYER
-//Function to download all players stats
-function downloadAllPlayers() {
-    let children = Array.from($('#playersDropdown').children());
-    children.forEach((player) => {
-        downloadPlayer(player.id);
-    });
-}
-
-//Download Player history 
-function downloadPlayer(id) {
-    $.ajax({
-        url: '/players/downloads/' + id,
-        success: function (data) {
-            console.log(data);
-            link = document.createElement("a"); //create 'a' element
-            link.setAttribute("href", "public/downloads/" + data + ".html"); //replace "file" with link to file you want to download
-            link.setAttribute("download", data);// replace "file" here too
-            link.click(); //virtually click <a> element to initiate download
-            link.remove();
-        },
-        error: function (xhr, ajaxOptions, thrownError) {
-            alert(xhr.status + ' - ' + thrownError);
-        }
-    });
-}
-
-//Prepare the download window
-function setDownloadsWindow() {
-    $('#player-checkbox-list').empty();
-    let children = Array.from($('#playersDropdown').children());
-    children.forEach((player) => {
-        let id = player.id;
-         
-        let input  = document.createElement('input');
-        input.setAttribute('value', id);
-        input.setAttribute('class','player-download')
-        //input.setAttribute('id', id + '-checkbox' );
-        input.setAttribute('type', 'checkbox');
-        let label  = document.createElement('label');
-        label.setAttribute('for', id + '-checkbox');
-        label.textContent = id;
-        
-        let li = document.createElement('li');
-        li.setAttribute('name', id);
-        li.append(input, label);
-        li.setAttribute('type', 'none');
-        $('#player-checkbox-list').append(li);
-    });
-}
-//Open download window
-function openDownloads() {
-    downloadsOpen = true;
-    $('#downloads-window').css({ 'display': 'block' });
-}
-//Close download window
-function closeDownloads() {
-    downloadsOpen = false;
-    $('#downloads-window').css({ 'display':'none' });
-}
-
 //Event binded to the download button
 $(document).on('click', '#download-files', function () {
     if (document.getElementById('classification-checkbox').checked) {
@@ -750,12 +759,11 @@ $(document).on('click', '#download-files', function () {
         });
     }
 });
-
 //Event bindend to 'select all' checkbox
 $(document).on('click', '#selectAllPlayersCheckbox', function () {
     if (this.checked) {
         $('.player-download').each(function () {
-           this.checked = true;
+            this.checked = true;
         });
     } else {
         $('.player-download').each(function () {
@@ -763,7 +771,6 @@ $(document).on('click', '#selectAllPlayersCheckbox', function () {
         });
     }
 });
-
 //Event to handle the selection of the checkboxes
 $(document).on('click', '.player-download', function (event) {
     let box = event.currentTarget;
@@ -778,5 +785,8 @@ $(document).on('click', '.player-download', function (event) {
         });
         document.getElementById('selectAllPlayersCheckbox').checked = check;
     }
-    
+});
+//Enable tooltips
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip()
 });
