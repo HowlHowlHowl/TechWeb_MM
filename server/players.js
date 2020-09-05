@@ -1,4 +1,5 @@
 var fs = require('fs');
+var formidable = require('formidable');
 
 module.exports = function (app) {
     var next_id = 0;
@@ -274,7 +275,25 @@ module.exports = function (app) {
             }
         });
     });
+    //Upload photo to the server and return full path
+    app.post('/players/upload_photo/:id', function (req, res) {
+        let form = new formidable.IncomingForm();
+        let name = req.params.id;
+        form.parse(req);
+        form.on('file', (name, file) => {
+            let save_path = "public/images/uploads/" + name;
+            fs.rename(file.path, save_path, function (err) {
+                if (err) {
+                    res.status(500).send();
+                } else {
+                    res.writeHead(200, { 'Content-Type': 'application/json' });
+                    res.write(JSON.stringify({ url: "/" + save_path }));
+                    res.end();
+                }
+            });
+        });
 
+    });
     //Crea il file del player quando accede all'applicazione
     app.put('/players/create_player', function (req, res) {
         var data = req.body;     
@@ -310,4 +329,5 @@ module.exports = function (app) {
         res.write(next_id.toString());
         res.end();
     });  
+    //TODO: set current quest timestamp ai player
 };
