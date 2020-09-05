@@ -16,10 +16,6 @@
 		var next_index = null;
 		var storyJSON = null;
 		var answer = null;
-
-		function nextPage(next_index) {
-
-        }
 		function setBeginning(data) {
 			$('h1').text('(' + data.name + ')'); 
 			$('#nome-attivita').text(data.activities[0].name);
@@ -87,80 +83,101 @@
 					alert(xhr.status + ' - ' + thrownError);
                 }
             });
-        });
+		});
+
 		// Questa funzione serve a controllare l'eventuale input dell'attività attuale
 		function checkInput() {
-			// TODO gestire i casi di errore alle risposte
 			let answer_data, type;
 			let score = 0;
 			let corrected_bool = true;
-            let question_text='';
+			let questionArray = [];
+            next_index = storyJSON.activities[index].input.next_index;
+			// storyJSON (è il file della storia trasformato in un'oggetto (JSON della storia)) . <--- serve per accedere ai campi delle storie
+			// 'activities' è un'array [index] accedi all'attività attuale .input_type <--- è un campo dell'oggetto dell'array
 			if (storyJSON.activities[index].input_type == 'photo') {
 				type = 'photo';
-				if (storyJSON.activities[index].input.evaluation_type == 'any') {
-					next_index = storyJSON.activities[index].input.next_index;
+				if (storyJSON.activities[index].input.evaluation_type == 'evaluator') {
+					corrected_bool = false;
 				}
-				else {
-					//Da valutare
-					let mission_index = storyJSON.activities[next_index].mission_index;
-					storyJSON.activities[next_index].contents.forEach(function (elem) {
-						if (elem.type == 'text') {
-							question_text += elem.text;
-						}
-						/*
-                        if (elem.type == 'video') {
-                            
-                        }
-                        if (elem.type == 'image') {
-                            
-                        } TODO aggiungere al testo della domanda dei player contenuto video e immagine*/
-					});
-				}
-				//Se corrected = false, aumentare pending_count server side
-			} else if (storyJSON.activities[index].input_type == 'number') {
+			}
+			else if (storyJSON.activities[index].input_type == 'number') {
 				type = 'number';
 				answer = $('#input-num').val();
-				
-				if (storyJSON.activities[index].input.evaluation_type == 'any') {
-					next_index = storyJSON.activities[index].input.next_index;
-				} else if (storyJSON.activities[index].input.evaluation_type == 'correct') {
-					next_index = storyJSON.activities[index].input.next_index;
-
-					//Controllo che per ogni possibile opzione corretta rientri, la prima che rientra esce dal ciclo
+				if (storyJSON.activities[index].input.evaluation_type == 'correct') {
+					//Controllo se esiste un intervallo corretto di risposte che contiene quella data
 					storyJSON.activities[index].input.correct_options.forEach(function (option) {
 						if (answer >= option.from && answer <= option.to) {
 							score = option.points;
 						}
 					});
+					//Se la risposta è sbagliata
+					if (score == 0) {
+                        if (storyJSON.activities[index].input.wrong_stay) {
+							next_index = index;
+						} else {
+                            next_index = (storyJSON.activities[index].input.wrong_next_index || next_index);
+						}
+					} 
 				} else {
-					//Da correggere
-				}
-
-			} else if (storyJSON.activities[index].input_type == 'text') {
-				type = 'text';
-				answer = $('input-text').val();
-				if (storyJSON.activities[index].input.evaluation_type == 'any') {
-					next_index = storyJSON.activities[index].input.next_index;
-					
-				} else if (storyJSON.activities[index].input.evaluation_type == 'correct') {
-					next_index = storyJSON.activities[index].input.next_index;
-					storyJSON.activities[index].input.correct_options.forEach((option) => {
-						if (answer.toLowerCase().replace(' ', '') == option.text.toLowerCase().replace(' ', '')) 
-						{
-							score = option.points;
-                        }
-					});
-				} else {
-					next_index = storyJSON.activities[index].input.next_index;
-					//No input
+					//Evaluation_type == evaluator
+					corrected_bool = false;
 				}
 			}
-            let mission_index = storyJSON.activities[next_index].mission_index;
+			else if (storyJSON.activities[index].input_type == 'text') {
+				type = 'text';
+				answer = $('input-text').val();
+				if (storyJSON.activities[index].input.evaluation_type == 'correct') {
+					storyJSON.activities[index].input.correct_options.forEach((option) => {
+						if (answer.toLowerCase().replace(' ', '') == option.text.toLowerCase().replace(' ', '')) {
+							score = option.points;
+						}
+					});
+					if (score == 0) {
+                        if (storyJSON.activities[index].input.wrong_stay) {
+							next_index = index;
+						} else {
+							next_index = (storyJSON.activities[index].input.wrong_next_index || next_index);
+						}
+					}
+				} else {
+					//Eval_type = evaluator
+					corrected_bool = false;
+					next_index = storyJSON.activities[index].input.next_index;
+				}
+			}
+			let mission_index = storyJSON.activities[next_index].mission_index;
+            //Costruisce l'array della domanda posta al player
+            storyJSON.activities[index].contents.forEach(function (elem) {
+                if (elem.type == 'text') {
+                    questionArray.push({
+                        type: 'text',
+                        content: elem.text
+                    });
+                }
+                if (elem.type == 'video') {
+                    questionArray.push({
+                        type: 'video',
+                        content: {
+                            url: elem.url,
+                            descr: elem.description
+                        }
+                    });
+                }
+                if (elem.type == 'image') {
+                    questionArray.push({
+                        type: 'image',
+                        content: {
+                            url: elem.url,
+                            descr: elem.description
+                        }
+                    });
+                }
+            });
             answer_data = {
                 mission_name: storyJSON.missions[mission_index].name,
 				activity_name: storyJSON.activities[next_index].name,
 				corrected: corrected_bool,
-				question: question_text,
+				question: questionArray,
 				input_type: type,
                 answer: answer,
 				comment: '',
@@ -182,30 +199,40 @@
         }
 		// Questa funzione serve a impostare la finestra per la prossima attività
 		function setWindow() {
+			console.log(next_index);
 			let mission_index = storyJSON.activities[next_index].mission_index;
-			console.log(storyJSON);
 			$('#nome-attivita').text(storyJSON.activities[next_index].name);
-            $('#nome-missione').text(storyJSON.missions[mission_index].name);
+			$('#nome-missione').text(storyJSON.missions[mission_index].name);
+			$('.testo-attivita').empty();
+			$('.to_del').remove();
 			storyJSON.activities[next_index].contents.forEach(function (elem) {
                 if (elem.type == 'text') {
                     $('.testo-attivita').append(elem.text);
                 }
                 if (elem.type == 'video') {
-                    var video = document.createElement('video');
+					var video = document.createElement('video');
+					var descr = document.createElement('p');
                     var source = document.createElement('source');
-                    source.setAttribute('src', elem.url);
+					source.setAttribute('src', elem.url);
                     video.setAttribute('width', '400');
                     video.setAttribute('controls', '');
-                    video.appendChild(source);
-                    $('.video').appendChild(video);
-                    $('.div-grande-video').append(elem.description);
+					video.appendChild(source);
+                    video.setAttribute('class', 'to_del');
+					descr.setAttribute('class', 'to_del');
+					descr.textContent = elem.description;
+                    $('.video').append(video);
+                    $('.div-grande-video').append(descr);
                 }
                 if (elem.type == 'image') {
-                    var image = document.createElement('img');
+					var image = document.createElement('img');
+                    var descr = document.createElement('p');
                     image.setAttribute('src', elem.url);
                     image.setAttribute('alt', elem.description);
-                    image.setAttribute('width', '400');
-                    $('.div-grande-img').append(elem.description);
+					image.setAttribute('width', '400');
+                    image.setAttribute('class', 'to_del');
+					descr.setAttribute('class', 'to_del');
+                    descr.textContent = elem.description;
+                    $('.div-grande-img').append(descr);
                     $('.img').append(image);
                 }
 			});
@@ -223,6 +250,7 @@
 			let hour = date.getHours();
 			let minutes = date.getMinutes();
 			setCurrentQuestTimeStamp(hour, minutes);
+			index = next_index;
 		}
 		function setCurrentQuestTimeStamp(h, m) {
 			$.ajax({
@@ -235,18 +263,10 @@
                 }
 			});
         }
-		$(document).on('click', '#bottone-avanti', function (){ 
-			switch (storyJSON.activities[index].input_type) {
-				case 'photo':
-					uploadFile($('#input_immagine').files[0]);
-					break;
-				case 'number':
-					sendNum();
-					break;
-				case 'text':
-					sendText();
-					break;
-			}
+		$(document).on('click', '#bottone-avanti', function () {
+		if (storyJSON.activities[index].input_type == 'photo') {
+				uploadFile($('#input_immagine').files[0]);
+		}
             checkInput();
             setWindow();
 		});
@@ -295,11 +315,13 @@
 		}
 
 		#div-grande {
-			margin: 0 7vw 0 7vw;
 			border: 3px #007bff solid;
-			height: 80vh;
+			height: 70vh;
 			overflow-y: auto;
 			background-color: white;
+			width: 80%;
+			margin: auto;
+			margin-bottom:2vh;
 		}
 
 		.bottonechat {
@@ -339,10 +361,17 @@
 			font-size:2vh;
 			bottom: 0.5vh;
 			position: fixed;
-			margin-top: 
 		}
-		.img {
-			text-align: center;
+        .img {
+            text-align: center;
+            vertical-align: middle;
+            border-style: none;
+        }
+		img {
+			
+			object-fit: contain;
+			width: 100%;
+			height:auto;
 		}
 		body {
 			background-color: #007bff;
