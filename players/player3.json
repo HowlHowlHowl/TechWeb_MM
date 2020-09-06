@@ -6,6 +6,8 @@
     16,
     32
   ],
+  "current_mission": "",
+  "current_activity": "",
   "help": [
     {
       "mission_name": "Mission A",

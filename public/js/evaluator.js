@@ -84,7 +84,7 @@ function setUserTab(data) {
     data.chat.forEach((log => { if (!log.seen) unread++; }));
     let nextID = ((data.id+1) > chatLength ? '' : 'player'+Number(data.id+1));
     let prevID = ((data.id - 1) < 1 ? '' : 'player' + Number(data.id - 1));
-    let actual_quest = data.quest_list[data.quest_list.length - 1];
+    
     
     $('#user-space').empty();
     $('#user-space').append(  '<a onclick="closeUserTab()"><span class="glyphicon glyphicon-remove icon-close"></span></a>'
@@ -101,7 +101,7 @@ function setUserTab(data) {
         + '<p>Punteggio: ' + data.score + '</p>'
         + '</div>'
         + '<div class="block-info">'
-        + '<p id="time-count">Missione "' + (actual_quest ? actual_quest.mission_name : 'nessuna') + '" attività: "' + (actual_quest ? actual_quest.activity_name : 'nessuna')+ '" da ' + (hours > 0 ? (hours + ' : '  + minutes + ' ore ') : (minutes + ' minuti')) + '</span></p>'
+        + '<p id="time-count">Missione: "' + (data.current_mission || 'nessuna') + '",  Attività: "' + (data.current_activity || 'nessuna')+ '",  da ' + (hours > 0 ? (hours + ' : '  + minutes + ' ore ') : (minutes + ' minuti')) + '</span></p>'
         + '</div>'
         + '<div class="block-info">'
         + '<p>ID: player' + data.id + '</p>'
@@ -433,7 +433,7 @@ function renamePlayer(id, str) {
         url: '/rename_player/' + id,
         type: 'POST',
         contentType: 'application/json',
-        data: JSON.stringify({surname : str}),
+        data: JSON.stringify({username : str}),
         success:function(){
             updateAllData();
             setPendingCorrectionList();

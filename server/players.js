@@ -143,7 +143,7 @@ module.exports = function (app) {
         let path = 'players/' + id + '.json';
         let body = req.body;
         let data = JSON.parse(fs.readFileSync(path));
-        data.username = body.surname;
+        data.username = body.username;
         fs.writeFile(path, JSON.stringify(data, null, 2), function (err) {
             res.status((err ? 500 : 200)).send();
         });
