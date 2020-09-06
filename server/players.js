@@ -250,6 +250,9 @@ module.exports = function (app) {
                 date.getHours(),
                 date.getMinutes()
             ],
+            current_mission: 'Inizio',
+            current_activity: '',
+            help: [],
             chat: [],
             pending_count: 0,
             story_name: data.name,
@@ -260,5 +263,46 @@ module.exports = function (app) {
         res.write(next_id.toString());
         res.end();
     });  
-    //TODO: set current quest timestamp ai player
+    //serve al valutatore per capire da quanto tempo stai giocando ad un'attività (per es. se sei bloccato)
+    app.put("/players/set_current_quest/:id", function (req, res) {
+        let id = req.params.id;
+        let body = req.body;
+        let path = "players/" + id + ".json";
+        let data = JSON.parse(fs.readFileSync(path));
+
+        data.current_quest_start_timestamp[0] = body.hour;
+        data.current_quest_start_timestamp[1] = body.minutes;
+        data.current_mission = body.mission;
+        data.current_activity = body.activity;
+
+        fs.writeFile(path, JSON.stringify(data, null, 2), function (err) {
+            if (err) {
+                res.status(500).send();
+            }
+            else {
+                res.status(200).send();
+            }
+        });
+    });
+    //TO DEBUG FORTE TANTO ESCE L'ERRORE
+    // serve al player per inviare le risposte da valutare
+    app.put("/players/add_answer/:id", function (req, res) {
+        let id = req.params.id;
+        let body = req.body;
+        let path = "players/" + id + ".json";
+        let data = JSON.parse(fs.readFileSync(path));
+        data.quest_list.push(body);
+        if (body.corrected == false) {
+            data.pending_count++;
+        }
+        fs.writeFile(path, JSON.stringify(data, null, 2), function (err) {
+            if (err) {
+                res.status(500).send();
+            }
+            else {
+                res.status(200).send();
+            }
+        });
+    });
+
 };

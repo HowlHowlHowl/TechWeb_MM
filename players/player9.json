@@ -4,12 +4,12 @@
   "username": "",
   "current_quest_start_timestamp": [
     18,
-    4
+    43
   ],
   "help": [
     {
       "mission_name": "Mission A",
-      "activity_name": "Nuova attivit‡",
+      "activity_name": "Nuova attivit√†",
       "question": "Prof sono bloccato",
       "answer": "",
       "to_help": true
@@ -18,5 +18,7 @@
   "chat": [],
   "pending_count": 0,
   "story_name": "Giro col coltello quando giro per Tufello",
-  "quest_list": []
+  "quest_list": [],
+  "current_mission": "Iniziamo",
+  "current_activity": "La tua prima missione"
 }
