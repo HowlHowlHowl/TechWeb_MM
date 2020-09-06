@@ -268,3 +268,11 @@ html, body {
     width: 24px;
     height: 24px;
 }
+
+.content-image img {
+    max-width : 100%;
+}
+
+video {
+  max-width: 100%;
+}

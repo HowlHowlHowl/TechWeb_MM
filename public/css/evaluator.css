@@ -545,7 +545,6 @@ body {
 }
 
 #timeNotification {
-    background-color: #eedd1a;
     color: black;
     text-align: center;
     padding-top: 0.2vh;
@@ -553,6 +552,8 @@ body {
     border-radius: 0.5vh;
     font-size: 1.5vh;
     vertical-align: middle;
+}
+
 }
 /*Notifications dot*/
 .time-dot, .new_msg-dot, .help-dot {

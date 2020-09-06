@@ -4,10 +4,10 @@
   "style": "",
   "published": true,
   "canvas_offset": {
-    "x": 90.26687316894605,
-    "y": 28.33999938964865
+    "x": 50.18541463216227,
+    "y": 17.15555487738741
   },
-  "canvas_scale": 0.9,
+  "canvas_scale": 1,
   "missions": [
     {
       "name": "LGBTQ+",
@@ -69,6 +69,11 @@
         {
           "type": "image",
           "url": "/public/uploads/Le scarpe che piacciono a bariele.jfif",
+          "description": ""
+        },
+        {
+          "type": "video",
+          "url": "/public/uploads/Linguaggi di Programmazione (Riunione) _ Microsoft Teams 2020-04-02 16-28-33.mp4",
           "description": ""
         }
       ],
@@ -136,17 +141,10 @@
       "mission_index": 0,
       "input_type": "number",
       "input": {
-        "evaluation_type": "correct",
-        "next_index": 5,
-        "correct_options": [
-          {
-            "points": "90",
-            "from": "10",
-            "to": "10"
-          }
-        ],
+        "evaluation_type": "evaluator",
+        "next_index": null,
         "wrong_stay": false,
-        "wrong_next_index": 5
+        "wrong_next_index": null
       },
       "position": {
         "x": 508.9999694824219,
