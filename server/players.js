@@ -1,6 +1,10 @@
 var fs = require('fs');
 var formidable = require('formidable');
 
+// Limiti del tempo impiegato da un player su un'attività
+var TOO_LONG_HOURS = 0;
+var TOO_LONG_MINUTES = 15;
+
 module.exports = function (app) {
     var next_id = 0;
     //Ritorna una lista dei player con l'informazione relativa all'ultimo messaggio inviato
@@ -30,7 +34,7 @@ module.exports = function (app) {
                         }
                     });
                     //Time alert
-                    player.too_long = (hours > 0 || minutes > 15);
+                    player.too_long = (hours > TOO_LONG_HOURS || minutes > TOO_LONG_MINUTES);
                     data.chat.forEach(function (dataChatLog) {
                         if ((dataChatLog.auth).localeCompare("player" + data.id) == 0) {
                             player.urgent = !dataChatLog.seen;
@@ -163,9 +167,10 @@ module.exports = function (app) {
         res.end();
     });
     //Segna come letti i chatlog del player specificato
-    app.post('/players/:id/mark_as_seen', function (req, res) {
+    app.post('/players/mark_as_seen/:id', function (req, res) {
         let id = req.params.id;
         let path = 'players/' + id + '.json';
+        let author = req.body.author;
         let data = fs.readFileSync(path, function (err) {
             if (err) {
                 res.status(500).send();
@@ -173,7 +178,7 @@ module.exports = function (app) {
         });
         let content = JSON.parse(data);
         content.chat.forEach(function (chatLog) {
-            chatLog.seen = true;
+            if (chatLog.auth != author) { chatLog.seen = true; }
         });
         fs.writeFile(path, JSON.stringify(content, null, 2), function (err) {
             res.status(err ? 500 : 200).send();
@@ -184,16 +189,11 @@ module.exports = function (app) {
         let id = req.params.id;
         let data = req.body;
         let path = 'players/' + id + '.json';
-        let content = fs.readFileSync(path, function (err) {
-            if (err) {
-                res.status(500).send();
-            }
-        });
-        content = JSON.parse(content);
-        let quest = content.quest_list[data.index];
-        quest.corrected = true;
-        quest.quest_score = Number(data.score);
-        quest.comment = data.comment;
+        let content = JSON.parse(fs.readFileSync(path));
+        console.log(data.index);
+        content.quest_list[data.index].corrected = true;
+        content.quest_list[data.index].quest_score = Number(data.score);
+        content.quest_list[data.index].comment = data.comment;
         content.pending_count -= 1;
         content.score += Number(data.score);
         fs.writeFile(path, JSON.stringify(content, null, 2), function (err) {
@@ -206,8 +206,8 @@ module.exports = function (app) {
             }
         });
     });
-    //Upload photo to the server and return full path
-    app.post('/players/upload_photo/:id', function (req, res) {
+    //Upload photo to the server and return full path, FORSE NON SERVE INDEX
+    app.post('/players/upload_photo/:id/:index', function (req, res) {
         let form = new formidable.IncomingForm();
         let name = req.params.id;
         form.parse(req);

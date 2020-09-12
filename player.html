@@ -10,14 +10,17 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+
+	<!--Internal dipendecies-->
+	<link rel="stylesheet" href="/public/css/chat.css">
 	<script type="text/javascript">
-        var player_id = 9; //TODO null e riattivare l'assegnamento 
+		var player_id = null;//9; //TODO null e riattivare l'assegnamento
 		var index = null;
 		var next_index = 0;
 		var storyJSON = null;
-		var answer = null;
-
-        $(document).ready(function () {
+		var answer = "";
+		var isChatOpen = false;
+		$(document).ready(function () {
             // richiesta storia
             var url_string = window.location.href;
             var url = new URL(url_string);
@@ -27,8 +30,7 @@
                 url: '/stories/' + id,
                 success: function (data) {
                     storyJSON = data;
-                    setWindow();
-                    //setPlayer(storyJSON);
+                    setPlayer(storyJSON);//
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
                     alert(xhr.status + ' - ' + thrownError);
@@ -44,31 +46,30 @@
 				contentType: 'application/json',
 				success: function (id) {
 					player_id = id;
-
+					setWindow();
 				},
 				error: function (xhr, ajaxOptions, thrownError) {
 					alert(xhr.status + ' - ' + thrownError);
 				}
 			});
         }
-		
+
 		// Questa funzione serve a controllare l'eventuale input dell'attività attuale
 		function checkInput() {
-			let answer_data, type;
+			let answer_data;
 			let score = 0;
 			let corrected_bool = true;
 			let questionArray = [];
-            next_index = storyJSON.activities[index].input.next_index;
+			let type = storyJSON.activities[index].input_type;
+			next_index = storyJSON.activities[index].input.next_index;
 			// storyJSON (è il file della storia trasformato in un'oggetto (JSON della storia)) . <--- serve per accedere ai campi delle storie
 			// 'activities' è un'array [index] accedi all'attività attuale .input_type <--- è un campo dell'oggetto dell'array
-			if (storyJSON.activities[index].input_type == 'photo') {
-				type = 'photo';
+            if (type == 'photo') {
 				if (storyJSON.activities[index].input.evaluation_type == 'evaluator') {
 					corrected_bool = false;
 				}
 			}
-			else if (storyJSON.activities[index].input_type == 'number') {
-				type = 'number';
+			else if (type == 'number') {
 				answer = $('#input-num').val();
 				if (storyJSON.activities[index].input.evaluation_type == 'correct') {
 					//Controllo se esiste un intervallo corretto di risposte che contiene quella data
@@ -84,14 +85,13 @@
 						} else {
                             next_index = (storyJSON.activities[index].input.wrong_next_index || next_index);
 						}
-					} 
+					}
 				} else {
 					//Evaluation_type == evaluator
 					corrected_bool = false;
 				}
 			}
-			else if (storyJSON.activities[index].input_type == 'text') {
-				type = 'text';
+			else if (type == 'text') {
 				answer = $('input-text').val();
 				if (storyJSON.activities[index].input.evaluation_type == 'correct') {
 					storyJSON.activities[index].input.correct_options.forEach((option) => {
@@ -111,8 +111,11 @@
 					corrected_bool = false;
 					next_index = storyJSON.activities[index].input.next_index;
 				}
-			}
-			let mission_index = storyJSON.activities[next_index].mission_index;
+			} 
+            let mission_index = storyJSON.activities[next_index].mission_index;
+            let mission_name;
+            if (mission_index) { mission_name = storyJSON.missions[mission_index].name; } else { mission_name = (next_index == 1 ? 'Fine' : 'Inizio'); }
+
             //Costruisce l'array della domanda posta al player
             storyJSON.activities[index].contents.forEach(function (elem) {
                 if (elem.type == 'text') {
@@ -141,20 +144,20 @@
                 }
             });
             answer_data = {
-                mission_name: storyJSON.missions[mission_index].name,
+                mission_name: mission_name,
 				activity_name: storyJSON.activities[next_index].name,
 				corrected: corrected_bool,
 				question: questionArray,
 				input_type: type,
                 answer: answer,
 				comment: '',
-				quest_score: score
-			}; 
+				quest_score: Number(score)
+			};
 			sendAnswerToServer(answer_data);
 		}
 		//Funzione per mandare il descrittore dell'attività completata al server ed aggiungerlo al file del player
 		function sendAnswerToServer(answer_data) {
-			console.log(answer_data);	
+			console.log(answer_data);
 			$.ajax({
 				url: '/players/add_answer/player' + player_id,
 				type: 'PUT',
@@ -164,7 +167,7 @@
                 error: function (xhr, ajaxOptions, thrownError) {
                     alert(xhr.status + ' - ' + thrownError);
                 }
-			}); 
+			});
 		}
 		// Questa funzione serve a impostare la finestra per la prossima attività
 		function setWindow() {
@@ -239,7 +242,7 @@
 				mission: mission_name
 			};
 			$.ajax({
-				url: '/players/set_current_quest/player' + player_id, 
+				url: '/players/set_current_quest/player' + player_id,
 				type: 'PUT',
 				contentType: 'application/json',
 				data: JSON.stringify(data),
@@ -250,25 +253,44 @@
 			});
         }
 		$(document).on('click', '#bottone-avanti', function () {
-			console.log(storyJSON.activities[index].input_type);
 			if (storyJSON.activities[index].input_type == 'photo') {
+				//In caso di success di uploadFile vengono invocate check input e setWindows
 				uploadFile($('#input-immagine')[0].files[0]);
+			} else {
+				// TODO controllare se gli input sono pieni
+				checkInput();
+				setWindow(); 
 			}
-			// TODO controllare se gli input sono pieni
-            checkInput();
-            setWindow();
 		});
+		//Evento per andare avanti fra le attività con invio
 		$(document).on('keypress', function (key) {
 			if (key.which == 13) {
-				$('#bottone-avanti').click();
+				if (!isChatOpen) {
+					$('#bottone-avanti').click();
+				}
 			}
+		});
+		//Evento per inviare il messaggio in chat con invio
+		$(document).on('keydown', '#new_msg_text', function (event) {
+			if (event.which == 13) {
+				event.preventDefault();
+				$('#send-msg').click();
+			}
+		});
+		//Evento per mostrare una preview del file selezionato
+		$(document).on('change', '#input-immagine', function () {
+			$('#preview').remove();
+			let img = document.createElement('img');
+			img.setAttribute('alt','Your selected image');
+			img.setAttribute('src', (window.URL ? URL : webkitURL).createObjectURL($('#input-immagine')[0].files[0]));
+			img.setAttribute('id', 'preview');
+			document.getElementById('footer').insertBefore(img, document.getElementById('bottone-avanti'));
 		});
 
         function uploadFile(file) {
 			let fd = new FormData();
-			console.log(file.name);
             fd.append(file.name, file);
-			let path = '/players/upload_photo/' + 'player' + player_id + '_' + index;
+			let path = '/players/upload_photo/' + 'player' + player_id + '/' + index;
             $.ajax({
 				accepts: 'application/json',
 				url: path,
@@ -276,16 +298,114 @@
                 type: 'POST',
                 contentType: false,
                 processData: false,
-
-				success: function (data) {
-					$('#footer').append('<image src="' + data + '">');
-					answer = data;
+                success: function (data) {
+                	answer = data.url;
+                	checkInput();
+                	setWindow();
 				},
                 error: function (xhr, ajaxOptions, thrownError) {
                     alert(xhr.status + ' - ' + thrownError);
                 }
             });
         }
+
+
+		/**** Funzioni per la chat ****/
+        //Sets the layout of the chat messages
+        function setChatView(data) {
+        	$('#chat-user').empty();
+        	$('#chat-msgs').empty();
+        	document.getElementById("chat").style.display = "block";
+
+        	$('#chat-user').append('<div class="glyphicon glyphicon-comment"></div><p id="chat-title">Valutatore</p>');
+        	data.chat.forEach((chatlog) => {
+        		if ((chatlog.auth.localeCompare("Valutatore")) != 0) {
+        			$('#chat-msgs').append('<div class="row msg_container base_sent"><div class="col-md-10 col-xs-10"><div class="messages sent-msgs msg_sent"><p>' +
+					 chatlog.text + '</p><time>Tu - ' + chatlog.hour + ':' + chatlog.mins + '</time></div></div></div>');
+        		} else {
+        			$('#chat-msgs').append('<div class="row msg_container base_receive <div class="col-md-10 col-xs-10"><div class="messages msg_receive"><p>' +
+					 chatlog.text + '</p> <time>' + (data.username ? data.username : ('Player ' + data.id)) + ' - ' + chatlog.hour + ':' + chatlog.mins + '</time></div></div></div>');
+        		}
+        	});
+        }
+        //Open the pop-up chat with the selected player
+        function openChat(id) {
+        	isChatOpen = true;
+        	$.ajax({
+        		url: '/players/' + id,
+        		success: function (data) {
+        			setChatView(data);
+        			markAsSeen(id);
+        			scrollToBottom();
+        			$('#new_msg_text').focus();
+        		},
+        		error: function (xhr, ajaxOptions, thrownError) {
+        			alert(xhr.status + ' - ' + thrownError);
+        		}
+        	});
+        }
+        //Close the pop-up chat
+        function closeChat() {
+        	isChatOpen = false;
+        	document.getElementById("chat").style.display = "none";
+        	currentChatPlayerId = null;
+        }
+        //Send chat message to the server
+        function sendMsg() {
+        	var str = $("#new_msg_text").val();
+        	$('#new_msg_text').val('');
+        	if (str) {
+        		let date = new Date();
+        		var hrs = String(date.getHours());
+        		var min = date.getMinutes();
+        		min = (min < 10 ? ("0" + String(min)) : (String(min)));
+        		var msg = {
+        			hour: hrs,
+        			mins: min,
+        			text: str,
+        			auth: "player" + player_id,
+        			seen: false
+        		};
+        		let id = 'player' + player_id;
+        		$.ajax({
+        			url: '/players/' + id,
+        			type: 'POST',
+        			contentType: 'application/json',
+        			data: JSON.stringify(msg),
+
+        			success: function (data) {
+        				openChat(id);
+        				$('#new_msg_text').focus();
+        			},
+        			error: function (xhr, ajaxOptions, thrownError) {
+        				alert(xhr.status + ' - ' + thrownError);
+        			}
+        		});
+        	}
+        }
+		//Change the state of the current chat last messages to 'seen'
+        function markAsSeen(id) {
+        	$.ajax({
+        		url: '/players/mark_as_seen/' + id,
+        		type: 'POST',
+        		contentType: 'application/json',
+        		data: JSON.stringify({ author: 'player'+player_id}),
+        		success: function () {
+        		},
+        		error: function (xhr, ajaxOptions, thrownError) {
+        			alert(xhr.status + ' - ' + thrownError);
+        		}
+        	});
+        }
+        //Scroll to the last received message in the current chat
+        function scrollToBottom() {
+        	let chatVBox = document.getElementById('chat-msgs');
+        	chatVBox.scrollTop = chatVBox.scrollHeight;
+        }
+        //Event to open chat with selected player
+        $(document).on('click', '#chat-button', function (event) {
+        	openChat('player' + player_id);
+        });
 	</script>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -297,6 +417,7 @@
 			font-style: normal;
 			font-display: swap;
 		}
+
 		h1 {
 			font-size: 11vh;
 			text-align: center;
@@ -305,17 +426,17 @@
 			font-family: "All The Roll";
 		}
 		/* TODO padding auto per riempire lo spazio del div grande */
-        #div-grande {
-            border: 3px #007bff solid;
-            height: 70vh;
-            overflow-y: auto;
-            background-color: white;
-            width: 80%;
-            margin: auto;
-            margin-bottom: 2vh;
+		#div-grande {
+			border: 3px #007bff solid;
+			height: 70vh;
+			overflow-y: auto;
+			background-color: white;
+			width: 80%;
+			margin: auto;
+			margin-bottom: 2vh;
 			padding: 1vh;
-            border: solid 1px black;
-        }
+			border: solid 1px black;
+		}
 
 		.bottonechat {
 			bottom: 0;
@@ -324,70 +445,82 @@
 			font-size: 3vh;
 			margin-right: 0.5vw;
 		}
+
 		#nome-attivita {
 			text-align: center;
 			font-size: 2.5vh;
 			font-family: 'Helvetica Neue LT Std';
 		}
+
 		#nome-missione {
 			text-align: center;
 			font-size: 4vh;
 			font-family: 'Helvetica Neue LT Std';
 			margin-bottom: 0.5vh;
 		}
-        .testo-attivita {
-            margin-left: 1.5vh;
-			margin-right:1.5vh;
-            margin-top: .5vh;
-            font-size: 2.5vh;
-            text-align: justify;
-            font-family: 'Helvetica Neue LT Std';
-        }
-        #footer {
-            width: 100%;
-            text-align: center;
-        }
-        
-        .img {
-            text-align: center;
-            vertical-align: middle;
-            border-style: none;
-        }
+
+		.testo-attivita {
+			margin-left: 1.5vh;
+			margin-right: 1.5vh;
+			margin-top: .5vh;
+			font-size: 2.5vh;
+			text-align: justify;
+			font-family: 'Helvetica Neue LT Std';
+		}
+
+		#footer {
+			width: 100%;
+			text-align: center;
+		}
+
+		.img {
+			text-align: center;
+			vertical-align: middle;
+			border-style: none;
+		}
+
 		img {
-			
 			object-fit: contain;
 			width: 100%;
-			height:auto;
+			height: auto;
 		}
+
 		body {
 			background-color: #007bff;
 		}
 		/*Input*/
-		.input { 
+		.input {
 			margin: 3vh;
 			font-size: 3vh;
 		}
-        input[type="file"] {
-            display: none;
-        }
 
-        .custom-file-upload {
-            background: white;
-            display: inline-block;
-            cursor: pointer;
-            padding: 1px 6px;
-            border: 2px outset gray;
-			font-weight:normal;
-            
-        }
-		#input-num{
-
+		input[type="file"] {
+			display: none;
 		}
-		#input-text{
 
+		.custom-file-upload {
+			background: white;
+			display: inline-block;
+			cursor: pointer;
+			padding: 1px 6px;
+			border: 2px outset gray;
+			font-weight: normal;
 		}
-        #bottone-avanti {
-        }
+
+		#input-num {
+		}
+
+		#input-text {
+		}
+
+		#bottone-avanti {
+		}
+		#preview {
+			width:10vw;
+			position: absolute;
+			margin: auto;
+			left: 0;
+		}
 	</style>
 </head>
 <body>
@@ -418,6 +551,38 @@
 		</div>
 	</div>
 	<div id="footer">
+	</div>
+	<!--CHAT-->
+	<div class="chat-popup" id="chat">
+		<form autocomplete="off" class="form-container">
+			<div class="container">
+				<div class="col-sm-8">
+					<div class="chatbody">
+						<div class="panel panel-primary">
+							<div class="panel-heading top-bar">
+								<div class="col-md-4 col-xs-4" style="text-align: right;">
+									<a onclick="closeChat()"><span class="glyphicon glyphicon-remove icon_close" data-id="chat_window_1"></span></a>
+								</div>
+								<div class="col-md-8 col-xs-8">
+									<p class="panel-title" id="chat-user"><!--Nome utente chat--></p>
+								</div>
+							</div>
+							<div id="chat-msgs" class="panel-body msg_container_base">
+								<!--MESSAGGI-->
+							</div>
+							<div class="panel-footer">
+								<div class="input-group">
+									<input id="new_msg_text" type="text" autocomplete="off" class="form-control input-sm chat_input" placeholder="Scrivi il tuo messaggio..." />
+									<a id="send-msg" class="btn btn-info btn-sm" onclick="sendMsg()">
+										<span class="glyphicon glyphicon-send"></span> Send
+									</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</form>
 	</div>
 </body>
 </html>

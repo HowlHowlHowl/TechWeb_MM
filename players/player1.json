@@ -13,6 +13,13 @@
       "text": "Buongiorno Prof, lei è maleodorante",
       "auth": "player1",
       "seen": true
+    },
+    {
+      "hour": "15",
+      "mins": "52",
+      "text": "lol",
+      "auth": "Valutatore",
+      "seen": true
     }
   ],
   "help": [

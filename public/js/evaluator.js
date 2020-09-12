@@ -5,7 +5,8 @@ PLAYER
 - Messaggio conclusivo a seconda del punteggio finale
 - Richiesta e risposta d'Aiuto diverso da chat
 */
-var chatLength = 0;
+
+var playersLength = 0;
 var new_msgLength = 0;
 var currentChatPlayerId = null;
 var currentCorrectionPlayerId = null;
@@ -14,7 +15,8 @@ var classificationOpen = false;
 var downloadsOpen = false;
 /*The displayed elements can be:
 - Correction pane
-- History
+- History pane
+- Help Pane
 - Classification
 - Downloads Window
 */
@@ -26,6 +28,11 @@ setInterval(function () {
         openChat(currentChatPlayerId);
     }
 }, 1000);
+
+//Update all data (navbar etc) every half minute
+setInterval(function () {
+    updateAllData();
+}, 30000);
 
 //User tab or Classification update every minute
 setInterval(function () {
@@ -82,7 +89,7 @@ function setUserTab(data) {
     minutes = (minutes < 10 ? '0' + minutes : minutes);
     let unread = 0;
     data.chat.forEach((log => { if (!log.seen) unread++; }));
-    let nextID = ((data.id+1) > chatLength ? '' : 'player'+Number(data.id+1));
+    let nextID = ((data.id+1) > playersLength ? '' : 'player'+Number(data.id+1));
     let prevID = ((data.id - 1) < 1 ? '' : 'player' + Number(data.id - 1));
     
     
@@ -130,6 +137,7 @@ function closeUserTab() {
     document.getElementById('user-pane').style.display = 'none';
     currentUserTabId = null;
 }
+
 //Sets layout of history panel
 function setHistory(data) {
     //TODO: immagini e video fra risposte e domande
@@ -163,7 +171,7 @@ function setHistory(data) {
 }
 
 //Sets layout of correction panel
-//TODO:immagini e video
+//TODOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO: immagini e video
 function setCorrectionPane(data) {
     classificationOpen = false;
     $('#main-placeholder').empty();
@@ -173,68 +181,71 @@ function setCorrectionPane(data) {
         + '</div><div class="panel-body" id="correction-pane">';
 
     $('#variable-answer').css({ 'height': '10vh' });
-    let i = 1;
     let body = "";
-    data.quest_list.forEach((quest) => {
-        if (!quest.corrected) {
-            let pane;
-            //Attach header:
-            let quest_header = '<p class="quest_header">Missione: ' + quest.mission_name + '<br>Attività: ' + quest.activity_name+ '</p>';
-            //Attach question:
-            let quest_widget =  '<div class="description-div">'
-                                + '<div class="inline-divs">Domanda :'
-                                + '<a id="plus_min_question' + i + '" class="plus_min btn btn-info btn-sm"><span class="glyphicon glyphicon-minus"></span></a>'
-                                + '</div>'
-                                + '<div class="inline-divs" id="question' + i + '">'
-                                + '<p>' + quest.question + '</p>'
-                                + '</div>'
-                                + '<div class="inline-divs">'
-                                + '</div>'
-                                + '</div>';
+    if (data.pending_count > 0) {
+        data.quest_list.forEach((quest) => {
+            let i = data.quest_list.indexOf(quest);
+            if (!quest.corrected) {
+                let pane;
+                //Attach header:
+                let quest_header = '<p class="quest_header">Missione: ' + quest.mission_name + '<br>Attività: ' + quest.activity_name + '</p>';
+                //Attach question:
+                let quest_widget = '<div class="description-div">'
+                                    + '<div class="inline-divs">Domanda :'
+                                    + '<a id="plus_min_question' + i + '" class="plus_min btn btn-info btn-sm"><span class="glyphicon glyphicon-minus"></span></a>'
+                                    + '</div>'
+                                    + '<div class="inline-divs" id="question' + i + '">'
+                                    + '<p>' + quest.question + '</p>'
+                                    + '</div>'
+                                    + '<div class="inline-divs">'
+                                    + '</div>'
+                                    + '</div>';
 
-            //Define answer html
-            let var_answr;
-            switch (quest.input_type) {
-                case 'text':
-                    var_answr = '<p>' + quest.answer + '</p>';
-                    break;
-                case 'img':
-                    var_answr = '<img src="public/pending_answer/' + quest.answer + '" class="img-fluid img-thumbnail" alt="Responsive image">';
-                    $('#variable-answer').css({ 'height': '50vh' });
-                    break;
+                //Define answer html
+                let var_answr;
+                switch (quest.input_type) {
+                    case 'text':
+                        var_answr = '<p>' + quest.answer + '</p>';
+                        break;
+                    case 'img':
+                        var_answr = '<img src="public/pending_answer/' + quest.answer + '" class="img-fluid img-thumbnail" alt="Responsive image">';
+                        $('#variable-answer').css({ 'height': '50vh' });
+                        break;
+                }
+                //Attach answer
+                let answer_widget = '<div class="description-div">'
+                                    + '<div class="inline-divs">'
+                                    + 'Risposta :'
+                                    + '<a id="plus_min_answer' + i + '" class="plus_min btn btn-info btn-sm"><span class="glyphicon glyphicon-minus"></span></a>'
+                                    + '</div>'
+                                    + '<div class="inline-divs" id="answer' + i + '">'
+                                    + var_answr
+                                    + '</div>'
+                                    + '<div class="inline-divs">'
+                                    + '</div>'
+                                    + '</div>';
+                //Attach corretion input
+                let valu_widget = '<div class="valutation-input">'
+                                    + '<form class="form-correction">'
+                                    + '<div class="form-group row">'
+                                    + '<div class="col-12">'
+                                    + '<div class="col-sm-6 input1" id="input1-' + i + '"><label for="score-input-' + i + '">Attribuisci un punteggio</label><br>'
+                                    + '<input class="form-control number-input" type="number" id="score-input-' + i + '"></div>'
+                                    + '<div class="col-sm-6 input2" id="input2-' + i + '"><label for="comment-input-' + i + '">Aggiungi un commento</label><br>'
+                                    + '<textarea class="comment-input" id="comment-input-' + i + '"></textarea></div>'
+                                    + '</div>'
+                                    + '</div>'
+                                    + '<button type="button" name="' + i + '"class="send-correction btn btn-outline-primary">Invio <span class="glyphicon glyphicon-ok"></span></button>'
+                                    + '</form>'
+                                    + '</div>'
+                                    + '<hr>';
+                pane = '<div class="correction-divider">' + quest_header + quest_widget + answer_widget + valu_widget + '</div>';
+                body += pane;
             }
-            //Attach answer
-            let answer_widget = '<div class="description-div">'
-                                + '<div class="inline-divs">'
-                                + 'Risposta :'
-                                + '<a id="plus_min_answer' + i + '" class="plus_min btn btn-info btn-sm"><span class="glyphicon glyphicon-minus"></span></a>'
-                                + '</div>'
-                                + '<div class="inline-divs" id="answer' + i + '">'
-                                + var_answr
-                                + '</div>'
-                                + '<div class="inline-divs">'
-                                + '</div>'
-                                + '</div>';
-            //Attach corretion input
-            let valu_widget = '<div class="valutation-input">'
-                                + '<form class="form-correction">'
-                                + '<div class="form-group row">'
-                                + '<div class="col-12">'
-                                + '<div class="col-sm-6 input1" id="input1-' + i + '"><label for="score-input-' + i + '">Attribuisci un punteggio</label><br>'
-                                + '<input class="form-control number-input" type="number" id="score-input-' + i + '"></div>'
-                                + '<div class="col-sm-6 input2" id="input2-' + i + '"><label for="comment-input-' + i + '">Aggiungi un commento</label><br>'
-                                + '<textarea class="comment-input" id="comment-input-' + i + '"></textarea></div>'
-                                + '</div>'
-                                + '</div>'
-                                + '<button type="button" name="'+i+'"class="send-correction btn btn-outline-primary">Invio <span class="glyphicon glyphicon-ok"></span></button>'
-                                + '</form>'
-                                + '</div>'
-                                + '<hr>';
-            pane = '<div class="correction-divider">' + quest_header + quest_widget + answer_widget + valu_widget + '</div>';
-            body += pane;
-            i++;
-        }
-    });
+        });
+    } else {
+        body+='<p class="quest_header">Non ci sono risposte in attesa di valutazione per questo giocatore</p>';
+    }
     $('#main-placeholder').append(header + body + '</div>');
     $('#score-input-1').focus();
 }
@@ -256,7 +267,7 @@ function setChatView(data) {
         if((chatlog.auth.localeCompare("Valutatore"))==0)
         {
             $('#chat-msgs').append('<div class="row msg_container base_sent"><div class="col-md-10 col-xs-10"><div class="messages sent-msgs msg_sent"><p>' +
-             chatlog.text + '</p><time>You - ' + chatlog.hour + ':' + chatlog.mins + '</time></div></div></div>');
+             chatlog.text + '</p><time>Tu - ' + chatlog.hour + ':' + chatlog.mins + '</time></div></div></div>');
         } else {
             $('#chat-msgs').append('<div class="row msg_container base_receive <div class="col-md-10 col-xs-10"><div class="messages msg_receive"><p>' +
              chatlog.text + '</p> <time>' + (data.username ? data.username : ('Player ' + data.id)) + ' - ' + chatlog.hour + ':' + chatlog.mins + '</time></div></div></div>');
@@ -277,12 +288,16 @@ function updateAllData() {
             $('#helpDropdown').empty();
 
             new_msgLength = 0;
-            chatLength = 0;
+            playersLength = 0;
+
+            $('#new_msgNotification').remove();
+            $('#navHelpNotification').remove();
+            $('#navTimeNotification').remove();
 
             data.forEach(setPlayerList);
             setDownloadsWindow();
 
-            if (chatLength == 0) {
+            if (playersLength == 0) {
                 $('#playersDropdown').append('<a class="dropdown-item">Non ci sono chat disponibili</a>');
             }
             if (new_msgLength == 0) {
@@ -297,33 +312,34 @@ function updateAllData() {
 //Fill the lists of player avaiable for conversation and in need for help
 function setPlayerList(data) {
     let name = (data.username ? data.username : "Player " + data.id);
-    $('#playersDropdown').append('<a class="dropdown-item player-list-el" id="player' + data.id + '">' + name + '</a>');
-    chatLength++;
+    $('#dot-space').empty();
+    $('#playersDropdown').append('<a class="dropdown-item player-list-el close-on-click" id="player' + data.id + '">' + name + '</a>');
+    playersLength++;
+    if (data.too_long) {
+        //Un dot per ogni player e uno per il bottone collapse
+        $('#navTimeNotification').remove();
+        $('#playerDropdownButton').append('<div class="glyphicon glyphicon-time color" id="navTimeNotification"></div>');
+        $('#player' + data.id).append('<div class="negative-dot dot"></div>');
+        blinkNotify('#navTimeNotification');
+    }
+
     if (data.urgent) {
         new_msgLength++;
-        $('.new_msg-dot').remove();
         $('#new_msgNotification').remove();
-        $('#new_msgDropdown').append('<a class="dropdown-item new_msg-list-el" id="new_msg-player' + data.id + '">' + name + '</a>');
-        $('#dot-space').append('<span class="new_msg-dot"></span>');
-        $('#new_msgDropdownButton').append('<span class="badge badge-secondary" id="new_msgNotification">' + new_msgLength + ' new</span>');
-       
+        $('#new_msgDropdownButton').append('<div class="badge badge-secondary" id="new_msgNotification">' + new_msgLength + ' new</div>');
+        $('#new_msgDropdown').append('<a class="dropdown-item new_msg-list-el close-on-click" id="new_msg-player' + data.id + '">' + name + '</a>');
         blinkNotify('#new_msgNotification');
     }
-    if (data.too_long) {  
-        //Un dot per ogni player e uno per il bottone collapse
-        $('.time-dot-collapse').remove();
-        $('#navTimeNotification').remove();
-        $('#playerDropdownButton').append('<span class="glyphicon glyphicon-time color" id="navTimeNotification">');
-        blinkNotify('#navTimeNotification');
-        $('#player' + data.id).append('<span class="time-dot"></span>');
-        $('#dot-space').append('<span class="time-dot time-dot-collapse"></span>');   
-    }
+
     if (data.to_help) {
-        $('.help-dot').remove();
-        $('#dot-space').append('<span class="help-dot"></span>');
-        $('#helpDropdown').append('<a class="dropdown-item help-list-el" id="help-player' + data.id + '">' + name + '</a>');
+        $('#navHelpNotification').remove();
+        $('#helpDropdown').append('<a class="dropdown-item help-list-el close-on-click" id="help-player' + data.id + '">' + name + '</a>');
+        $('#helpDropdownButton').append('<div class="glyphicon glyphicon-flag" id="navHelpNotification"></div>');
+        blinkNotify('#navHelpNotification');
     }
-    
+
+    $('#dot-space').append('<div id="dot" class="dot"></div>');
+    blinkNotify('#dot');
 }
 //Make the notification mark blink
 function blinkNotify(selector) {
@@ -416,6 +432,8 @@ function setDownloadsWindow() {
 //Open download window
 function openDownloads() {
     downloadsOpen = true;
+    if (currentUserTabId) { closeUserTab(); }
+
     $('#downloads-window').css({ 'display': 'block' });
 }
 //Close download window
@@ -444,7 +462,7 @@ function renamePlayer(id, str) {
         }
     });
 }
-//Send message to the server
+//Send chat message to the server
 function sendMsg() {
     var str = $("#new_msg_text").val();
     $('#new_msg_text').val('');
@@ -469,6 +487,7 @@ function sendMsg() {
 
             success: function (data) {
                 openChat(id);
+                $('#new_msg_text').focus();
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 alert(xhr.status + ' - ' + thrownError);
@@ -479,9 +498,10 @@ function sendMsg() {
 //Change the state of the current chat last messages to 'seen'
 function markAsSeen(id) {
     $.ajax({
-        url: '/players/' + id + '/mark_as_seen',
+        url: '/players/mark_as_seen/' + id,
         type: 'POST',
         contentType: 'application/json',
+        data: JSON.stringify({author:'evaluator'}),
         success: function () {
             updateAllData();
             $('#chatNotification').remove();
@@ -533,7 +553,6 @@ function downloadClassification() {
             + '<th scope="col">Nome</th>'
             + '<th scope="col">Punteggio</th></tr></thead><tbody>';
             JSON.parse(data).forEach((player) => {
-                console.log(player);
                 html = html + '<tr><td>player' + player.id + '</td><td>' + (player.username || '---') + '</td><td>' + player.score + '</td></tr>';
             });
             html = html + '</tbody></table></body>';
@@ -586,15 +605,30 @@ function download(player) {
     pdf.text(pdf.internal.pageSize.width / 2, 40,
         'ID player: ' + player.id + ' - Nome Player: ' + (player.username || 'Nessuno') + ' - Punteggio Finale: ' + player.score
        , 'center');
+    let add_img = [];
     let table_body = [];
     player.quest_list.forEach((quest) => {
-        table_body.push([quest.mission_name, quest.activity_name, quest.question, quest.answer, quest.comment, quest.quest_score]);
+        let question_content = '';
+        quest.question.forEach((elem) => {
+            switch (elem.type) {
+                case 'image':
+                    question_content += 'Immagine con url "' + elem.content.url + '".' + (elem.content.descr ? '.\n Descrizione: "' + elem.content.descr + '"\n' : '\n');
+                    break;
+                case 'text':
+                    question_content += elem.content + '\n';
+                    break;
+                case 'video':
+                    question_content += 'Video con url "' + elem.content.url + '".' + (elem.content.descr ? '.\n Descrizione: "' + elem.content.descr + '"\n' : '\n');
+                    break;
+            }
+        });
+        table_body.push([quest.mission_name, quest.activity_name, question_content, quest.answer, quest.comment, quest.quest_score]);
     });
                
     pdf.autoTable({
         head: [['Missione', 'Attività', 'Domanda', 'Risposta', 'Commento', 'Punteggio']],
         body: table_body,
-        margin: {top: 60}
+        margin: { top: 60 }
     });
     pdf.save((player.username || 'player' + player.id) + '.pdf');
 }
@@ -649,6 +683,8 @@ function openChat(id) {
         success: function (data) {
             setChatView(data);
             markAsSeen(id);
+            scrollToBottom();
+            $('#new_msg_text').focus();
         },
         error: function (xhr, ajaxOptions, thrownError) {
             alert(xhr.status + ' - ' + thrownError);
@@ -661,6 +697,7 @@ function openUserTab(id) {
         accepts: 'application/json',
         url: '/players/' + id,
         success: function (data) {
+            if (downloadsOpen) { closeDownloads();}
             setUserTab(data);
             currentUserTabId = id;
         },
@@ -700,7 +737,7 @@ $(document).on('click', '.send-correction', function (event) {
     let questComment = $('#comment-input-' + questIndex).val();
     let questScore = $('#score-input-' + questIndex).val();
     if (questScore) {
-        let questValutation = { comment: questComment, score: questScore, index: questIndex - 1 };
+        let questValutation = { comment: questComment, score: questScore, index: questIndex };
         submitCorrection(questValutation);
     } else {
         $('#no-score').remove();
@@ -740,6 +777,10 @@ $(document).on('click', '#rename-button', function () {
 //Event to open correction pane of selected player
 $(document).on('click', '.waiting-player', function (event) {
     openCorrectionPane(event.currentTarget.id);
+});
+//Event to open the help window
+$(document).on('click', '.help-list-el', function (event) {
+    openHelpPane(event.currentTarget.id.replace('help-', ''));
 });
 //Event to expand or reduce the answer and question sub-panes
 $(document).on('click', '.plus_min', function (event) {
@@ -800,6 +841,13 @@ $(document).on('click', '#selectAllPlayersCheckbox', function () {
         });
     }
 });
+//Event to close the navbar dropdown on menu option clicked
+$(document).on('click', '.close-on-click', function () {
+    if ($('#navbarSupportedContent').hasClass('show')) {
+        $('#collapse-button').click();
+        updateAllData();
+    }
+});
 //Event to handle the selection of the checkboxes
 $(document).on('click', '.player-download', function (event) {
     let box = event.currentTarget;
@@ -813,6 +861,13 @@ $(document).on('click', '.player-download', function (event) {
             }
         });
         document.getElementById('selectAllPlayersCheckbox').checked = check;
+    }
+});
+//Prevent submission of text form and send message in chat
+$(document).on('keydown', '#new_msg_text', function (event) {
+    if (event.which == 13) {
+        event.preventDefault();
+        $('#send-msg').click();
     }
 });
 //Enable tooltips
