@@ -140,7 +140,6 @@ function closeUserTab() {
 
 //Sets layout of history panel
 function setHistory(data) {
-    //TODO: immagini e video fra risposte e domande
     classificationOpen = false;
     currentCorrectionPlayerId = null;
     $('#main-placeholder').empty();
@@ -148,8 +147,7 @@ function setHistory(data) {
         + (data.username ? data.username : 'Player ' + data.id) + ' - Storico'
         + '<a id="user-info-tab-player' + data.id + '" class="user-info-tab btn btn-info btn-sm"><span class="glyphicon glyphicon-info-sign"></span></a>'
         + '</div><div class="panel-body" id="history-pane">'
-        + '<table class="table table-sm"><thead><tr><th id="table-head" colspan="5">'+data.story_name+' - '+data.score+ ' punti</th></tr><tr>'
-        + '<th scope="col">#</th>'
+        + '<table class="history-table table table-sm"><thead><tr><th id="table-head" colspan="5">'+data.story_name+' - '+data.score+ ' punti</th></tr><tr>'
         + '<th scope="col">Domanda</th>'
         + '<th scope="col">Risposta</th>'
         + '<th scope="col">Commento</th>'
@@ -157,14 +155,28 @@ function setHistory(data) {
         + '</tr>'
         + '</thead><tbody>';
     let body='';
-    let i = 1;
     data.quest_list.forEach((quest) => {
-        let row = '<tr><th scope="row">' + i + '</th>'
-        + '<td>' + quest.question + '</td>'
-        + '<td>' + quest.answer + '</td>'
+        let question_content = '';
+        quest.question.forEach((elem) => {
+            switch (elem.type) {
+                case 'image':
+                    question_content += 'Immagine con url: "' + elem.content.url + '".\n';
+                    break;
+                case 'text':
+                    question_content += elem.content + '\n';
+                    break;
+                case 'video':
+                    question_content += 'Video con url: "' + elem.content.url + '".\n';
+                    break;
+            }
+        });
+        let answer_content = '';
+        if (quest.input_type == 'photo') { answer_content = '<img class="preview-img" src="' + quest.answer + '">'; } else { answer_content=quest.answer }
+        let row = '<tr><td>' + question_content + '</td>'
+        + '<td>' + (answer_content || 'Nessuna') + '</td>'
         + '<td>' + quest.comment + '</td>'
-        + '<td>' + quest.quest_score + '</td></tr>';
-        i++;
+        + '<td>' + (quest.quest_score ||(quest.corrected ? '0' : 'Non valutata')) + '</td></tr>';
+        body += row;
     });
     body+='</tbody></table></div>';
     $('#main-placeholder').append(header + body);
@@ -182,6 +194,8 @@ function setCorrectionPane(data) {
 
     $('#variable-answer').css({ 'height': '10vh' });
     let body = "";
+    let imgs = [];
+    let has_img = [];
     if (data.pending_count > 0) {
         data.quest_list.forEach((quest) => {
             let i = data.quest_list.indexOf(quest);
@@ -190,36 +204,58 @@ function setCorrectionPane(data) {
                 //Attach header:
                 let quest_header = '<p class="quest_header">Missione: ' + quest.mission_name + '<br>Attività: ' + quest.activity_name + '</p>';
                 //Attach question:
+                let question_content = '';
+                quest.question.forEach((elem) => {
+                    switch (elem.type) {
+                        case 'image':
+                            question_content += 'Immagine con url: "' + elem.content.url + '".\n';
+                            break;
+                        case 'text':
+                            question_content += elem.content + '\n';
+                            break;
+                        case 'video':
+                            question_content += 'Video con url: "' + elem.content.url + '".\n';
+                            break;
+                    }
+                });
                 let quest_widget = '<div class="description-div">'
-                                    + '<div class="inline-divs">Domanda :'
+                                    + '<div class="inline-divs"> Domanda :'
                                     + '<a id="plus_min_question' + i + '" class="plus_min btn btn-info btn-sm"><span class="glyphicon glyphicon-minus"></span></a>'
                                     + '</div>'
                                     + '<div class="inline-divs" id="question' + i + '">'
-                                    + '<p>' + quest.question + '</p>'
+                                    + '<p>' + question_content + '</p>'
                                     + '</div>'
                                     + '<div class="inline-divs">'
                                     + '</div>'
                                     + '</div>';
 
                 //Define answer html
-                let var_answr;
-                switch (quest.input_type) {
-                    case 'text':
-                        var_answr = '<p>' + quest.answer + '</p>';
-                        break;
-                    case 'img':
-                        var_answr = '<img src="public/pending_answer/' + quest.answer + '" class="img-fluid img-thumbnail" alt="Responsive image">';
-                        $('#variable-answer').css({ 'height': '50vh' });
-                        break;
+                let answer_content;
+                if (quest.input_type == 'photo') {
+                    has_img[i] = true;
+                    let img = document.createElement('img');
+                    img.setAttribute('id', 'img' + i);
+                    img.setAttribute('name', 'answer' + i);
+                    img.setAttribute('class', 'preview-img-correction');
+                    img.src = quest.answer;
+                    img.onload = function () {
+                        //Event to resize container of imgs in correction pane 
+                        let h = $(this).css('height');
+                        let name = $(this).attr('name');
+                        $('#'+name).css('height', h);
+                    };
+                    imgs[i] = img;
+                } else {
+                    answer_content = quest.answer;
                 }
                 //Attach answer
                 let answer_widget = '<div class="description-div">'
                                     + '<div class="inline-divs">'
-                                    + 'Risposta :'
+                                    + ' Risposta :'
                                     + '<a id="plus_min_answer' + i + '" class="plus_min btn btn-info btn-sm"><span class="glyphicon glyphicon-minus"></span></a>'
                                     + '</div>'
                                     + '<div class="inline-divs" id="answer' + i + '">'
-                                    + var_answr
+                                    + (answer_content || '')
                                     + '</div>'
                                     + '<div class="inline-divs">'
                                     + '</div>'
@@ -247,8 +283,15 @@ function setCorrectionPane(data) {
         body+='<p class="quest_header">Non ci sono risposte in attesa di valutazione per questo giocatore</p>';
     }
     $('#main-placeholder').append(header + body + '</div>');
+    has_img.forEach((img_el) => {
+        let index = has_img.indexOf(img_el);
+        if (img_el) {
+            document.getElementById('answer' + index).appendChild(imgs[index]);
+        }
+    });
     $('#score-input-1').focus();
 }
+
 //Close the pop-up chat
 function closeChat() {
     document.getElementById("chat").style.display = "none";
@@ -566,7 +609,6 @@ function downloadClassification() {
         }
     });
 }
-
 //Function to download all players stats
 function downloadAllPlayers() {
     $.ajax({
@@ -605,7 +647,6 @@ function download(player) {
     pdf.text(pdf.internal.pageSize.width / 2, 40,
         'ID player: ' + player.id + ' - Nome Player: ' + (player.username || 'Nessuno') + ' - Punteggio Finale: ' + player.score
        , 'center');
-    let add_img = [];
     let table_body = [];
     player.quest_list.forEach((quest) => {
         let question_content = '';
@@ -647,7 +688,6 @@ function setPendingCorrectionList() {
         }
     });
 }
-
 //Request data for correction pane of selected player
 function openCorrectionPane(id) {
     let real_id = id.replace('sidebar-player-', 'player');

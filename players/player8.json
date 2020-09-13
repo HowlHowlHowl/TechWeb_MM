@@ -1,16 +1,16 @@
 {
-  "id": 2,
+  "id": 8,
   "score": 0,
-  "username": "Myriam Molinari",
+  "username": "",
   "current_quest_start_timestamp": [
-    19,
-    40
+    17,
+    42
   ],
-  "current_mission": "Arriviamo a conclusione",
-  "current_activity": "Storia che è un finale ma non arriva alla fine",
+  "current_mission": "Iniziamo",
+  "current_activity": "Che sventura!",
   "help": [],
   "chat": [],
-  "pending_count": 1,
+  "pending_count": 0,
   "story_name": "Le cose stanno così",
   "quest_list": [
     {
@@ -30,7 +30,7 @@
     },
     {
       "mission_name": "Inizio",
-      "activity_name": "Ottimo, avventuriero!",
+      "activity_name": "Che sventura!",
       "corrected": true,
       "question": [
         {
@@ -39,32 +39,6 @@
         }
       ],
       "input_type": "number",
-      "answer": "2020",
-      "comment": "",
-      "quest_score": 1000
-    },
-    {
-      "mission_name": "Arriviamo a conclusione",
-      "activity_name": "Storia che è un finale ma non arriva alla fine",
-      "corrected": false,
-      "question": [
-        {
-          "type": "text",
-          "content": "p1\nChe grande anno per vivere, magari un po' caotico ma sicuramente pieno di comfort per un avventuriero come te, non ti pare?\nQuis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?\n"
-        },
-        {
-          "type": "text",
-          "content": "p2\nLa domanda è: come fanno i delfini a sostare nella galassia per così tanto?"
-        },
-        {
-          "type": "image",
-          "content": {
-            "url": "/public/uploads/pesce.jpg",
-            "descr": "La colpa è vostra e si sa, ma in tanti lo sapevano giààààààààààààà!!!\nAddio, addio addio e grazie, per tutto il pesceeeeeeeeeeeeeeeeeeeeeeee..."
-          }
-        }
-      ],
-      "input_type": "text",
       "answer": "",
       "comment": "",
       "quest_score": 0

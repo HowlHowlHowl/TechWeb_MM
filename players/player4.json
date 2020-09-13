@@ -3,21 +3,13 @@
   "score": 0,
   "username": "",
   "current_quest_start_timestamp": [
-    20,
-    56
+    16,
+    38
   ],
   "current_mission": "Iniziamo",
   "current_activity": "Che sventura!",
   "help": [],
-  "chat": [
-    {
-      "hour": "20",
-      "mins": "56",
-      "text": "Hey bro",
-      "auth": "player4",
-      "seen": false
-    }
-  ],
+  "chat": [],
   "pending_count": 0,
   "story_name": "Le cose stanno così",
   "quest_list": [
@@ -47,7 +39,7 @@
         }
       ],
       "input_type": "number",
-      "answer": "",
+      "answer": "1469",
       "comment": "",
       "quest_score": 0
     }
