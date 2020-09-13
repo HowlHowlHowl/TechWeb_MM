@@ -65,6 +65,7 @@
         }
       ],
       "input_type": "text",
+      "answer": "",
       "comment": "",
       "quest_score": 0
     }

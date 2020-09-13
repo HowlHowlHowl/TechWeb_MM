@@ -268,6 +268,7 @@ module.exports = function (app) {
         let id = req.params.id;
         let body = req.body;
         let path = "players/" + id + ".json";
+        console.log(path);
         let data = JSON.parse(fs.readFileSync(path));
 
         data.current_quest_start_timestamp[0] = body.hour;

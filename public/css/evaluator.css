@@ -154,14 +154,23 @@ body {
 .panel-default {
     margin-left: 20vw;
 }
-
+.panel-body {
+    height:80vh;
+    overflow-y:auto;
+}
+.history-table {
+    margin-bottom:3vh;
+    margin-right:3vh;
+}
 #correction-header, #history-header {
     text-align: center;
     font-size: 4vh;
     background-color: rgba(66, 139, 202, 0.77);
     color: white;
 }
-
+.preview-img-correction{
+    width:100%;
+}
 #correction-pane {
     padding-left: 1vw;
     padding-right: 1vw;
@@ -171,7 +180,6 @@ body {
 }
 
 .description-div {
-    max-height: 30vh;
     margin-bottom: 1vh
 }
 
@@ -262,7 +270,8 @@ body {
 }
 
 .inline-divs:nth-child(2) > p {
-    font-size: 1.5vh;
+    font-size: 2vh;
+    font-weight:500;
     margin: .5vw;
 }
 
@@ -299,7 +308,11 @@ body {
     margin: 25vh 25vw 25vh 25vw;
     border: white 2px solid;
 }
-
+#history-button {
+    bottom: 2vh;
+    left: 2vh;
+    position: absolute;
+}
 .pop-space {
     width: 100%;
     height: 100%;
@@ -453,6 +466,10 @@ td, th {
     font-size:2vh;
     border-right:0;
     border-left:0;
+}
+.preview-img {
+    width:25vh;
+    border: 1px solid black;
 }
 /*Classification*/
 #classification-table > tbody > tr:nth-child(1) > td:nth-child(1) {
