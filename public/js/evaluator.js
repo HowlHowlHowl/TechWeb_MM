@@ -1,8 +1,5 @@
 /*TODO:
-NEI JSON STORIA
-- Messaggi diversi a seconda del contenuto
 PLAYER
-- Messaggio conclusivo a seconda del punteggio finale
 - Richiesta e risposta d'Aiuto diverso da chat
 */
 
@@ -183,7 +180,6 @@ function setHistory(data) {
 }
 
 //Sets layout of correction panel
-//TODOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO: immagini e video
 function setCorrectionPane(data) {
     classificationOpen = false;
     $('#main-placeholder').empty();
@@ -639,7 +635,9 @@ function downloadPlayer(id) {
 }
 //Download del player tramite JSON
 function download(player) {
-    //TODO: immagini e video fra risposte e domande
+    //TODO: immagini legenda
+    let images = [];
+    let i = 1;
     let pdf = new jsPDF();
     pdf.setFontSize(26);
     pdf.text(pdf.internal.pageSize.width / 2, 20, player.story_name, 'center' );
@@ -653,13 +651,19 @@ function download(player) {
         quest.question.forEach((elem) => {
             switch (elem.type) {
                 case 'image':
-                    question_content += 'Immagine con url "' + elem.content.url + '".' + (elem.content.descr ? '.\n Descrizione: "' + elem.content.descr + '"\n' : '\n');
+                    question_content += '\n*Immagine '+ i + '\n';
+                    images.push({
+                        url: elem.content.url,
+                        index: i,
+                        description: elem.content.descr
+                    });
+                    i++;
                     break;
                 case 'text':
                     question_content += elem.content + '\n';
                     break;
                 case 'video':
-                    question_content += 'Video con url "' + elem.content.url + '".' + (elem.content.descr ? '.\n Descrizione: "' + elem.content.descr + '"\n' : '\n');
+                    question_content += '\nVideo con url "' + elem.content.url + '".' + (elem.content.descr ? '.\n Descrizione: "' + elem.content.descr + '"\n' : '\n');
                     break;
             }
         });
@@ -671,6 +675,26 @@ function download(player) {
         body: table_body,
         margin: { top: 60 }
     });
+
+    let finalY = pdf.lastAutoTable.finalY; 
+    let img_body =  [];
+    images.forEach((img) => {
+        img_body.push([img.index, '']);
+    });
+    pdf.autoTable({
+        head: [['n°', 'Immagine']],
+        body: img_body,
+        margin: { top: finalY },
+        didDrawCell: function (data) {
+            if (data.column.index === 1 && data.cell.section === 'body') {
+                var td = data.cell.raw;
+                var dim = data.cell.height - data.cell.padding('vertical');
+                var textPos = data.cell.textPos;
+                pdf.addImage(img.src, textPos.x, textPos.y, dim, dim);
+            }
+        }
+    });
+    
     pdf.save((player.username || 'player' + player.id) + '.pdf');
 }
 //Richiesta al server dei file con richieste di correzione in attesa
@@ -680,7 +704,7 @@ function setPendingCorrectionList() {
         url: '/pending_answers',
         success: function (data) {
             $('#correction-list').empty();
-            $('#correction-list').append(' <a class="waiting-player list-group-item list-group-item-action disabled" data-toggle="list"  role="tab">Pending Answers</a>');
+            $('#correction-list').append(' <a class="waiting-player list-group-item list-group-item-action disabled" data-toggle="list"  role="tab">Correzioni coda</a>');
             data.forEach(addPendingPlayer);
         },
         error: function (xhr, ajaxOptions, thrownError) {

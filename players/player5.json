@@ -3,24 +3,14 @@
   "score": 0,
   "username": "",
   "current_quest_start_timestamp": [
-    16,
-<<<<<<< HEAD
-    43
+    13,
+    6
   ],
-  "current_mission": "Arriviamo a conclusione",
-  "current_activity": "Storia che è un finale ma non arriva alla fine",
+  "current_mission": "Iniziamo",
+  "current_activity": "Ottimo, avventuriero!",
   "help": [],
   "chat": [],
-  "pending_count": 1,
-=======
-    40
-  ],
-  "current_mission": "",
-  "current_activity": "Fine",
-  "help": [],
-  "chat": [],
-  "pending_count": 2,
->>>>>>> 0ed7301bee90432d4e03ffdc3c07cd315bd2bdb9
+  "pending_count": 0,
   "story_name": "Le cose stanno così",
   "quest_list": [
     {
@@ -52,49 +42,6 @@
       "answer": "2020",
       "comment": "",
       "quest_score": 1000
-    },
-    {
-      "mission_name": "Arriviamo a conclusione",
-      "activity_name": "Storia che è un finale ma non arriva alla fine",
-      "corrected": false,
-      "question": [
-        {
-          "type": "text",
-          "content": "p1\nChe grande anno per vivere, magari un po' caotico ma sicuramente pieno di comfort per un avventuriero come te, non ti pare?\nQuis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?\n"
-        },
-        {
-          "type": "text",
-          "content": "p2\nLa domanda è: come fanno i delfini a sostare nella galassia per così tanto?"
-        },
-        {
-          "type": "image",
-          "content": {
-            "url": "/public/uploads/pesce.jpg",
-            "descr": "La colpa è vostra e si sa, ma in tanti lo sapevano giààààààààààààà!!!\nAddio, addio addio e grazie, per tutto il pesceeeeeeeeeeeeeeeeeeeeeeee..."
-          }
-        }
-      ],
-      "input_type": "text",
-      "comment": "",
-      "quest_score": 0
-<<<<<<< HEAD
-=======
-    },
-    {
-      "mission_name": "Fine",
-      "activity_name": "Fine",
-      "corrected": false,
-      "question": [
-        {
-          "type": "text",
-          "content": "Questa è la storia\nDi uno di noi\nAnche lui nato per caso in via Gluck\nIn una casa, fuori città\nGente tranquilla, che lavorava\nLà dove c'era l'erba ora c'è\nUna città\nE quella casa in mezzo al verde ormai\nDove sarà\nQuesto ragazzo della via Gluck\nSi divertiva a giocare con me\nMa un giorno disse\nVado in città\nE lo diceva mentre piangeva\nIo gli domando amico\nNon sei contento\nVai finalmente a stare in città\nLà troverai le cose che non hai avuto qui\nPotrai lavarti in casa senza andar\nGiù nel cortile\nMio caro amico, disse\nQui sono nato\nIn questa strada\nOra lascio il mio cuore\nMa come fai a non capire\nÈ una fortuna, per voi che restate\nA piedi nudi a giocare nei prati\nMentre là in centro io respiro il cemento\nMa verrà un giorno che ritornerò\nAncora qui\nE sentirò l'amico treno\nChe fischia così\n\"Uah, uah\"\nPassano gli anni\nMa otto son lunghi\nPerò quel ragazzo ne ha fatta di strada\nMa non si scorda la sua prima casa\nOra coi soldi lui può comperarla\nTorna e non trova gli amici che aveva\nSolo case su case\nCatrame e cemento\nLà dove c'era l'erba ora c'è\nUna città, ah\nE quella casa in mezzo al verde ormai\nDove sarà, ah\nNon so, non so\nPerché continuano\nA costruire, le case\nE non lasciano l'erba\nNon lasciano l'erba\nNon lasciano l'erba\nNon lasciano l'erba\nEh no\nSe andiamo avanti così, chissà\nCome si farà\nChissà\nChissà\nCome si farà"
-        }
-      ],
-      "input_type": "photo",
-      "answer": "/public/images/uploads/hackerman.jpg",
-      "comment": "",
-      "quest_score": 0
->>>>>>> 0ed7301bee90432d4e03ffdc3c07cd315bd2bdb9
     }
   ]
 }

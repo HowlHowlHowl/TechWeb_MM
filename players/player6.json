@@ -3,26 +3,15 @@
   "score": 0,
   "username": "",
   "current_quest_start_timestamp": [
-<<<<<<< HEAD
-    16,
-    45
-  ],
-  "current_mission": "",
-  "current_activity": "Inizio",
-=======
-    17,
-    35
+    13,
+    14
   ],
   "current_mission": "Iniziamo",
-  "current_activity": "Che sventura!",
->>>>>>> 0ed7301bee90432d4e03ffdc3c07cd315bd2bdb9
+  "current_activity": "Ottimo, avventuriero!",
   "help": [],
   "chat": [],
   "pending_count": 0,
   "story_name": "Le cose stanno così",
-<<<<<<< HEAD
-  "quest_list": []
-=======
   "quest_list": [
     {
       "mission_name": "Inizio",
@@ -41,7 +30,7 @@
     },
     {
       "mission_name": "Inizio",
-      "activity_name": "Che sventura!",
+      "activity_name": "Ottimo, avventuriero!",
       "corrected": true,
       "question": [
         {
@@ -50,10 +39,9 @@
         }
       ],
       "input_type": "number",
-      "answer": "",
+      "answer": "2020",
       "comment": "",
-      "quest_score": 0
+      "quest_score": 1000
     }
   ]
->>>>>>> 0ed7301bee90432d4e03ffdc3c07cd315bd2bdb9
 }
