@@ -3,8 +3,13 @@
   "score": 0,
   "username": "",
   "current_quest_start_timestamp": [
+<<<<<<< HEAD
+    16,
+    53
+=======
     17,
     42
+>>>>>>> 0ed7301bee90432d4e03ffdc3c07cd315bd2bdb9
   ],
   "current_mission": "Iniziamo",
   "current_activity": "Che sventura!",

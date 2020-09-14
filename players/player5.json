@@ -4,6 +4,15 @@
   "username": "",
   "current_quest_start_timestamp": [
     16,
+<<<<<<< HEAD
+    43
+  ],
+  "current_mission": "Arriviamo a conclusione",
+  "current_activity": "Storia che è un finale ma non arriva alla fine",
+  "help": [],
+  "chat": [],
+  "pending_count": 1,
+=======
     40
   ],
   "current_mission": "",
@@ -11,6 +20,7 @@
   "help": [],
   "chat": [],
   "pending_count": 2,
+>>>>>>> 0ed7301bee90432d4e03ffdc3c07cd315bd2bdb9
   "story_name": "Le cose stanno così",
   "quest_list": [
     {
@@ -67,6 +77,8 @@
       "input_type": "text",
       "comment": "",
       "quest_score": 0
+<<<<<<< HEAD
+=======
     },
     {
       "mission_name": "Fine",
@@ -82,6 +94,7 @@
       "answer": "/public/images/uploads/hackerman.jpg",
       "comment": "",
       "quest_score": 0
+>>>>>>> 0ed7301bee90432d4e03ffdc3c07cd315bd2bdb9
     }
   ]
 }

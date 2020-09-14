@@ -14,7 +14,7 @@
 	<!--Internal dipendecies-->
 	<link rel="stylesheet" href="/public/css/chat.css">
 	<script type="text/javascript">
-		var player_id = null;//9; //TODO null e riattivare l'assegnamento
+		var player_id = null;
 		var index = null;
 		var next_index = 0;
 		var storyJSON = null;
@@ -185,28 +185,21 @@
                 }
                 if (elem.type == 'video') {
 					var video = document.createElement('video');
-					var descr = document.createElement('p');
                     var source = document.createElement('source');
 					source.setAttribute('src', elem.url);
                     video.setAttribute('width', '400');
                     video.setAttribute('controls', '');
 					video.appendChild(source);
-                    video.setAttribute('class', 'to_del');
-					descr.setAttribute('class', 'to_del');
-					descr.textContent = elem.description;
+					video.setAttribute('class', 'to_del');
+					video.setAttribute('alt', elem.description);
                     $('.video').append(video);
-                    $('.div-grande-video').append(descr);
                 }
                 if (elem.type == 'image') {
 					var image = document.createElement('img');
-                    var descr = document.createElement('p');
                     image.setAttribute('src', elem.url);
                     image.setAttribute('alt', elem.description);
 					image.setAttribute('width', '400');
                     image.setAttribute('class', 'to_del');
-					descr.setAttribute('class', 'to_del');
-                    descr.textContent = elem.description;
-                    $('.div-grande-img').append(descr);
                     $('.img').append(image);
                 }
 			});
@@ -214,13 +207,22 @@
             if (storyJSON.activities[next_index].input_type == 'photo') {
                 $('#footer').append('<label for="input-immagine" class="input custom-file-upload">'
                     + '<span class="glyphicon glyphicon-cloud-upload"></span> Carica Foto</label >'
-                    + '<input id="input-immagine" type="file"/>');
+					+ '<input id="input-immagine" type="file"/>');
+				$('label[for="input-immagine"]').focus();
 
             } else if (storyJSON.activities[next_index].input_type == 'number') {
 				$('#footer').append('<input id="input-num" class="input" type="number">');
-            } else if (storyJSON.activities[next_index].input_type == 'text') {
-                $('#footer').append('<textarea id="input-text"');
+                $('#input-num').focus();
+			} else if (storyJSON.activities[next_index].input_type == 'text') {
+
+				$('#footer').append(
+					`<div class="inner-addon left-addon">
+							 <b class= "glyphicon glyphicon-pencil"></b>
+						<input type="text" id=input-text class="form-control" placeholder="Risposta"/>		  
+					</div>`);
+                $('#input-text').focus();
 			}
+            
             $('#footer').append('<button id="bottone-avanti" class="input" type="button" class="btn btn-light">Avanti</button>');
 			let date = new Date();
 			let hour = date.getHours();
@@ -253,15 +255,34 @@
 			});
         }
 		$(document).on('click', '#bottone-avanti', function () {
-			if (storyJSON.activities[index].input_type == 'photo') {
-				//In caso di success di uploadFile vengono invocate check input e setWindows
-				uploadFile($('#input-immagine')[0].files[0]);
+			if (isInputValid()) {
+				if (storyJSON.activities[index].input_type == 'photo') {
+					//In caso di success di uploadFile vengono invocate check input e setWindows
+					uploadFile($('#input-immagine')[0].files[0]);
+				} else {
+					checkInput();
+					setWindow();
+				}
 			} else {
-				// TODO controllare se gli input sono pieni
-				checkInput();
-				setWindow(); 
+				//Non accade nulla
 			}
 		});
+		function isInputValid() {
+			let input_type = storyJSON.activities[index].input_type;
+			console.log(input_type);
+			switch (input_type) {
+				case 'photo':
+					if ($('#input-immagine')[0].files.lenght == 0)
+						return false;
+					else return true;
+                case 'none':
+                    return true;
+				default:
+					if ($('#input-num').val() || ($('#input-text').val()))
+						return true;
+					else return false;
+			}
+        }
 		//Evento per andare avanti fra le attività con invio
 		$(document).on('keypress', function (key) {
 			if (key.which == 13) {
@@ -417,15 +438,28 @@
 			font-style: normal;
 			font-display: swap;
 		}
+        /*TAg*/
+        img {
+            object-fit: contain;
+            width: 100%;
+            height: auto;
+        }
 
+        video {
+            width: 100%;
+        }
+
+        body {
+            background-color: #007bff;
+        }
 		h1 {
 			font-size: 11vh;
 			text-align: center;
 			color: white;
-			margin-top: 2vh;
 			font-family: "All The Roll";
+			line-height: .9;
 		}
-		/* TODO padding auto per riempire lo spazio del div grande */
+		/*classi e id*/
 		#div-grande {
 			border: 3px #007bff solid;
 			height: 70vh;
@@ -433,19 +467,17 @@
 			background-color: white;
 			width: 80%;
 			margin: auto;
-			margin-bottom: 2vh;
 			padding: 1vh;
-			border: solid 1px black;
+			border-radius: 2vh;
 		}
-
 		.bottonechat {
-			bottom: 0;
-			right: 0;
-			position: fixed;
 			font-size: 3vh;
 			margin-right: 0.5vw;
+			border-radius: 0;
+			border: 1px solid black;
+			border-top: 0;
+			border-left: 0;
 		}
-
 		#nome-attivita {
 			text-align: center;
 			font-size: 2.5vh;
@@ -467,70 +499,91 @@
 			text-align: justify;
 			font-family: 'Helvetica Neue LT Std';
 		}
-
-		#footer {
-			width: 100%;
-			text-align: center;
-		}
-
 		.img {
 			text-align: center;
 			vertical-align: middle;
 			border-style: none;
 		}
-
-		img {
-			object-fit: contain;
-			width: 100%;
-			height: auto;
-		}
-
-		body {
-			background-color: #007bff;
-		}
-		/*Input*/
-		.input {
-			margin: 3vh;
+        /*spazio che contiene gli input*/
+        #footer {
+            width: 100%;
+            text-align: center;
+        }
+		/*INPUT: */
+		.input { /*tutti gli input*/
+			margin: 1.5vh;
 			font-size: 3vh;
+			border: black solid 1px;
 		}
-
-		input[type="file"] {
-			display: none;
+		/*input delle risposte*/
+		/*placeholder è la scritta inside all'input*/
+		#input-text::placeholder {
+			font-weight: bold;
+			font-style: italic;
 		}
-
-		.custom-file-upload {
-			background: white;
-			display: inline-block;
-			cursor: pointer;
-			padding: 1px 6px;
-			border: 2px outset gray;
-			font-weight: normal;
-		}
-
-		#input-num {
-		}
-
-		#input-text {
-		}
-
-		#bottone-avanti {
-		}
+        #bottone-avanti {
+            border: 1px black solid;
+            font-size: 2.5vh;
+            border-radius: 0.5vh;
+            font-weight: bold;
+			margin: 2vh;
+        }
+        /*INPUT TEXT + GLYPHICON*/
+        /*Bootstrap layout per avere l'icona dentro all'input*/
+        .inner-addon {
+            position: relative;
+            width: 20vh;
+            margin-left: auto;
+            margin-right: auto;
+            display: inline-block;
+        }
+        .glyphicon-pencil.glyphicon-pencil:before {
+            bottom: 0.5vh;
+            position: relative;
+        }
+        /* style icon */
+        .inner-addon .glyphicon {
+            position: absolute;
+            padding: 10px;
+        }
+        /* align icon */
+        .left-addon .glyphicon {
+            left: 0px;
+        }
+        /* add padding  */
+        .left-addon input {
+            padding-left: 30px;
+        }
+        /*UPLOAD dei FILE (immagini)*/
+        .custom-file-upload {
+            background: white;
+            display: inline-block;
+            cursor: pointer;
+            padding: 1px 6px;
+            border: 1px black solid;
+            font-weight: bold;
+            font-size: 2.5vh;
+            border-radius: 0.5vh;
+        }
+		/*per nascondere l'input dell'immagine xkè se no è un obrobrio*/
+        input[type="file"] {
+            display: none;
+        }
+		/*preview dell'immagine caricata*/
 		#preview {
 			width:10vw;
 			position: absolute;
 			margin: auto;
 			left: 0;
-		}
+		}	
 	</style>
 </head>
 <body>
-
 	<div id="generico">
 		<button type="button" id="chat-button" class="btn btn-light bottonechat">Chat</button>
 	</div>
 	<h1></h1>
 	<div id="div-grande">
-
 		<!--TITOLO MISSIONE-->
 		<div id="nome-missione">
 		</div>
@@ -539,7 +592,6 @@
 		<!--TESTO ATTIVITA VISUALIZZATA-->
 		<div class="testo-attivita">
 		</div>
-
 		<!--SPAZIO VIDEO-->
 		<div class="div-grande-video">
 			<div class="video">

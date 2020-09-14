@@ -3,15 +3,26 @@
   "score": 0,
   "username": "",
   "current_quest_start_timestamp": [
+<<<<<<< HEAD
+    16,
+    45
+  ],
+  "current_mission": "",
+  "current_activity": "Inizio",
+=======
     17,
     35
   ],
   "current_mission": "Iniziamo",
   "current_activity": "Che sventura!",
+>>>>>>> 0ed7301bee90432d4e03ffdc3c07cd315bd2bdb9
   "help": [],
   "chat": [],
   "pending_count": 0,
   "story_name": "Le cose stanno così",
+<<<<<<< HEAD
+  "quest_list": []
+=======
   "quest_list": [
     {
       "mission_name": "Inizio",
@@ -44,4 +55,5 @@
       "quest_score": 0
     }
   ]
+>>>>>>> 0ed7301bee90432d4e03ffdc3c07cd315bd2bdb9
 }

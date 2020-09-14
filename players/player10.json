@@ -3,6 +3,18 @@
   "score": 0,
   "username": "",
   "current_quest_start_timestamp": [
+<<<<<<< HEAD
+    16,
+    53
+  ],
+  "current_mission": "",
+  "current_activity": "Inizio",
+  "help": [],
+  "chat": [],
+  "pending_count": 0,
+  "story_name": "Le cose stanno così",
+  "quest_list": []
+=======
     20,
     19
   ],
@@ -84,4 +96,5 @@
       "quest_score": 0
     }
   ]
+>>>>>>> 0ed7301bee90432d4e03ffdc3c07cd315bd2bdb9
 }
