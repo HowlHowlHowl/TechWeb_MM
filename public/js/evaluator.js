@@ -635,7 +635,7 @@ function downloadPlayer(id) {
 }
 //Download del player tramite JSON
 function download(player) {
-    //TODO: immagini legenda
+    //TODO: IMMAGINI immagini legenda
     let images = [];
     let i = 1;
     let pdf = new jsPDF();
@@ -673,29 +673,47 @@ function download(player) {
     pdf.autoTable({
         head: [['Missione', 'Attività', 'Domanda', 'Risposta', 'Commento', 'Punteggio']],
         body: table_body,
-        margin: { top: 60 }
+        margin: { top: 60, left:10, right:10 }
     });
 
     let finalY = pdf.lastAutoTable.finalY; 
     let img_body =  [];
     images.forEach((img) => {
-        img_body.push([img.index, '']);
+        img_body.push([img.index, ' ']);
     });
     pdf.autoTable({
         head: [['n°', 'Immagine']],
         body: img_body,
-        margin: { top: finalY },
+        margin: { top: finalY, left:10, right:10  },
         didDrawCell: function (data) {
+            let i = 0;
             if (data.column.index === 1 && data.cell.section === 'body') {
-                var td = data.cell.raw;
-                var dim = data.cell.height - data.cell.padding('vertical');
-                var textPos = data.cell.textPos;
-                pdf.addImage(img.src, textPos.x, textPos.y, dim, dim);
+                var img = new Image();
+                img.onload = function () {
+                    pdf.addImage(getDataUrl(img), data.cell.x, data.cell.y, data.cell.height, data.cell.width);
+                }
+                img.src = images[i].url;
+                i++;
             }
+        },
+        columnStyles: {
+            Immagine: { cellWidth: 100 }
+        },
+        styles: {
+            minCellHeight :50
         }
     });
-    
     pdf.save((player.username || 'player' + player.id) + '.pdf');
+}
+function getDataUrl(img) {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = img.width;
+    canvas.height = img.height;
+
+    ctx.drawImage(img, 0, 0);
+    return canvas.toDataURL('image/jpeg');
 }
 //Richiesta al server dei file con richieste di correzione in attesa
 function setPendingCorrectionList() {

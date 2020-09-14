@@ -190,7 +190,6 @@ module.exports = function (app) {
         let data = req.body;
         let path = 'players/' + id + '.json';
         let content = JSON.parse(fs.readFileSync(path));
-        console.log(data.index);
         content.quest_list[data.index].corrected = true;
         content.quest_list[data.index].quest_score = Number(data.score);
         content.quest_list[data.index].comment = data.comment;
@@ -233,7 +232,7 @@ module.exports = function (app) {
             files.forEach(function (file) {
                 var id = file.replace('player', '');
                 id = id.replace('.json', '');
-                if (Number(id) > next_id) {
+                if (Number(id) >= next_id) {
                     next_id = Number(id) + 1;
                 }
             });
@@ -268,7 +267,6 @@ module.exports = function (app) {
         let id = req.params.id;
         let body = req.body;
         let path = "players/" + id + ".json";
-        console.log(path);
         let data = JSON.parse(fs.readFileSync(path));
 
         data.current_quest_start_timestamp[0] = body.hour;
