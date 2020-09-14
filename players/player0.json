@@ -1,16 +1,16 @@
 {
-  "id": 3,
-  "score": 0,
+  "id": 0,
+  "score": 1000,
   "username": "",
   "current_quest_start_timestamp": [
     19,
-    42
+    34
   ],
-  "current_mission": "Arriviamo a conclusione",
-  "current_activity": "Storia che è un finale ma non arriva alla fine",
+  "current_mission": "",
+  "current_activity": "Fine",
   "help": [],
   "chat": [],
-  "pending_count": 1,
+  "pending_count": 2,
   "story_name": "Le cose stanno così",
   "quest_list": [
     {
@@ -65,6 +65,22 @@
         }
       ],
       "input_type": "text",
+      "answer": "ciao",
+      "comment": "",
+      "quest_score": 0
+    },
+    {
+      "mission_name": "Fine",
+      "activity_name": "Fine",
+      "corrected": false,
+      "question": [
+        {
+          "type": "text",
+          "content": "Questa è la storia\nDi uno di noi\nAnche lui nato per caso in via Gluck\nIn una casa, fuori città\nGente tranquilla, che lavorava\nLà dove c'era l'erba ora c'è\nUna città\nE quella casa in mezzo al verde ormai\nDove sarà\nQuesto ragazzo della via Gluck\nSi divertiva a giocare con me\nMa un giorno disse\nVado in città\nE lo diceva mentre piangeva\nIo gli domando amico\nNon sei contento\nVai finalmente a stare in città\nLà troverai le cose che non hai avuto qui\nPotrai lavarti in casa senza andar\nGiù nel cortile\nMio caro amico, disse\nQui sono nato\nIn questa strada\nOra lascio il mio cuore\nMa come fai a non capire\nÈ una fortuna, per voi che restate\nA piedi nudi a giocare nei prati\nMentre là in centro io respiro il cemento\nMa verrà un giorno che ritornerò\nAncora qui\nE sentirò l'amico treno\nChe fischia così\n\"Uah, uah\"\nPassano gli anni\nMa otto son lunghi\nPerò quel ragazzo ne ha fatta di strada\nMa non si scorda la sua prima casa\nOra coi soldi lui può comperarla\nTorna e non trova gli amici che aveva\nSolo case su case\nCatrame e cemento\nLà dove c'era l'erba ora c'è\nUna città, ah\nE quella casa in mezzo al verde ormai\nDove sarà, ah\nNon so, non so\nPerché continuano\nA costruire, le case\nE non lasciano l'erba\nNon lasciano l'erba\nNon lasciano l'erba\nNon lasciano l'erba\nEh no\nSe andiamo avanti così, chissà\nCome si farà\nChissà\nChissà\nCome si farà"
+        }
+      ],
+      "input_type": "photo",
+      "answer": "/public/images/uploads/83780703_10216642471196590_2357141939683328000_n.jpg",
       "comment": "",
       "quest_score": 0
     }
