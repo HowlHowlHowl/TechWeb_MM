@@ -185,7 +185,7 @@ module.exports = function (app) {
         });
     });
     //Aggiorna la correzione di una quest per player=id
-    app.post('/submit_answer/:id', function (req, res) {
+    app.post('/submit_correction/:id', function (req, res) {
         let id = req.params.id;
         let data = req.body;
         let path = 'players/' + id + '.json';
@@ -207,7 +207,7 @@ module.exports = function (app) {
         });
     });
     //Upload photo to the server and return full path, FORSE NON SERVE INDEX
-    app.post('/players/upload_photo/:id/:index', function (req, res) {
+    app.post('/players/upload_photo/:id', function (req, res) {
         let form = new formidable.IncomingForm();
         let name = req.params.id;
         form.parse(req);
@@ -285,7 +285,6 @@ module.exports = function (app) {
             }
         });
     });
-    //TO DEBUG FORTE TANTO ESCE L'ERRORE
     // serve al player per inviare le risposte da valutare
     app.put("/players/add_answer/:id", function (req, res) {
         let id = req.params.id;
@@ -295,13 +294,16 @@ module.exports = function (app) {
         data.quest_list.push(body);
         if (body.corrected == false) {
             data.pending_count++;
+        } else {
+            data.score += body.quest_score;
         }
         fs.writeFile(path, JSON.stringify(data, null, 2), function (err) {
             if (err) {
                 res.status(500).send();
-            }
-            else {
-                res.status(200).send();
+            } else {
+                res.writeHead(200, { 'Content-Type': 'application/json' });
+                res.write(JSON.stringify(data, null, 2));
+                res.end();
             }
         });
     });

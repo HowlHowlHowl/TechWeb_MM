@@ -555,7 +555,7 @@ function submitCorrection(data) {
     $.ajax({
         type: "POST",
         contentType: "application/json",
-        url: "/submit_answer/" + currentCorrectionPlayerId,
+        url: "/submit_correction/" + currentCorrectionPlayerId,
         data: JSON.stringify(data),
         success: function (data) {
             //In caso di successo riceve i dati del player aggiornati

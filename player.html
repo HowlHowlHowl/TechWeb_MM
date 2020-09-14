@@ -14,13 +14,21 @@
 	<!--Internal dipendecies-->
 	<link rel="stylesheet" href="/public/css/chat.css">
 	<script type="text/javascript">
+		/*TODO:
+			Update di correzioni => score 
+			Notifica di messaggi in interval aggiornamento
+			Notifica e visualizzazione di HELP
+		*/ 
 		var player_id = null;
 		var index = null;
 		var next_index = 0;
 		var storyJSON = null;
 		var answer = "";
 		var isChatOpen = false;
+		var isTextWindowOpen = false;
 		$(document).ready(function () {
+            $('#score').text('Score: 0');
+            blinkNotify('#score');
             // richiesta storia
             var url_string = window.location.href;
             var url = new URL(url_string);
@@ -30,7 +38,7 @@
                 url: '/stories/' + id,
                 success: function (data) {
                     storyJSON = data;
-                    setPlayer(storyJSON);//
+                    setPlayer(storyJSON);
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
                     alert(xhr.status + ' - ' + thrownError);
@@ -47,11 +55,23 @@
 				success: function (id) {
 					player_id = id;
 					setWindow();
+                    setCurrentQuest();
 				},
 				error: function (xhr, ajaxOptions, thrownError) {
 					alert(xhr.status + ' - ' + thrownError);
 				}
 			});
+        }
+        //Make the notification mark blink
+        function blinkNotify(selector) {
+            var element = $(selector);
+            setInterval(function () {
+                element.fadeIn(500, function () {
+                    element.fadeOut(500, function () {
+                        element.fadeIn(1000);
+                    });
+                });
+            }, 2000);
         }
 
 		// Questa funzione serve a controllare l'eventuale input dell'attività attuale
@@ -62,6 +82,8 @@
 			let questionArray = [];
 			let type = storyJSON.activities[index].input_type;
 			next_index = storyJSON.activities[index].input.next_index;
+
+            $('#err-msg').remove();
 			// storyJSON (è il file della storia trasformato in un'oggetto (JSON della storia)) . <--- serve per accedere ai campi delle storie
 			// 'activities' è un'array [index] accedi all'attività attuale .input_type <--- è un campo dell'oggetto dell'array
             if (type == 'photo') {
@@ -82,6 +104,8 @@
 					if (score == 0) {
                         if (storyJSON.activities[index].input.wrong_stay) {
 							next_index = index;
+							$('#div-grande').append('<p id="err-msg">' + (storyJSON.activities[index].input.wrong_message || 'Riprova') + '</p>');
+							scrollToBottom('div-grande');
 						} else {
                             next_index = (storyJSON.activities[index].input.wrong_next_index || next_index);
 						}
@@ -92,16 +116,18 @@
 				}
 			}
 			else if (type == 'text') {
-				answer = $('input-text').val();
+				answer = $('#input-text').val();
 				if (storyJSON.activities[index].input.evaluation_type == 'correct') {
 					storyJSON.activities[index].input.correct_options.forEach((option) => {
-						if (answer.toLowerCase().replace(' ', '') == option.text.toLowerCase().replace(' ', '')) {
+						if (answer.toLowerCase().replace(' ', '').localeCompare(option.text.toLowerCase().replace(' ', ''))==0) {
 							score = option.points;
 						}
 					});
 					if (score == 0) {
                         if (storyJSON.activities[index].input.wrong_stay) {
-							next_index = index;
+                            next_index = index;
+							$('#div-grande').append('<p id="err-msg">' + (storyJSON.activities[index].input.wrong_message || 'Riprova') + '</p>');
+                            scrollToBottom('div-grande');
 						} else {
 							next_index = (storyJSON.activities[index].input.wrong_next_index || next_index);
 						}
@@ -163,7 +189,12 @@
 				type: 'PUT',
 				contentType: 'application/json',
 				data: JSON.stringify(answer_data),
-				success: function (data) {},
+				success: function (data) {
+                    setWindow();
+                    setCurrentQuest();
+					$('#score').text('Score: ' + data.score);
+					blinkNotify('#score');
+				},
                 error: function (xhr, ajaxOptions, thrownError) {
                     alert(xhr.status + ' - ' + thrownError);
                 }
@@ -204,34 +235,48 @@
                 }
 			});
 			$('#footer').empty();
-            if (storyJSON.activities[next_index].input_type == 'photo') {
-                $('#footer').append('<label for="input-immagine" class="input custom-file-upload">'
-                    + '<span class="glyphicon glyphicon-cloud-upload"></span> Carica Foto</label >'
-					+ '<input id="input-immagine" type="file"/>');
-				$('label[for="input-immagine"]').focus();
 
-            } else if (storyJSON.activities[next_index].input_type == 'number') {
-				$('#footer').append('<input id="input-num" class="input" type="number">');
-                $('#input-num').focus();
-			} else if (storyJSON.activities[next_index].input_type == 'text') {
+			let isSpecial = storyJSON.activities[next_index].special;
+			if (!isSpecial) {
+				if (storyJSON.activities[next_index].input_type == 'photo') {
+					$('#footer').append('<label for="input-immagine" class="input custom-file-upload">'
+						+ '<span class="glyphicon glyphicon-cloud-upload"></span> Carica Foto</label >'
+						+ '<input id="input-immagine" type="file"/>');
+					$('label[for="input-immagine"]').focus();
 
-				$('#footer').append(
-					`<div class="inner-addon left-addon">
-							 <b class= "glyphicon glyphicon-pencil"></b>
-						<input type="text" id=input-text class="form-control" placeholder="Risposta"/>		  
+				} else if (storyJSON.activities[next_index].input_type == 'number') {
+					$('#footer').append('<input id="input-num" class="input" type="number">');
+					$('#input-num').focus();
+				} else if (storyJSON.activities[next_index].input_type == 'text') {
+
+					$('#footer').append(
+						`<div class="inner-addon left-addon">
+							 <a id="icona-fullscreen" class="glyphicon glyphicon-fullscreen"></a>
+						<input type="text" autocomplete="off" id=input-text class="form-control input" placeholder="Risposta"/>		  
 					</div>`);
-                $('#input-text').focus();
-			}
-            
-            $('#footer').append('<button id="bottone-avanti" class="input" type="button" class="btn btn-light">Avanti</button>');
-			let date = new Date();
-			let hour = date.getHours();
-			let minutes = date.getMinutes();
-			index = next_index;
-            setCurrentQuest(hour, minutes);
-
+					$('#input-text').focus();
+				}
+				$('#footer').append('<button id="bottone-avanti" type="button" class="btn btn-light bottone-next">Avanti</button>');
+			} else if (isSpecial == "begin") {
+                $('#footer').append('<button id="bottone-avanti" type="button" class="btn btn-light bottone-next">Inizio</button>');
+			} else if (isSpecial == "end") {
+                $('#footer').append('<button id="bottone-fine" type="button" class="btn btn-light bottone-next">Fine</button>');
+            }
 		}
-		function setCurrentQuest(h, m) {
+
+		//Evento per la fine della storia
+		$(document).on('click', '#bottone-fine', function () {
+			$('.testo-attivita').empty();
+			$('#nome-missione').empty();
+			$('#nome-attivita').empty();
+			$('.testo-attivita').append('<p id="final-text">Grazie per aver giocato!</p>'); 
+			$('#bottone-fine').remove();
+		});
+		function setCurrentQuest() {
+            let date = new Date();
+            let h = date.getHours();
+            let m = date.getMinutes();
+            index = next_index;
 			let mission_index = storyJSON.activities[index].mission_index;
 			let mission_name = '';
 			if (mission_index != null) {
@@ -253,7 +298,28 @@
                     alert(xhr.status + ' - ' + thrownError);
                 }
 			});
-        }
+		}
+		//Evento per mettere in fullscreen l'input di testo
+		$(document).on('click', '#icona-fullscreen', function () {
+			//Questo serve a ignorare la pressione del pulsante invio nel caso la finestra di testo sia aperta (isTextWindowOpen)
+            isTextWindowOpen = true;
+			$('#input-text').attr('disabled', true);
+			$('#bottone-avanti').attr('disabled', true);
+			$('#window-input-text').remove();
+			$('body').append(`<div id="window-input-text"><textarea></textarea><button>Fatto</button></div>`);
+			$('#window-input-text > textarea').val($('#input-text').val());
+			$('#window-input-text > textarea').focus();
+		});
+        //Evento per confermare il testo tramite il pulsante Fatto
+		$(document).on('click', '#window-input-text > button', function () {
+			//Questo serve a ignorare la pressione del pulsante invio nel caso la finestra di testo sia aperta (isTextWindowOpen)
+            isTextWindowOpen = false;
+			$('#input-text').attr('disabled', false);
+			$('#bottone-avanti').attr('disabled', false);
+			$('#input-text').val($('#window-input-text > textarea').val().replace('\n', ' '));	
+            $('#window-input-text').remove();
+        });
+		//Evento per cambiare attività
 		$(document).on('click', '#bottone-avanti', function () {
 			if (isInputValid()) {
 				if (storyJSON.activities[index].input_type == 'photo') {
@@ -261,7 +327,7 @@
 					uploadFile($('#input-immagine')[0].files[0]);
 				} else {
 					checkInput();
-					setWindow();
+					
 				}
 			} else {
 				//Non accade nulla
@@ -286,7 +352,7 @@
 		//Evento per andare avanti fra le attività con invio
 		$(document).on('keypress', function (key) {
 			if (key.which == 13) {
-				if (!isChatOpen) {
+				if (!isChatOpen && !isTextWindowOpen) {
 					$('#bottone-avanti').click();
 				}
 			}
@@ -306,12 +372,17 @@
 			img.setAttribute('src', (window.URL ? URL : webkitURL).createObjectURL($('#input-immagine')[0].files[0]));
 			img.setAttribute('id', 'preview');
 			document.getElementById('footer').insertBefore(img, document.getElementById('bottone-avanti'));
+            $('.custom-file-upload').css({
+                "border-top-right-radius": "0",
+				"border-bottom-right-radius": "0",
+				"margin-right": "0",	
+            });
 		});
 
         function uploadFile(file) {
 			let fd = new FormData();
             fd.append(file.name, file);
-			let path = '/players/upload_photo/' + 'player' + player_id + '/' + index;
+			let path = '/players/upload_photo/' + 'player' + player_id;
             $.ajax({
 				accepts: 'application/json',
 				url: path,
@@ -322,7 +393,6 @@
                 success: function (data) {
                 	answer = data.url;
                 	checkInput();
-                	setWindow();
 				},
                 error: function (xhr, ajaxOptions, thrownError) {
                     alert(xhr.status + ' - ' + thrownError);
@@ -357,7 +427,7 @@
         		success: function (data) {
         			setChatView(data);
         			markAsSeen(id);
-        			scrollToBottom();
+                    scrollToBottom('chat-msgs');
         			$('#new_msg_text').focus();
         		},
         		error: function (xhr, ajaxOptions, thrownError) {
@@ -419,14 +489,33 @@
         	});
         }
         //Scroll to the last received message in the current chat
-        function scrollToBottom() {
-        	let chatVBox = document.getElementById('chat-msgs');
+        function scrollToBottom(id) {
+        	let chatVBox = document.getElementById(id);
         	chatVBox.scrollTop = chatVBox.scrollHeight;
         }
         //Event to open chat with selected player
-        $(document).on('click', '#chat-button', function (event) {
+        $(document).on('click', '#chat-button', function() {
         	openChat('player' + player_id);
-        });
+		});
+        //Chat update every second 
+		setInterval(function () {
+			if (isChatOpen) {
+				openChat(currentChatPlayerId);
+			} else {
+				//TODO:	inserire notifica.
+            }
+        }, 1000);
+
+
+		/* Funzioni per HELP */
+		//Evento per il pulsante help
+		$(document).on('click', '#help-button', function () {
+			openHelp('player' + player_id);
+		});
+		// evento che apre la finestra di aiuto
+		function openHelp(player) {
+
+        }
 	</script>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -438,7 +527,7 @@
 			font-style: normal;
 			font-display: swap;
 		}
-        /*TAg*/
+        /*Tag*/
         img {
             object-fit: contain;
             width: 100%;
@@ -450,28 +539,45 @@
         }
 
         body {
-            background-color: #007bff;
+            background-color: #9932CC;
         }
 		h1 {
 			font-size: 11vh;
 			text-align: center;
 			color: white;
 			font-family: "All The Roll";
-			line-height: .9;
+			line-height: .7;
 		}
 		/*classi e id*/
-		#div-grande {
-			border: 3px #007bff solid;
-			height: 70vh;
-			overflow-y: auto;
-			background-color: white;
-			width: 80%;
-			margin: auto;
-			padding: 1vh;
-			border-radius: 2vh;
-		}
+        #div-grande {
+            border: 3px #9932CC solid;
+            height: 70vh;
+            overflow-y: auto;
+            background-color: white;
+            min-width: 80%;
+            max-width: 80%;
+            margin: auto;
+            padding: 1vh;
+            border-radius: 2vh;
+        }
+        .bottonecorrezioni {
+            font-size: 2.5vh;
+            margin-right: 0.5vw;
+            border-radius: 0;
+            border: 1px solid black;
+            border-top: 0;
+            border-left: 0;
+        }
+        .bottonehelp {
+            font-size: 2.5vh;
+            margin-right: 0.5vw;
+            border-radius: 0;
+            border: 1px solid black;
+            border-top: 0;
+            border-left: 0;
+        }
 		.bottonechat {
-			font-size: 3vh;
+			font-size: 2.5vh;
 			margin-right: 0.5vw;
 			border-radius: 0;
 			border: 1px solid black;
@@ -504,15 +610,22 @@
 			vertical-align: middle;
 			border-style: none;
 		}
+		/*Messaggio di errore*/
+		#err-msg{
+			font-size: 2.5vh;
+			text-align:center;
+			color:red;
+		}
         /*spazio che contiene gli input*/
         #footer {
             width: 100%;
-            text-align: center;
+			text-align: center;
+			vertical-align: middle;
         }
 		/*INPUT: */
 		.input { /*tutti gli input*/
-			margin: 1.5vh;
-			font-size: 3vh;
+			margin: 2vh;
+			font-size: 2.5vh !important;
 			border: black solid 1px;
 		}
 		/*input delle risposte*/
@@ -520,24 +633,75 @@
 		#input-text::placeholder {
 			font-weight: bold;
 			font-style: italic;
+			text-align:center;
 		}
-        #bottone-avanti {
+	
+        .bottone-next {
             border: 1px black solid;
             font-size: 2.5vh;
             border-radius: 0.5vh;
             font-weight: bold;
 			margin: 2vh;
+			vertical-align: top;
+			height:5vh;
+        }
+		#input-num {
+			width: 20vh;
+			height:5vh;
+			margin: 2vh;
+			font-size: 2.5vh;
+			border-radius: 0.5vh;
+		}
+		#input-text {
+			margin:0;
+			height:5vh;
+			border: solid black 1px;
+			border-radius: 0.5vh;
+		}
+        #window-input-text > textarea {
+            width: 100%;
+            height: 34.5vh;
+            margin: auto;
+            background-color: #9932CC;
+            color: white;
+            font-weight: bold;
+            opacity: 0.7;
+            font-size: 3vh;
+        }
+        #window-input-text > button {
+            display: block;
+            width: 100%;
+            margin: auto;
+            font-weight: bold;
+            background-color: #9932CC;
+            color: white;
+            border: 1px solid black;
+            font-size: 2vh;
+            height: 5vh;
+        }
+        #window-input-text {
+            width: 70vw;
+            height: 40vh;
+            margin: auto;
+            position: fixed;
+            top: 37vh;
+			left: 15vw;
+            background-color: white;
+            border: 2px solid white;
         }
         /*INPUT TEXT + GLYPHICON*/
         /*Bootstrap layout per avere l'icona dentro all'input*/
         .inner-addon {
             position: relative;
             width: 20vh;
-            margin-left: auto;
-            margin-right: auto;
+            margin: 2vh;
             display: inline-block;
         }
-        .glyphicon-pencil.glyphicon-pencil:before {
+        a.glyphicon-fullscreen:hover {
+            color: blue;
+            cursor: pointer;
+        }
+        .glyphicon-fullscreen.glyphicon-fullscreen:before {
             bottom: 0.5vh;
             position: relative;
         }
@@ -545,10 +709,13 @@
         .inner-addon .glyphicon {
             position: absolute;
             padding: 10px;
+			font-size: 2.5vh !important;
         }
         /* align icon */
         .left-addon .glyphicon {
-            left: 0px;
+            left: 0;
+			top: 0;
+			padding-left:1.5vh;
         }
         /* add padding  */
         .left-addon input {
@@ -564,23 +731,45 @@
             font-weight: bold;
             font-size: 2.5vh;
             border-radius: 0.5vh;
+			height: 5vh;
+			padding-top:4px;
         }
 		/*per nascondere l'input dell'immagine xkè se no è un obrobrio*/
         input[type="file"] {
             display: none;
         }
 		/*preview dell'immagine caricata*/
-		#preview {
-			width:10vw;
-			position: absolute;
-			margin: auto;
-			left: 0;
-		}	
+        #preview {
+            height: 5vh;
+            width: auto;
+            position: relative;
+            left: 0;
+            bottom: .8vh;
+            opacity: 0.9;
+            border: 1px solid black;
+            border-top-right-radius: 0.5vh;
+            border-bottom-right-radius: 0.5vh;
+        }	
+		#score {
+			float:right;
+			font-size: 3vh;
+			color:white;
+			margin-right:2vh;
+			margin-bottom:0;
+		}
+        #final-text {
+            font-size: 5vh;
+            color: #9932CC;
+			text-align:center;
+        }
 	</style>
 </head>
 <body>
 	<div id="generico">
-		<button type="button" id="chat-button" class="btn btn-light bottonechat">Chat</button>
+		<button type="button" id="help-button" class="btn btn-light bottonehelp bottone">Aiuto</button>
+		<button type="button" id="correzione" class="btn btn-light bottonecorrezioni bottone">Revisioni</button>
+		<button type="button" id="chat-button" class="btn btn-light bottonechat bottone">Chat</button>
+		<p id="score"></p>
 	</div>
 	<h1></h1>
 	<div id="div-grande">
