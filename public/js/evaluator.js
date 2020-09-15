@@ -18,19 +18,13 @@ var downloadsOpen = false;
 - Downloads Window
 */
 
-//APPLICATION UPDATE FUNCTIONS
+//APPLICATION UPDATES FUNCTIONS
 //Chat update every second 
 setInterval(function () {
     if (currentChatPlayerId) {
         openChat(currentChatPlayerId);
     }
 }, 1000);
-
-//Update all data (navbar etc) every half minute
-setInterval(function () {
-    updateAllData();
-}, 30000);
-
 //User tab or Classification update every minute
 setInterval(function () {
     if (currentUserTabId) {
@@ -39,8 +33,8 @@ setInterval(function () {
     if (classificationOpen) {
         openClassification();
     }
+    updateAllData();
 }, 60000);
-
 //Correction pane updated every 5 minutes if no input is given
 setInterval(function () {
     if (currentCorrectionPlayerId) {
@@ -48,7 +42,7 @@ setInterval(function () {
         let update = true;
         let input1 = $('#score-input-' + i);
         let input2 = $('#comment-input-' + i);
-        //Esistono?
+        //Per ogni input presente
         while (input1.length > 0 && input2.length > 0) {
             //Hanno un valore scritto?
             let in1 = input1.val();
@@ -642,78 +636,102 @@ function download(player) {
     pdf.setFontSize(26);
     pdf.text(pdf.internal.pageSize.width / 2, 20, player.story_name, 'center' );
     pdf.setFontSize(16);
-    pdf.text(pdf.internal.pageSize.width / 2, 40,
-        'ID player: ' + player.id + ' - Nome Player: ' + (player.username || 'Nessuno') + ' - Punteggio Finale: ' + player.score
-       , 'center');
+    pdf.text(pdf.internal.pageSize.width / 2, 40, 'ID player: ' + player.id + ' - Nome Player: ' + (player.username || 'Nessuno') + ' - Punteggio Finale: ' + player.score, 'center');
+  
     let table_body = [];
     player.quest_list.forEach((quest) => {
         let question_content = '';
         quest.question.forEach((elem) => {
             switch (elem.type) {
                 case 'image':
-                    question_content += '\n*Immagine '+ i + '\n';
-                    images.push({
-                        url: elem.content.url,
-                        index: i,
-                        description: elem.content.descr
-                    });
-                    i++;
+                    question_content += '\nImmagine con url ' + elem.content.url +'".' + (elem.content.descr ? '.\nDescrizione: "' + elem.content.descr + '"\n' : '\n');
                     break;
                 case 'text':
                     question_content += elem.content + '\n';
                     break;
                 case 'video':
-                    question_content += '\nVideo con url "' + elem.content.url + '".' + (elem.content.descr ? '.\n Descrizione: "' + elem.content.descr + '"\n' : '\n');
+                    question_content += '\nVideo con url "' + elem.content.url + '".' + (elem.content.descr ? '.\nDescrizione: "' + elem.content.descr + '"\n' : '\n');
                     break;
             }
         });
-        table_body.push([quest.mission_name, quest.activity_name, question_content, quest.answer, quest.comment, quest.quest_score]);
+        let answer;
+        if (quest.input_type=='photo') {
+            images.push({
+                url: quest.answer,
+                index: i,
+                loaded: false,
+                y:0
+            });
+            answer = "*Immagine n° " + i;
+            i++;
+        } else {
+            answer = quest.answer;
+        }
+        table_body.push([quest.mission_name, quest.activity_name, question_content, answer, quest.comment, quest.quest_score]);
     });
-               
+    //Autotable dei dati del player      
     pdf.autoTable({
         head: [['Missione', 'Attività', 'Domanda', 'Risposta', 'Commento', 'Punteggio']],
         body: table_body,
-        margin: { top: 60, left:10, right:10 }
+        startY: pdf.pageCount > 1? pdf.autoTableEndPosY() + 20 : 50,
+        margin: { left:10, right:10 }
     });
-
-    let finalY = pdf.lastAutoTable.finalY; 
-    let img_body =  [];
-    images.forEach((img) => {
-        img_body.push([img.index, ' ']);
-    });
-    pdf.autoTable({
-        head: [['n°', 'Immagine']],
-        body: img_body,
-        margin: { top: finalY, left:10, right:10  },
-        didDrawCell: function (data) {
-            let i = 0;
-            if (data.column.index === 1 && data.cell.section === 'body') {
-                var img = new Image();
-                img.onload = function () {
-                    pdf.addImage(getDataUrl(img), data.cell.x, data.cell.y, data.cell.height, data.cell.width);
-                }
-                img.src = images[i].url;
-                i++;
+    
+    //Aggiunta immagini
+    let finalY = 10;
+    var pageHeight = pdf.internal.pageSize.height;
+    pdf.addPage();
+    pdf.setFontSize(26);
+    pdf.text(pdf.internal.pageSize.width / 2, finalY, 'Legenda delle immagini', 'center');
+    pdf.setFontSize(16)
+    finalY += 10;
+    images.forEach((img_el) => {
+        img_el.y = finalY;
+        var img = new Image();
+        img.onload = function () {
+            img_el.loaded = true;
+            let base64url = getDataUrl(img);
+            if (img_el.y + 70 > pageHeight) { pdf.addPage(); img_el.y = 10; finalY = 10; }
+            pdf.text(30, img_el.y + 35, 'Immagine n°' + img_el.index);
+            if (base64url) {
+                pdf.addImage(base64url, 90, img_el.y, 70, 70);
+            } else {
+                pdf.text(10, finalY, 'Non è stato possibile caricare il file.');
             }
-        },
-        columnStyles: {
-            Immagine: { cellWidth: 100 }
-        },
-        styles: {
-            minCellHeight :50
+            let save = true;
+            images.forEach((img_el_check) =>{
+                console.log(img_el_check.loaded);
+                if (img_el_check.loaded == false) {
+                    save = false;
+                }
+            });
+            if (save) { pdf.save((player.username || 'player' + player.id) + '.pdf'); }
         }
+        img.src = img_el.url;
+        finalY += 80;
     });
-    pdf.save((player.username || 'player' + player.id) + '.pdf');
+    
 }
+//Get base 64 url of images for the download
 function getDataUrl(img) {
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
-
     canvas.width = img.width;
     canvas.height = img.height;
-
     ctx.drawImage(img, 0, 0);
-    return canvas.toDataURL('image/jpeg');
+    var path = img.src;
+    var index = path.lastIndexOf("/") + 1;
+    var filename = path.substr(index);
+    let ext = filename.split('.').pop().toLowerCase();
+    switch (ext) {
+        case 'jpg':
+        case 'jpeg':
+            return canvas.toDataURL('image/jpeg');
+        case 'png':
+            return canvas.toDataURL('image/png');
+        default:
+            return null;
+    }
 }
 //Richiesta al server dei file con richieste di correzione in attesa
 function setPendingCorrectionList() {

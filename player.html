@@ -82,7 +82,7 @@
 			let questionArray = [];
 			let type = storyJSON.activities[index].input_type;
 			next_index = storyJSON.activities[index].input.next_index;
-
+			answer = '';
             $('#err-msg').remove();
 			// storyJSON (è il file della storia trasformato in un'oggetto (JSON della storia)) . <--- serve per accedere ai campi delle storie
 			// 'activities' è un'array [index] accedi all'attività attuale .input_type <--- è un campo dell'oggetto dell'array
@@ -178,7 +178,7 @@
                 answer: answer,
 				comment: '',
 				quest_score: Number(score)
-			};
+            };
 			sendAnswerToServer(answer_data);
 		}
 		//Funzione per mandare il descrittore dell'attività completata al server ed aggiungerlo al file del player
@@ -241,7 +241,7 @@
 				if (storyJSON.activities[next_index].input_type == 'photo') {
 					$('#footer').append('<label for="input-immagine" class="input custom-file-upload">'
 						+ '<span class="glyphicon glyphicon-cloud-upload"></span> Carica Foto</label >'
-						+ '<input id="input-immagine" type="file"/>');
+						+ '<input id="input-immagine" type="file" accept="image/*"/>');
 					$('label[for="input-immagine"]').focus();
 
 				} else if (storyJSON.activities[next_index].input_type == 'number') {
@@ -439,7 +439,6 @@
         function closeChat() {
         	isChatOpen = false;
         	document.getElementById("chat").style.display = "none";
-        	currentChatPlayerId = null;
         }
         //Send chat message to the server
         function sendMsg() {
@@ -500,7 +499,7 @@
         //Chat update every second 
 		setInterval(function () {
 			if (isChatOpen) {
-				openChat(currentChatPlayerId);
+				openChat('player'+player_id);
 			} else {
 				//TODO:	inserire notifica.
             }
@@ -762,6 +761,17 @@
             color: #9932CC;
 			text-align:center;
         }
+		/*Chat Viola*/
+		.panel-primary > .panel-heading {
+			background-color: #ae50dc;
+			border-color: #ae50dc;
+		}
+		#send-msg {
+			background-color: #ae50dc;
+		}
+		.sent-msgs {
+			background-color: #9932CC;
+		}
 	</style>
 </head>
 <body>
