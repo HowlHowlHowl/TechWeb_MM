@@ -4,10 +4,10 @@
   "style": "",
   "published": true,
   "canvas_offset": {
-    "x": 50.18541463216227,
-    "y": 17.15555487738741
+    "x": 119.0890960693373,
+    "y": 28.739999389648553
   },
-  "canvas_scale": 1,
+  "canvas_scale": 0.9,
   "missions": [
     {
       "name": "LGBTQ+",
@@ -35,8 +35,8 @@
         "next_index": 2
       },
       "position": {
-        "x": 50,
-        "y": 50
+        "x": -78.88888888888889,
+        "y": 2.2222222222222223
       }
     },
     {
@@ -55,8 +55,8 @@
         "next_index": null
       },
       "position": {
-        "x": 771.9999694824219,
-        "y": 60
+        "x": 875.326436360677,
+        "y": 507.77777777777777
       }
     },
     {
@@ -90,11 +90,11 @@
           }
         ],
         "wrong_stay": false,
-        "wrong_next_index": null
+        "wrong_next_index": 5
       },
       "position": {
-        "x": 268.9999694824219,
-        "y": 125
+        "x": 110.10420057508681,
+        "y": 138.33333333333334
       }
     },
     {
@@ -126,8 +126,8 @@
         "wrong_message": "Ne sei sicuro?"
       },
       "position": {
-        "x": 552.9999694824219,
-        "y": 264
+        "x": 600.652838812934,
+        "y": 34.88194783528646
       }
     },
     {
@@ -142,13 +142,13 @@
       "input_type": "number",
       "input": {
         "evaluation_type": "evaluator",
-        "next_index": null,
+        "next_index": 1,
         "wrong_stay": false,
-        "wrong_next_index": null
+        "wrong_next_index": 3
       },
       "position": {
-        "x": 508.9999694824219,
-        "y": 7
+        "x": 336.7708672417535,
+        "y": 26.999986436631943
       }
     },
     {
@@ -172,11 +172,11 @@
           }
         ],
         "wrong_stay": false,
-        "wrong_next_index": 1
+        "wrong_next_index": 3
       },
       "position": {
-        "x": 61.99032253689236,
-        "y": 409.8854234483507
+        "x": 325.3194512261285,
+        "y": 322.10420396592883
       }
     }
   ],

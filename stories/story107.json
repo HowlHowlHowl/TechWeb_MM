@@ -4,10 +4,10 @@
   "style": "",
   "published": true,
   "canvas_offset": {
-    "x": 192.89740942979552,
-    "y": 160.7730047798869
+    "x": 291.6663538274628,
+    "y": 121.94162070886368
   },
-  "canvas_scale": 0.5314410000000002,
+  "canvas_scale": 0.31381059609000017,
   "missions": [
     {
       "name": "Missione A",
@@ -54,11 +54,11 @@
       "input_type": "none",
       "input": {
         "evaluation_type": "none",
-        "next_index": 9
+        "next_index": 8
       },
       "position": {
-        "x": -156.29855601587303,
-        "y": 260.94972832141667
+        "x": -553.1726763624914,
+        "y": -480.6724918213653
       }
     },
     {
@@ -72,8 +72,8 @@
         "next_index": null
       },
       "position": {
-        "x": 1446.2698866457351,
-        "y": 181.10543261250825
+        "x": 1824.724853515625,
+        "y": 231.87493896484375
       }
     },
     {
@@ -89,11 +89,11 @@
       "input_type": "text",
       "input": {
         "evaluation_type": "any",
-        "next_index": null
+        "next_index": 5
       },
       "position": {
-        "x": 106.32586650536942,
-        "y": 485.9729267092209
+        "x": 253.24876802633767,
+        "y": -335.4686619552967
       }
     },
     {
@@ -103,11 +103,11 @@
       "input_type": "none",
       "input": {
         "evaluation_type": "none",
-        "next_index": 11
+        "next_index": 2
       },
       "position": {
-        "x": 592.1928796834925,
-        "y": -227.78361392501768
+        "x": -7.479462790904096,
+        "y": -526.1627291505359
       }
     },
     {
@@ -117,33 +117,11 @@
       "input_type": "none",
       "input": {
         "evaluation_type": "none",
-        "next_index": null
+        "next_index": 10
       },
       "position": {
-        "x": 1601.4283974792293,
-        "y": 718.4573106625883
-      }
-    },
-    {
-      "name": "Nuova attività",
-      "contents": [],
-      "mission_index": 1,
-      "input_type": "text",
-      "input": {
-        "evaluation_type": "correct",
-        "next_index": null,
-        "correct_options": [
-          {
-            "points": 0,
-            "text": ""
-          }
-        ],
-        "wrong_stay": false,
-        "wrong_next_index": 6
-      },
-      "position": {
-        "x": 962.0822274862024,
-        "y": 494.807825328426
+        "x": 1081.556396484375,
+        "y": 425.512451171875
       }
     },
     {
@@ -153,11 +131,11 @@
       "input_type": "none",
       "input": {
         "evaluation_type": "none",
-        "next_index": 4
+        "next_index": 10
       },
       "position": {
-        "x": 1306.9727564268424,
-        "y": 643.5077412209982
+        "x": 1106.612780862603,
+        "y": 32.4371360818933
       }
     },
     {
@@ -167,7 +145,7 @@
       "input_type": "text",
       "input": {
         "evaluation_type": "correct",
-        "next_index": 4,
+        "next_index": 5,
         "correct_options": [
           {
             "points": 0,
@@ -175,11 +153,11 @@
           }
         ],
         "wrong_stay": false,
-        "wrong_next_index": 6
+        "wrong_next_index": 4
       },
       "position": {
-        "x": 814.7912225055816,
-        "y": 783.8358646552294
+        "x": 661.1847425703312,
+        "y": 282.9497926710284
       }
     },
     {
@@ -189,13 +167,13 @@
       "input_type": "text",
       "input": {
         "evaluation_type": "evaluator",
-        "next_index": 5,
+        "next_index": 2,
         "wrong_stay": false,
-        "wrong_next_index": 7
+        "wrong_next_index": 6
       },
       "position": {
-        "x": 518.8059590829366,
-        "y": 615.4841256760401
+        "x": -16.184856583781066,
+        "y": 68.59785382219434
       }
     },
     {
@@ -221,11 +199,11 @@
           }
         ],
         "wrong_stay": false,
-        "wrong_next_index": 10
+        "wrong_next_index": 9
       },
       "position": {
-        "x": 217.37601870074053,
-        "y": -100.40686442288772
+        "x": -277.7313232421875,
+        "y": -506.09375
       }
     },
     {
@@ -235,25 +213,25 @@
       "input_type": "none",
       "input": {
         "evaluation_type": "none",
-        "next_index": 11
+        "next_index": 7
       },
       "position": {
-        "x": 662.683901488215,
-        "y": 160.32608967293638
+        "x": -107.90593968745412,
+        "y": -190.21053102169697
       }
     },
     {
-      "name": "Five",
+      "name": "Nuova attività",
       "contents": [],
-      "mission_index": 4,
+      "mission_index": null,
       "input_type": "none",
       "input": {
         "evaluation_type": "none",
         "next_index": 1
       },
       "position": {
-        "x": 991.4353186339382,
-        "y": -4.168423204257386
+        "x": 1442.9998779296875,
+        "y": 221.99993896484375
       }
     }
   ],

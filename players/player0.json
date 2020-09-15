@@ -1,26 +1,40 @@
 {
   "id": 0,
-  "score": 1000,
+  "score": 0,
   "username": "",
   "current_quest_start_timestamp": [
-    19,
-    34
+    13,
+    50
   ],
   "current_mission": "",
   "current_activity": "Fine",
   "help": [],
   "chat": [],
   "pending_count": 2,
-  "story_name": "Le cose stanno così",
+  "story_name": "Big storia",
   "quest_list": [
     {
-      "mission_name": "Inizio",
-      "activity_name": "La tua prima missione",
+      "mission_name": "Missione B",
+      "activity_name": "Two",
       "corrected": true,
       "question": [
         {
           "type": "text",
-          "content": "Benvenuto in questa fantastica avventura, Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. \"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat\". Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+          "content": "aaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaaaaaaaaaa aaaaaaaaaaaaaaaaaaaa a aaa aa a aaaaaaaaa aa a    aaaaa"
+        },
+        {
+          "type": "image",
+          "content": {
+            "url": "",
+            "descr": ""
+          }
+        },
+        {
+          "type": "video",
+          "content": {
+            "url": "",
+            "descr": ""
+          }
         }
       ],
       "input_type": "none",
@@ -29,58 +43,70 @@
       "quest_score": 0
     },
     {
-      "mission_name": "Inizio",
-      "activity_name": "Ottimo, avventuriero!",
+      "mission_name": "Missione C",
+      "activity_name": "Three",
       "corrected": true,
-      "question": [
-        {
-          "type": "text",
-          "content": "La tua prima missione determinerà il resto della tua campagna da avventuriero, se risponderai correttamente il futuro ti sorriderà, altrimenti la strada per la vittoria diventerà lunga e tortuosa. Da questa scelta capiremo se sei il prescelto.\nLa domanda è:\nIn quale anno ci troviamo, 2020 oppure 1469?"
-        }
-      ],
-      "input_type": "number",
-      "answer": "2020",
+      "question": [],
+      "input_type": "text",
+      "answer": "d",
       "comment": "",
-      "quest_score": 1000
+      "quest_score": 0
     },
     {
-      "mission_name": "Arriviamo a conclusione",
-      "activity_name": "Storia che è un finale ma non arriva alla fine",
+      "mission_name": "Missione A",
+      "activity_name": "Nuova attività",
+      "corrected": true,
+      "question": [],
+      "input_type": "none",
+      "answer": "d",
+      "comment": "",
+      "quest_score": 0
+    },
+    {
+      "mission_name": "Inizio",
+      "activity_name": "One",
+      "corrected": false,
+      "question": [],
+      "input_type": "text",
+      "answer": "f",
+      "comment": "",
+      "quest_score": 0
+    },
+    {
+      "mission_name": "Missione A",
+      "activity_name": "Nuova attività",
       "corrected": false,
       "question": [
         {
-          "type": "text",
-          "content": "p1\nChe grande anno per vivere, magari un po' caotico ma sicuramente pieno di comfort per un avventuriero come te, non ti pare?\nQuis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?\n"
-        },
-        {
-          "type": "text",
-          "content": "p2\nLa domanda è: come fanno i delfini a sostare nella galassia per così tanto?"
-        },
-        {
           "type": "image",
           "content": {
-            "url": "/public/uploads/pesce.jpg",
-            "descr": "La colpa è vostra e si sa, ma in tanti lo sapevano giààààààààààààà!!!\nAddio, addio addio e grazie, per tutto il pesceeeeeeeeeeeeeeeeeeeeeeee..."
+            "url": "",
+            "descr": "Yo"
           }
         }
       ],
       "input_type": "text",
-      "answer": "ciao",
+      "answer": "d",
+      "comment": "",
+      "quest_score": 0
+    },
+    {
+      "mission_name": "Inizio",
+      "activity_name": "Nuova attività",
+      "corrected": true,
+      "question": [],
+      "input_type": "none",
+      "answer": "d",
       "comment": "",
       "quest_score": 0
     },
     {
       "mission_name": "Fine",
       "activity_name": "Fine",
-      "corrected": false,
-      "question": [
-        {
-          "type": "text",
-          "content": "Questa è la storia\nDi uno di noi\nAnche lui nato per caso in via Gluck\nIn una casa, fuori città\nGente tranquilla, che lavorava\nLà dove c'era l'erba ora c'è\nUna città\nE quella casa in mezzo al verde ormai\nDove sarà\nQuesto ragazzo della via Gluck\nSi divertiva a giocare con me\nMa un giorno disse\nVado in città\nE lo diceva mentre piangeva\nIo gli domando amico\nNon sei contento\nVai finalmente a stare in città\nLà troverai le cose che non hai avuto qui\nPotrai lavarti in casa senza andar\nGiù nel cortile\nMio caro amico, disse\nQui sono nato\nIn questa strada\nOra lascio il mio cuore\nMa come fai a non capire\nÈ una fortuna, per voi che restate\nA piedi nudi a giocare nei prati\nMentre là in centro io respiro il cemento\nMa verrà un giorno che ritornerò\nAncora qui\nE sentirò l'amico treno\nChe fischia così\n\"Uah, uah\"\nPassano gli anni\nMa otto son lunghi\nPerò quel ragazzo ne ha fatta di strada\nMa non si scorda la sua prima casa\nOra coi soldi lui può comperarla\nTorna e non trova gli amici che aveva\nSolo case su case\nCatrame e cemento\nLà dove c'era l'erba ora c'è\nUna città, ah\nE quella casa in mezzo al verde ormai\nDove sarà, ah\nNon so, non so\nPerché continuano\nA costruire, le case\nE non lasciano l'erba\nNon lasciano l'erba\nNon lasciano l'erba\nNon lasciano l'erba\nEh no\nSe andiamo avanti così, chissà\nCome si farà\nChissà\nChissà\nCome si farà"
-        }
-      ],
-      "input_type": "photo",
-      "answer": "/public/images/uploads/83780703_10216642471196590_2357141939683328000_n.jpg",
+      "corrected": true,
+      "question": [],
+      "input_type": "none",
+      "answer": "d",
       "comment": "",
       "quest_score": 0
     }
