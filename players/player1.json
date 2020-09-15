@@ -8,7 +8,15 @@
   ],
   "current_mission": "",
   "current_activity": "Fine",
-  "help": [],
+  "help": [
+    {
+      "mission_name": "Mission A",
+      "activity_name": "Nuova attività",
+      "question": "Prof sono bloccato",
+      "answer": "",
+      "to_help": true
+    }
+  ],
   "chat": [],
   "pending_count": 0,
   "story_name": "Le cose stanno così",

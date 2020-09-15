@@ -209,15 +209,15 @@ function setCorrectionPane(data) {
                     }
                 });
                 let quest_widget = '<div class="description-div">'
-                                    + '<div class="inline-divs"> Domanda :'
-                                    + '<a id="plus_min_question' + i + '" class="plus_min btn btn-info btn-sm"><span class="glyphicon glyphicon-minus"></span></a>'
-                                    + '</div>'
-                                    + '<div class="inline-divs" id="question' + i + '">'
-                                    + '<p>' + question_content + '</p>'
-                                    + '</div>'
-                                    + '<div class="inline-divs">'
-                                    + '</div>'
-                                    + '</div>';
+                    + '<div class="inline-divs"> Domanda :'
+                    + '<a id="plus_min_question' + i + '" class="plus_min btn btn-info btn-sm"><span class="glyphicon glyphicon-minus"></span></a>'
+                    + '</div>'
+                    + '<div class="inline-divs" id="question' + i + '">'
+                    + '<p>' + question_content + '</p>'
+                    + '</div>'
+                    + '<div class="inline-divs">'
+                    + '</div>'
+                    + '</div>';
 
                 //Define answer html
                 let answer_content;
@@ -230,9 +230,17 @@ function setCorrectionPane(data) {
                     img.src = quest.answer;
                     img.onload = function () {
                         //Event to resize container of imgs in correction pane 
-                        let h = $(this).css('height');
+                        var h = $(this).height();
+                        var w = $(this).width();
+                        if (h > 1000 || w > 1000) {
+                            h /= 2;
+                            w /= 2;
+                            img.height = h;
+                            img.width = w;
+                        }
                         let name = $(this).attr('name');
-                        $('#'+name).css('height', h);
+                        $('#' + name).css('height', h);
+                        
                     };
                     imgs[i] = img;
                 } else {
@@ -240,31 +248,31 @@ function setCorrectionPane(data) {
                 }
                 //Attach answer
                 let answer_widget = '<div class="description-div">'
-                                    + '<div class="inline-divs">'
-                                    + ' Risposta :'
-                                    + '<a id="plus_min_answer' + i + '" class="plus_min btn btn-info btn-sm"><span class="glyphicon glyphicon-minus"></span></a>'
-                                    + '</div>'
-                                    + '<div class="inline-divs" id="answer' + i + '">'
-                                    + (answer_content || '')
-                                    + '</div>'
-                                    + '<div class="inline-divs">'
-                                    + '</div>'
-                                    + '</div>';
+                    + '<div class="inline-divs">'
+                    + ' Risposta :'
+                    + '<a id="plus_min_answer' + i + '" class="plus_min btn btn-info btn-sm"><span class="glyphicon glyphicon-minus"></span></a>'
+                    + '</div>'
+                    + '<div class="inline-divs" id="answer' + i + '">'
+                    + '<p>'+ (answer_content || '') + '</p>'
+                    + '</div>'
+                    + '<div class="inline-divs">'
+                    + '</div>'
+                    + '</div>';
                 //Attach corretion input
                 let valu_widget = '<div class="valutation-input">'
-                                    + '<form class="form-correction">'
-                                    + '<div class="form-group row">'
-                                    + '<div class="col-12">'
-                                    + '<div class="col-sm-6 input1" id="input1-' + i + '"><label for="score-input-' + i + '">Attribuisci un punteggio</label><br>'
-                                    + '<input class="form-control number-input" type="number" id="score-input-' + i + '"></div>'
-                                    + '<div class="col-sm-6 input2" id="input2-' + i + '"><label for="comment-input-' + i + '">Aggiungi un commento</label><br>'
-                                    + '<textarea class="comment-input" id="comment-input-' + i + '"></textarea></div>'
-                                    + '</div>'
-                                    + '</div>'
-                                    + '<button type="button" name="' + i + '"class="send-correction btn btn-outline-primary">Invio <span class="glyphicon glyphicon-ok"></span></button>'
-                                    + '</form>'
-                                    + '</div>'
-                                    + '<hr>';
+                    + '<form class="form-correction">'
+                    + '<div class="form-group row">'
+                    + '<div class="col-12">'
+                    + '<div class="col-sm-6 input1" id="input1-' + i + '"><label for="score-input-' + i + '">Attribuisci un punteggio</label><br>'
+                    + '<input class="form-control number-input" type="number" id="score-input-' + i + '"></div>'
+                    + '<div class="col-sm-6 input2" id="input2-' + i + '"><label for="comment-input-' + i + '">Aggiungi un commento</label><br>'
+                    + '<textarea class="comment-input" id="comment-input-' + i + '" placeholder="Questo commento sarà visibile soltanto a te"></textarea></div>'
+                    + '</div>'
+                    + '</div>'
+                    + '<button type="button" name="' + i + '"class="send-correction btn btn-outline-primary">Invio <span class="glyphicon glyphicon-ok"></span></button>'
+                    + '</form>'
+                    + '</div>'
+                    + '<hr>';
                 pane = '<div class="correction-divider">' + quest_header + quest_widget + answer_widget + valu_widget + '</div>';
                 body += pane;
             }
@@ -272,7 +280,7 @@ function setCorrectionPane(data) {
     } else {
         body+='<p class="quest_header">Non ci sono risposte in attesa di valutazione per questo giocatore</p>';
     }
-    $('#main-placeholder').append(header + body + '</div>');
+    $('#main-placeholder').append(header + body);
     has_img.forEach((img_el) => {
         let index = has_img.indexOf(img_el);
         if (img_el) {
@@ -281,7 +289,46 @@ function setCorrectionPane(data) {
     });
     $('#score-input-1').focus();
 }
-
+//Set help pane 
+function setHelpPane(data) {
+    helpOpen = true;
+    let body = '';
+    $('#main-placeholder').empty();
+    let header = '<div class="panel-heading" id="correction-header">'
+        + data.name
+        + '<a id="user-info-tab-player' + data.id + '" class="user-info-tab btn btn-info btn-sm"><span class="glyphicon glyphicon-info-sign"></span></a>'
+        + '</div><div class="panel-body" id="help-pane">';
+    let i = 0;
+    data.help.forEach((help_req) => {
+        if (help_req.to_help) {
+            let quest_header = '<p class="quest_header">Missione: ' + help_req.mission_name + '<br>Attività: ' + help_req.activity_name + '</p>';
+            let quest_widget = '<div class="description-div">'
+                + "<div class='inline-divs'> Richiesta d'aiuto :"
+                + '</div>'
+                + '<div class="inline-divs" id="question' + i + '">'
+                + '<p>' + help_req.question + '</p>'
+                + '</div>'
+                + '<div class="inline-divs">'
+                + '</div>'
+                + '</div>';
+            let valu_widget = '<div class="valutation-input">'
+                + '<form class="form-correction">'
+                + '<div class="form-group row">'
+                + '<div class="col-12">'
+                + '<div class="col-sm-6 input2" id="input2-' + i + '"><label for="comment-input-' + i + '">Rispondi</label><br>'
+                + '<textarea class="comment-input help-comment" id="comment-input-' + i + '" placeholder="Scrivi qui la tua risposta"></textarea></div>'
+                + '</div>'
+                + '</div>'
+                + '<button type="button" name="' + i + '"class="send-correction btn btn-outline-primary">Invio <span class="glyphicon glyphicon-ok"></span></button>'
+                + '</form>'
+                + '</div>'
+                + '<hr>';
+            pane = '<div class="correction-divider">' + quest_header + quest_widget + valu_widget + '</div>';
+            body += pane;
+    }
+    });
+    $('#main-placeholder').append(header + body);
+}
 //Close the pop-up chat
 function closeChat() {
     document.getElementById("chat").style.display = "none";
@@ -564,7 +611,7 @@ function submitCorrection(data) {
 
 //GET
 //Get story by ID
-//TODO: success, ma la uso?
+/*INUTILE
 function getStory(id) {
     $.ajax({
         url: "/stories/story" + id,
@@ -576,7 +623,7 @@ function getStory(id) {
             alert(xhr.status + ' - ' + thrownError);
         }
     });
-}
+}*/
 //Download Classification
 function downloadClassification() {
     $.ajax({
@@ -757,6 +804,19 @@ function openCorrectionPane(id) {
         success: function (data) {
             setCorrectionPane(data);
             currentCorrectionPlayerId = real_id;
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            alert(xhr.status + ' - ' + thrownError);
+        }
+    });
+}
+//Request the array of help for the specified player
+function openHelpPane(player) {
+    $.ajax({
+        accepts: 'application/json',
+        url: '/players/get_help_requests/' + player,
+        success: function (data) {
+            setHelpPane(JSON.parse(data));
         },
         error: function (xhr, ajaxOptions, thrownError) {
             alert(xhr.status + ' - ' + thrownError);

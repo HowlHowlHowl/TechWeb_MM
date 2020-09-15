@@ -7,13 +7,13 @@
 
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.min.js"></script>
 	<script src="https://unpkg.com/jspdf-autotable@3.5.9/dist/jspdf.plugin.autotable.js"></script>
+	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-
 	<!-- Internal -->
 	<link rel="stylesheet" href="/public/css/evaluator.css">
 	<link rel="stylesheet" href="/public/css/chat.css">
@@ -24,7 +24,7 @@
 <body>
 
 	<!--NAVBAR-->
-	<nav class="navbar navbar-expand-sm navbar-dark bg-primary">
+	<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
 		<button id="collapse-button" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
 			<div class="navbar-toggler-icon"></div>
 			<div id="dot-space"></div>
@@ -49,7 +49,7 @@
 				</li>
 				<li class="nav-item dropdown">
 					<a class="nav-link dropdown-toggle" id="new_msgDropdownButton" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						Messaggi non letti
+					Messaggi non letti
 					</a>
 					<div class="dropdown-menu" id="new_msgDropdown" aria-labelledby="navbarDropdown">
 						<!--Lista degli utenti con messaggi non letti-->
@@ -57,12 +57,12 @@
 				</li>
 				<li class="nav-item close-on-click">
 					<a class="nav-link" id="classification-button">
-						Classifica
+					Classifica
 					</a>
 				</li>
 				<li class="nav-item close-on-click">
 					<a class="nav-link" onclick="openDownloads()">
-						Downloads
+					Downloads
 					</a>
 				</li>
 			</ul>

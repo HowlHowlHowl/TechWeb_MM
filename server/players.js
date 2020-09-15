@@ -140,7 +140,18 @@ module.exports = function (app) {
             res.status(200).send();
         }
     });
-    
+    //Restituisce il vettore di richieste d'aiuto del player con il nome 
+    app.get('/players/get_help_requests/:id', function (req, res) {
+        let id = req.params.id;
+        let player = JSON.parse(fs.readFileSync('players/' + id + '.json'));
+        let data = {
+            help: player.help,
+            name: (player.username || 'player ' + player.id),
+            id: player.id
+        }
+        res.write(JSON.stringify(data));
+        res.status(200).send();
+    });
     //Associa un username ad un player
     app.post('/rename_player/:id', function (req, res) {
         let id = req.params.id;
@@ -305,5 +316,4 @@ module.exports = function (app) {
             }
         });
     });
-
 };

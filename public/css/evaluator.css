@@ -6,17 +6,21 @@ body {
     width:100%;
 }
 /*Navbar*/
+@media only screen and (max-width: 1000px) {
+    .nav-item > a {
+        text-align: left !important;
+    }
+}
+
 #collapse-button{
     margin-left:0;
 }
-
 .navbar-toggler:focus,
 .navbar-toggler:active,
 .navbar-toggler-icon:focus {
     outline: none;
     box-shadow: none;
 }
-
 .nav-item > a {
     text-align:center;
 }
@@ -167,9 +171,6 @@ body {
     font-size: 4vh;
     background-color: rgba(66, 139, 202, 0.77);
     color: white;
-}
-.preview-img-correction{
-    width:100%;
 }
 #correction-pane {
     padding-left: 1vw;
@@ -520,4 +521,8 @@ td, th {
 }
 #downloads-content{
     padding:1vh;
+}
+/*Help pane*/
+.help-comment{
+    width:100%;
 }
