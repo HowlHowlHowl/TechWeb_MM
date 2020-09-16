@@ -5,14 +5,18 @@
 	<title>Player</title>
 	<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"> <!--codice boostrap per attivare le funzionalità bootstrap-->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-	<link rel="icon" type="image/png" sizes="16x16" href="/public/images/icons/site16x16.ico">
-
+	
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 
 	<!--Internal dipendecies-->
-	<link rel="stylesheet" href="/public/css/chat.css">
+	<link rel="icon" type="image/png" sizes="16x16" href="/public/images/icons/site16x16.ico">
+    <link rel="stylesheet" href="/public/css/chat.css">
+	<link rel="stylesheet" href="/public/css/widgets.css">
+    
+	<script src="/public/js/widgets.js"></script>
+    
 	<script type="text/javascript">
 		/*TODO:
 			Update di correzioni => score 
@@ -240,21 +244,26 @@
 
 			let isSpecial = storyJSON.activities[next_index].special;
 			if (!isSpecial) {
-				if (storyJSON.activities[next_index].input_type == 'photo') {
-					$('#footer').append('<label for="input-immagine" class="input custom-file-upload">'
-						+ '<span class="glyphicon glyphicon-cloud-upload"></span> Carica Foto</label >'
-						+ '<input id="input-immagine" type="file" accept="image/*"/>');
-					$('label[for="input-immagine"]').focus();
-
-				} else if (storyJSON.activities[next_index].input_type == 'number') {
-					$('#footer').append('<input id="input-num" class="input" type="number">');
-					$('#input-num').focus();
-				} else if (storyJSON.activities[next_index].input_type == 'text') {
+                let input_type = storyJSON.activities[next_index].input_type;
+                let input = storyJSON.activities[next_index].input;
+				if (input_type == 'photo') {
+                    $('#footer').append('<label for="input-immagine" class="input custom-file-upload">'
+                        + '<span class="glyphicon glyphicon-cloud-upload"></span> Carica Foto</label >'
+                        + '<input id="input-immagine" type="file" accept="image/*"/>');
+                    $('label[for="input-immagine"]').focus();
+				} else if (input_type == 'number') {
+                    if(input.style == "LCD") {
+                        $('#footer').append($($("#template-lcd").html()));
+					} else {
+                        $('#footer').append('<input id="input-num" class="input default-input-num" type="number">');
+                    }
+                    $('#input-num').focus();
+				} else if (input_type == 'text') {
 
 					$('#footer').append(
 						`<div class="inner-addon left-addon">
 							 <a id="icona-fullscreen" class="glyphicon glyphicon-fullscreen"></a>
-						<input type="text" autocomplete="off" id=input-text class="form-control input" placeholder="Risposta"/>		  
+						<input type="text" autocomplete="off" id="input-text" class="form-control input default-input-text" placeholder="Risposta"/>		  
 					</div>`);
 					$('#input-text').focus();
 				}
@@ -632,9 +641,10 @@
 			font-size: 2.5vh !important;
 			border: black solid 1px;
 		}
+        
 		/*input delle risposte*/
 		/*placeholder è la scritta inside all'input*/
-		#input-text::placeholder {
+		.default-input-text::placeholder {
 			font-weight: bold;
 			font-style: italic;
 			text-align:center;
@@ -649,14 +659,14 @@
 			vertical-align: top;
 			height:5vh;
         }
-		#input-num {
+		.default-input-num {
 			width: 20vh;
 			height:5vh;
 			margin: 2vh;
 			font-size: 2.5vh;
 			border-radius: 0.5vh;
 		}
-		#input-text {
+		.default-input-text {
 			margin:0;
 			height:5vh;
 			border: solid black 1px;
@@ -840,5 +850,24 @@
 			</div>
 		</form>
 	</div>
+    
+    <!-- template widget LCD -->
+    <template id="template-lcd">
+        <div class="lcd-container">
+            <div class="lcd-button-container" style="grid-area: up1;"><button class="lcd-button" onClick="onLCDButtonClick(0, true)"><img src="/public/images/icons/lcd-tri-up.png"></button></div>
+            <div class="lcd-button-container" style="grid-area: up2;"><button class="lcd-button" onClick="onLCDButtonClick(1, true)"><img src="/public/images/icons/lcd-tri-up.png"></button></div>
+            <div class="lcd-button-container" style="grid-area: up3;"><button class="lcd-button" onClick="onLCDButtonClick(2, true)"><img src="/public/images/icons/lcd-tri-up.png"></button></div>
+            <div class="lcd-button-container" style="grid-area: up4;"><button class="lcd-button" onClick="onLCDButtonClick(3, true)"><img src="/public/images/icons/lcd-tri-up.png"></button></div>
+            
+            <div class="lcd-display">
+                <input id="input-num" type="number" value="0000" onchange="onLCDNumberChange()">
+            </div>
+            
+            <div class="lcd-button-container" style="grid-area: down1;"><button class="lcd-button" onClick="onLCDButtonClick(0, false)"><img src="/public/images/icons/lcd-tri-down.png"></button></div>
+            <div class="lcd-button-container" style="grid-area: down2;"><button class="lcd-button" onClick="onLCDButtonClick(1, false)"><img src="/public/images/icons/lcd-tri-down.png"></button></div>
+            <div class="lcd-button-container" style="grid-area: down3;"><button class="lcd-button" onClick="onLCDButtonClick(2, false)"><img src="/public/images/icons/lcd-tri-down.png"></button></div>
+            <div class="lcd-button-container" style="grid-area: down4;"><button class="lcd-button" onClick="onLCDButtonClick(3, false)"><img src="/public/images/icons/lcd-tri-down.png"></button></div>
+        </div>
+    </template>
 </body>
 </html>

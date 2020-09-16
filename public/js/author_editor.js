@@ -462,7 +462,7 @@ function setInputElement(activity, node)
             
             let evaluation_type = select.val();
             activity.input = {
-                style: "";
+                style: "",
                 evaluation_type: evaluation_type,
                 next_index: null
             };
