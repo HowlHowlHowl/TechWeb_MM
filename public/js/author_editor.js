@@ -427,6 +427,16 @@ function setInputElement(activity, node)
     } else {
         input_container.toggle(true);
         
+        //Style options
+        $("#input-style-div div").each( (index, element) => {
+            let div = $(element);
+            div.toggle("input-style-" + type + "-div" == div.attr("id"));
+            let select = div.find("select");
+            select.val(activity.input.style || "");
+            linkInputToProperty(activity.input, "style", select);
+        });
+    
+        
         //Evaluation options
         let select = $("#input-evaluation-select");
         select.empty();
@@ -452,6 +462,7 @@ function setInputElement(activity, node)
             
             let evaluation_type = select.val();
             activity.input = {
+                style: "";
                 evaluation_type: evaluation_type,
                 next_index: null
             };

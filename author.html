@@ -7,7 +7,6 @@
 	<!-- Libraries from CDN -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-	<link rel="icon" type="image/png" sizes="16x16" href="/public/images/icons/site16x16.ico">
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
@@ -16,6 +15,7 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 
 	<!-- Internal -->
+	<link rel="icon" type="image/png" sizes="16x16" href="/public/images/icons/site16x16.ico">
 	<link rel="stylesheet" href="/public/css/author.css">
 	<script src="/public/js/author_nodes.js"></script>
 	<script src="/public/js/author_editor.js"></script>
@@ -150,14 +150,28 @@
                 </div>
                 
                 <div id="activity-input-div" class="p-3">
-                    <div class="form-group">
-                        <label for="input-style">Stile widget di input:</label>
-                        <select class="custom-select" id="input-style">
-                            <option value="" selected>Nessuno</option>
-                            <option value="1">One</option>
-                            <option value="2">Two</option>
-                            <option value="3">Three</option>
-                        </select>
+                    <div class="form-group" id="input-style-div">
+                        <div id="input-style-text-div">
+                            <label for="input-style-text">Stile widget di input di testo:</label>
+                            <select class="custom-select" id="input-style-text">
+                                <option value="" selected>Nessuno</option>
+                            </select>
+                        </div>
+                        
+                        <div id="input-style-number-div">
+                            <label for="input-style-number">Stile widget di input di numero:</label>
+                            <select class="custom-select input-style-number" id="input-style-number">
+                                <option value="" selected>Nessuno</option>
+                                <option value="LCD">Display LCD</option>
+                            </select>
+                        </div>
+                        
+                        <div id="input-style-photo-div">
+                            <label for="input-style-photo">Stile widget di input di foto:</label>
+                            <select class="custom-select input-style-photo" id="input-style-photo">
+                                <option value="" selected>Nessuno</option>
+                            </select>
+                        </div>
                     </div>
                     
                     <div class="form-group" id="activity-input-select-div">
