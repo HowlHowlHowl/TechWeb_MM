@@ -7,6 +7,7 @@ var playersLength = 0;
 var new_msgLength = 0;
 var currentChatPlayerId = null;
 var currentCorrectionPlayerId = null;
+var currentHelpPlayerId = null;
 var currentUserTabId = null;
 var classificationOpen = false;
 var downloadsOpen = false;
@@ -35,15 +36,20 @@ setInterval(function () {
     }
     updateAllData();
 }, 60000);
-//Correction pane updated every 5 minutes if no input is given
+//Correction pane and Help pane updated every 5 minutes if no input is given
 setInterval(function () {
     if (currentCorrectionPlayerId) {
-        let i = 1;
+        let i = 0;
         let update = true;
-        let input1 = $('#score-input-' + i);
-        let input2 = $('#comment-input-' + i);
+        let label1;
+        let label2;
         //Per ogni input presente
-        while (input1.length > 0 && input2.length > 0) {
+        do {
+            label1 = $('#score-label-' + i);
+            label2 = $('#comment-label-' + i);
+
+            let input1 = $('#' + label1.attr('for'));
+            let input2 = $('#' + label2.attr('for'));
             //Hanno un valore scritto?
             let in1 = input1.val();
             let in2 = input2.val();
@@ -53,15 +59,15 @@ setInterval(function () {
                 break;
             }
             i++
-            input1 = $('#input1-' + i);
-            input2 = $('#input2-' + i);
-        }
+        } while (label1.length > 0 && label2.length > 0);
         if (update) {
             openCorrectionPane(currentCorrectionPlayerId);
         }
     }
-    setDownloadsWindow();
-}, 5 * 60000);
+    if (currentHelpPlayerId) {
+        
+    }
+}, /*5 * 60000*/ 5000);
 
 //GENERIC FUNCTIONS
 //Scroll to the last received message in the current chat
@@ -176,6 +182,7 @@ function setHistory(data) {
 //Sets layout of correction panel
 function setCorrectionPane(data) {
     classificationOpen = false;
+    currentHelpPlayerId = null; 
     $('#main-placeholder').empty();
     let header = '<div class="panel-heading" id="correction-header">'
         + (data.username ? data.username : 'Player ' + data.id) + ' - ' + data.story_name
@@ -188,7 +195,8 @@ function setCorrectionPane(data) {
     let has_img = [];
     if (data.pending_count > 0) {
         data.quest_list.forEach((quest) => {
-            let i = data.quest_list.indexOf(quest);
+            let quest_index = data.quest_list.indexOf(quest);
+            let ordinary_index = 0;
             if (!quest.corrected) {
                 let pane;
                 //Attach header:
@@ -210,9 +218,9 @@ function setCorrectionPane(data) {
                 });
                 let quest_widget = '<div class="description-div">'
                     + '<div class="inline-divs"> Domanda :'
-                    + '<a id="plus_min_question' + i + '" class="plus_min btn btn-info btn-sm"><span class="glyphicon glyphicon-minus"></span></a>'
+                    + '<a id="plus_min_question' + quest_index + '" class="plus_min btn btn-info btn-sm"><span class="glyphicon glyphicon-minus"></span></a>'
                     + '</div>'
-                    + '<div class="inline-divs" id="question' + i + '">'
+                    + '<div class="inline-divs" id="question' + quest_index + '">'
                     + '<p>' + question_content + '</p>'
                     + '</div>'
                     + '<div class="inline-divs">'
@@ -222,27 +230,26 @@ function setCorrectionPane(data) {
                 //Define answer html
                 let answer_content;
                 if (quest.input_type == 'photo') {
-                    has_img[i] = true;
+                    has_img[quest_index] = true;
                     let img = document.createElement('img');
-                    img.setAttribute('id', 'img' + i);
-                    img.setAttribute('name', 'answer' + i);
+                    img.setAttribute('id', 'img' + quest_index);
+                    img.setAttribute('name', 'answer' + quest_index);
                     img.setAttribute('class', 'preview-img-correction');
                     img.src = quest.answer;
                     img.onload = function () {
                         //Event to resize container of imgs in correction pane 
                         var h = $(this).height();
                         var w = $(this).width();
-                        if (h > 1000 || w > 1000) {
+                        if (h > 1000) {
                             h /= 2;
                             w /= 2;
                             img.height = h;
                             img.width = w;
-                        }
+                        }//TODO: immagini dimensionate giusto
                         let name = $(this).attr('name');
                         $('#' + name).css('height', h);
-                        
                     };
-                    imgs[i] = img;
+                    imgs[quest_index] = img;
                 } else {
                     answer_content = quest.answer;
                 }
@@ -250,9 +257,9 @@ function setCorrectionPane(data) {
                 let answer_widget = '<div class="description-div">'
                     + '<div class="inline-divs">'
                     + ' Risposta :'
-                    + '<a id="plus_min_answer' + i + '" class="plus_min btn btn-info btn-sm"><span class="glyphicon glyphicon-minus"></span></a>'
+                    + '<a id="plus_min_answer' + quest_index + '" class="plus_min btn btn-info btn-sm"><span class="glyphicon glyphicon-minus"></span></a>'
                     + '</div>'
-                    + '<div class="inline-divs" id="answer' + i + '">'
+                    + '<div class="inline-divs" id="answer' + quest_index + '">'
                     + '<p>'+ (answer_content || '') + '</p>'
                     + '</div>'
                     + '<div class="inline-divs">'
@@ -263,18 +270,19 @@ function setCorrectionPane(data) {
                     + '<form class="form-correction">'
                     + '<div class="form-group row">'
                     + '<div class="col-12">'
-                    + '<div class="col-sm-6 input1" id="input1-' + i + '"><label for="score-input-' + i + '">Attribuisci un punteggio</label><br>'
-                    + '<input class="form-control number-input" type="number" id="score-input-' + i + '"></div>'
-                    + '<div class="col-sm-6 input2" id="input2-' + i + '"><label for="comment-input-' + i + '">Aggiungi un commento</label><br>'
-                    + '<textarea class="comment-input" id="comment-input-' + i + '" placeholder="Questo commento sarà visibile soltanto a te"></textarea></div>'
+                    + '<div class="col-sm-6 input1" id="input1-' + quest_index + '"><label id = "score-label-' + ordinary_index + '" for="score-input-' + quest_index + '">Attribuisci un punteggio</label><br>'
+                    + '<input class="form-control number-input" type="number" id="score-input-' + quest_index + '"></div>'
+                    + '<div class="col-sm-6 input2" id="input2-' + quest_index + '"><label id = "comment-label-' + ordinary_index + '" for="comment-input-' + quest_index + '">Aggiungi un commento</label><br>'
+                    + '<textarea class="comment-input" id="comment-input-' + quest_index + '" placeholder="Questo commento sarà visibile soltanto a te"></textarea></div>'
                     + '</div>'
                     + '</div>'
-                    + '<button type="button" name="' + i + '"class="send-correction btn btn-outline-primary">Invio <span class="glyphicon glyphicon-ok"></span></button>'
+                    + '<button type="button" name="' + quest_index + '"class="send-correction btn btn-outline-primary">Invio <span class="glyphicon glyphicon-ok"></span></button>'
                     + '</form>'
                     + '</div>'
                     + '<hr>';
                 pane = '<div class="correction-divider">' + quest_header + quest_widget + answer_widget + valu_widget + '</div>';
                 body += pane;
+                ordinary_index++;
             }
         });
     } else {
@@ -287,25 +295,24 @@ function setCorrectionPane(data) {
             document.getElementById('answer' + index).appendChild(imgs[index]);
         }
     });
-    $('#score-input-1').focus();
+    $('#' + $('#score-label-0').attr('for')).focus();
 }
 //Set help pane 
 function setHelpPane(data) {
-    helpOpen = true;
     let body = '';
     $('#main-placeholder').empty();
     let header = '<div class="panel-heading" id="correction-header">'
-        + data.name
+        + data.name + ' - ' + data.story_name
         + '<a id="user-info-tab-player' + data.id + '" class="user-info-tab btn btn-info btn-sm"><span class="glyphicon glyphicon-info-sign"></span></a>'
         + '</div><div class="panel-body" id="help-pane">';
-    let i = 0;
     data.help.forEach((help_req) => {
         if (help_req.to_help) {
+            let i = data.help.indexOf(help_req);
             let quest_header = '<p class="quest_header">Missione: ' + help_req.mission_name + '<br>Attività: ' + help_req.activity_name + '</p>';
             let quest_widget = '<div class="description-div">'
                 + "<div class='inline-divs'> Richiesta d'aiuto :"
                 + '</div>'
-                + '<div class="inline-divs" id="question' + i + '">'
+                + '<div class="inline-divs" id="help-question' + i + '">'
                 + '<p>' + help_req.question + '</p>'
                 + '</div>'
                 + '<div class="inline-divs">'
@@ -314,21 +321,37 @@ function setHelpPane(data) {
             let valu_widget = '<div class="valutation-input">'
                 + '<form class="form-correction">'
                 + '<div class="form-group row">'
-                + '<div class="col-12">'
-                + '<div class="col-sm-6 input2" id="input2-' + i + '"><label for="comment-input-' + i + '">Rispondi</label><br>'
-                + '<textarea class="comment-input help-comment" id="comment-input-' + i + '" placeholder="Scrivi qui la tua risposta"></textarea></div>'
+                + '<div class="col-12 input2" id="input1-' + i + '">'
+                + '<label for="comment-input-' + i + '">Rispondi</label><br>'
+                + '<textarea class="comment-input help-comment" id="help-comment-input-' + i + '" placeholder="Scrivi qui la tua risposta"></textarea></div>'
                 + '</div>'
-                + '</div>'
-                + '<button type="button" name="' + i + '"class="send-correction btn btn-outline-primary">Invio <span class="glyphicon glyphicon-ok"></span></button>'
+                + '<button type="button" name="' + i + '"class="send-help btn btn-outline-primary">Invio <span class="glyphicon glyphicon-ok"></span></button>'
                 + '</form>'
                 + '</div>'
                 + '<hr>';
             pane = '<div class="correction-divider">' + quest_header + quest_widget + valu_widget + '</div>';
             body += pane;
-    }
+        }
     });
+    if (!body) {
+        body += '<p class="quest_header">Non ci sono risposte in attesa di valutazione per questo giocatore</p>';
+    }
     $('#main-placeholder').append(header + body);
 }
+//Event to submit the answer to the help required
+$(document).on('click', '.send-help', function (event) {
+    let helpIndex = event.currentTarget.getAttribute('name');
+    let helpAnswer = $('#help-comment-input-' + helpIndex).val();
+    if (helpAnswer) {
+        let helpData= { answer: helpAnswer, index: helpIndex };
+        submitHelpAnswer(helpData);
+    } else {
+        $('#no-score').remove();
+        $('#input1-' + helpIndex).append('<p id="no-score"class="unexpected-str">*Questo campo è obbligatorio</p>');
+        $('#help-comment-input-' + helpIndex).focus();
+    }
+});
+
 //Close the pop-up chat
 function closeChat() {
     document.getElementById("chat").style.display = "none";
@@ -383,8 +406,9 @@ function updateAllData() {
             if (new_msgLength == 0) {
                 $('#new_msgDropdown').append('<a class="dropdown-item">Non ci sono nuovi messaggi</a>');
             }
+            setDownloadsWindow(); 
         },
-        error: function (xhr, ajaxOptions, thrownError) {
+        error: function (xhr, ajaxOptions, thrownError) {            
             alert(xhr.status + ' - ' + thrownError);
         }
     });
@@ -441,6 +465,7 @@ function addPendingPlayer(data) {
 function setClassification(data) {
     $('#main-placeholder').empty();
     classificationOpen = true;
+    currentHelpPlayerId = null;
     currentCorrectionPlayerId = null;
     let header = '<div class="panel-heading" id="history-header">'
         + 'Classifica'
@@ -488,26 +513,34 @@ function sort() {
 
 //Prepare the download window
 function setDownloadsWindow() {
-    $('#player-checkbox-list').empty();
     let children = Array.from($('#playersDropdown').children());
     children.forEach((player) => {
         let id = player.id;
+        if (!$('#checkbox-' + id).length) {
+            let input = document.createElement('input');
+            input.setAttribute('value', id);
+            input.setAttribute('class', 'player-download');
+            input.setAttribute('type', 'checkbox');
+            input.setAttribute('id', 'checkbox-' + id);
 
-        let input = document.createElement('input');
-        input.setAttribute('value', id);
-        input.setAttribute('class', 'player-download');
-        //input.setAttribute('id', id + '-checkbox' );
-        input.setAttribute('type', 'checkbox');
-        let label = document.createElement('label');
-        label.setAttribute('for', id + '-checkbox');
-        label.textContent = player.text;
+            let label = document.createElement('label');
+            label.setAttribute('for', id + '-checkbox');
+            label.textContent = player.text;
 
-        let li = document.createElement('li');
-        li.setAttribute('name', id);
-        li.append(input, label);
-        li.setAttribute('type', 'none');
-        $('#player-checkbox-list').append(li);
+            let li = document.createElement('li');
+            li.setAttribute('name', id);
+            li.append(input, label);
+            li.setAttribute('type', 'none');
+            $('#player-checkbox-list').append(li);
+        }
     });
+    /*TODO: recuperare i checkbox singolarmente*/
+    //If select all was selected then all the checkboxes became selected  
+    if ($('#selectAllPlayersCheckbox').prop('checked')) {
+        $('.player-download').each(function () {
+            this.checked = true;
+        });
+    }
 }
 //Open download window
 function openDownloads() {
@@ -608,7 +641,21 @@ function submitCorrection(data) {
         }
     });
 }
-
+//Send answer for help to the server
+function submitHelpAnswer(helpData) {
+    $.ajax({
+        url: '/players/answer_help_request/' + currentHelpPlayerId,
+        contentType: "application/json",
+        type: 'POST',
+        data: JSON.stringify(helpData),
+        success: function (data) {
+            setHelpPane(data);
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            alert(xhr.status + ' - ' + thrownError);
+        }
+    });
+}
 //GET
 //Get story by ID
 /*INUTILE
@@ -676,7 +723,6 @@ function downloadPlayer(id) {
 }
 //Download del player tramite JSON
 function download(player) {
-    //TODO: IMMAGINI immagini legenda
     let images = [];
     let i = 1;
     let pdf = new jsPDF();
@@ -755,6 +801,7 @@ function download(player) {
             if (save) { pdf.save((player.username || 'player' + player.id) + '.pdf'); }
         }
         img.src = img_el.url;
+        console.log('-->' + img.src + '<--');
         finalY += 80;
     });
     
@@ -814,9 +861,10 @@ function openCorrectionPane(id) {
 function openHelpPane(player) {
     $.ajax({
         accepts: 'application/json',
-        url: '/players/get_help_requests/' + player,
+        url: '/players/get_help_request/' + player,
         success: function (data) {
             setHelpPane(JSON.parse(data));
+            currentHelpPlayerId = player;
         },
         error: function (xhr, ajaxOptions, thrownError) {
             alert(xhr.status + ' - ' + thrownError);
@@ -883,8 +931,8 @@ function openClassification() {
 //EVENTS
 //Function to run when the document is ready
 $(document).ready(function () {
-    updateAllData();
-    setPendingCorrectionList();
+  updateAllData();
+  setPendingCorrectionList();
 });
 //Event to open history of selected player
 $(document).on('click', '#history-button', function (event) {

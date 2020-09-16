@@ -87,6 +87,8 @@
 			// storyJSON (è il file della storia trasformato in un'oggetto (JSON della storia)) . <--- serve per accedere ai campi delle storie
 			// 'activities' è un'array [index] accedi all'attività attuale .input_type <--- è un campo dell'oggetto dell'array
             if (type == 'photo') {
+            	answer = '/public/images/uploads/' + $('#input-immagine')[0].files[0].name;
+            	console.log(answer);
 				if (storyJSON.activities[index].input.evaluation_type == 'evaluator') {
 					corrected_bool = false;
 				}

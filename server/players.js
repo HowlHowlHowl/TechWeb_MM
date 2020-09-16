@@ -140,13 +140,14 @@ module.exports = function (app) {
             res.status(200).send();
         }
     });
-    //Restituisce il vettore di richieste d'aiuto del player con il nome 
-    app.get('/players/get_help_requests/:id', function (req, res) {
+    //Restituisce il vettore di richieste d'aiuto del player con nome e nome storia
+    app.get('/players/get_help_request/:id', function (req, res) {
         let id = req.params.id;
         let player = JSON.parse(fs.readFileSync('players/' + id + '.json'));
         let data = {
             help: player.help,
-            name: (player.username || 'player ' + player.id),
+            name: (player.username || 'Player ' + player.id),
+            story_name: player.story_name,
             id: player.id
         }
         res.write(JSON.stringify(data));
@@ -207,6 +208,30 @@ module.exports = function (app) {
         content.pending_count -= 1;
         content.score += Number(data.score);
         fs.writeFile(path, JSON.stringify(content, null, 2), function (err) {
+            if (err) {
+                res.status(500).send();
+            } else {
+                res.writeHead(200, { 'Content-Type': 'application/json' });
+                res.write(JSON.stringify(content, null, 2));
+                res.end();
+            }
+        });
+    });
+    //Aggiorna le richieste d'aiuto con la risposta fornita dal valutatore
+    app.post('/players/answer_help_request/:id', function (req, res) {
+        let id = req.params.id;
+        let data = req.body;
+        let path = 'players/' + id + '.json';
+        let player = JSON.parse(fs.readFileSync(path));
+        player.help[data.index].to_help = false;
+        player.help[data.index].answer = data.answer;
+        let content = {
+            help: player.help,
+            name: (player.username || 'Player ' + player.id),
+            story_name: player.story_name,
+            id: player.id
+        };
+        fs.writeFile(path, JSON.stringify(player, null, 2), function (err) {
             if (err) {
                 res.status(500).send();
             } else {
