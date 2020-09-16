@@ -143,7 +143,13 @@
 					corrected_bool = false;
 					next_index = storyJSON.activities[index].input.next_index;
 				}
-			} 
+			}
+            
+            //Se per caso la storia e' stata creata male dall'autore che non ha specificato tutti i percorsi saltiamo alla fine direttamente.
+            if(next_index === undefined || next_index === null){
+                next_index = 1;
+            }
+            
             let mission_index = storyJSON.activities[next_index].mission_index;
             let mission_name;
             if (mission_index) { mission_name = storyJSON.missions[mission_index].name; } else { mission_name = (next_index == 1 ? 'Fine' : 'Inizio'); }
