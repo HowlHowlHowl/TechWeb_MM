@@ -1,0 +1,335 @@
+{
+  "name": "cia1 stai s8 tu sei un'apeee bzzzz",
+  "accessible": false,
+  "style": "",
+  "published": true,
+  "canvas_offset": {
+    "x": 199.78385691624365,
+    "y": 141.4828202352104
+  },
+  "canvas_scale": 0.25,
+  "missions": [],
+  "activities": [
+    {
+      "name": "tua madre è slava",
+      "contents": [
+        {
+          "type": "image",
+          "url": "/public/uploads/s-l300.jpg",
+          "description": "tua madre è slava tua madre è slava.\nF"
+        }
+      ],
+      "mission_index": null,
+      "special": "begin",
+      "input_type": "none",
+      "input": {
+        "evaluation_type": "none",
+        "next_index": 10
+      },
+      "position": {
+        "x": -118.02260224967178,
+        "y": -42.70216992762755
+      }
+    },
+    {
+      "name": "the end is near",
+      "contents": [
+        {
+          "type": "text",
+          "text": "bravo, alla fine tutto porta ad un'unica morale \nSOVRANO MAIALE"
+        },
+        {
+          "type": "image",
+          "url": "/public/uploads/Screenshot (3).png",
+          "description": ""
+        }
+      ],
+      "mission_index": null,
+      "special": "end",
+      "input_type": "none",
+      "input": {
+        "evaluation_type": "none",
+        "next_index": null
+      },
+      "position": {
+        "x": 1822.7470474123252,
+        "y": 114.06767902889187
+      }
+    },
+    {
+      "name": "TUA MAMMA ERA UNA GRANDE MILF SISISI",
+      "contents": [
+        {
+          "type": "text",
+          "text": "e ho sempre cercato di non guardare\nma nonostante facessi così SISI\ntu hai continuato ad essere un?"
+        }
+      ],
+      "mission_index": null,
+      "input_type": "text",
+      "input": {
+        "evaluation_type": "correct",
+        "next_index": 3,
+        "correct_options": [
+          {
+            "points": "777",
+            "text": "infame"
+          }
+        ],
+        "wrong_stay": false,
+        "wrong_next_index": 7
+      },
+      "position": {
+        "x": 362.4400906121401,
+        "y": -206.72133695332386
+      }
+    },
+    {
+      "name": "NON VOGLIO SNITCH NEL GVNG",
+      "contents": [
+        {
+          "type": "text",
+          "text": "foto piedi"
+        }
+      ],
+      "mission_index": null,
+      "input_type": "photo",
+      "input": {
+        "evaluation_type": "any",
+        "next_index": 4
+      },
+      "position": {
+        "x": 653.7075595750322,
+        "y": -91.87163235726904
+      }
+    },
+    {
+      "name": "saitamaaaaaaa",
+      "contents": [
+        {
+          "type": "image",
+          "url": "/public/uploads/saitama.jpg",
+          "description": "saitama"
+        },
+        {
+          "type": "text",
+          "text": "nebula rick e karma vanno al mercato e incontrato BOT irene che ci proca con BOT AMUMU \nbot amumu \nbho vedi tu\ngo jhonny go, go\n"
+        },
+        {
+          "type": "image",
+          "url": "/public/uploads/amumu.jpg",
+          "description": "bot amumu"
+        }
+      ],
+      "mission_index": null,
+      "input_type": "photo",
+      "input": {
+        "evaluation_type": "any",
+        "next_index": 6
+      },
+      "position": {
+        "x": 956.25,
+        "y": -166
+      }
+    },
+    {
+      "name": "puoi dire di no ",
+      "contents": [
+        {
+          "type": "image",
+          "url": "/public/uploads/MERLINSKINCARE.JPG",
+          "description": "my last skin :3\nfammi vedere la tuaaaaa:3333"
+        }
+      ],
+      "mission_index": null,
+      "input_type": "photo",
+      "input": {
+        "evaluation_type": "any",
+        "next_index": 11
+      },
+      "position": {
+        "x": 437.46291936637635,
+        "y": 135.7521620112903
+      }
+    },
+    {
+      "name": "nu simmu salentini dellu munnu cittadini radicati alli messapi cu li greci e bizanti uniti da su stile oce culli jamaicani ",
+      "contents": [
+        {
+          "type": "text",
+          "text": "ihihihhihih\nxd lol xp asd wasd gabriele gay"
+        }
+      ],
+      "mission_index": null,
+      "input_type": "photo",
+      "input": {
+        "evaluation_type": "any",
+        "next_index": 9
+      },
+      "position": {
+        "x": 1230.0048476524753,
+        "y": -204.53859608732128
+      }
+    },
+    {
+      "name": "another mate ",
+      "contents": [
+        {
+          "type": "text",
+          "text": "ciao manda foto piedini "
+        }
+      ],
+      "mission_index": null,
+      "input_type": "photo",
+      "input": {
+        "evaluation_type": "any",
+        "next_index": 5
+      },
+      "position": {
+        "x": 176.39200609274786,
+        "y": 193.732781816365
+      }
+    },
+    {
+      "name": "ahahahahhahashahahahahahahhahahahahaHAHAHAHAHAHAHAHAHAHAHAHSHJAHAHHAHAHAHAHAHAHAHAJAJA",
+      "contents": [
+        {
+          "type": "text",
+          "text": "AHASHDSUGAIUEFG7UW3YIRFSJEBT4UBLVYSEIFWHHYWUSDFUSSEYUAJGHAHAHAHAJJZJAJAJSJSHAKUGFAHKUSHKUDAKJAGSDGFDJHZUKAJòOFSHVXCZNJksAIESFDKJVXC,M.ZDSòLRIJFKCVXLZòADSPFJKXASòLàERWIOUDFKLSòERWIPROUDTFGKLCVòFXADFKLERSEKòLW'0QWE98RIKJLSWPOERIòO34098KJERWL32I4895W347ERUKJDFLSòOPER9IDFKLASòQEWIPORUKDFS,M.ZòLEUOK,GFMERWP9IUZDSLAòQWè0ERIUQWè0ERIPOCVX-.DFRIPOTKòLminneapolysMERDA KAKDUHVSIOdHKVacwjò,snbv cxzkseslcv mzxldskjfnmcv df,mnhv-klb,ntrklijgnm"
+        }
+      ],
+      "mission_index": null,
+      "input_type": "photo",
+      "input": {
+        "evaluation_type": "any",
+        "next_index": 1
+      },
+      "position": {
+        "x": 1506.4832472050375,
+        "y": 492.6369241753852
+      }
+    },
+    {
+      "name": "SOVRANO MERDA",
+      "contents": [
+        {
+          "type": "image",
+          "url": "/public/uploads/Screenshot (4).png",
+          "description": "ihihihihihhih"
+        },
+        {
+          "type": "text",
+          "text": "SOVRANO MERDA"
+        }
+      ],
+      "mission_index": null,
+      "input_type": "photo",
+      "input": {
+        "evaluation_type": "any",
+        "next_index": 1
+      },
+      "position": {
+        "x": 1519.9059274911087,
+        "y": -162.60259783659035
+      }
+    },
+    {
+      "name": "ihihih",
+      "contents": [
+        {
+          "type": "text",
+          "text": "ma allora se tua madre è slava. manda nudes"
+        }
+      ],
+      "mission_index": null,
+      "input_type": "photo",
+      "input": {
+        "evaluation_type": "evaluator",
+        "next_index": 2
+      },
+      "position": {
+        "x": 149.43772513058505,
+        "y": -31.833688831878213
+      }
+    },
+    {
+      "name": "seven deadly sins",
+      "contents": [
+        {
+          "type": "image",
+          "url": "/public/uploads/meliodas.jpg",
+          "description": "MELIODAS che peccato è?"
+        }
+      ],
+      "mission_index": null,
+      "input_type": "text",
+      "input": {
+        "evaluation_type": "correct",
+        "next_index": 4,
+        "correct_options": [
+          {
+            "points": "100",
+            "text": "IRA"
+          },
+          {
+            "points": "50",
+            "text": "drago dell'ira "
+          },
+          {
+            "points": "20",
+            "text": "rabbia"
+          }
+        ],
+        "wrong_stay": false,
+        "wrong_next_index": 12
+      },
+      "position": {
+        "x": 670.3619209522589,
+        "y": 134.258836985481
+      }
+    },
+    {
+      "name": "m so cacat u cazz ",
+      "contents": [
+        {
+          "type": "text",
+          "text": "sai chi è il personaggio più bello della storia di anime e manga?\nte lo dico io "
+        },
+        {
+          "type": "image",
+          "url": "/public/uploads/korosenseistates.jpg",
+          "description": "TAKOTUBO IS MY FAVORITE stage of KOROSENSEI "
+        }
+      ],
+      "mission_index": null,
+      "input_type": "photo",
+      "input": {
+        "evaluation_type": "any",
+        "next_index": 13
+      },
+      "position": {
+        "x": 934.4207940202563,
+        "y": 226.39558310445818
+      }
+    },
+    {
+      "name": "si è fatta una certa",
+      "contents": [
+        {
+          "type": "text",
+          "text": "meh  avast, gabrieru looooser"
+        }
+      ],
+      "mission_index": null,
+      "input_type": "photo",
+      "input": {
+        "evaluation_type": "any",
+        "next_index": 8
+      },
+      "position": {
+        "x": 1229.1642110972361,
+        "y": 259.84302944521494
+      }
+    }
+  ],
+  "id": 112
+}
