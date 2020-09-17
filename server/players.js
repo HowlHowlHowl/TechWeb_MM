@@ -141,7 +141,7 @@ module.exports = function (app) {
         }
     });
     // Richiesta dei messaggi della chat per verificarne la presenza di nuovi 
-    app.get('players/get_chat/:id', function (req, res) {
+    app.get('/players/get_chat/:id', function (req, res) {
         let id = req.params.id;
         let player = JSON.parse(fs.readFileSync('players/' + id + '.json'));
         let chat = player.chat;
