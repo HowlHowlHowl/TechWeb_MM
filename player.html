@@ -20,7 +20,6 @@
 	<script type="text/javascript">
 		/*TODO:
 			Update di correzioni => score 
-			Notifica di messaggi in interval aggiornamento
 			Notifica e visualizzazione di HELP
 		*/ 
 		var player_id = null;
@@ -49,7 +48,10 @@
                 }
             });
         });
+		setInterval(function () {
+			check4newMex();
 
+		},1000);
 		function setPlayer(data) {
 			$.ajax({
 				url: '/players/create_player',
@@ -280,7 +282,30 @@
                 $('#footer').append('<button id="bottone-fine" type="button" class="btn btn-light bottone-next">Fine</button>');
             }
 		}
+		//Funzione per la notifica della chat
+		function check4newMex() {
+			$.ajax({
+				url: 'players/get_chat/player' + player_id,
+				success: function (chat) {
+					chat = JSON.parse(chat);
+					let count=0;
+					console.log(chat.length);
+					if (chat.length > 0) {
+						chat.forEach((chatLog) => {
+							if (chatLog.seen == false && chatLog.auth == 'Valutatore') {
+								count++;
+							}
+						});
+						if (count > 0 && !($('#chatDot').length)) {
+							$('#chat-button').append('<div id= "chatDot" class= "dot"></div>');
+							blinkNotify('#chatDot');
+						}
+					}
+                }
 
+			}); 
+	
+		}
 		//Evento per la fine della storia
 		$(document).on('click', '#bottone-fine', function () {
 			$('.testo-attivita').empty();
@@ -358,7 +383,7 @@
 			console.log(input_type);
 			switch (input_type) {
 				case 'photo':
-					if ($('#input-immagine')[0].files.lenght == 0)
+					if ($('#input-immagine')[0].files.length == 0)
 						return false;
 					else return true;
                 case 'none':
@@ -793,6 +818,20 @@
 		.sent-msgs {
 			background-color: #9932CC;
 		}
+		/*notifica nuovo messaggio chat*/
+		.dot {
+			min-width: 2vh;
+			min-height: 2vh;
+			margin: .2vh;
+			border-radius: 2vh;
+			font-size: 1vh;
+			vertical-align: middle;
+			text-align: center;
+			padding: 2.5px;
+			float: left;
+			clear: right;
+			background: radial-gradient(rebeccapurple 10%, transparent) !important;
+        }
 	</style>
 </head>
 <body>
