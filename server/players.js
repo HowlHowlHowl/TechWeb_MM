@@ -148,6 +148,32 @@ module.exports = function (app) {
         res.write(JSON.stringify(chat));
         res.status(200).send();
     });
+    // verifica delle risposte alle richiste d'aiuto 
+    app.get('/players/get_help/:id', function (req, res) {
+        let id = req.params.id;
+        let player = JSON.parse(fs.readFileSync('players/' + id + '.json'));
+        let help = player.help;
+        res.write(JSON.stringify(help));
+        res.status(200).send();
+    });
+    app.get('/players/update_score/:id', function (req, res) {
+        let id = req.params.id;
+        let path = 'players/' + id + '.json';
+        let player = JSON.parse(fs.readFileSync(path));
+        let quests = player.quest_list;
+        let to_send;
+        for (let i = 0; i < help.length; i++) {
+            if (!quests[i].up_to_date && quests[i].corrected) {
+                player.quest_list[i].up_to_date = true;
+                to_send = quests[i];
+                break;
+            }
+        }
+        fs.writeFile(path, JSON.stringify(player, null, 2), function (err) {
+            res.write(JSON.stringify(data));
+            res.status((err ? 500 : 200)).send();
+        });
+    });
     //Restituisce il vettore di richieste d'aiuto del player con nome e nome storia
     app.get('/players/get_help_request/:id', function (req, res) {
         let id = req.params.id;
@@ -160,6 +186,18 @@ module.exports = function (app) {
         }
         res.write(JSON.stringify(data));
         res.status(200).send();
+    });
+    //Aggiunge una richiesta di aiuto al vettore help del player
+    app.post('/players/send_help_req/:id', function (req, res) {
+        let id = req.params.id;
+        let data = req.body;
+        let path = 'players/' + id + '.json';
+        let player = JSON.parse(fs.readFileSync(path));
+        player.help.unshift(data);
+        fs.writeFile(path, JSON.stringify(player, null, 2), function (err) {
+            res.status((err ? 500 : 200)).send();
+        });
+        res.end();
     });
     //Associa un username ad un player
     app.post('/rename_player/:id', function (req, res) {
@@ -186,16 +224,27 @@ module.exports = function (app) {
         });
         res.end();
     });
+    
+    //Segna come letti gli helplog del player specificato
+    app.post('/players/mark_help_as_seen/:id' , function (req, res) {
+        let id = req.params.id;
+        let path = 'players/' + id + '.json';
+        let data = fs.readFileSync(path);
+        let content = JSON.parse(data);
+        content.help.forEach(function (helpLog) {
+            if (!helpLog.to_help) { helpLog.seen = true; }
+        });
+        fs.writeFile(path, JSON.stringify(content, null, 2), function (err) {
+            res.status(err ? 500 : 200).send();
+        });
+        res.end();
+    });
     //Segna come letti i chatlog del player specificato
     app.post('/players/mark_as_seen/:id', function (req, res) {
         let id = req.params.id;
         let path = 'players/' + id + '.json';
         let author = req.body.author;
-        let data = fs.readFileSync(path, function (err) {
-            if (err) {
-                res.status(500).send();
-            }
-        });
+        let data = fs.readFileSync(path);
         let content = JSON.parse(data);
         content.chat.forEach(function (chatLog) {
             if (chatLog.auth != author) { chatLog.seen = true; }
@@ -203,6 +252,7 @@ module.exports = function (app) {
         fs.writeFile(path, JSON.stringify(content, null, 2), function (err) {
             res.status(err ? 500 : 200).send();
         });
+        res.end();
     });
     //Aggiorna la correzione di una quest per player=id
     app.post('/submit_correction/:id', function (req, res) {

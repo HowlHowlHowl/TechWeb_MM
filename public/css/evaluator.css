@@ -33,8 +33,12 @@ body {
     background: #007bff;
     padding: 0;
     margin: 0;
+    max-height:70vh;
+    overflow-y: auto;
 }
-
+.dropdown {
+    max-height:60vh;
+}
 .navbar-nav > li {
     color: white;
     margin-left: 1vw;
@@ -68,6 +72,8 @@ body {
 
 .dropdown-menu {
     width: 30vh;
+    max-height: 40vh;
+    overflow-y: auto;
 }
 
 .nav-item {
@@ -111,7 +117,7 @@ body {
 }
 
 .answer-list > a {
-    font-size: 2vh;
+    font-size: 2.5vh;
     word-wrap: break-word;
     padding: .5px .5px .5px .5px;
 }
@@ -119,12 +125,20 @@ body {
 .waiting-player:first-child {
     background: #007bff;
     color: white;
-    font-size: 2.5vh;
+    font-size: 2vh;
     padding-top: 2vh;
     padding-bottom: 2vh;
     border: #007bff;
     height: 10vh;
+    min-height: 50px;
 }
+.waiting-player:first-child a {
+    margin: 0;
+    vertical-align: middle;
+}
+.waiting-player:nth-child(2) {
+    border-top: 1px solid #007bff;
+} 
 
 .waiting-player {
     border: inset;

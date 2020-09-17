@@ -18,20 +18,17 @@
 	<script src="/public/js/widgets.js"></script>
     
 	<script type="text/javascript">
-		/*TODO:
-			Update di correzioni => score 
-			Notifica e visualizzazione di HELP
-		*/ 
 		var player_id = null;
 		var index = null;
 		var next_index = 0;
 		var storyJSON = null;
 		var answer = "";
 		var isChatOpen = false;
+		var isHelpPaneOpen = false;
 		var isTextWindowOpen = false;
 		$(document).ready(function () {
             $('#score').text('Score: 0');
-            blinkNotify('#score');
+			blinkNotify('#score');
             // richiesta storia
             var url_string = window.location.href;
             var url = new URL(url_string);
@@ -41,17 +38,33 @@
                 url: '/stories/' + id,
                 success: function (data) {
                     storyJSON = data;
-                    setPlayer(storyJSON);
+				    setPlayer(storyJSON);
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
                     alert(xhr.status + ' - ' + thrownError);
                 }
             });
-        });
+		});
+		//Update al secondo di nuovi messaggi e risposte a richieste d'aiuto 
 		setInterval(function () {
 			check4newMex();
+			checkReqHelp();
 
-		},1000);
+		}, 1000);
+
+        //Chat update every second 
+        setInterval(function () {
+            if (isChatOpen) {
+                openChat();
+            }
+        }, 1000);
+        //Help pane update every 10 seconds
+        setInterval(function () {
+            if (isHelpPaneOpen)
+                if (!$('#helpPane textarea').val()) {
+                    openHelpPane();
+                }
+        }, 10000);
 		function setPlayer(data) {
 			$.ajax({
 				url: '/players/create_player',
@@ -61,7 +74,7 @@
 				success: function (id) {
 					player_id = id;
 					setWindow();
-                    setCurrentQuest();
+					setCurrentQuest();
 				},
 				error: function (xhr, ajaxOptions, thrownError) {
 					alert(xhr.status + ' - ' + thrownError);
@@ -86,6 +99,7 @@
 			let score = 0;
 			let corrected_bool = true;
 			let questionArray = [];
+			let to_notify = false;
 			let type = storyJSON.activities[index].input_type;
 			next_index = storyJSON.activities[index].input.next_index;
 			answer = '';
@@ -94,10 +108,10 @@
 			// 'activities' è un'array [index] accedi all'attività attuale .input_type <--- è un campo dell'oggetto dell'array
             if (type == 'photo') {
             	answer = '/public/images/uploads/' + $('#input-immagine')[0].files[0].name;
-            	console.log(answer);
 				if (storyJSON.activities[index].input.evaluation_type == 'evaluator') {
 					corrected_bool = false;
 				}
+				to_notify = true;
 			}
 			else if (type == 'number') {
 				answer = $('#input-num').val();
@@ -121,13 +135,14 @@
 				} else {
 					//Evaluation_type == evaluator
 					corrected_bool = false;
+					to_notify = true;
 				}
 			}
 			else if (type == 'text') {
 				answer = $('#input-text').val();
 				if (storyJSON.activities[index].input.evaluation_type == 'correct') {
 					storyJSON.activities[index].input.correct_options.forEach((option) => {
-						if (answer.toLowerCase().replace(' ', '').localeCompare(option.text.toLowerCase().replace(' ', ''))==0) {
+						if (answer.trim().toLowerCase().replace(' ', '').localeCompare(option.text.trim().toLowerCase().replace(' ', ''))==0) {
 							score = option.points;
 						}
 					});
@@ -142,6 +157,7 @@
 					}
 				} else {
 					//Eval_type = evaluator
+					to_notify = true;
 					corrected_bool = false;
 					next_index = storyJSON.activities[index].input.next_index;
 				}
@@ -154,7 +170,7 @@
             
             let mission_index = storyJSON.activities[next_index].mission_index;
             let mission_name;
-            if (mission_index) { mission_name = storyJSON.missions[mission_index].name; } else { mission_name = (next_index == 1 ? 'Fine' : 'Inizio'); }
+            if (mission_index) { mission_name = storyJSON.missions[mission_index].name; } else { mission_name = (next_index == 1 ? 'Fine' : (index==0 ? 'Inizio' : '')); }
 
             //Costruisce l'array della domanda posta al player
             storyJSON.activities[index].contents.forEach(function (elem) {
@@ -191,13 +207,13 @@
 				input_type: type,
                 answer: answer,
 				comment: '',
-				quest_score: Number(score)
+				quest_score: Number(score),
+				up_to_date: to_notify
             };
 			sendAnswerToServer(answer_data);
 		}
 		//Funzione per mandare il descrittore dell'attività completata al server ed aggiungerlo al file del player
 		function sendAnswerToServer(answer_data) {
-			console.log(answer_data);
 			$.ajax({
 				url: '/players/add_answer/player' + player_id,
 				type: 'PUT',
@@ -237,7 +253,7 @@
 					video.appendChild(source);
 					video.setAttribute('class', 'to_del');
 					video.setAttribute('alt', elem.description);
-                    $('.video').append(video);
+                    $('.testo-attivita').append(video);
                 }
                 if (elem.type == 'image') {
 					var image = document.createElement('img');
@@ -245,7 +261,7 @@
                     image.setAttribute('alt', elem.description);
 					image.setAttribute('width', '400');
                     image.setAttribute('class', 'to_del');
-                    $('.img').append(image);
+                    $('.testo-attivita').append(image);
                 }
 			});
 			$('#footer').empty();
@@ -289,7 +305,6 @@
 				success: function (chat) {
 					chat = JSON.parse(chat);
 					let count=0;
-					console.log(chat.length);
 					if (chat.length > 0) {
 						chat.forEach((chatLog) => {
 							if (chatLog.seen == false && chatLog.auth == 'Valutatore') {
@@ -302,17 +317,35 @@
 						}
 					}
                 }
-
 			}); 
-	
+		}
+		// funzione per la notifica degli aiuti
+		function checkReqHelp() {
+			$.ajax({
+				url: 'players/get_help/player' + player_id,
+				success: function (help) {
+					help = JSON.parse(help);
+					let count = 0;
+					if (help.length > 0) {
+						help.forEach((helpLog) => {
+							console.log(!helpLog.to_help + ' ' + !helpLog.seen);
+							if (!helpLog.to_help && !helpLog.seen) {
+								count++;
+							}
+						});
+						if (count > 0 && !($('#helpDot').length)) {
+							$('#help-button').append('<div id= "helpDot" class= "dot"></div>');
+							blinkNotify('#helpDot');
+						}
+					}
+				}
+			});
 		}
 		//Evento per la fine della storia
 		$(document).on('click', '#bottone-fine', function () {
 			$('.testo-attivita').empty();
 			$('#nome-missione').empty();
 			$('#nome-attivita').empty();
-			$('.div-grande-video').empty();
-			$('.div-grande-img').empty();
 			$('.testo-attivita').append('<p id="final-text">Grazie per aver giocato!</p>'); 
 			$('#bottone-fine').remove();
 
@@ -372,7 +405,6 @@
 					uploadFile($('#input-immagine')[0].files[0]);
 				} else {
 					checkInput();
-					
 				}
 			} else {
 				//Non accade nulla
@@ -380,7 +412,6 @@
 		});
 		function isInputValid() {
 			let input_type = storyJSON.activities[index].input_type;
-			console.log(input_type);
 			switch (input_type) {
 				case 'photo':
 					if ($('#input-immagine')[0].files.length == 0)
@@ -397,7 +428,7 @@
 		//Evento per andare avanti fra le attività con invio
 		$(document).on('keypress', function (key) {
 			if (key.which == 13) {
-				if (!isChatOpen && !isTextWindowOpen) {
+				if (!isChatOpen && !isTextWindowOpen && !isHelpPaneOpen) {
 					$('#bottone-avanti').click();
 				}
 			}
@@ -449,11 +480,8 @@
 		/**** Funzioni per la chat ****/
         //Sets the layout of the chat messages
         function setChatView(data) {
-        	$('#chat-user').empty();
         	$('#chat-msgs').empty();
         	document.getElementById("chat").style.display = "block";
-
-        	$('#chat-user').append('<div class="glyphicon glyphicon-comment"></div><p id="chat-title">Valutatore</p>');
         	data.chat.forEach((chatlog) => {
         		if ((chatlog.auth.localeCompare("Valutatore")) != 0) {
         			$('#chat-msgs').append('<div class="row msg_container base_sent"><div class="col-md-10 col-xs-10"><div class="messages sent-msgs msg_sent"><p>' +
@@ -465,10 +493,10 @@
         	});
         }
         //Open the pop-up chat with the selected player
-        function openChat(id) {
+        function openChat() {
         	isChatOpen = true;
         	$.ajax({
-        		url: '/players/' + id,
+        		url: '/players/player' + player_id,
         		success: function (data) {
         			setChatView(data);
         			markAsSeen(id);
@@ -509,7 +537,7 @@
         			data: JSON.stringify(msg),
 
         			success: function (data) {
-        				openChat(id);
+        				openChat();
         				$('#new_msg_text').focus();
         			},
         			error: function (xhr, ajaxOptions, thrownError) {
@@ -539,27 +567,120 @@
         }
         //Event to open chat with selected player
         $(document).on('click', '#chat-button', function() {
-        	openChat('player' + player_id);
+        	openChat();
 		});
-        //Chat update every second 
-		setInterval(function () {
-			if (isChatOpen) {
-				openChat('player'+player_id);
-			} else {
-				//TODO:	inserire notifica.
-            }
-        }, 1000);
-
-
 		/* Funzioni per HELP */
 		//Evento per il pulsante help
 		$(document).on('click', '#help-button', function () {
-			openHelp('player' + player_id);
+			openHelpPane();
 		});
-		// evento che apre la finestra di aiuto
-		function openHelp(player) {
-
+		//Connessione per aprire la finestra di aiuto
+		function openHelpPane() {
+			$.ajax({
+				url: '/players/get_help/player' + player_id,
+				success: function (help) {
+					isHelpPaneOpen = true;
+					setHelpPane(JSON.parse(help));
+					markHelpAsSeen();
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert(xhr.status + ' - ' + thrownError);
+                }
+			});
+		}
+		//Connessione per segnare come lette le risposte d'aiuto
+		function markHelpAsSeen() {
+            $.ajax({
+				url: '/players/mark_help_as_seen/player' + player_id,
+				type: 'POST',
+                success: function () {
+					$('#chatDot').remove();
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert(xhr.status + ' - ' + thrownError);
+                }
+            });
         }
+		//Preparazione e visualizzazione della finestra degli aiuti
+		function setHelpPane(help) {
+			$('#helpPane').remove();
+			$('body').append(`<div id="helpPane">
+								<h3><span id="close-help-pane" class="glyphicon glyphicon-remove"></span>Aiuti</h3>
+								<div id="new-help-req">
+									<textarea placeholder="Scrivi qui la tua richiesta d'aiuto" id="new-help-req-text"></textarea>
+									<button id="send-new-req">Invia</button>
+								</div>
+							</div>`);
+			if (help.length > 0) {
+				help.forEach((req) => {
+					console.log('inside');
+					$('#helpPane').append('<hr><div><p><b>Missione</b>: ' + req.mission_name
+						+ '<br><b>Attività</b>: ' + req.activity_name
+						+ '<br><b>Domanda</b>: <p class="help-question">' + req.question
+						+ '</p><br><b>Risposta</b>: <p class="help-answer">'
+						+ (req.answer || '<i>Ancora nessuna risposta</i>') + '</p></div>');
+				});
+			} else {
+				$('#helpPane').append('<ip id="no-help-msg">Non hai effettuato richieste</p>');
+            }
+			$('#helpPane textarea').focus();
+		}
+		//Evento per chiudere la finestra degli aiuti
+		$(document).on('click', '#close-help-pane', function () {
+			isHelpPaneOpen = false;
+			$('#helpPane').remove();
+		});
+		//Evento per inviare la richiesta d'aiuto collegato al bottone 
+		$(document).on('click', '#send-new-req', function () {
+			let question = ($('#helpPane textarea').val())
+			if (question) {
+                let mission_index = storyJSON.activities[next_index].mission_index;
+                let mission_name;
+				if (mission_index) {
+					mission_name = storyJSON.missions[mission_index].name;
+				} else {
+					mission_name = (next_index == 1 ? 'Fine' : (index == 0 ? 'Inizio' : ''));
+				}
+                sendHelpReq({
+                    mission_name: $('#nome-missione').text().trim() || (index == 0 ? 'Inizio' : (index == 1 ? 'Fine' : ' --- ')),
+					activity_name: $('#nome-attivita').text(),
+					question: question,
+					answer: "",
+					to_help: true,
+					seen: false
+				});
+			} else {
+				$('#helpPane textarea').attr('placeholder', "Devi riempire questo campo per procedere con la richiesta d'aiuto");
+            }
+		});
+		//Connessione per inviare una nuova richiesta d'aiuto
+		function sendHelpReq(data) {
+			$.ajax({
+				url: '/players/send_help_req/player' + player_id,
+				type: 'POST',
+				contentType: 'application/json',
+				data: JSON.stringify(data),
+				success: function () {
+					$('#help-button').click();
+				},
+				error: function (xhr, ajaxOptions, thrownError) {
+					alert(xhr.status + ' - ' + thrownError);
+				}
+			});
+		}
+        //Richiede informazioni sulle correzioni effettuati per verificare se ci sono punteggi da notificare
+        function updateScore() {
+            $.ajax({
+                url: '/players/update_score/player9',
+                success: function (score) {
+                    $('body').append(`<div class="notification-bar"><h4>` + score.mission_name + `</h4><p class="details-new-score">Nell'attività ` + score.activity_name + `hai conseguito ` + score.score + ` punti</div>`);
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert(xhr.status + ' - ' + thrownError);
+                }
+            });
+        }
+
 	</script>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -649,7 +770,7 @@
 			text-align: justify;
 			font-family: 'Helvetica Neue LT Std';
 		}
-		.img {
+		.testo-attivita img {
 			text-align: center;
 			vertical-align: middle;
 			border-style: none;
@@ -734,6 +855,62 @@
             background-color: white;
             border: 2px solid white;
         }
+		/*Finestra per l'help*/
+        #helpPane {
+            width: 70vw;
+            height: 60vh;
+            position: fixed;
+			margin:auto;
+			top:35vh;
+			left:15vw;
+			background:white;
+			border:5px solid #9932CC;
+			padding:1vh;
+			overflow-y:auto;
+			font-size:2vh;
+			word-break:break-word;
+        }
+		#new-help-req {
+			text-align:center;
+		}
+		#no-help-msg {
+			margin-top:3vh;
+			font-size: 4vh;
+			text-align:center;
+			display:block;
+		}
+		#helpPane button{
+			width:40%;
+			font-size:2vh;
+			border-color: #9932CC;
+		}
+		#helpPane p {
+			margin-bottom:0;
+		}
+		#helpPane h3 {
+			text-align:center;
+		}
+		#helpPane textarea {
+			margin-bottom:1vh;
+			width:100%;
+			resize:none;
+			font-size:2vh;
+			text-align:left;
+		}
+		.help-answer, .help-question {
+			background-color:rgba(200,200,200, .5);
+			padding:.5vh;
+			display:block;
+			min-height: 5vh;
+			margin-bottom:1vh;
+		}
+		#close-help-pane{
+			float:right;
+			top:0;
+			margin-bottom:1vh;
+			position:relative;
+			color: #9932CC;
+		}
         /*INPUT TEXT + GLYPHICON*/
         /*Bootstrap layout per avere l'icona dentro all'input*/
         .inner-addon {
@@ -850,15 +1027,6 @@
 		</div>
 		<!--TESTO ATTIVITA VISUALIZZATA-->
 		<div class="testo-attivita">
-		</div>
-		<!--SPAZIO VIDEO-->
-		<div class="div-grande-video">
-			<div class="video">
-			</div>
-		</div>
-		<!--SPAZIO IMMAGINE-->
-		<div class="div-grande-img">
-			<div class="img"></div>
 		</div>
 	</div>
 	<div id="footer">

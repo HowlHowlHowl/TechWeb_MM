@@ -1,6 +1,6 @@
 {
   "id": 0,
-  "score": 1000,
+  "score": 1116,
   "username": "",
   "current_quest_start_timestamp": [
     20,
@@ -10,7 +10,7 @@
   "current_activity": "Fine",
   "help": [],
   "chat": [],
-  "pending_count": 2,
+  "pending_count": 0,
   "story_name": "Le cose stanno così",
   "quest_list": [
     {
@@ -46,7 +46,7 @@
     {
       "mission_name": "Arriviamo a conclusione",
       "activity_name": "Storia che è un finale ma non arriva alla fine",
-      "corrected": false,
+      "corrected": true,
       "question": [
         {
           "type": "text",
@@ -67,12 +67,12 @@
       "input_type": "text",
       "answer": "1312",
       "comment": "",
-      "quest_score": 0
+      "quest_score": 20
     },
     {
       "mission_name": "Fine",
       "activity_name": "Fine",
-      "corrected": false,
+      "corrected": true,
       "question": [
         {
           "type": "text",
@@ -82,7 +82,7 @@
       "input_type": "photo",
       "answer": "/public/images/uploads/bell.jpg",
       "comment": "",
-      "quest_score": 0
+      "quest_score": 96
     }
   ]
 }

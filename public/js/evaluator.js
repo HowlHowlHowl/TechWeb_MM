@@ -226,7 +226,8 @@ function setCorrectionPane(data) {
                     + '<div class="inline-divs">'
                     + '</div>'
                     + '</div>';
-
+                //TODOOOO il main panel si abbassa agli update
+                //TODOOOOOOOO verificare che le notifiche score funzionino
                 //Define answer html
                 let answer_content;
                 if (quest.input_type == 'photo') {
@@ -240,14 +241,10 @@ function setCorrectionPane(data) {
                         //Event to resize container of imgs in correction pane 
                         var h = $(this).height();
                         var w = $(this).width();
-                        if (h > 1000) {
-                            h /= 2;
-                            w /= 2;
-                            img.height = h;
-                            img.width = w;
-                        }//TODO: immagini dimensionate giusto
                         let name = $(this).attr('name');
-                        $('#' + name).css('height', h);
+                        $(this).css('width', $('#' + name).width());
+                        $(this).css('height', 'auto');
+                        $('#' + name).css('height', $(this).height());
                     };
                     imgs[quest_index] = img;
                 } else {
@@ -416,6 +413,7 @@ function updateAllData() {
 //Fill the lists of player avaiable for conversation and in need for help
 function setPlayerList(data) {
     let name = (data.username ? data.username : "Player " + data.id);
+    let to_notify = false;
     $('#dot-space').empty();
     $('#playersDropdown').append('<a class="dropdown-item player-list-el close-on-click" id="player' + data.id + '">' + name + '</a>');
     playersLength++;
@@ -425,6 +423,7 @@ function setPlayerList(data) {
         $('#playerDropdownButton').append('<div class="glyphicon glyphicon-time color" id="navTimeNotification"></div>');
         $('#player' + data.id).append('<div class="negative-dot dot"></div>');
         blinkNotify('#navTimeNotification');
+        to_notify = true;
     }
 
     if (data.urgent) {
@@ -433,6 +432,7 @@ function setPlayerList(data) {
         $('#new_msgDropdownButton').append('<div class="badge badge-secondary" id="new_msgNotification">' + new_msgLength + ' new</div>');
         $('#new_msgDropdown').append('<a class="dropdown-item new_msg-list-el close-on-click" id="new_msg-player' + data.id + '">' + name + '</a>');
         blinkNotify('#new_msgNotification');
+        to_notify = true;
     }
 
     if (data.to_help) {
@@ -440,10 +440,11 @@ function setPlayerList(data) {
         $('#helpDropdown').append('<a class="dropdown-item help-list-el close-on-click" id="help-player' + data.id + '">' + name + '</a>');
         $('#helpDropdownButton').append('<div class="glyphicon glyphicon-flag" id="navHelpNotification"></div>');
         blinkNotify('#navHelpNotification');
+        to_notify = true;
     }
 
-    $('#dot-space').append('<div id="dot" class="dot"></div>');
-    blinkNotify('#dot');
+    if (to_notify) { $('#dot-space').append('<div id="dot" class="dot"></div>'); blinkNotify('#dot');}
+   
 }
 //Make the notification mark blink
 function blinkNotify(selector) {
@@ -834,7 +835,7 @@ function setPendingCorrectionList() {
         url: '/pending_answers',
         success: function (data) {
             $('#correction-list').empty();
-            $('#correction-list').append(' <a class="waiting-player list-group-item list-group-item-action disabled" data-toggle="list"  role="tab">Correzioni coda</a>');
+            $('#correction-list').append(' <a class="waiting-player list-group-item list-group-item-action disabled" data-toggle="list"  role="tab"><p>Risposte da correggere</p></a>');
             data.forEach(addPendingPlayer);
         },
         error: function (xhr, ajaxOptions, thrownError) {
