@@ -4,10 +4,10 @@
   "style": "",
   "published": true,
   "canvas_offset": {
-    "x": 199.78385691624365,
-    "y": 141.4828202352104
+    "x": -192.09952431767562,
+    "y": 197.20562107221065
   },
-  "canvas_scale": 0.25,
+  "canvas_scale": 0.6484356150250006,
   "missions": [],
   "activities": [
     {
@@ -16,7 +16,11 @@
         {
           "type": "image",
           "url": "/public/uploads/s-l300.jpg",
-          "description": "tua madre è slava tua madre è slava.\nF"
+          "description": "mamma slava"
+        },
+        {
+          "type": "text",
+          "text": "tua madre è slava tua madre è slava.\nF"
         }
       ],
       "mission_index": null,
@@ -137,7 +141,11 @@
         {
           "type": "image",
           "url": "/public/uploads/MERLINSKINCARE.JPG",
-          "description": "my last skin :3\nfammi vedere la tuaaaaa:3333"
+          "description": "minecraft skin "
+        },
+        {
+          "type": "text",
+          "text": "my last skin :3\nfammi vedere la tuaaaaa:3333"
         }
       ],
       "mission_index": null,
@@ -257,7 +265,11 @@
         {
           "type": "image",
           "url": "/public/uploads/meliodas.jpg",
-          "description": "MELIODAS che peccato è?"
+          "description": "meliodas"
+        },
+        {
+          "type": "text",
+          "text": "MELIODAS che peccato è?"
         }
       ],
       "mission_index": null,
@@ -297,7 +309,11 @@
         {
           "type": "image",
           "url": "/public/uploads/korosenseistates.jpg",
-          "description": "TAKOTUBO IS MY FAVORITE stage of KOROSENSEI "
+          "description": "stadi di korosensei"
+        },
+        {
+          "type": "text",
+          "text": "TAKOTUBO IS MY FAVORITE stage of KOROSENSEI "
         }
       ],
       "mission_index": null,

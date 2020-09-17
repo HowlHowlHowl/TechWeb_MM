@@ -280,7 +280,26 @@
                 $('#footer').append('<button id="bottone-fine" type="button" class="btn btn-light bottone-next">Fine</button>');
             }
 		}
+		//Funzione per la notifica della chat
+		function check4newMex() {
+			$.ajax({
+				url: 'players/get_chat/' + player_id,
+				success: function(chat) {
+					let count = 0;
+					chat.forEach((chatLog) => {
+						if (chatLog.seen == false && chatLog.auth == 'Valutatore') {
+							count++;
+						}
+					});
+					if (count > 0) {
+						$('#chat-button').append(
+							'<div class= "dot"></div>'
+                    );} 
+                }
 
+			}); 
+	
+		});
 		//Evento per la fine della storia
 		$(document).on('click', '#bottone-fine', function () {
 			$('.testo-attivita').empty();
@@ -793,6 +812,21 @@
 		.sent-msgs {
 			background-color: #9932CC;
 		}
+		/*notifica nuovo messaggio chat*/
+		.dot {
+			min-width: 2vh;
+			min-height: 2vh;
+			margin: .2vh;
+			border-radius: 2vh;
+			color: white;
+			font-size: 1vh;
+			vertical-align: middle;
+			text-align: center;
+			padding: 2.5px;
+			float: left;
+			clear: right;
+			background: radial-gradient(white 10%, transparent) !important;
+        }
 	</style>
 </head>
 <body>

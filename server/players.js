@@ -140,6 +140,14 @@ module.exports = function (app) {
             res.status(200).send();
         }
     });
+    // Richiesta dei messaggi della chat per verificarne la presenza di nuovi 
+    app.get('players/get_chat/:id', function (req, res) {
+        let id = req.params.id;
+        let player = JSON.parse(fs.readFileSync('players/' + id + '.json'));
+        let chat = player.chat;
+        res.write(JSON.stringify(chat));
+        res.status(200).send();
+    });
     //Restituisce il vettore di richieste d'aiuto del player con nome e nome storia
     app.get('/players/get_help_request/:id', function (req, res) {
         let id = req.params.id;
