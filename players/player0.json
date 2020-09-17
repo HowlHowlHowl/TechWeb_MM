@@ -9,7 +9,15 @@
   "current_mission": "",
   "current_activity": "Fine",
   "help": [],
-  "chat": [],
+  "chat": [
+    {
+      "hour": "11",
+      "mins": "44",
+      "text": "Lol",
+      "auth": "Valutatore",
+      "seen": false
+    }
+  ],
   "pending_count": 2,
   "story_name": "Le cose stanno così",
   "quest_list": [

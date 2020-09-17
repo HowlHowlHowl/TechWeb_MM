@@ -85,7 +85,7 @@ function setUserTab(data) {
     let minutes = (((elapsed_mins % 1) * 60).toFixed() < 0 ? 0 : ((elapsed_mins % 1) * 60).toFixed());
     minutes = (minutes < 10 ? '0' + minutes : minutes);
     let unread = 0;
-    data.chat.forEach((log => { if (!log.seen) unread++; }));
+    data.chat.forEach((log => { if (!log.seen && !(log.author=='Valutatore')) unread++; }));
     let nextID = ((data.id+1) > playersLength ? '' : 'player'+Number(data.id+1));
     let prevID = ((data.id - 1) < 1 ? '' : 'player' + Number(data.id - 1));
     
@@ -238,16 +238,16 @@ function setCorrectionPane(data) {
                     img.src = quest.answer;
                     img.onload = function () {
                         //Event to resize container of imgs in correction pane 
-                        var h = $(this).height();
-                        var w = $(this).width();
-                        if (h > 1000) {
-                            h /= 2;
-                            w /= 2;
-                            img.height = h;
-                            img.width = w;
-                        }//TODO: immagini dimensionate giusto
+                        let w = $(this).width;
                         let name = $(this).attr('name');
-                        $('#' + name).css('height', h);
+                        console.log($(this).height());
+                        if ($(this).height() > 1000) {
+                            $(this).css('width', $('#' + name).width());
+                            $(this).css('height', 'auto');
+                            $('#' + name).css('height', $(this).height());
+                        }//TODO: immagini dimensionate giusto
+                       
+                        
                     };
                     imgs[quest_index] = img;
                 } else {
@@ -334,7 +334,7 @@ function setHelpPane(data) {
         }
     });
     if (!body) {
-        body += '<p class="quest_header">Non ci sono risposte in attesa di valutazione per questo giocatore</p>';
+        body += "<p class='quest_header'>Non ci sono richieste d'aiuto in sospeso da parte di questo giocatore</p>";
     }
     $('#main-placeholder').append(header + body);
 }
@@ -614,7 +614,7 @@ function markAsSeen(id) {
         url: '/players/mark_as_seen/' + id,
         type: 'POST',
         contentType: 'application/json',
-        data: JSON.stringify({author:'evaluator'}),
+        data: JSON.stringify({author:'Valutatore'}),
         success: function () {
             updateAllData();
             $('#chatNotification').remove();
