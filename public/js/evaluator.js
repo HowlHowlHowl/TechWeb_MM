@@ -1,8 +1,3 @@
-/*TODO:
-PLAYER
-- Richiesta e risposta d'Aiuto diverso da chat
-*/
-
 var playersLength = 0;
 var new_msgLength = 0;
 var currentChatPlayerId = null;
@@ -36,7 +31,7 @@ setInterval(function () {
     }
     updateAllData();
 }, 60000);
-//Correction pane and Help pane updated every 5 minutes if no input is given
+//Correction pane and Help pane updated every 2 minutes if no input is given
 setInterval(function () {
     if (currentCorrectionPlayerId) {
         let i = 0;
@@ -64,10 +59,22 @@ setInterval(function () {
             openCorrectionPane(currentCorrectionPlayerId);
         }
     }
-    if (currentHelpPlayerId) {
-        
+    update = true;
+     if (currentHelpPlayerId) {
+        let i = 0;
+        let label;
+        do {
+            label = $('#help-input-label' + i);
+            let input = $('#' + label.attr('for'));
+            let in_val = input.val();
+            if (in_val && in_val.length > 0) {
+                update = false;
+                break;
+            }
+            i++;
+        } while (label.length > 0); 
     }
-}, /*5 * 60000*/ 5000);
+}, 2 *60000);
 
 //GENERIC FUNCTIONS
 //Scroll to the last received message in the current chat
@@ -302,14 +309,15 @@ function setHelpPane(data) {
         + data.name + ' - ' + data.story_name
         + '<a id="user-info-tab-player' + data.id + '" class="user-info-tab btn btn-info btn-sm"><span class="glyphicon glyphicon-info-sign"></span></a>'
         + '</div><div class="panel-body" id="help-pane">';
+    let ordinary_index = 0;
     data.help.forEach((help_req) => {
         if (help_req.to_help) {
-            let i = data.help.indexOf(help_req);
+            let help_index = data.help.indexOf(help_req);
             let quest_header = '<p class="quest_header">Missione: ' + help_req.mission_name + '<br>Attività: ' + help_req.activity_name + '</p>';
             let quest_widget = '<div class="description-div">'
                 + "<div class='inline-divs'> Richiesta d'aiuto :"
                 + '</div>'
-                + '<div class="inline-divs" id="help-question' + i + '">'
+                + '<div class="inline-divs" id="help-question' + help_index + '">'
                 + '<p>' + help_req.question + '</p>'
                 + '</div>'
                 + '<div class="inline-divs">'
@@ -318,22 +326,24 @@ function setHelpPane(data) {
             let valu_widget = '<div class="valutation-input">'
                 + '<form class="form-correction">'
                 + '<div class="form-group row">'
-                + '<div class="col-12 input2" id="input1-' + i + '">'
-                + '<label for="comment-input-' + i + '">Rispondi</label><br>'
-                + '<textarea class="comment-input help-comment" id="help-comment-input-' + i + '" placeholder="Scrivi qui la tua risposta"></textarea></div>'
+                + '<div class="col-12 input2" id="input1-' + help_index + '">'
+                + '<label id="help-input-label'+ ordinary_index + '" for="help-answer-input-' + help_index + '">Rispondi</label><br>'
+                + '<textarea class="comment-input help-comment" id="help-answer-input-' + help_index + '" placeholder="Scrivi qui la tua risposta"></textarea></div>'
                 + '</div>'
-                + '<button type="button" name="' + i + '"class="send-help btn btn-outline-primary">Invio <span class="glyphicon glyphicon-ok"></span></button>'
+                + '<button type="button" name="' + help_index + '"class="send-help btn btn-outline-primary">Invio <span class="glyphicon glyphicon-ok"></span></button>'
                 + '</form>'
                 + '</div>'
                 + '<hr>';
             pane = '<div class="correction-divider">' + quest_header + quest_widget + valu_widget + '</div>';
             body += pane;
+            ordinary_index++;
         }
     });
     if (!body) {
         body += '<p class="quest_header">Non ci sono risposte in attesa di valutazione per questo giocatore</p>';
-    }
+    } 
     $('#main-placeholder').append(header + body);
+    $('#' + $('#help-input-label-0').attr('for')).focus();
 }
 //Event to submit the answer to the help required
 $(document).on('click', '.send-help', function (event) {
@@ -757,7 +767,7 @@ function download(player) {
                 y:0
             });
             answer = "*Immagine n° " + i;
-            i++;
+            help_index++;
         } else {
             answer = quest.answer;
         }
