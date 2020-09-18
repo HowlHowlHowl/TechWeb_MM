@@ -688,6 +688,15 @@
                 }
             });
         }
+		//Remove notification bar TODO: controllare se funziona
+        setInterval(function () {
+        	let notifications = document.getElementsByClassName('notification-bar');
+        	[].forEach.call(notifications, function (el) {
+        		if (el.attr('display') == 'none') {
+        			el.remove();
+        		}
+        	});
+        }, 60000);
 
 	</script>
 	<meta charset="utf-8">
