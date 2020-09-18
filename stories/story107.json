@@ -4,8 +4,8 @@
   "style": "",
   "published": true,
   "canvas_offset": {
-    "x": 308.1706608704196,
-    "y": 450.38114953711766
+    "x": 353.1706608704196,
+    "y": 414.38114953711766
   },
   "canvas_scale": 0.5475244788874036,
   "missions": [
@@ -172,8 +172,8 @@
         "wrong_next_index": 6
       },
       "position": {
-        "x": -16.204193099897974,
-        "y": -6.275359766415271
+        "x": 179.2219740899105,
+        "y": -20.87688033706053
       }
     },
     {
@@ -204,14 +204,23 @@
       "name": "Three",
       "contents": [],
       "mission_index": 3,
-      "input_type": "number",
+      "input_type": "text",
       "input": {
-        "evaluation_type": "any",
-        "next_index": 7
+        "style": "scroll",
+        "evaluation_type": "correct",
+        "next_index": 3,
+        "correct_options": [
+          {
+            "points": "100",
+            "text": "Bella"
+          }
+        ],
+        "wrong_stay": false,
+        "wrong_next_index": 7
       },
       "position": {
-        "x": 6.579016994605046,
-        "y": -474.36364586947377
+        "x": -18.97723906482046,
+        "y": -373.89724734099417
       }
     },
     {
