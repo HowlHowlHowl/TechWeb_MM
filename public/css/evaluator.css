@@ -1,5 +1,6 @@
 body {
     overflow: hidden;
+    background-color: #007bff;
 }
 
 .tab-content, .tab-pane{
@@ -114,6 +115,7 @@ body {
     overflow-y: auto;
     top: 0;
     bottom: 0;
+    background-color: white !important;
 }
 
 .answer-list > a {
