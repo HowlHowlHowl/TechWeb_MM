@@ -90,3 +90,37 @@
 .lcd-button:focus {
     outline: none;
 }
+
+
+
+/* Widget pergamena */
+
+@font-face {
+        font-family: scrollFont;
+        src: url('/public/fonts/SCRIPTIN.ttf');
+        font-weight: normal;
+        font-style: normal;
+        font-display: auto;
+}
+.scroll-container {
+    width: 75vw;
+    height: 100vw;
+    
+    background: url('/public/images/scroll.png');
+    background-size: 100% 100%;
+    font-family: scrollFont;
+    margin: auto;
+}
+
+.scroll-textarea {
+    position: relative;
+    top: 10vw;
+    width: 55vw;
+    height: 75vw;
+    font-size: 4vw;
+    line-height: 7vw;
+    margin: auto;
+    background-color: transparent;
+    outline: none;
+    border: 0px;
+}

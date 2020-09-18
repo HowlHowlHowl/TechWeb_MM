@@ -283,12 +283,15 @@
                     }
                     $('#input-num').focus();
 				} else if (input_type == 'text') {
-
-					$('#footer').append(
-						`<div class="inner-addon left-addon">
-							 <a id="icona-fullscreen" class="glyphicon glyphicon-fullscreen"></a>
-						<input type="text" autocomplete="off" id="input-text" class="form-control input default-input-text" placeholder="Risposta"/>		  
-					</div>`);
+                    if(input.style == "scroll") {
+                        $('#footer').append($($("#template-scroll").html()));
+                    } else {
+                        $('#footer').append(
+                            `<div class="inner-addon left-addon">
+                                 <a id="icona-fullscreen" class="glyphicon glyphicon-fullscreen"></a>
+                            <input type="text" autocomplete="off" id="input-text" class="form-control input default-input-text" placeholder="Risposta"/>		  
+                        </div>`);
+                    }
 					$('#input-text').focus();
 				}
 				$('#footer').append('<button id="bottone-avanti" type="button" class="btn btn-light bottone-next">Avanti</button>');
@@ -1080,6 +1083,13 @@
             <div class="lcd-button-container" style="grid-area: down2;"><button class="lcd-button" onClick="onLCDButtonClick(1, false)"><img src="/public/images/icons/lcd-tri-down.png"></button></div>
             <div class="lcd-button-container" style="grid-area: down3;"><button class="lcd-button" onClick="onLCDButtonClick(2, false)"><img src="/public/images/icons/lcd-tri-down.png"></button></div>
             <div class="lcd-button-container" style="grid-area: down4;"><button class="lcd-button" onClick="onLCDButtonClick(3, false)"><img src="/public/images/icons/lcd-tri-down.png"></button></div>
+        </div>
+    </template>
+    
+    <!-- template widget pergamena -->
+    <template id="template-scroll">
+        <div class="scroll-container">
+            <textarea id="input-text" spellcheck="false" class="scroll-textarea"></textarea>
         </div>
     </template>
 </body>
