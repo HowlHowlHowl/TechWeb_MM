@@ -161,18 +161,32 @@ module.exports = function (app) {
         let path = 'players/' + id + '.json';
         let player = JSON.parse(fs.readFileSync(path));
         let quests = player.quest_list;
-        let to_send;
-        for (let i = 0; i < help.length; i++) {
-            if (!quests[i].up_to_date && quests[i].corrected) {
+        let to_send = null
+        for (let i = 0; i < quests.length; i++) {
+            if (!(quests[i].up_to_date) && quests[i].corrected) {
                 player.quest_list[i].up_to_date = true;
                 to_send = quests[i];
                 break;
             }
         }
-        fs.writeFile(path, JSON.stringify(player, null, 2), function (err) {
-            res.write(JSON.stringify(data));
-            res.status((err ? 500 : 200)).send();
-        });
+        if (to_send) {
+            fs.writeFile(path, JSON.stringify(player, null, 2), function (err) {
+                if (err) {
+                    res.status(500).send();
+                } else {
+                    res.writeHead(200, { 'Content-Type': 'application/json' });
+                    res.write(JSON.stringify({
+                        score: player.score,
+                        mission: to_send.mission_name,
+                        activity: to_send.activity_name,
+                        added: to_send.quest_score
+                    }));
+                    res.end();
+                }
+            });
+        } else {
+            res.status(200).send();
+        }
     });
     //Restituisce il vettore di richieste d'aiuto del player con nome e nome storia
     app.get('/players/get_help_request/:id', function (req, res) {

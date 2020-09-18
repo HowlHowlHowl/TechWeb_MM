@@ -10,6 +10,9 @@ body {
     .nav-item > a {
         text-align: left !important;
     }
+    #navbarSupportedContent {
+        top: 10vh !important;
+    }
 }
 
 #collapse-button{
@@ -91,6 +94,7 @@ body {
     background:#007BFF;
     position:fixed;
     top:0;
+    width:100%;
 }
 /*Container correzioni*/
 .list-group {
@@ -208,12 +212,14 @@ body {
 }
 
 .input1 {
+    z-index: 1;
     font-size: 2vh;
     float: left;
     margin-right: 5vw;
 }
 
 .input2 {
+    z-index: 0;
     font-size: 2vh;
     width: 100%;
 }
@@ -261,6 +267,7 @@ body {
     overflow-y: auto;
     vertical-align: top;
     margin-left: 1vw;
+    overflow-x:hidden;
 }
 
 .inline-divs:nth-child(3) {

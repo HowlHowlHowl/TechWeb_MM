@@ -45,19 +45,18 @@
                 }
             });
 		});
-		//Update al secondo di nuovi messaggi e risposte a richieste d'aiuto 
+		//Update al secondo di nuovi messaggi oppure chat, risposte a richieste d'aiuto e punteggio
 		setInterval(function () {
-			check4newMex();
+			if (isChatOpen) {
+				openChat();
+			} else {
+				check4newMex();
+			}
 			checkReqHelp();
-
+			updateScore();
 		}, 1000);
 
-        //Chat update every second 
-        setInterval(function () {
-            if (isChatOpen) {
-                openChat();
-            }
-        }, 1000);
+       
         //Help pane update every 10 seconds
         setInterval(function () {
             if (isHelpPaneOpen)
@@ -65,6 +64,7 @@
                     openHelpPane();
                 }
         }, 10000);
+		//Funzione per inizializzare il file sul server e ricevere l'id associato
 		function setPlayer(data) {
 			$.ajax({
 				url: '/players/create_player',
@@ -99,7 +99,7 @@
 			let score = 0;
 			let corrected_bool = true;
 			let questionArray = [];
-			let to_notify = false;
+			let up_to_date = true;
 			let type = storyJSON.activities[index].input_type;
 			next_index = storyJSON.activities[index].input.next_index;
 			answer = '';
@@ -111,7 +111,6 @@
 				if (storyJSON.activities[index].input.evaluation_type == 'evaluator') {
 					corrected_bool = false;
 				}
-				to_notify = true;
 			}
 			else if (type == 'number') {
 				answer = $('#input-num').val();
@@ -135,7 +134,6 @@
 				} else {
 					//Evaluation_type == evaluator
 					corrected_bool = false;
-					to_notify = true;
 				}
 			}
 			else if (type == 'text') {
@@ -157,7 +155,6 @@
 					}
 				} else {
 					//Eval_type = evaluator
-					to_notify = true;
 					corrected_bool = false;
 					next_index = storyJSON.activities[index].input.next_index;
 				}
@@ -199,6 +196,8 @@
                     });
                 }
             });
+            up_to_date = corrected_bool;
+
             answer_data = {
                 mission_name: mission_name,
 				activity_name: storyJSON.activities[next_index].name,
@@ -208,7 +207,7 @@
                 answer: answer,
 				comment: '',
 				quest_score: Number(score),
-				up_to_date: to_notify
+				up_to_date: up_to_date
             };
 			sendAnswerToServer(answer_data);
 		}
@@ -331,7 +330,6 @@
 					let count = 0;
 					if (help.length > 0) {
 						help.forEach((helpLog) => {
-							console.log(!helpLog.to_help + ' ' + !helpLog.seen);
 							if (!helpLog.to_help && !helpLog.seen) {
 								count++;
 							}
@@ -616,7 +614,6 @@
 							</div>`);
 			if (help.length > 0) {
 				help.forEach((req) => {
-					console.log('inside');
 					$('#helpPane').append('<hr><div><p><b>Missione</b>: ' + req.mission_name
 						+ '<br><b>Attività</b>: ' + req.activity_name
 						+ '<br><b>Domanda</b>: <p class="help-question">' + req.question
@@ -674,9 +671,17 @@
         //Richiede informazioni sulle correzioni effettuati per verificare se ci sono punteggi da notificare
         function updateScore() {
             $.ajax({
-                url: '/players/update_score/player9',
-                success: function (score) {
-                    $('body').append(`<div class="notification-bar"><h4>` + score.mission_name + `</h4><p class="details-new-score">Nell'attività ` + score.activity_name + `hai conseguito ` + score.score + ` punti</div>`);
+                url: '/players/update_score/player' + player_id,
+                success: function (new_score) {
+                	if (new_score) {
+                		$('body').append('<div class="notification-bar"><h4>'
+							+ new_score.mission + '</h4><p class="details-new-score">Nell'+"'"+'attività: "' 
+							+ new_score.activity + '" hai conseguito: <span class="'
+							+ (new_score.added > 0 ? 'score-notif-text-pos' : 'score-notif-text-neg')
+							+ '">' + new_score.added + '</span> punti</div>');
+                		$('#score').text('Score: ' + new_score.score);
+                		blinkNotify('#score');
+                	}
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
                     alert(xhr.status + ' - ' + thrownError);
@@ -777,6 +782,46 @@
 			text-align: center;
 			vertical-align: middle;
 			border-style: none;
+		}
+		/*Notifica nuovo punteggio*/
+		.notification-bar {
+			width: 100%;
+			color:black;
+			position:fixed;
+			background: rgba(255, 255, 255, .9);
+			border: 1.5px solid black;
+			border-bottom-left-radius: 2vh;
+			border-bottom-right-radius: 2vh;
+			padding: 5px;
+			font-weight:600;
+			min-height:10vh;
+			animation-name: notification;
+			animation-duration:5s;
+			animation-iteration-count:1;
+			animation-fill-mode: forwards;
+		}
+		.score-notif-text-pos {
+			font-size:3vh;
+			color: #07b100;
+		}
+		.score-notif-text-neg {
+			font-size: 3vh;
+			color: red;
+		}
+		@keyframes notification {
+			0% {
+				top:-100vh;
+			}
+			10% {
+				top:0;
+			}
+			80%{
+				top:0;
+			}
+			100%{
+				top:-100vh;
+				display:none;
+			}
 		}
 		/*Messaggio di errore*/
 		#err-msg{
@@ -1017,7 +1062,6 @@
 <body>
 	<div id="generico">
 		<button type="button" id="help-button" class="btn btn-light bottonehelp bottone">Aiuto</button>
-		<button type="button" id="correzione" class="btn btn-light bottonecorrezioni bottone">Revisioni</button>
 		<button type="button" id="chat-button" class="btn btn-light bottonechat bottone">Chat</button>
 		<p id="score"></p>
 	</div>

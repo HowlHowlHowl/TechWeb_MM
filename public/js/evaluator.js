@@ -93,9 +93,8 @@ function setUserTab(data) {
     minutes = (minutes < 10 ? '0' + minutes : minutes);
     let unread = 0;
     data.chat.forEach((log => { if (!log.seen) unread++; }));
-    let nextID = ((data.id+1) > playersLength ? '' : 'player'+Number(data.id+1));
-    let prevID = ((data.id - 1) < 1 ? '' : 'player' + Number(data.id - 1));
-    
+    let nextID = ((data.id + 1) >= playersLength ? 'player' + 0 : 'player' + Number(data.id + 1));
+    let prevID = ((data.id - 1) < 0 ? 'player' + (playersLength - 1) : 'player' + Number(data.id - 1));
     
     $('#user-space').empty();
     $('#user-space').append(  '<a onclick="closeUserTab()"><span class="glyphicon glyphicon-remove icon-close"></span></a>'
@@ -233,8 +232,6 @@ function setCorrectionPane(data) {
                     + '<div class="inline-divs">'
                     + '</div>'
                     + '</div>';
-                //TODOOOO il main panel si abbassa agli update
-                //TODOOOOOOOO verificare che le notifiche score funzionino
                 //Define answer html
                 let answer_content;
                 if (quest.input_type == 'photo') {
@@ -246,11 +243,13 @@ function setCorrectionPane(data) {
                     img.src = quest.answer;
                     img.onload = function () {
                         //Event to resize container of imgs in correction pane 
-                        var h = $(this).height();
-                        var w = $(this).width();
                         let name = $(this).attr('name');
                         $(this).css('width', $('#' + name).width());
                         $(this).css('height', 'auto');
+                        while($(this).height() > 1000) {
+                            $(this).css('width', $('#' + name).width()/2);
+                            $(this).css('height', 'auto');
+                        }
                         $('#' + name).css('height', $(this).height());
                     };
                     imgs[quest_index] = img;
@@ -345,20 +344,6 @@ function setHelpPane(data) {
     $('#main-placeholder').append(header + body);
     $('#' + $('#help-input-label-0').attr('for')).focus();
 }
-//Event to submit the answer to the help required
-$(document).on('click', '.send-help', function (event) {
-    let helpIndex = event.currentTarget.getAttribute('name');
-    let helpAnswer = $('#help-comment-input-' + helpIndex).val();
-    if (helpAnswer) {
-        let helpData= { answer: helpAnswer, index: helpIndex };
-        submitHelpAnswer(helpData);
-    } else {
-        $('#no-score').remove();
-        $('#input1-' + helpIndex).append('<p id="no-score"class="unexpected-str">*Questo campo è obbligatorio</p>');
-        $('#help-comment-input-' + helpIndex).focus();
-    }
-});
-
 //Close the pop-up chat
 function closeChat() {
     document.getElementById("chat").style.display = "none";
@@ -748,13 +733,13 @@ function download(player) {
         quest.question.forEach((elem) => {
             switch (elem.type) {
                 case 'image':
-                    question_content += '\nImmagine con url ' + elem.content.url +'".' + (elem.content.descr ? '.\nDescrizione: "' + elem.content.descr + '"\n' : '\n');
+                    question_content += '\nImmagine con url: "' + elem.content.url +'".' + (elem.content.descr ? '.\nDescrizione: "' + elem.content.descr + '"\n' : '\n');
                     break;
                 case 'text':
                     question_content += elem.content + '\n';
                     break;
                 case 'video':
-                    question_content += '\nVideo con url "' + elem.content.url + '".' + (elem.content.descr ? '.\nDescrizione: "' + elem.content.descr + '"\n' : '\n');
+                    question_content += '\nVideo con url: "' + elem.content.url + '".' + (elem.content.descr ? '.\nDescrizione: "' + elem.content.descr + '"\n' : '\n');
                     break;
             }
         });
@@ -764,10 +749,11 @@ function download(player) {
                 url: quest.answer,
                 index: i,
                 loaded: false,
-                y:0
+                y: 0,
+                img: null
             });
             answer = "*Immagine n° " + i;
-            help_index++;
+            i++;
         } else {
             answer = quest.answer;
         }
@@ -778,42 +764,72 @@ function download(player) {
         head: [['Missione', 'Attività', 'Domanda', 'Risposta', 'Commento', 'Punteggio']],
         body: table_body,
         startY: pdf.pageCount > 1? pdf.autoTableEndPosY() + 20 : 50,
-        margin: { left:10, right:10 }
+        margin: { left:10, right:10 },
+        columnStyles:{
+            0: {
+                cellWidth: 20
+            },
+            1: {
+                cellWidth: 30
+            }, 
+            2: {
+                cellWidth: 40
+            },
+            3: {
+                cellWidth: 40
+            },
+            4: {
+                cellWidth: 35
+            }
+        },
+        theme: 'grid',
     });
     
     //Aggiunta immagini
     let finalY = 10;
     var pageHeight = pdf.internal.pageSize.height;
     pdf.addPage();
-    pdf.setFontSize(26);
+    pdf.setFontSize(30);
     pdf.text(pdf.internal.pageSize.width / 2, finalY, 'Legenda delle immagini', 'center');
     pdf.setFontSize(16)
     finalY += 10;
+    //scorri le immagini
     images.forEach((img_el) => {
+        //aggiorna la y
         img_el.y = finalY;
+        //crea l'immagine
         var img = new Image();
+        img.src = img_el.url;
+        //quando vieene caricata
         img.onload = function () {
             img_el.loaded = true;
-            let base64url = getDataUrl(img);
-            if (img_el.y + 70 > pageHeight) { pdf.addPage(); img_el.y = 10; finalY = 10; }
-            pdf.text(30, img_el.y + 35, 'Immagine n°' + img_el.index);
-            if (base64url) {
-                pdf.addImage(base64url, 90, img_el.y, 70, 70);
-            } else {
-                pdf.text(10, finalY, 'Non è stato possibile caricare il file.');
-            }
+            img_el.img = this;
             let save = true;
+            //Sono state caricate tutte?
             images.forEach((img_el_check) =>{
-                console.log(img_el_check.loaded);
                 if (img_el_check.loaded == false) {
                     save = false;
                 }
             });
-            if (save) { pdf.save((player.username || 'player' + player.id) + '.pdf'); }
+            if (save) {
+                //Sono tutte state caricate
+                images.forEach((img_el_save) => {
+                    let base64url = getDataUrl(img_el_save.img);
+                    //non entrerebbe nella pagina?
+                    if (img_el_save.y  + 40 > pageHeight) {
+                        pdf.addPage(); img_el_save.y = finalY = 10;
+                    }
+                    pdf.text(50, img_el_save.y + 15, 'Immagine n°' + img_el_save.index);
+                    if (base64url) {
+                        pdf.addImage(base64url, 120, img_el_save.y, 30, 30);
+                    } else {
+                        pdf.text(90, finalY + 15, 'Non è stato possibile caricare il file.');
+                    }
+                });
+                pdf.save((player.username || 'player' + player.id) + '.pdf');
+            }
         }
-        img.src = img_el.url;
-        console.log('-->' + img.src + '<--');
-        finalY += 80;
+        finalY += 40;
     });
     
 }
@@ -1089,6 +1105,20 @@ $(document).on('keydown', '#new_msg_text', function (event) {
         $('#send-msg').click();
     }
 });
+//Event to submit the answer to the help required
+$(document).on('click', '.send-help', function (event) {
+    let helpIndex = event.currentTarget.getAttribute('name');
+    let helpAnswer = $('#help-answer-input-' + helpIndex).val();
+    if (helpAnswer) {
+        let helpData = { answer: helpAnswer, index: helpIndex };
+        submitHelpAnswer(helpData);
+    } else {
+        $('#no-score').remove();
+        $('#input1-' + helpIndex).append('<p id="no-score"class="unexpected-str">*Questo campo è obbligatorio</p>');
+        $('#help-comment-input-' + helpIndex).focus();
+    }
+});
+
 //Enable tooltips
 $(function () {
     $('[data-toggle="tooltip"]').tooltip()
