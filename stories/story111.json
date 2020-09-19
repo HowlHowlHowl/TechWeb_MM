@@ -1,33 +1,61 @@
 {
-  "name": "Nuova storia",
-  "accessible": false,
+  "name": "Uomo come soggetto o oggetto di studio",
+  "accessible": true,
   "style": "",
   "published": false,
   "canvas_offset": {
-    "x": 0,
-    "y": 0
+    "x": 304.7173252884889,
+    "y": 214.51445518937487
   },
-  "canvas_scale": 1,
-  "missions": [],
+  "canvas_scale": 0.4679824677196933,
+  "missions": [
+    {
+      "name": "Introduzione",
+      "color": "#32f50f"
+    },
+    {
+      "name": "Curiosità",
+      "color": "#ff0000"
+    },
+    {
+      "name": "Quiz",
+      "color": "#0e00cc"
+    }
+  ],
   "activities": [
     {
-      "name": "Inizio",
-      "contents": [],
+      "name": "Introduzione all'antropologia culturale!",
+      "contents": [
+        {
+          "type": "text",
+          "text": "L'antropologia è lo studio dell'uomo a 360°. Ogni aspetto dell'uomo e del suo ambiente circostante è di fondamentale importanza per la materia. L'antropologo deve tener presente il territorio, sia a livello geografico sia a livello politico-sociale, la lingua, le tradizioni, la storia e non solo!\nLa chiave del suo lavoro è la ricerca sul campo, che è fondamentale per raccogliere informazioni quanto più vicine alla realtà, deve tener presente che essendo un essere umano e venendo da una società e una cultura diversa da quella che andrà a studiare dovrà cercare il più possibile di eliminare pregiudizi per portare a termine una ricerca quanto più oggettiva."
+        },
+        {
+          "type": "image",
+          "url": "/public/uploads/antropologia1.jpeg",
+          "description": "Vignetta sull'antropologia"
+        }
+      ],
       "mission_index": null,
       "special": "begin",
       "input_type": "none",
       "input": {
         "evaluation_type": "none",
-        "next_index": null
+        "next_index": 2
       },
       "position": {
-        "x": 50,
-        "y": 50
+        "x": -594.4154180756166,
+        "y": -378.1209782432767
       }
     },
     {
       "name": "Fine",
-      "contents": [],
+      "contents": [
+        {
+          "type": "text",
+          "text": "Grazie per aver giocato. Speriamo tu abbia imparato qualcosa di nuovo e ti sia divertito!"
+        }
+      ],
       "mission_index": null,
       "special": "end",
       "input_type": "none",
@@ -36,8 +64,191 @@
         "next_index": null
       },
       "position": {
-        "x": 250,
-        "y": 50
+        "x": 1637.671007748293,
+        "y": -380.76824908829366
+      }
+    },
+    {
+      "name": "Vediamo cosa sai sull'antropologia!",
+      "contents": [
+        {
+          "type": "text",
+          "text": "Inizia col rispondere a questa semplice domanda:\n\nSecondo te l'uomo in antropologia è \"soggetto\" oppure \"oggetto\" di studio?\n"
+        }
+      ],
+      "mission_index": 0,
+      "input_type": "text",
+      "input": {
+        "style": "",
+        "evaluation_type": "any",
+        "next_index": 4
+      },
+      "position": {
+        "x": -376.86217925752976,
+        "y": -398.96107549713895
+      }
+    },
+    {
+      "name": "Bronislaw K. Malinowski",
+      "contents": [
+        {
+          "type": "text",
+          "text": "L'antropologo B. K. Malinowski, pionere della moderna antropologia fu il primo a mettere per iscritto i parametri con cui condurre una ricerca sul campo durante la seconda guerra mondiale.\nNelle sue pubblicazioni appariva come un ricercatore professionale e privo di pregiudizi culturali nei confronti delle comunità e delle popolazioni con cui entrava in contatto. Il suo lavoro era considerato estremamente all'avanguardia.  Tuttavia dopo la sua morte fu pubblicato un diario privato che svelò i segreti di Malinowki, e perse il rispetto di cui godeva nella comunità accademica.\nNel diario infatti si legge di un uomo spesso a disagio, intollerante e volgare nei confronti dei nativi, comportamento che probabilmente derivava dalla frustrazione scaturita dai lunghi perodi passati lontano da casa in un contesto diverso dal proprio."
+        },
+        {
+          "type": "image",
+          "url": "/public/uploads/malinowski.jpg",
+          "description": "Bronislaw Malinowski sulle isole di Trobriand "
+        }
+      ],
+      "mission_index": 1,
+      "input_type": "none",
+      "input": {
+        "evaluation_type": "none",
+        "next_index": 5
+      },
+      "position": {
+        "x": 102.89967813310572,
+        "y": -400.4305278055369
+      }
+    },
+    {
+      "name": "La storia dell'Antropologia",
+      "contents": [
+        {
+          "type": "text",
+          "text": "I primi appunti antropologici risalgono al V secolo dagli scritti di Erodoto in cui egli osservava e descriveva gli usi e costumi delle popolazioni barbare.\nDurante il periodo del colonialismo britannico e spagnolo i missionari e \"conquistadores\" che presiedevano nelle colonie americane riportarono i resoconti dei primi contatti con i nativi che sono considerati le prime testimonianze etnografiche della storia dell'antropologia.\nSolo a partire dal diciottesimo secolo con l'avvento dell'illuminismo l'antropologia venne riconosciuta come disciplina in ambito accademico.\nDurante la seconda guerra mondiale come altre discipline l'antropologia fu utilizzata a sostegno delle teorie raziali e naziste, il \"razzismo scientifico\" propone, infatti, una classificazione delle popolazioni umane in \"razze\" fisicamente distinte in \"superiori\" o \"inferiori.\nNell'età moderna e fino ai giorni nostri l'antropologia è diventata una scienza multidisciplinare che incomincia a trattare geografia, economia, biologia, politica... di tutto!"
+        }
+      ],
+      "mission_index": 0,
+      "input_type": "none",
+      "input": {
+        "evaluation_type": "none",
+        "next_index": 3
+      },
+      "position": {
+        "x": -138.43698913967512,
+        "y": -397.1850605453115
+      }
+    },
+    {
+      "name": "Ralph Linton",
+      "contents": [
+        {
+          "type": "text",
+          "text": "L'antropologo Ralph Linton ne \"Lo studio dell'uomo\" scrive in chiave critica una parodia riferita all'uomo moderno\n\"Il cittadino americano medio si sveglia in un letto costruito secondo un modello che ebbe origine nel vicino Oriente. Egli scosta le lenzuola e le coperte che possono essere di cotone, pianta originaria dell’India; o di lino, pianta originaria del vicino Oriente; o di lana di pecora, animale originariamente addomesticato nel vicino Oriente; o di seta, il cui uso fu scoperto in Cina. [...] Mentre legge i resoconti dei problemi che si agitano all’estero, se è un buon cittadino conservatore, con un linguaggio indo-europeo, ringrazierà una divinità ebraica di averlo fatto al cento per cento americano…\""
+        },
+        {
+          "type": "image",
+          "url": "/public/uploads/Linthon.jpg",
+          "description": "Una foto di Ralph Linton."
+        }
+      ],
+      "mission_index": 1,
+      "input_type": "none",
+      "input": {
+        "next_index": 6
+      },
+      "position": {
+        "x": 343.77389756778,
+        "y": -399.97155179804673
+      }
+    },
+    {
+      "name": "I popoli mesoamericani",
+      "contents": [
+        {
+          "type": "text",
+          "text": "Nelle popolazioni mesoamericane (XIV - XVI secolo), gli Aztechi ad esempio, l'arte, la politica e la religione coincidevano come concetti. La società era organizzata in maniera gerachica e vedeva politici ed artisti in cima alla \"piramide sociale\".  Infatti in caso di guerra tra territori vicini, le vittime più frequenti erano gli artisti la quale morte rappresentava una perdita enorme per il regno.\nTutta l'arte prodotta all'interno del regno era considerata un'offerta agli dei venerati. "
+        },
+        {
+          "type": "image",
+          "url": "/public/uploads/diodelmais.jpg",
+          "description": "Dio del mais Azteco."
+        },
+        {
+          "type": "text",
+          "text": "Sopra rappresentato da un artista Azteco, il dio del Mais una delle figure religiose più importanti"
+        }
+      ],
+      "mission_index": 1,
+      "input_type": "none",
+      "input": {
+        "evaluation_type": "none",
+        "next_index": 7
+      },
+      "position": {
+        "x": 556.0266925837849,
+        "y": -406.2099106411533
+      }
+    },
+    {
+      "name": "Ora tocca a te!",
+      "contents": [
+        {
+          "type": "text",
+          "text": "In quale anno può essersi affermata in ambito accademico l'antropologia secondo te? "
+        }
+      ],
+      "mission_index": 2,
+      "input_type": "number",
+      "input": {
+        "style": "",
+        "evaluation_type": "correct",
+        "next_index": 9,
+        "correct_options": [
+          {
+            "points": "200",
+            "from": "1700",
+            "to": "1800"
+          }
+        ],
+        "wrong_stay": false,
+        "wrong_next_index": 9
+      },
+      "position": {
+        "x": 773.5886109784127,
+        "y": -413.08752029650736
+      }
+    },
+    {
+      "name": "Definiamo l'antropologia",
+      "contents": [
+        {
+          "type": "text",
+          "text": "Sei giunto alla conclusione del tuo viaggio all'interno dell'antropologia. \nProva a dare una tua definizione personale dell'antropologia e a delineare gli aspetti più importanti di essa."
+        }
+      ],
+      "mission_index": 2,
+      "input_type": "text",
+      "input": {
+        "style": "",
+        "evaluation_type": "evaluator",
+        "next_index": 1
+      },
+      "position": {
+        "x": 1399.8092957394826,
+        "y": -401.1130897047242
+      }
+    },
+    {
+      "name": "Prossima domanda...",
+      "contents": [
+        {
+          "type": "text",
+          "text": "Di cosa è stato pioniere l'antropologo B. K. Malinowski? "
+        }
+      ],
+      "mission_index": 2,
+      "input_type": "text",
+      "input": {
+        "style": "",
+        "evaluation_type": "evaluator",
+        "next_index": 8
+      },
+      "position": {
+        "x": 1111.2776046163317,
+        "y": -395.18945230699575
       }
     }
   ],

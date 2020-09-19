@@ -30,7 +30,8 @@ setInterval(function () {
         openClassification();
     }
     updateAllData();
-}, 60000);
+}, 2000);
+
 //Correction pane and Help pane updated every 2 minutes if no input is given
 setInterval(function () {
     if (currentCorrectionPlayerId) {
@@ -74,7 +75,7 @@ setInterval(function () {
             i++;
         } while (label.length > 0); 
     }
-}, 2 *60000);
+},  2000);
 
 //GENERIC FUNCTIONS
 //Scroll to the last received message in the current chat

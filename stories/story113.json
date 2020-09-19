@@ -1,0 +1,291 @@
+{
+  "name": "Il Sole di Smeraldo",
+  "accessible": true,
+  "style": "",
+  "published": false,
+  "canvas_offset": {
+    "x": 81.14365263477214,
+    "y": 96.89139802014147
+  },
+  "canvas_scale": 0.5465943880330457,
+  "missions": [
+    {
+      "name": "All'entrata della piramide",
+      "color": "#ffd500"
+    },
+    {
+      "name": "La trappola",
+      "color": "#8a7328"
+    },
+    {
+      "name": "Nella sala del gioiello",
+      "color": "#11770e"
+    },
+    {
+      "name": "La fine dell'avventura",
+      "color": "#f20202"
+    }
+  ],
+  "activities": [
+    {
+      "name": "All'avventura!",
+      "contents": [
+        {
+          "type": "text",
+          "text": "Benvenuto avventuriero questa è la tua prima missione! \nDevi andare a recuperare un gioiello nella antica piramide di una regina egizia."
+        }
+      ],
+      "mission_index": null,
+      "special": "begin",
+      "input_type": "none",
+      "input": {
+        "evaluation_type": "none",
+        "next_index": 2
+      },
+      "position": {
+        "x": -123.65983294062438,
+        "y": 114.88982664302779
+      }
+    },
+    {
+      "name": "Fine",
+      "contents": [
+        {
+          "type": "text",
+          "text": "Complimenti la tua prima avventura è finita, ci rivediamo alla tua prossima missione!!"
+        }
+      ],
+      "mission_index": null,
+      "special": "end",
+      "input_type": "none",
+      "input": {
+        "evaluation_type": "none",
+        "next_index": null
+      },
+      "position": {
+        "x": 1807.6995516390932,
+        "y": 92.43830797055654
+      }
+    },
+    {
+      "name": "Una prima scelta",
+      "contents": [
+        {
+          "type": "text",
+          "text": "Stiamo per entrare nella piramide del sole di smeraldo, dobbiamo recuperare il pendente della regina.\nHai con te dell'acqua, una torcia e questo blocchetto per gli appunti che stai leggendo. C'è un ultimo oggetto che avevi deciso di portare ma non si legge più qual è. Nella tua Jeep è rimasta una ruota di scorta, una pentola e una corda, cosa porti con te?"
+        },
+        {
+          "type": "text",
+          "text": "TODO IMMAGINI oggetti"
+        }
+      ],
+      "mission_index": 0,
+      "input_type": "text",
+      "input": {
+        "style": "",
+        "evaluation_type": "correct",
+        "next_index": 3,
+        "correct_options": [
+          {
+            "points": "100",
+            "text": "corda"
+          },
+          {
+            "points": "100",
+            "text": "la corda"
+          },
+          {
+            "points": "100",
+            "text": "una corda"
+          }
+        ],
+        "wrong_stay": true,
+        "wrong_message": "Forse non è molto utile..."
+      },
+      "position": {
+        "x": 113.72919329640483,
+        "y": 88.36594104520297
+      }
+    },
+    {
+      "name": "Alla porta della piramide",
+      "contents": [
+        {
+          "type": "text",
+          "text": "Hai scelto la corda, bravo! Sicuramente ti tornerà utile!\nTi avvicini all'ingresso ma la strada è chiusa da un'enorme porta di pietra."
+        },
+        {
+          "type": "image",
+          "url": "",
+          "description": "TODO porta pietra"
+        },
+        {
+          "type": "text",
+          "text": "Avvicinandoti noti che c'è inciso quel che sembra essere un indovinello, grazie alle tue conoscenze dei geroglifici, riesci a capire cosa recita:\n\"Con il sole a mezzogiorno quante facce della piramide sono illuminate?\""
+        }
+      ],
+      "mission_index": 0,
+      "input_type": "number",
+      "input": {
+        "style": "",
+        "evaluation_type": "correct",
+        "next_index": 5,
+        "correct_options": [
+          {
+            "points": "1000",
+            "from": "4",
+            "to": "4"
+          }
+        ],
+        "wrong_stay": false,
+        "wrong_next_index": 4
+      },
+      "position": {
+        "x": 387.3706938694648,
+        "y": 67.10523777358871
+      }
+    },
+    {
+      "name": "Nel tunnel",
+      "contents": [
+        {
+          "type": "text",
+          "text": "Il pavimento sotto di te si apre e rotoli giù per un tunnel sotteraneo.\nTi ritrovi in una grotta completamente buia... forse non era la risposta giusta?\nNon c'è modo di risalire il tunnel quindi decidi di accendere la torcia e proseguire."
+        }
+      ],
+      "mission_index": 1,
+      "input_type": "none",
+      "input": {
+        "evaluation_type": "none",
+        "next_index": 6
+      },
+      "position": {
+        "x": 662.8222495637781,
+        "y": 362.48295560622125
+      }
+    },
+    {
+      "name": "Sembra essere giusto!",
+      "contents": [
+        {
+          "type": "text",
+          "text": "Dopo un grande boato la porta si apre lentamente e tu puoi proseguire. Accendi la torcia, cammini dritto fino ad incontrare una passaggio fra due muri, decidi di attraversarlo "
+        }
+      ],
+      "mission_index": 0,
+      "input_type": "none",
+      "input": {
+        "evaluation_type": "none",
+        "next_index": 7
+      },
+      "position": {
+        "x": 780.6283454342927,
+        "y": 30.028884954678425
+      }
+    },
+    {
+      "name": "La via di fuga",
+      "contents": [
+        {
+          "type": "text",
+          "text": "Camminando trovi una scala di legno che sembra andare verso l'alto e una catena spezzata attaccata al soffitto.\nSembra che tu possa scegliere cosa usare per risalire. \nCosa decidi? Scala o catena?"
+        }
+      ],
+      "mission_index": 1,
+      "input_type": "text",
+      "input": {
+        "style": "",
+        "evaluation_type": "correct",
+        "next_index": 7,
+        "correct_options": [
+          {
+            "points": "1000",
+            "text": "scala"
+          },
+          {
+            "points": "1000",
+            "text": "la scala"
+          }
+        ],
+        "wrong_stay": true,
+        "wrong_message": "La catena è arruginita e si spezza appena ti appendi."
+      },
+      "position": {
+        "x": 888.5536648171928,
+        "y": 359.63487355381324
+      }
+    },
+    {
+      "name": "Ecco il gioiello!",
+      "contents": [
+        {
+          "type": "text",
+          "text": "Ti ritrovi in un salone enorme, pieno di antichi vasi e oggetti d'arte della famiglia reale. Ti fai strada stando attento a non toccare nulla e a metà della sala vedi in lontananza l'antico gioiello su di un piedistallo illuminato dalla luce del sole che filtra dalla cima della piramide.\nTI avvicini e ti rendi conto che il piedistallo è troppo alto per essere raggiunto,  noti quello che sembra essere un foglio di papiro ed un pennello con inchiostro fresco, cosa significherà?\nCercando qualche indizio nella stanza noti che il sole illumina  una piccola incisione sul piedistallo, vi è scritto: \n\"Scrivi sulla pergamena il colore dello smeraldo\""
+        }
+      ],
+      "mission_index": 2,
+      "input_type": "text",
+      "input": {
+        "style": "",
+        "evaluation_type": "correct",
+        "next_index": 8,
+        "correct_options": [
+          {
+            "points": "5000",
+            "text": "verde"
+          },
+          {
+            "points": "5000",
+            "text": "il verde"
+          }
+        ],
+        "wrong_stay": true,
+        "wrong_message": "Mhhh... non succede niente, la scritta scompare magicamente... Riprova!"
+      },
+      "position": {
+        "x": 1165.2140765469237,
+        "y": 67.86392383294937
+      }
+    },
+    {
+      "name": "Prendi e scappa!",
+      "contents": [
+        {
+          "type": "text",
+          "text": "La pergamena si alza a mezz'aria e brucia davanti ai tuoi occhi, il piedistallo si abbassa ma contemporaneamente tutta la piramide iniza a tremare.\nCorri verso il gioiello e che è ancora troppo in alto ma la piramide sta crollando! Per fortuna ti sei ricordato la corda, la lanci verso il pendente  e lo afferri al lazo, ottimo! Corri verso l'uscita più in fretta che puoi ed esci dalla piramide con un salto acrobatico. Ti giri e la vedi finire in macerie dietro di te... Appena in tempo!"
+        }
+      ],
+      "mission_index": 2,
+      "input_type": "none",
+      "input": {
+        "evaluation_type": "none",
+        "next_index": 9
+      },
+      "position": {
+        "x": 1375.6662599947356,
+        "y": 72.94381836991131
+      }
+    },
+    {
+      "name": "Diario di viaggio",
+      "contents": [
+        {
+          "type": "text",
+          "text": "La tua missione è giunta al termine, prima di portare il gioiello al museo affinché tutti possano leggere delle tue imprese, decidi di scrivere un resoconto di viaggio. \nAnnota qui sotto la parte migliore della tua avventura!"
+        }
+      ],
+      "mission_index": 3,
+      "input_type": "text",
+      "input": {
+        "style": "",
+        "evaluation_type": "evaluator",
+        "next_index": 1
+      },
+      "position": {
+        "x": 1582.892457770781,
+        "y": 74.36815413440476
+      }
+    }
+  ],
+  "id": 113
+}

@@ -56,7 +56,7 @@
 			updateScore();
 		}, 1000);
 
-       
+
         //Help pane update every 10 seconds
         setInterval(function () {
             if (isHelpPaneOpen)
@@ -131,8 +131,7 @@
                             next_index = (storyJSON.activities[index].input.wrong_next_index || next_index);
 						}
 					}
-				} else {
-					//Evaluation_type == evaluator
+				} else if (storyJSON.activities[index].input.evaluation_type == 'evaluator') {
 					corrected_bool = false;
 				}
 			}
@@ -140,31 +139,29 @@
 				answer = $('#input-text').val();
 				if (storyJSON.activities[index].input.evaluation_type == 'correct') {
 					storyJSON.activities[index].input.correct_options.forEach((option) => {
-						if (answer.trim().toLowerCase().replace(' ', '').localeCompare(option.text.trim().toLowerCase().replace(' ', ''))==0) {
+						if (answer.trim().toLowerCase().replace(' ', '').localeCompare(option.text.trim().toLowerCase().replace(' ', '')) == 0) {
 							score = option.points;
 						}
 					});
 					if (score == 0) {
-                        if (storyJSON.activities[index].input.wrong_stay) {
-                            next_index = index;
+						if (storyJSON.activities[index].input.wrong_stay) {
+							next_index = index;
 							$('#div-grande').append('<p id="err-msg">' + (storyJSON.activities[index].input.wrong_message || 'Riprova') + '</p>');
-                            scrollToBottom('div-grande');
+							scrollToBottom('div-grande');
 						} else {
 							next_index = (storyJSON.activities[index].input.wrong_next_index || next_index);
 						}
 					}
-				} else {
-					//Eval_type = evaluator
+				} else if (storyJSON.activities[index].input.evaluation_type == 'evaluator') {
 					corrected_bool = false;
-					next_index = storyJSON.activities[index].input.next_index;
 				}
 			}
-            
+
             //Se per caso la storia e' stata creata male dall'autore che non ha specificato tutti i percorsi saltiamo alla fine direttamente.
             if(next_index === undefined || next_index === null){
                 next_index = 1;
             }
-            
+
             let mission_index = storyJSON.activities[next_index].mission_index;
             let mission_name;
             if (mission_index) { mission_name = storyJSON.missions[mission_index].name; } else { mission_name = (next_index == 1 ? 'Fine' : (index==0 ? 'Inizio' : '')); }
@@ -288,7 +285,7 @@
                         $('#footer').append(
                             `<div class="inner-addon left-addon">
                                  <a id="icona-fullscreen" class="glyphicon glyphicon-fullscreen"></a>
-                            <input type="text" autocomplete="off" id="input-text" class="form-control input default-input-text" placeholder="Risposta"/>		  
+                            <input type="text" autocomplete="off" id="input-text" class="form-control input default-input-text" placeholder="Risposta"/>
                         </div>`);
                     }
 					$('#input-text').focus();
@@ -319,7 +316,7 @@
 						}
 					}
                 }
-			}); 
+			});
 		}
 		// funzione per la notifica degli aiuti
 		function checkReqHelp() {
@@ -347,7 +344,7 @@
 			$('.testo-attivita').empty();
 			$('#nome-missione').empty();
 			$('#nome-attivita').empty();
-			$('.testo-attivita').append('<p id="final-text">Grazie per aver giocato!</p>'); 
+			$('.testo-attivita').append('<p id="final-text">Grazie per aver giocato!</p>');
 			$('#bottone-fine').remove();
 
 		});
@@ -395,7 +392,7 @@
             isTextWindowOpen = false;
 			$('#input-text').attr('disabled', false);
 			$('#bottone-avanti').attr('disabled', false);
-			$('#input-text').val($('#window-input-text > textarea').val().replace('\n', ' '));	
+			$('#input-text').val($('#window-input-text > textarea').val().replace('\n', ' '));
             $('#window-input-text').remove();
         });
 		//Evento per cambiare attività
@@ -452,7 +449,7 @@
             $('.custom-file-upload').css({
                 "border-top-right-radius": "0",
 				"border-bottom-right-radius": "0",
-				"margin-right": "0",	
+				"margin-right": "0",
             });
 		});
 
@@ -630,7 +627,7 @@
 			isHelpPaneOpen = false;
 			$('#helpPane').remove();
 		});
-		//Evento per inviare la richiesta d'aiuto collegato al bottone 
+		//Evento per inviare la richiesta d'aiuto collegato al bottone
 		$(document).on('click', '#send-new-req', function () {
 			let question = ($('#helpPane textarea').val())
 			if (question) {
@@ -675,7 +672,7 @@
                 success: function (new_score) {
                 	if (new_score) {
                 		$('body').append('<div class="notification-bar"><h4>'
-							+ new_score.mission + '</h4><p class="details-new-score">Nell'+"'"+'attività: "' 
+							+ new_score.mission + '</h4><p class="details-new-score">Nell'+"'"+'attività: "'
 							+ new_score.activity + '" hai conseguito: <span class="'
 							+ (new_score.added > 0 ? 'score-notif-text-pos' : 'score-notif-text-neg')
 							+ '">' + new_score.added + '</span> punti</div>');
@@ -689,7 +686,7 @@
             });
         }
 		//Remove notification bar TODO: controllare se funziona
-        setInterval(function () {
+        /*setInterval(function () {
         	let notifications = document.getElementsByClassName('notification-bar');
         	[].forEach.call(notifications, function (el) {
         		if (el.attr('display') == 'none') {
@@ -697,7 +694,8 @@
         		}
         	});
         }, 60000);
-
+		*/
+		//TODO: rimuv notif help
 	</script>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -769,6 +767,7 @@
 		#nome-attivita {
 			text-align: center;
 			font-size: 2.5vh;
+			font-weight: 600;
 			font-family: 'Helvetica Neue LT Std';
 		}
 
@@ -850,7 +849,7 @@
 			font-size: 2.5vh !important;
 			border: black solid 1px;
 		}
-        
+
 		/*input delle risposte*/
 		/*placeholder è la scritta inside all'input*/
 		.default-input-text::placeholder {
@@ -858,7 +857,7 @@
 			font-style: italic;
 			text-align:center;
 		}
-	
+
         .bottone-next {
             border: 1px black solid;
             font-size: 2.5vh;
@@ -1028,7 +1027,7 @@
             border: 1px solid black;
             border-top-right-radius: 0.5vh;
             border-bottom-right-radius: 0.5vh;
-        }	
+        }
 		#score {
 			float:right;
 			font-size: 3vh;
@@ -1119,7 +1118,7 @@
 			</div>
 		</form>
 	</div>
-    
+
     <!-- template widget LCD -->
     <template id="template-lcd">
         <div class="lcd-container">
@@ -1127,18 +1126,18 @@
             <div class="lcd-button-container" style="grid-area: up2;"><button class="lcd-button" onClick="onLCDButtonClick(1, true)"><img src="/public/images/icons/lcd-tri-up.png"></button></div>
             <div class="lcd-button-container" style="grid-area: up3;"><button class="lcd-button" onClick="onLCDButtonClick(2, true)"><img src="/public/images/icons/lcd-tri-up.png"></button></div>
             <div class="lcd-button-container" style="grid-area: up4;"><button class="lcd-button" onClick="onLCDButtonClick(3, true)"><img src="/public/images/icons/lcd-tri-up.png"></button></div>
-            
+
             <div class="lcd-display">
                 <input id="input-num" type="number" value="0000" onchange="onLCDNumberChange()">
             </div>
-            
+
             <div class="lcd-button-container" style="grid-area: down1;"><button class="lcd-button" onClick="onLCDButtonClick(0, false)"><img src="/public/images/icons/lcd-tri-down.png"></button></div>
             <div class="lcd-button-container" style="grid-area: down2;"><button class="lcd-button" onClick="onLCDButtonClick(1, false)"><img src="/public/images/icons/lcd-tri-down.png"></button></div>
             <div class="lcd-button-container" style="grid-area: down3;"><button class="lcd-button" onClick="onLCDButtonClick(2, false)"><img src="/public/images/icons/lcd-tri-down.png"></button></div>
             <div class="lcd-button-container" style="grid-area: down4;"><button class="lcd-button" onClick="onLCDButtonClick(3, false)"><img src="/public/images/icons/lcd-tri-down.png"></button></div>
         </div>
     </template>
-    
+
     <!-- template widget pergamena -->
     <template id="template-scroll">
         <div class="scroll-container">
