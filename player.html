@@ -500,7 +500,7 @@
         		url: '/players/player' + player_id,
         		success: function (data) {
         			setChatView(data);
-        			markAsSeen(id);
+        			markAsSeen('player' + player_id);
                     scrollToBottom('chat-msgs');
         			$('#new_msg_text').focus();
         		},
@@ -1099,7 +1099,7 @@
 									<a onclick="closeChat()"><span class="glyphicon glyphicon-remove icon_close" data-id="chat_window_1"></span></a>
 								</div>
 								<div class="col-md-8 col-xs-8">
-									<p class="panel-title" id="chat-user"><!--Nome utente chat--></p>
+									<p class="panel-title" id="chat-user"><div class="glyphicon glyphicon-comment"></div><p id="chat-title">Valutatore</p>
 								</div>
 							</div>
 							<div id="chat-msgs" class="panel-body msg_container_base">
