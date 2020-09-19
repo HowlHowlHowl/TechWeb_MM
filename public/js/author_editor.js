@@ -461,11 +461,15 @@ function setInputElement(activity, node)
             editorDirty = true;
             
             let evaluation_type = select.val();
+            
+            //if we already had values for next index we keep it in the new input object
+            let old_next_index = activity.input.next_index;
             activity.input = {
                 style: "",
                 evaluation_type: evaluation_type,
-                next_index: null
+                next_index: old_next_index
             };
+            
             if(evaluation_type == "correct") {
                 if(type == "text") {
                     activity.input.correct_options = [ { points : 0, text : "" } ];
@@ -578,11 +582,14 @@ function openActivityEditor(activity, node) {
                 editorDirty = true;
                 activity.input_type = type;
                 
+                //if we already had values for next index we keep it in the new input object
+                let old_next_index = activity.input.next_index;
+                
                 activity.input = {};
                 if(type != "none") {
                     activity.input.evaluation_type = "any";
                 }
-                activity.input.next_index = null;
+                activity.input.next_index = old_next_index;
                 
                 setInputElement(activity, node);
                 clearAndSetNodeOutputs(activity, node);
