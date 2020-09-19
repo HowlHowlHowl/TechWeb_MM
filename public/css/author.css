@@ -161,15 +161,13 @@ html, body {
 }
 
 .editable-name-div {
-    overflow: hidden;
     padding: 3px;
 }
 
 .mission-div {
-    border-radius: 15px;
-    border: 1px solid;
-    border-top: 15px solid;
-    background-color: #6c7a89;;
+    border-radius: 10px;
+    border: 3px solid;
+    background-color: #e9ecef;
 }
 
 .mission-button {
@@ -191,7 +189,6 @@ html, body {
 
 .mission-name {
     font-size: 15pt;
-    color: white;
 }
 
 .mission-col{
