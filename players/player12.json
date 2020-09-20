@@ -1,7 +1,7 @@
 {
   "id": 12,
   "score": 5912,
-  "username": "",
+  "username": "Marco",
   "current_quest_start_timestamp": [
     18,
     18
@@ -9,7 +9,204 @@
   "current_mission": "",
   "current_activity": "Fine",
   "help": [],
-  "chat": [],
+  "chat": [
+    {
+      "hour": "21",
+      "mins": "55",
+      "text": "Marco tutto ok?",
+      "auth": "Valutatore",
+      "seen": false
+    },
+    {
+      "hour": "21",
+      "mins": "56",
+      "text": "marcolin",
+      "auth": "Valutatore",
+      "seen": false
+    },
+    {
+      "hour": "21",
+      "mins": "58",
+      "text": "Marcooooo",
+      "auth": "Valutatore",
+      "seen": false
+    },
+    {
+      "hour": "22",
+      "mins": "02",
+      "text": "Broo",
+      "auth": "Valutatore",
+      "seen": false
+    },
+    {
+      "hour": "22",
+      "mins": "03",
+      "text": "Oi",
+      "auth": "Valutatore",
+      "seen": false
+    },
+    {
+      "hour": "22",
+      "mins": "04",
+      "text": "bro",
+      "auth": "Valutatore",
+      "seen": false
+    },
+    {
+      "hour": "22",
+      "mins": "04",
+      "text": "lel",
+      "auth": "Valutatore",
+      "seen": false
+    },
+    {
+      "hour": "22",
+      "mins": "06",
+      "text": "oi",
+      "auth": "Valutatore",
+      "seen": false
+    },
+    {
+      "hour": "22",
+      "mins": "07",
+      "text": "oi",
+      "auth": "Valutatore",
+      "seen": false
+    },
+    {
+      "hour": "22",
+      "mins": "07",
+      "text": "ma cristo",
+      "auth": "Valutatore",
+      "seen": false
+    },
+    {
+      "hour": "22",
+      "mins": "08",
+      "text": "ZIo",
+      "auth": "Valutatore",
+      "seen": false
+    },
+    {
+      "hour": "22",
+      "mins": "08",
+      "text": "Ma dove sei",
+      "auth": "Valutatore",
+      "seen": false
+    },
+    {
+      "hour": "22",
+      "mins": "08",
+      "text": "ma dove sei",
+      "auth": "Valutatore",
+      "seen": false
+    },
+    {
+      "hour": "22",
+      "mins": "08",
+      "text": "delay",
+      "auth": "Valutatore",
+      "seen": false
+    },
+    {
+      "hour": "22",
+      "mins": "09",
+      "text": "ZIo",
+      "auth": "Valutatore",
+      "seen": false
+    },
+    {
+      "hour": "22",
+      "mins": "11",
+      "text": "ZIo ca",
+      "auth": "Valutatore",
+      "seen": false
+    },
+    {
+      "hour": "22",
+      "mins": "11",
+      "text": "zio boia",
+      "auth": "Valutatore",
+      "seen": false
+    },
+    {
+      "hour": "22",
+      "mins": "13",
+      "text": "oi",
+      "auth": "Valutatore",
+      "seen": false
+    },
+    {
+      "hour": "22",
+      "mins": "13",
+      "text": "oi",
+      "auth": "Valutatore",
+      "seen": false
+    },
+    {
+      "hour": "22",
+      "mins": "13",
+      "text": "1",
+      "auth": "Valutatore",
+      "seen": false
+    },
+    {
+      "hour": "22",
+      "mins": "14",
+      "text": "ZIo",
+      "auth": "Valutatore",
+      "seen": false
+    },
+    {
+      "hour": "22",
+      "mins": "16",
+      "text": "Bella",
+      "auth": "Valutatore",
+      "seen": false
+    },
+    {
+      "hour": "22",
+      "mins": "16",
+      "text": "oi",
+      "auth": "Valutatore",
+      "seen": false
+    },
+    {
+      "hour": "22",
+      "mins": "17",
+      "text": "Oi",
+      "auth": "Valutatore",
+      "seen": false
+    },
+    {
+      "hour": "22",
+      "mins": "18",
+      "text": "zio",
+      "auth": "Valutatore",
+      "seen": false
+    },
+    {
+      "hour": "22",
+      "mins": "18",
+      "text": "oi",
+      "auth": "Valutatore",
+      "seen": false
+    },
+    {
+      "hour": "22",
+      "mins": "18",
+      "text": "bella",
+      "auth": "Valutatore",
+      "seen": false
+    },
+    {
+      "hour": "22",
+      "mins": "20",
+      "text": "zio",
+      "auth": "Valutatore",
+      "seen": false
+    }
+  ],
   "pending_count": 0,
   "story_name": "Uomo come soggetto o oggetto di studio",
   "quest_list": [

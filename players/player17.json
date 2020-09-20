@@ -1,0 +1,45 @@
+{
+  "id": 17,
+  "score": 0,
+  "username": "",
+  "current_quest_start_timestamp": [
+    22,
+    27
+  ],
+  "current_mission": "",
+  "current_activity": "tua madre è slava",
+  "help": [],
+  "chat": [
+    {
+      "hour": "22",
+      "mins": "27",
+      "text": "eHI",
+      "auth": "player17",
+      "seen": true
+    },
+    {
+      "hour": "22",
+      "mins": "28",
+      "text": "PROOOOOOOOOOOOOOOOF",
+      "auth": "player17",
+      "seen": true
+    },
+    {
+      "hour": "22",
+      "mins": "32",
+      "text": "OOOOOO dio bestia",
+      "auth": "Valutatore",
+      "seen": false
+    },
+    {
+      "hour": "22",
+      "mins": "32",
+      "text": "MErda vuoi ziocaaa",
+      "auth": "Valutatore",
+      "seen": false
+    }
+  ],
+  "pending_count": 0,
+  "story_name": "cia1 stai s8 tu sei un'apeee bzzzz",
+  "quest_list": []
+}

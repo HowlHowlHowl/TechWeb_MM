@@ -1,0 +1,94 @@
+{
+  "id": 19,
+  "score": 0,
+  "username": "",
+  "current_quest_start_timestamp": [
+    22,
+    49
+  ],
+  "current_mission": "",
+  "current_activity": "tua madre è slava",
+  "help": [],
+  "chat": [
+    {
+      "hour": "22",
+      "mins": "49",
+      "text": "hi",
+      "auth": "player19",
+      "seen": true
+    },
+    {
+      "hour": "22",
+      "mins": "50",
+      "text": "hi",
+      "auth": "Valutatore",
+      "seen": true
+    },
+    {
+      "hour": "22",
+      "mins": "50",
+      "text": "oi",
+      "auth": "player19",
+      "seen": true
+    },
+    {
+      "hour": "22",
+      "mins": "53",
+      "text": "Ez zi",
+      "auth": "player19",
+      "seen": true
+    },
+    {
+      "hour": "22",
+      "mins": "57",
+      "text": "brioski",
+      "auth": "Valutatore",
+      "seen": true
+    },
+    {
+      "hour": "22",
+      "mins": "57",
+      "text": "ez",
+      "auth": "player19",
+      "seen": true
+    },
+    {
+      "hour": "22",
+      "mins": "57",
+      "text": "allora?",
+      "auth": "Valutatore",
+      "seen": true
+    },
+    {
+      "hour": "22",
+      "mins": "57",
+      "text": "tutto gud",
+      "auth": "Valutatore",
+      "seen": true
+    },
+    {
+      "hour": "22",
+      "mins": "57",
+      "text": "yup!",
+      "auth": "player19",
+      "seen": true
+    },
+    {
+      "hour": "22",
+      "mins": "57",
+      "text": "?",
+      "auth": "Valutatore",
+      "seen": true
+    },
+    {
+      "hour": "22",
+      "mins": "57",
+      "text": "è.é",
+      "auth": "player19",
+      "seen": true
+    }
+  ],
+  "pending_count": 0,
+  "story_name": "cia1 stai s8 tu sei un'apeee bzzzz",
+  "quest_list": []
+}

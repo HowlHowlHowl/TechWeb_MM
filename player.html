@@ -529,7 +529,7 @@
         		};
         		let id = 'player' + player_id;
         		$.ajax({
-        			url: '/players/' + id,
+        			url: '/players/send_msg/' + id,
         			type: 'POST',
         			contentType: 'application/json',
         			data: JSON.stringify(msg),
