@@ -48,7 +48,7 @@
 		//Update al secondo di nuovi messaggi oppure chat, risposte a richieste d'aiuto e punteggio
 		setInterval(function () {
 			if (isChatOpen) {
-				openChat();
+				openChat(false);
 			} else {
 				check4newMex();
 			}
@@ -270,25 +270,22 @@
                     $('#footer').append('<label for="input-immagine" class="input custom-file-upload">'
                         + '<span class="glyphicon glyphicon-cloud-upload"></span> Carica Foto</label >'
                         + '<input id="input-immagine" type="file" accept="image/*"/>');
-                    $('label[for="input-immagine"]').focus();
 				} else if (input_type == 'number') {
                     if(input.style == "LCD") {
                         $('#footer').append($($("#template-lcd").html()));
 					} else {
-                        $('#footer').append('<input id="input-num" class="input default-input-num" type="number">');
+                        $('#footer').append('<input aria-label="numero di risposta" id="input-num" class="input default-input-num" type="number">');
                     }
-                    $('#input-num').focus();
 				} else if (input_type == 'text') {
                     if(input.style == "scroll") {
                         $('#footer').append($($("#template-scroll").html()));
                     } else {
                         $('#footer').append(
                             `<div class="inner-addon left-addon">
-                                 <a id="icona-fullscreen" class="glyphicon glyphicon-fullscreen"></a>
-                            <input type="text" autocomplete="off" id="input-text" class="form-control input default-input-text" placeholder="Risposta"/>
-                        </div>`);
+                                <a aria-hidden="true"id="icona-fullscreen" class="glyphicon glyphicon-fullscreen"></a>
+                                <input aria-label="testo di risposta" type="text" autocomplete="off" id="input-text" class="form-control input default-input-text" placeholder="Risposta"/>
+                            </div>`);
                     }
-					$('#input-text').focus();
 				}
 				$('#footer').append('<button id="bottone-avanti" type="button" class="btn btn-light bottone-next">Avanti</button>');
 			} else if (isSpecial == "begin") {
@@ -490,16 +487,19 @@
         		}
         	});
         }
+        
         //Open the pop-up chat with the selected player
-        function openChat() {
+        function openChat(set_focus) {
         	isChatOpen = true;
         	$.ajax({
         		url: '/players/player' + player_id,
         		success: function (data) {
         			setChatView(data);
         			markAsSeen('player' + player_id);
-                    scrollToBottom('chat-msgs');
-        			$('#new_msg_text').focus();
+                    if(set_focus) {                                
+                        scrollToBottom('chat-msgs');
+                        $('#new_msg_text').focus();
+                    }
         		},
         		error: function (xhr, ajaxOptions, thrownError) {
         			alert(xhr.status + ' - ' + thrownError);
@@ -535,7 +535,7 @@
         			data: JSON.stringify(msg),
 
         			success: function (data) {
-        				openChat();
+        				openChat(false);
         				$('#new_msg_text').focus();
         			},
         			error: function (xhr, ajaxOptions, thrownError) {
@@ -565,13 +565,15 @@
         }
         //Event to open chat with selected player
         $(document).on('click', '#chat-button', function() {
-        	openChat();
+        	openChat(true);
 		});
 		/* Funzioni per HELP */
 		//Evento per il pulsante help
 		$(document).on('click', '#help-button', function () {
 			openHelpPane();
 		});
+        </script>
+        <script>
 		//Connessione per aprire la finestra di aiuto
 		function openHelpPane() {
 			$.ajax({
@@ -601,32 +603,26 @@
         }
 		//Preparazione e visualizzazione della finestra degli aiuti
 		function setHelpPane(help) {
-			$('#helpPane').remove();
-			$('body').append(`<div id="helpPane">
-								<h3><span id="close-help-pane" class="glyphicon glyphicon-remove"></span>Aiuti</h3>
-								<div id="new-help-req">
-									<textarea placeholder="Scrivi qui la tua richiesta d'aiuto" id="new-help-req-text"></textarea>
-									<button id="send-new-req">Invia</button>
-								</div>
-							</div>`);
+            $("#helpPane").css("display", "block");   
+            $("#old-help-req").empty();
 			if (help.length > 0) {
 				help.forEach((req) => {
-					$('#helpPane').append('<hr><div><p><b>Missione</b>: ' + req.mission_name
+					$('#old-help-req').append('<hr><div><p><b>Missione</b>: ' + req.mission_name
 						+ '<br><b>Attività</b>: ' + req.activity_name
 						+ '<br><b>Domanda</b>: <p class="help-question">' + req.question
 						+ '</p><br><b>Risposta</b>: <p class="help-answer">'
 						+ (req.answer || '<i>Ancora nessuna risposta</i>') + '</p></div>');
 				});
 			} else {
-				$('#helpPane').append('<ip id="no-help-msg">Non hai effettuato richieste</p>');
+				$('#old-help-req').append('<p id="no-help-msg">Non hai effettuato richieste</p>');
             }
-			$('#helpPane textarea').focus();
 		}
-		//Evento per chiudere la finestra degli aiuti
-		$(document).on('click', '#close-help-pane', function () {
+        
+        function closeHelpPane() {
 			isHelpPaneOpen = false;
-			$('#helpPane').remove();
-		});
+			$('#helpPane').css("display", "none");
+        }
+        
 		//Evento per inviare la richiesta d'aiuto collegato al bottone
 		$(document).on('click', '#send-new-req', function () {
 			let question = ($('#helpPane textarea').val())
@@ -783,7 +779,6 @@
 			margin-right: 1.5vh;
 			margin-top: .5vh;
 			font-size: 2.5vh;
-			text-align: justify;
 			font-family: 'Helvetica Neue LT Std';
 		}
 		.testo-attivita img {
@@ -931,11 +926,10 @@
 		}
 		#no-help-msg {
 			margin-top:3vh;
-			font-size: 4vh;
 			text-align:center;
 			display:block;
 		}
-		#helpPane button{
+		#send-new-req {
 			width:40%;
 			font-size:2vh;
 			border-color: #9932CC;
@@ -962,10 +956,12 @@
 		}
 		#close-help-pane{
 			float:right;
+            width: 5vw;
 			top:0;
 			margin-bottom:1vh;
 			position:relative;
 			color: #9932CC;
+            border: 0px;
 		}
         /*INPUT TEXT + GLYPHICON*/
         /*Bootstrap layout per avere l'icona dentro all'input*/
@@ -1031,6 +1027,7 @@
 		#score {
 			float:right;
 			font-size: 3vh;
+            font-weight: normal;
 			color:white;
 			margin-right:2vh;
 			margin-bottom:0;
@@ -1074,7 +1071,7 @@
 		<p id="score"></p>
 	</div>
 	<h1></h1>
-	<div id="div-grande">
+	<div role="main" id="div-grande">
 		<!--TITOLO MISSIONE-->
 		<div id="nome-missione">
 		</div>
@@ -1086,19 +1083,34 @@
 	</div>
 	<div id="footer">
 	</div>
+    
+    <!--AIUTO-->
+    <div role="dialog" id="helpPane" style="display: none;">
+        <button aria-label="chiudi aiuto" id="close-help-pane" class="btn bg-transparent" onclick="closeHelpPane()"><span class="glyphicon glyphicon-remove"></span></button>
+        <h2>Aiuti</h2>
+        <div id="new-help-req">
+            <textarea aria-label="Domanda di aiuto" placeholder="Scrivi qui la tua richiesta d'aiuto" id="new-help-req-text"></textarea>
+            <button id="send-new-req">Invia</button>
+        </div>
+        <div id="old-help-req">
+            
+        </div>
+    </div>
+    
 	<!--CHAT-->
-	<div class="chat-popup" id="chat">
-		<form autocomplete="off" class="form-container">
+	<div class="chat-popup" id="chat" role="dialog">
+		<div class="form-container">
 			<div class="container">
 				<div class="col-sm-8">
 					<div class="chatbody">
 						<div class="panel panel-primary">
 							<div class="panel-heading top-bar">
 								<div class="col-md-4 col-xs-4" style="text-align: right;">
-									<a onclick="closeChat()"><span class="glyphicon glyphicon-remove icon_close" data-id="chat_window_1"></span></a>
+									<button class="btn bg-transparent" aria-label="chiudi chat" onclick="closeChat()"><span class="glyphicon glyphicon-remove icon_close" data-id="chat_window_1"></span></button>
 								</div>
 								<div class="col-md-8 col-xs-8">
-									<p class="panel-title" id="chat-user"><div class="glyphicon glyphicon-comment"></div><p id="chat-title">Valutatore</p>
+                                    <div class="glyphicon glyphicon-comment"></div>
+                                    <h2 id="chat-title">Valutatore</h5>
 								</div>
 							</div>
 							<div id="chat-msgs" class="panel-body msg_container_base">
@@ -1106,42 +1118,42 @@
 							</div>
 							<div class="panel-footer">
 								<div class="input-group">
-									<input id="new_msg_text" type="text" autocomplete="off" class="form-control input-sm chat_input" placeholder="Scrivi il tuo messaggio..." />
-									<a id="send-msg" class="btn btn-info btn-sm" onclick="sendMsg()">
-										<span class="glyphicon glyphicon-send"></span> Send
-									</a>
+									<input aria-label="messaggio" id="new_msg_text" type="text" autocomplete="off" class="form-control input-sm chat_input" placeholder="Scrivi il tuo messaggio..." />
+									<button id="send-msg" class="btn btn-info btn-sm" onclick="sendMsg()">
+										<span class="glyphicon glyphicon-send"></span>Invia
+									</button>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		</form>
-	</div>
+		</div>
+    </div>
 
     <!-- template widget LCD -->
     <template id="template-lcd">
         <div class="lcd-container">
-            <div class="lcd-button-container" style="grid-area: up1;"><button class="lcd-button" onClick="onLCDButtonClick(0, true)"><img src="/public/images/icons/lcd-tri-up.png"></button></div>
-            <div class="lcd-button-container" style="grid-area: up2;"><button class="lcd-button" onClick="onLCDButtonClick(1, true)"><img src="/public/images/icons/lcd-tri-up.png"></button></div>
-            <div class="lcd-button-container" style="grid-area: up3;"><button class="lcd-button" onClick="onLCDButtonClick(2, true)"><img src="/public/images/icons/lcd-tri-up.png"></button></div>
-            <div class="lcd-button-container" style="grid-area: up4;"><button class="lcd-button" onClick="onLCDButtonClick(3, true)"><img src="/public/images/icons/lcd-tri-up.png"></button></div>
-
+            <div aria-hidden="true" class="lcd-button-container" style="grid-area: up1;"><button tabindex="-1" class="lcd-button" onClick="onLCDButtonClick(0, true)"><img alt="" src="/public/images/icons/lcd-tri-up.png"></button></div>
+            <div aria-hidden="true" class="lcd-button-container" style="grid-area: up2;"><button tabindex="-1" class="lcd-button" onClick="onLCDButtonClick(1, true)"><img alt="" src="/public/images/icons/lcd-tri-up.png"></button></div>
+            <div aria-hidden="true" class="lcd-button-container" style="grid-area: up3;"><button tabindex="-1" class="lcd-button" onClick="onLCDButtonClick(2, true)"><img alt="" src="/public/images/icons/lcd-tri-up.png"></button></div>
+            <div aria-hidden="true" class="lcd-button-container" style="grid-area: up4;"><button tabindex="-1" class="lcd-button" onClick="onLCDButtonClick(3, true)"><img alt="" src="/public/images/icons/lcd-tri-up.png"></button></div>
+            
             <div class="lcd-display">
-                <input id="input-num" type="number" value="0000" onchange="onLCDNumberChange()">
+                <input aria-label="lcd per numero di risposta, massimo 4 cifre" id="input-num" type="number" value="0000" onchange="onLCDNumberChange()">
             </div>
 
-            <div class="lcd-button-container" style="grid-area: down1;"><button class="lcd-button" onClick="onLCDButtonClick(0, false)"><img src="/public/images/icons/lcd-tri-down.png"></button></div>
-            <div class="lcd-button-container" style="grid-area: down2;"><button class="lcd-button" onClick="onLCDButtonClick(1, false)"><img src="/public/images/icons/lcd-tri-down.png"></button></div>
-            <div class="lcd-button-container" style="grid-area: down3;"><button class="lcd-button" onClick="onLCDButtonClick(2, false)"><img src="/public/images/icons/lcd-tri-down.png"></button></div>
-            <div class="lcd-button-container" style="grid-area: down4;"><button class="lcd-button" onClick="onLCDButtonClick(3, false)"><img src="/public/images/icons/lcd-tri-down.png"></button></div>
+            <div aria-hidden="true" class="lcd-button-container" style="grid-area: down1;"><button tabindex="-1" class="lcd-button" onClick="onLCDButtonClick(0, false)"><img alt="" src="/public/images/icons/lcd-tri-down.png"></button></div>
+            <div aria-hidden="true" class="lcd-button-container" style="grid-area: down2;"><button tabindex="-1" class="lcd-button" onClick="onLCDButtonClick(1, false)"><img alt="" src="/public/images/icons/lcd-tri-down.png"></button></div>
+            <div aria-hidden="true" class="lcd-button-container" style="grid-area: down3;"><button tabindex="-1" class="lcd-button" onClick="onLCDButtonClick(2, false)"><img alt="" src="/public/images/icons/lcd-tri-down.png"></button></div>
+            <div aria-hidden="true" class="lcd-button-container" style="grid-area: down4;"><button tabindex="-1" class="lcd-button" onClick="onLCDButtonClick(3, false)"><img alt="" src="/public/images/icons/lcd-tri-down.png"></button></div>
         </div>
     </template>
 
     <!-- template widget pergamena -->
     <template id="template-scroll">
         <div class="scroll-container">
-            <textarea id="input-text" spellcheck="false" class="scroll-textarea"></textarea>
+            <textarea aria-label="pergamena per testo di risposta" id="input-text" spellcheck="false" class="scroll-textarea"></textarea>
         </div>
     </template>
 </body>
