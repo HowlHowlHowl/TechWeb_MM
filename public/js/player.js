@@ -14,38 +14,49 @@ $(document).ready(function () {
     var url_string = window.location.href;
     var url = new URL(url_string);
     var id = url.searchParams.get("id");
-    $.ajax({
-        type: 'GET',
-        url: '/stories/' + id,
-        success: function (data) {
-            storyJSON = data;
-            setPlayer(storyJSON);
-        },
-        error: function (xhr, ajaxOptions, thrownError) {
-            alert(xhr.status + ' - ' + thrownError);
-        }
-    });
+    if (id) {
+        $.ajax({
+            type: 'GET',
+            url: '/stories/' + id,
+            success: function (data) {
+                storyJSON = data;
+                setPlayer(storyJSON);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert(xhr.status + ' - ' + thrownError);
+            }
+        });
+        //Update al secondo di nuovi messaggi oppure chat, risposte a richieste d'aiuto e punteggio
+        setInterval(function () {
+            if (isChatOpen) {
+                openChat(false);
+            } else {
+                check4newMex();
+            }
+            checkReqHelp();
+            updateScore();
+        }, 1000);
+
+
+        //Help pane update every 10 seconds
+        setInterval(function () {
+            if (isHelpPaneOpen)
+                if (!$('#helpPane textarea').val()) {
+                    openHelpPane();
+                }
+        }, 10000);
+    } else {
+        $('#div-grande').text('Non è selezionata nessuna storia');
+        $('#div-grande').css({
+            'font-size': '5vh',
+            'text-align': 'center'
+        })
+        $('#chat-button').prop('disabled', true);
+        $('#help-button').prop('disabled', true);
+       
+    }
 });
 
-//Update al secondo di nuovi messaggi oppure chat, risposte a richieste d'aiuto e punteggio
-setInterval(function () {
-    if (isChatOpen) {
-        openChat(false);
-    } else {
-        check4newMex();
-    }
-    checkReqHelp();
-    updateScore();
-}, 1000);
-
-
-//Help pane update every 10 seconds
-setInterval(function () {
-    if (isHelpPaneOpen)
-        if (!$('#helpPane textarea').val()) {
-            openHelpPane();
-        }
-}, 10000);
 //Funzione per inizializzare il file sul server e ricevere l'id associato
 function setPlayer(data) {
     $.ajax({
@@ -210,7 +221,7 @@ function sendAnswerToServer(answer_data) {
 }
 // Questa funzione serve a impostare la finestra per la prossima attività
 function setWindow() {
-    $('h1').text('(' + storyJSON.name + ')');
+    $('h1').text(storyJSON.name);
     let mission_index = storyJSON.activities[next_index].mission_index;
     $('#nome-attivita').text(storyJSON.activities[next_index].name);
     if (mission_index != null) {

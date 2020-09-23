@@ -1,0 +1,296 @@
+{
+  "name": "Ladri al Van Gogh Museum",
+  "accessible": false,
+  "style": "",
+  "published": false,
+  "canvas_offset": {
+    "x": 220.59892623056973,
+    "y": 210.7112260485126
+  },
+  "canvas_scale": 0.25,
+  "missions": [
+    {
+      "name": "Introduzione",
+      "color": "#ff0000"
+    },
+    {
+      "name": "Entrando al museo",
+      "color": "#2f00ff"
+    },
+    {
+      "name": "Alla ricerca dei quadri",
+      "color": "#00ff04"
+    },
+    {
+      "name": "Fuga dal museo",
+      "color": "#f4c701"
+    }
+  ],
+  "activities": [
+    {
+      "name": "Ladri d'arte",
+      "contents": [
+        {
+          "type": "text",
+          "text": "Benvenuti! Siete stati scelti fra i migliori ladri d'Europa per portare a termine un furto da milioni di euro. \nNon potete fallire, quindi occhi ed orecchie ben aperti.\nNon sarete soli, l'organizzatore del colpo vi seguirà nella vostra missione, potete comunicare con lui tramite il bottone di aiuto qui sopra.\nDovrete inflitrarvi nel Van Gogh Museum, riceverete ulteriori indicazioni quando sarete dentro.\n"
+        }
+      ],
+      "mission_index": null,
+      "special": "begin",
+      "input_type": "none",
+      "input": {
+        "evaluation_type": "none",
+        "next_index": 4
+      },
+      "position": {
+        "x": 165,
+        "y": 128
+      }
+    },
+    {
+      "name": "Fine",
+      "contents": [
+        {
+          "type": "text",
+          "text": "Missione compiuta, ottimo lavoro ragazzi, riceverete il vostro compenso al più presto!\nAbbiamo fatto un sacco di soldi e imparato qualcosa!\nCi risentiremo per il prossimo colpo!"
+        }
+      ],
+      "mission_index": null,
+      "special": "end",
+      "input_type": "none",
+      "input": {
+        "evaluation_type": "none",
+        "next_index": null
+      },
+      "position": {
+        "x": 2762.4199147305094,
+        "y": 191.63829708695317
+      }
+    },
+    {
+      "name": "Dentro al museo",
+      "contents": [
+        {
+          "type": "text",
+          "text": "La guardia sembra convinta e vi lascia entrare.\nSiete finalmente soli nel museo, il capo vuole che voi troviate più prezioso della collezione, iniziate quindi a guardarvi intorno alla ricerca del vostro obbiettivo. \nTra i quadri che più vi saltano all'occhio ce ne sono due in particolare:"
+        },
+        {
+          "type": "image",
+          "url": "/public/uploads/Terrazza del caffe la sera.jpg",
+          "description": "Terrazza del caffè la sera, quadro di Vincent Van Gogh"
+        },
+        {
+          "type": "text",
+          "text": "Terrazza del caffè la sera è un dipinto che rivela la sua intenzione di realizzare un notturno. Vincent dipinse, così, l'esterno di un caffè illuminato dalle luci a gas. L'artista fu molto soddisfatto del risultato poiché tale illuminazione creava un intenso contrasto di complementarietà con il blu."
+        },
+        {
+          "type": "image",
+          "url": "/public/uploads/campo di grano con volo di corvi.jpg",
+          "description": "Campo di grano con volo di corvi di Vincent Van Gogh"
+        },
+        {
+          "type": "text",
+          "text": "Nella tela Campo di grano con volo di corvi emerge lo stato d'animo tormentato e angosciato dell'artista. I toni sono cupi, a partire dal cielo che passa dalle tonalità rassicuranti del blu a quelle più decise e scure del blu scuro e del nero."
+        }
+      ],
+      "mission_index": 2,
+      "input_type": "none",
+      "input": {
+        "evaluation_type": "none",
+        "next_index": 6
+      },
+      "position": {
+        "x": 1373.015199341067,
+        "y": 143.8101222581477
+      }
+    },
+    {
+      "name": "La guardia",
+      "contents": [
+        {
+          "type": "text",
+          "text": "Siete appena arrivati davanti al museo, non c'è molta gente, infatti oggi è chiuso al pubblico, notate però una guardia all'ingresso,  come previsto dal capo. Il piano è di fingersi dei ricercatori per ottenere  l'accesso al museo e poter agire indisturbati. Vi avvicinate e subito vi chiede cosa ci facciate lì. Dopo una breve spiegazione la guardia non sembra convinta,  per verificare le vostre intenzioni vi domanda una cosa che uno di studioso di Van Gogh non può non sapere.\n\n\"Quale artista, molto amico di Van Gogh, finì il quadro dei girasoli?\""
+        }
+      ],
+      "mission_index": 1,
+      "input_type": "text",
+      "input": {
+        "style": "",
+        "evaluation_type": "correct",
+        "next_index": 2,
+        "correct_options": [
+          {
+            "points": "1000",
+            "text": "Gauguin"
+          },
+          {
+            "points": "1000",
+            "text": "Paul Gauguin"
+          },
+          {
+            "points": "1000",
+            "text": "Paul"
+          }
+        ],
+        "wrong_stay": false,
+        "wrong_next_index": 5
+      },
+      "position": {
+        "x": 726.8516754311877,
+        "y": 94.52973673754796
+      }
+    },
+    {
+      "name": "Vicent Van Gogh",
+      "contents": [
+        {
+          "type": "text",
+          "text": "Lo scopo della missione è rubare un quadro di Van Gogh e quale miglior posto del Van Gogh Museum di Amsterdam!\nSapete chi è Van Gogh vero? Facciamo un breve ripasso:\nVincent Willem Van Gogh nasce il 30 marzo 1853 a Groot Zundert ed ebbe, a causa della sua estrema sensibilità di artista, una vita molto tormentata.  Nel maggio del 1875 si trasferisce a Parig, si dedica esclusivamente a dipingere poveri minatori e tessitori. Più tardi nel corso dell'anno, intraprende studi formali di anatomia e prospettiva all'Accademia di Bruxelles. \nNel 1888 lascia Parigi in febbraio e si trasferisce ad Arles, nel Sud. All'inizio, il cattivo tempo invernale gli impedisce di lavorare, ma una volta arrivata la primavera inizia a dipingere i paesaggi in fiore della Provenza. Si trasferisce infine nella \"Casa Gialla\", una dimora che ha preso in affitto dove spera di stabilire una comunità di artisti. E' il momento in cui riesce a dipingere alcune delle sue opere migliori ma anche il momento delle sue già accennate violente tensioni con Gauguin. "
+        },
+        {
+          "type": "image",
+          "url": "/public/uploads/Van_Gogh_Autoritratto_con_cappello_giallo.jpg",
+          "description": "Ritratto di Vincent van Gogh"
+        }
+      ],
+      "mission_index": 0,
+      "input_type": "none",
+      "input": {
+        "evaluation_type": "none",
+        "next_index": 3
+      },
+      "position": {
+        "x": 419.19499223666776,
+        "y": 103.10099122452745
+      }
+    },
+    {
+      "name": "L'arte del raggiro",
+      "contents": [
+        {
+          "type": "text",
+          "text": "\"Assolutamente no, siete sicuri di essere davvero dei ricercatori?\"\nLa guardia è sul punto di cacciarvi, e la missione andrebbe in fumo!\nPresto, provate a convincerla dicendo qualcosa da veri esperti!"
+        }
+      ],
+      "mission_index": 1,
+      "input_type": "text",
+      "input": {
+        "style": "",
+        "evaluation_type": "evaluator",
+        "next_index": 2
+      },
+      "position": {
+        "x": 957.6043701171875,
+        "y": 350.604248046875
+      }
+    },
+    {
+      "name": "La porta chiusa",
+      "contents": [
+        {
+          "type": "text",
+          "text": "Esplorando il museo notete una stanza chiusa da una serratura elettronica, per aprire la porta serve un codice di quattro cifre. Il capo ha saputo da un informatore che la password è l'anno nel quale Van Gogh dipinse questo quadro: \"La casa gialla\".\nScoprite qual'è l'anno in cui il quadro è stato dipinto ed avrete accesso alla stanza."
+        },
+        {
+          "type": "image",
+          "url": "/public/uploads/la casa gialla7.jpg",
+          "description": "La casa gialla, dipinto di VIncent Van Gogh"
+        }
+      ],
+      "mission_index": 2,
+      "input_type": "number",
+      "input": {
+        "style": "",
+        "evaluation_type": "correct",
+        "next_index": 7,
+        "correct_options": [
+          {
+            "points": "2000",
+            "from": "1888",
+            "to": "1888"
+          }
+        ],
+        "wrong_stay": true,
+        "wrong_message": "Codice Errato!"
+      },
+      "position": {
+        "x": 1628.2585543346233,
+        "y": 166.50525569167445
+      }
+    },
+    {
+      "name": "Ricerca del quadro",
+      "contents": [
+        {
+          "type": "text",
+          "text": "La porta si spalanca e riuscite ad entrare, ci sono molti quadri appesi alle pareti, voi dovete sceglierne uno solo, fate in modo di portare con voi il più costoso. Scegliete il più antico che trovate, probabilmente sarà quello che vale di più.\nPrima di prenderlo scannerizzatelo per assicurarvi che sia autentico."
+        }
+      ],
+      "mission_index": 2,
+      "input_type": "photo",
+      "input": {
+        "style": "",
+        "evaluation_type": "evaluator",
+        "next_index": 8
+      },
+      "position": {
+        "x": 1908.8642638406634,
+        "y": 156.83948846510899
+      }
+    },
+    {
+      "name": "Suona l'allarme!",
+      "contents": [
+        {
+          "type": "text",
+          "text": "Il quadro è autentico ma non appena lo afferrate scatta l'allarme della stanza, dovete disinnescarlo immediatamente!\nNotate un tastierino con un post-it attaccato vicino, c'è scritto: \n\"Gli astri della notte stellata\".\nCosa significa? Trovate una soluzione!"
+        }
+      ],
+      "mission_index": 3,
+      "input_type": "number",
+      "input": {
+        "style": "",
+        "evaluation_type": "correct",
+        "next_index": 9,
+        "correct_options": [
+          {
+            "points": "1000",
+            "from": "12",
+            "to": "12"
+          },
+          {
+            "points": "500",
+            "from": "11",
+            "to": "11"
+          }
+        ],
+        "wrong_stay": true,
+        "wrong_message": "L'allarme non si ferma, riprovate!"
+      },
+      "position": {
+        "x": 2160.592249954751,
+        "y": 131.85393826624656
+      }
+    },
+    {
+      "name": "Correte via!",
+      "contents": [
+        {
+          "type": "text",
+          "text": "L'allarme si è fermato, uscite dal museo prima che qualcuno vi noti!\nCorrete verso l'uscita con il quadro, la guardia sembra essere andata via, non si può essere più fortunati!\n"
+        }
+      ],
+      "mission_index": 3,
+      "input_type": "none",
+      "input": {
+        "evaluation_type": "none",
+        "next_index": 1
+      },
+      "position": {
+        "x": 2433.810577834457,
+        "y": 132.83202641258475
+      }
+    }
+  ],
+  "id": 115
+}
