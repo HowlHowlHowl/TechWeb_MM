@@ -4,10 +4,10 @@
   "style": "",
   "published": false,
   "canvas_offset": {
-    "x": 220.59892623056973,
-    "y": 210.7112260485126
+    "x": -297.3191856323184,
+    "y": 90.95956872858648
   },
-  "canvas_scale": 0.25,
+  "canvas_scale": 0.7290000000000001,
   "missions": [
     {
       "name": "Introduzione",
@@ -72,7 +72,7 @@
       "contents": [
         {
           "type": "text",
-          "text": "La guardia sembra convinta e vi lascia entrare.\nSiete finalmente soli nel museo, il capo vuole che voi troviate più prezioso della collezione, iniziate quindi a guardarvi intorno alla ricerca del vostro obbiettivo. \nTra i quadri che più vi saltano all'occhio ce ne sono due in particolare:"
+          "text": "La guardia sembra convinta e vi lascia entrare.\nSiete finalmente soli nel museo, il capo vuole che voi troviate  l'opera più preziosa dell'intera collezione, iniziate quindi a guardarvi intorno alla ricerca del vostro obbiettivo. \nTra i quadri che più vi saltano all'occhio ce ne sono due in particolare:"
         },
         {
           "type": "image",
@@ -109,7 +109,7 @@
       "contents": [
         {
           "type": "text",
-          "text": "Siete appena arrivati davanti al museo, non c'è molta gente, infatti oggi è chiuso al pubblico, notate però una guardia all'ingresso,  come previsto dal capo. Il piano è di fingersi dei ricercatori per ottenere  l'accesso al museo e poter agire indisturbati. Vi avvicinate e subito vi chiede cosa ci facciate lì. Dopo una breve spiegazione la guardia non sembra convinta,  per verificare le vostre intenzioni vi domanda una cosa che uno di studioso di Van Gogh non può non sapere.\n\n\"Quale artista, molto amico di Van Gogh, finì il quadro dei girasoli?\""
+          "text": "Siete appena arrivati davanti al museo, non c'è molta gente perchè oggi è chiuso al pubblico, notate però una guardia all'ingresso,  come previsto dal capo. Il piano è di fingersi dei ricercatori per ottenere  l'accesso al museo e poter agire indisturbati. Vi avvicinate e un uomo della sicurezza subito vi approccia e vi chiede cosa ci facciate lì. Dopo una breve spiegazione la guardia non sembra essere convinta, per verificare le vostre intenzioni vi domanda una cosa che uno di studioso di Van Gogh non può non sapere.\n\n\"Quale artista, molto amico di Van Gogh, finì il quadro dei girasoli?\""
         }
       ],
       "mission_index": 1,
@@ -200,7 +200,7 @@
       "mission_index": 2,
       "input_type": "number",
       "input": {
-        "style": "",
+        "style": "LCD",
         "evaluation_type": "correct",
         "next_index": 7,
         "correct_options": [
@@ -229,7 +229,7 @@
       "mission_index": 2,
       "input_type": "photo",
       "input": {
-        "style": "",
+        "style": "scanner",
         "evaluation_type": "evaluator",
         "next_index": 8
       },

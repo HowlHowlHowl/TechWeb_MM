@@ -168,7 +168,9 @@ body {
     border: transparent;
     margin: auto;
 }
-
+#user-space button {
+    font-size:2vh;
+}
 .user-info-tab:hover {
     background-color: transparent;
     border: transparent;
@@ -399,12 +401,14 @@ body {
 }
 
 #rename-field {
+    font-size: 2vh;
     height: 4.5vh;
     min-width: 20vh;
     text-align: center;
 }
 
 #playername-label {
+    font-size:2vh;  
     height: 4.5vh;
     display: inline-block;
     width: 100%;
