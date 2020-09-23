@@ -1,11 +1,8 @@
 Togliere gli alert
 Test storia Van Gogh
 
-
 AUTORE:
- - Mantenimento connessioni con "riprova"
- - Bordo al colore missione
- - Se sicuro di voler uscire
+ - Un po' di commenti random nel js
 
 VALUTATORE:
  - Elimina player

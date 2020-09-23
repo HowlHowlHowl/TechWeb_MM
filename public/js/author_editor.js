@@ -315,7 +315,11 @@ function setWrongInputElement(activity, node) {
                 input.wrong_next_index = null;
             }
             
-            clearAndSetNodeOutputs(activity, node);
+            //if we already had values for next index we keep it in the new input object
+            let old_next_index = input.next_index;
+            node.clearOutputs();
+            input.next_index = old_next_index;
+            setNodeOutputs(activity, node);
         });
     }
 }
@@ -1203,12 +1207,11 @@ $(() => {
     updateStories();
 });
 
-/*
+
 $(window).bind('beforeunload', function() {
    if(editorDirty)
    {
        return 'Ci sono modifiche non salvate, procedere ugualmente?';
    }
 });
-*/
 
