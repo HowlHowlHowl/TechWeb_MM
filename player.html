@@ -266,10 +266,14 @@
 			if (!isSpecial) {
                 let input_type = storyJSON.activities[next_index].input_type;
                 let input = storyJSON.activities[next_index].input;
-				if (input_type == 'photo') {
-                    $('#footer').append('<label for="input-immagine" class="input custom-file-upload">'
+                if (input_type == 'photo') {
+                	if (input.style == 'scanner') {
+                		$('#footer').append($($("#template-scanner").html()));
+                	} else {
+                	$('#footer').append('<label for="input-immagine" class="input custom-file-upload">'
                         + '<span class="glyphicon glyphicon-cloud-upload"></span> Carica Foto</label >'
-                        + '<input id="input-immagine" type="file" accept="image/*"/>');
+                        + '<input id="input-immagine" type="file" accept="image/*"/ class="standard-input-img">');
+					}
 				} else if (input_type == 'number') {
                     if(input.style == "LCD") {
                         $('#footer').append($($("#template-lcd").html()));
@@ -436,7 +440,7 @@
 			}
 		});
 		//Evento per mostrare una preview del file selezionato
-		$(document).on('change', '#input-immagine', function () {
+		$(document).on('change', '.standard-input-img', function () {
 			$('#preview').remove();
 			let img = document.createElement('img');
 			img.setAttribute('alt','Your selected image');
@@ -1082,20 +1086,20 @@
 	</div>
 	<div id="footer">
 	</div>
-    
-    <!--AIUTO-->
-    <div role="dialog" id="helpPane" style="display: none;">
-        <button aria-label="chiudi aiuto" id="close-help-pane" class="btn bg-transparent" onclick="closeHelpPane()"><span class="glyphicon glyphicon-remove"></span></button>
-        <h2>Aiuti</h2>
-        <div id="new-help-req">
-            <textarea aria-label="Domanda di aiuto" placeholder="Scrivi qui la tua richiesta d'aiuto" id="new-help-req-text"></textarea>
-            <button id="send-new-req">Invia</button>
-        </div>
-        <div id="old-help-req">
-            
-        </div>
-    </div>
-    
+
+	<!--AIUTO-->
+	<div role="dialog" id="helpPane" style="display: none;">
+		<button aria-label="chiudi aiuto" id="close-help-pane" class="btn bg-transparent" onclick="closeHelpPane()"><span class="glyphicon glyphicon-remove"></span></button>
+		<h2>Aiuti</h2>
+		<div id="new-help-req">
+			<textarea aria-label="Domanda di aiuto" placeholder="Scrivi qui la tua richiesta d'aiuto" id="new-help-req-text"></textarea>
+			<button id="send-new-req">Invia</button>
+		</div>
+		<div id="old-help-req">
+
+		</div>
+	</div>
+
 	<!--CHAT-->
 	<div class="chat-popup" id="chat" role="dialog">
 		<div class="form-container">
@@ -1108,8 +1112,8 @@
 									<button class="btn bg-transparent" aria-label="chiudi chat" onclick="closeChat()"><span class="glyphicon glyphicon-remove icon_close" data-id="chat_window_1"></span></button>
 								</div>
 								<div class="col-md-8 col-xs-8">
-                                    <div class="glyphicon glyphicon-comment"></div>
-                                    <h2 id="chat-title">Valutatore</h5>
+									<div class="glyphicon glyphicon-comment"></div>
+									<h2 id="chat-title">Valutatore</h5>
 								</div>
 							</div>
 							<div id="chat-msgs" class="panel-body msg_container_base">
@@ -1128,32 +1132,48 @@
 				</div>
 			</div>
 		</div>
-    </div>
+	</div>
 
-    <!-- template widget LCD -->
-    <template id="template-lcd">
-        <div class="lcd-container">
-            <div aria-hidden="true" class="lcd-button-container" style="grid-area: up1;"><button tabindex="-1" class="lcd-button" onClick="onLCDButtonClick(0, true)"><img alt="" src="/public/images/icons/lcd-tri-up.png"></button></div>
-            <div aria-hidden="true" class="lcd-button-container" style="grid-area: up2;"><button tabindex="-1" class="lcd-button" onClick="onLCDButtonClick(1, true)"><img alt="" src="/public/images/icons/lcd-tri-up.png"></button></div>
-            <div aria-hidden="true" class="lcd-button-container" style="grid-area: up3;"><button tabindex="-1" class="lcd-button" onClick="onLCDButtonClick(2, true)"><img alt="" src="/public/images/icons/lcd-tri-up.png"></button></div>
-            <div aria-hidden="true" class="lcd-button-container" style="grid-area: up4;"><button tabindex="-1" class="lcd-button" onClick="onLCDButtonClick(3, true)"><img alt="" src="/public/images/icons/lcd-tri-up.png"></button></div>
-            
-            <div class="lcd-display">
-                <input aria-label="lcd per numero di risposta, massimo 4 cifre" id="input-num" type="number" value="0000" onchange="onLCDNumberChange()">
-            </div>
+	<!-- template widget LCD -->
+	<template id="template-lcd">
+		<div class="lcd-container">
+			<div aria-hidden="true" class="lcd-button-container" style="grid-area: up1;"><button tabindex="-1" class="lcd-button" onClick="onLCDButtonClick(0, true)"><img alt="" src="/public/images/icons/lcd-tri-up.png"></button></div>
+			<div aria-hidden="true" class="lcd-button-container" style="grid-area: up2;"><button tabindex="-1" class="lcd-button" onClick="onLCDButtonClick(1, true)"><img alt="" src="/public/images/icons/lcd-tri-up.png"></button></div>
+			<div aria-hidden="true" class="lcd-button-container" style="grid-area: up3;"><button tabindex="-1" class="lcd-button" onClick="onLCDButtonClick(2, true)"><img alt="" src="/public/images/icons/lcd-tri-up.png"></button></div>
+			<div aria-hidden="true" class="lcd-button-container" style="grid-area: up4;"><button tabindex="-1" class="lcd-button" onClick="onLCDButtonClick(3, true)"><img alt="" src="/public/images/icons/lcd-tri-up.png"></button></div>
 
-            <div aria-hidden="true" class="lcd-button-container" style="grid-area: down1;"><button tabindex="-1" class="lcd-button" onClick="onLCDButtonClick(0, false)"><img alt="" src="/public/images/icons/lcd-tri-down.png"></button></div>
-            <div aria-hidden="true" class="lcd-button-container" style="grid-area: down2;"><button tabindex="-1" class="lcd-button" onClick="onLCDButtonClick(1, false)"><img alt="" src="/public/images/icons/lcd-tri-down.png"></button></div>
-            <div aria-hidden="true" class="lcd-button-container" style="grid-area: down3;"><button tabindex="-1" class="lcd-button" onClick="onLCDButtonClick(2, false)"><img alt="" src="/public/images/icons/lcd-tri-down.png"></button></div>
-            <div aria-hidden="true" class="lcd-button-container" style="grid-area: down4;"><button tabindex="-1" class="lcd-button" onClick="onLCDButtonClick(3, false)"><img alt="" src="/public/images/icons/lcd-tri-down.png"></button></div>
-        </div>
-    </template>
+			<div class="lcd-display">
+				<input aria-label="lcd per numero di risposta, massimo 4 cifre" id="input-num" type="number" value="0000" onchange="onLCDNumberChange()">
+			</div>
 
-    <!-- template widget pergamena -->
-    <template id="template-scroll">
-        <div class="scroll-container">
-            <textarea aria-label="pergamena per testo di risposta" id="input-text" spellcheck="false" class="scroll-textarea"></textarea>
-        </div>
-    </template>
+			<div aria-hidden="true" class="lcd-button-container" style="grid-area: down1;"><button tabindex="-1" class="lcd-button" onClick="onLCDButtonClick(0, false)"><img alt="" src="/public/images/icons/lcd-tri-down.png"></button></div>
+			<div aria-hidden="true" class="lcd-button-container" style="grid-area: down2;"><button tabindex="-1" class="lcd-button" onClick="onLCDButtonClick(1, false)"><img alt="" src="/public/images/icons/lcd-tri-down.png"></button></div>
+			<div aria-hidden="true" class="lcd-button-container" style="grid-area: down3;"><button tabindex="-1" class="lcd-button" onClick="onLCDButtonClick(2, false)"><img alt="" src="/public/images/icons/lcd-tri-down.png"></button></div>
+			<div aria-hidden="true" class="lcd-button-container" style="grid-area: down4;"><button tabindex="-1" class="lcd-button" onClick="onLCDButtonClick(3, false)"><img alt="" src="/public/images/icons/lcd-tri-down.png"></button></div>
+		</div>
+	</template>
+
+	<!-- template widgetna -->
+	<template id="template-scroll">
+		<div class="scroll-container">
+			<textarea aria-label="pergamena per testo di risposta" id="input-text" spellcheck="false" class="scroll-textarea"></textarea>
+		</div>
+	</template>
+
+	<!-- template widget scanner -->
+	<template id="template-scanner">
+		<div id="scan-container">
+			<label for="input-immagine" class="widget-scan-label">Scan</label>
+			<input id="input-immagine" type="file" accept="image/*" class="scan-immagine-input">
+			<div id="scan-window">
+				<div id="scan-line"></div>
+				<table>
+					<tr><td></td><td></td><td></td><td></td></tr>
+					<tr><td></td><td id="o-word"><p>O</p></td><td id="k-word"><p>K</p></td><td></td></tr>
+					<tr><td></td><td></td><td></td><td></td></tr>
+				</table>
+			</div>
+		</div>
+	</template>
 </body>
 </html>
