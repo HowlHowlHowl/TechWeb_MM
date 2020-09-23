@@ -997,7 +997,7 @@ function addStoryElement(s) {
     qr.on('click', () => {
         let qr = $(document.createElement('div'));
         qr.qrcode({
-            'text' : 'http://www.site.com/player?id=' + s.id,  // users will be redirected to this URL when scanning the QR-Code
+            'text' : window.location.origin + '/player?id=' + s.id,  // users will be redirected to this URL when scanning the QR-Code
             'size' : 150                                       // image width in pixel
         });
         
