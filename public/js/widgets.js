@@ -32,10 +32,11 @@ $(document).on('change', '.scan-immagine-input', function () {
         'background-size': 'contain'
     });
 
+    lineAnimation();
     blinkWord('#o-word p');
     blinkWord('#k-word p');
-    $('#scan-line').remove();
-    $('#scan-window').append('<div id="scan-line"></div>')
+//    $('#scan-line').remove();
+//    $('#scan-window').append('<div id="scan-line"></div>')
 });
 
 //Make the notification mark blink
@@ -51,11 +52,9 @@ function blinkWord(selector) {
 }
 
 $(document).on('click', '.widget-scan-label', function () {
-    $(this).css('border-style', 'inset');
     //Button like behaviour
-    setTimeout(function () { console.log('out'); $('.widget-scan-label  ').css('border-style', 'outset') }, 150);
-    lineAnimation();
-
+    $(this).css('border-style', 'inset');
+    setTimeout(function () { $('.widget-scan-label  ').css('border-style', 'outset') }, 150);
 });
 
 function lineAnimation() {

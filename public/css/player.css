@@ -1,0 +1,366 @@
+@font-face {
+    font-family: 'All The Roll';
+    src: url('/public/fonts/AllTheRollPersonalUse.woff2') format('woff2'), url('/public/fonts/AllTheRollPersonalUse.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+/*Tag*/
+img {
+    object-fit: contain;
+    width: 100%;
+    height: auto;
+}
+
+video {
+    width: 100%;
+}
+
+body {
+    background-color: #9932CC;
+}
+h1 {
+    font-size: 11vh;
+    text-align: center;
+    color: white;
+    font-family: "All The Roll";
+    line-height: .7;
+}
+/*classi e id*/
+#div-grande {
+    border: 3px #9932CC solid;
+    height: 70vh;
+    overflow-y: auto;
+    background-color: white;
+    min-width: 80%;
+    max-width: 80%;
+    margin: auto;
+    padding: 1vh;
+    border-radius: 2vh;
+}
+.bottonecorrezioni {
+    font-size: 2.5vh;
+    margin-right: 0.5vw;
+    border-radius: 0;
+    border: 1px solid black;
+    border-top: 0;
+    border-left: 0;
+}
+.bottonehelp {
+    font-size: 2.5vh;
+    margin-right: 0.5vw;
+    border-radius: 0;
+    border: 1px solid black;
+    border-top: 0;
+    border-left: 0;
+}
+.bottonechat {
+    font-size: 2.5vh;
+    margin-right: 0.5vw;
+    border-radius: 0;
+    border: 1px solid black;
+    border-top: 0;
+    border-left: 0;
+}
+#nome-attivita {
+    text-align: center;
+    font-size: 2.5vh;
+    font-weight: 600;
+    font-family: 'Helvetica Neue LT Std';
+}
+
+#nome-missione {
+    text-align: center;
+    font-size: 4vh;
+    font-family: 'Helvetica Neue LT Std';
+    margin-bottom: 0.5vh;
+}
+
+.testo-attivita {
+    margin-left: 1.5vh;
+    margin-right: 1.5vh;
+    margin-top: .5vh;
+    font-size: 2.5vh;
+    font-family: 'Helvetica Neue LT Std';
+}
+.testo-attivita img {
+    text-align: center;
+    vertical-align: middle;
+    border-style: none;
+}
+/*Notifica nuovo punteggio*/
+.notification-bar {
+    width: 100%;
+    color:black;
+    position:fixed;
+    background: rgba(255, 255, 255, .9);
+    border: 1.5px solid black;
+    border-bottom-left-radius: 2vh;
+    border-bottom-right-radius: 2vh;
+    padding: 5px;
+    font-weight:600;
+    min-height:10vh;
+    animation-name: notification;
+    animation-duration:5s;
+    animation-iteration-count:1;
+    animation-fill-mode: forwards;
+}
+.score-notif-text-pos {
+    font-size:3vh;
+    color: #07b100;
+}
+.score-notif-text-neg {
+    font-size: 3vh;
+    color: red;
+}
+@keyframes notification {
+    0% {
+        top:-100vh;
+    }
+    10% {
+        top:0;
+    }
+    80%{
+        top:0;
+    }
+    100%{
+        top:-100vh;
+        display:none;
+    }
+}
+/*Messaggio di errore*/
+#err-msg{
+    font-size: 2.5vh;
+    text-align:center;
+    color:red;
+}
+/*spazio che contiene gli input*/
+#footer {
+    width: 100%;
+    text-align: center;
+    vertical-align: middle;
+}
+/*INPUT: */
+.input { /*tutti gli input*/
+    margin: 2vh;
+    font-size: 2.5vh !important;
+    border: black solid 1px;
+}
+
+/*input delle risposte*/
+/*placeholder è la scritta inside all'input*/
+.default-input-text::placeholder {
+    font-weight: bold;
+    font-style: italic;
+    text-align:center;
+}
+
+.bottone-next {
+    border: 1px black solid;
+    font-size: 2.5vh;
+    border-radius: 0.5vh;
+    font-weight: bold;
+    margin: 2vh;
+    vertical-align: top;
+    height:5vh;
+}
+.default-input-num {
+    width: 20vh;
+    height:5vh;
+    margin: 2vh;
+    font-size: 2.5vh;
+    border-radius: 0.5vh;
+}
+.default-input-text {
+    margin:0;
+    height:5vh;
+    border: solid black 1px;
+    border-radius: 0.5vh;
+}
+#window-input-text > textarea {
+    width: 100%;
+    height: 34.5vh;
+    margin: auto;
+    background-color: #9932CC;
+    color: white;
+    font-weight: bold;
+    opacity: 0.7;
+    font-size: 3vh;
+}
+#window-input-text > button {
+    display: block;
+    width: 100%;
+    margin: auto;
+    font-weight: bold;
+    background-color: #9932CC;
+    color: white;
+    border: 1px solid black;
+    font-size: 2vh;
+    height: 5vh;
+}
+#window-input-text {
+    width: 70vw;
+    height: 40vh;
+    margin: auto;
+    position: fixed;
+    top: 37vh;
+    left: 15vw;
+    background-color: white;
+    border: 2px solid white;
+}
+/*Finestra per l'help*/
+#helpPane {
+    width: 70vw;
+    height: 60vh;
+    position: fixed;
+    margin:auto;
+    top:35vh;
+    left:15vw;
+    background:white;
+    border:5px solid #9932CC;
+    padding:1vh;
+    overflow-y:auto;
+    font-size:2vh;
+    word-break:break-word;
+}
+#new-help-req {
+    text-align:center;
+}
+#no-help-msg {
+    margin-top:3vh;
+    text-align:center;
+    display:block;
+}
+#send-new-req {
+    width:40%;
+    font-size:2vh;
+    border-color: #9932CC;
+}
+#helpPane p {
+    margin-bottom:0;
+}
+#helpPane h3 {
+    text-align:center;
+}
+#helpPane textarea {
+    margin-bottom:1vh;
+    width:100%;
+    resize:none;
+    font-size:2vh;
+    text-align:left;
+}
+.help-answer, .help-question {
+    background-color:rgba(200,200,200, .5);
+    padding:.5vh;
+    display:block;
+    min-height: 5vh;
+    margin-bottom:1vh;
+}
+#close-help-pane{
+    float:right;
+    width: 5vw;
+    top:0;
+    margin-bottom:1vh;
+    position:relative;
+    color: #9932CC;
+    border: 0px;
+}
+/*INPUT TEXT + GLYPHICON*/
+/*Bootstrap layout per avere l'icona dentro all'input*/
+.inner-addon {
+    position: relative;
+    width: 20vh;
+    margin: 2vh;
+    display: inline-block;
+}
+a.glyphicon-fullscreen:hover {
+    color: blue;
+    cursor: pointer;
+}
+.glyphicon-fullscreen.glyphicon-fullscreen:before {
+    bottom: 0.5vh;
+    position: relative;
+}
+/* style icon */
+.inner-addon .glyphicon {
+    position: absolute;
+    padding: 10px;
+    font-size: 2.5vh !important;
+}
+/* align icon */
+.left-addon .glyphicon {
+    left: 0;
+    top: 0;
+    padding-left:1.5vh;
+}
+/* add padding  */
+.left-addon input {
+    padding-left: 30px;
+}
+/*UPLOAD dei FILE (immagini)*/
+.custom-file-upload {
+    background: white;
+    display: inline-block;
+    cursor: pointer;
+    padding: 1px 6px;
+    border: 1px black solid;
+    font-weight: bold;
+    font-size: 2.5vh;
+    border-radius: 0.5vh;
+    height: 5vh;
+    padding-top:4px;
+}
+/*per nascondere l'input dell'immagine xkè se no è un obrobrio*/
+input[type="file"] {
+    display: none;
+}
+/*preview dell'immagine caricata*/
+#preview {
+    height: 5vh;
+    width: auto;
+    position: relative;
+    left: 0;
+    bottom: .8vh;
+    opacity: 0.9;
+    border: 1px solid black;
+    border-top-right-radius: 0.5vh;
+    border-bottom-right-radius: 0.5vh;
+}
+#score {
+    float:right;
+    font-size: 3vh;
+    font-weight: normal;
+    color:white;
+    margin-right:2vh;
+    margin-bottom:0;
+}
+#final-text {
+    font-size: 5vh;
+    color: #9932CC;
+    text-align:center;
+}
+/*Chat Viola*/
+.panel-primary > .panel-heading {
+    background-color: #ae50dc;
+    border-color: #ae50dc;
+}
+#send-msg {
+    background-color: #ae50dc;
+}
+.sent-msgs {
+    background-color: #9932CC;
+}
+/*notifica nuovo messaggio chat*/
+.dot {
+    min-width: 2vh;
+    min-height: 2vh;
+    margin: .2vh;
+    border-radius: 2vh;
+    font-size: 1vh;
+    vertical-align: middle;
+    text-align: center;
+    padding: 2.5px;
+    float: left;
+    clear: right;
+    background: radial-gradient(rebeccapurple 10%, transparent) !important;
+}
