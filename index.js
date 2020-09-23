@@ -2,8 +2,12 @@ var fs = require('fs');
 var path = require('path');
 var express = require('express');
 var formidable = require('formidable');
+var process = require('process');
 var app = express();
 var port = 8000;
+
+//Cambia la working directory alla directory che contiene questo file
+process.chdir(__dirname);
 
 //Parsing di body json nelle richieste che specificano application/json come content type
 app.use(express.json());
