@@ -198,7 +198,7 @@ html, body {
     border-radius: 6px;
     height: 24px;
     width: 24px;
-    border: none;
+    border: 2px solid black;
     outline: none;
     padding: 2px;
     -webkit-appearance: none;
