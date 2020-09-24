@@ -465,10 +465,16 @@ function setUserTab(data) {
     let unread = 0;
     data.chat.forEach((log => { if (!log.seen && log.auth != 'Valutatore') unread++; }));
 
-    let nextID = (player_index + 1 < players_array.length ? players_array[player_index + 1].id : players_array[0].id);
-    let prevID = (player_index - 1 > -1 ? players_array[player_index - 1].id : players_array[players_array.length - 1].id);
-    $('#nextUser').click(() => { openUserTab(nextID) });
-    $('#prevUser').click(() => { openUserTab(prevID) });
+    let prevID = players_array[((player_index + players_array.length - 1) % players_array.length)].id;
+    let nextID = players_array[((player_index + 1) % players_array.length)].id;
+    $(document).on('click', '#prevUser', function (event) {
+        openUserTab(prevID);
+        event.stopPropagation();
+    });
+    $(document).on('click', '#nextUser', function (event) {
+        openUserTab(nextID);
+        event.stopPropagation();
+    });
 
     $('#user-space').empty();
     $('#user-space').append('<a onclick="closeUserTab()"><span class="glyphicon glyphicon-remove icon-close"></span></a>'
@@ -492,10 +498,9 @@ function setUserTab(data) {
         + '</div>'
         + '</div>'
         + '<div class="block-info">'
-        + '<button type="button" id="history-button" name="player' + data.id + '" class="btn btn-primary btn-lg">Storico</button>'
-        + '</div>'
-        + '<div id ="user-chat-div">'
-        + '<button type="button" id="chat-button" class="btn btn-primary btn-lg">Chat</button>'
+        + '<button type="button" id="history-button" name="player' + data.id + '" class="user-space-button btn btn-primary btn-lg">Storico</button>'
+        + '<button type="button" id="chat-button" class="user-space-button btn btn-primary btn-lg">Chat</button>'
+        + '<button type="button" id="delete-player" name="' + data.id + '" class="user-space-button btn btn-primary btn-lg">Elimina</button>'
         + '</div>');
     if (hours > 0 || minutes > 15) {
         $('#time-count').append('<span class="glyphicon glyphicon-time" id="timeNotification">');
