@@ -10,7 +10,8 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 
-	<!--Internal dipendecies-->
+	<!--INCLUSIONE DI FILE ESTERNI (ES. ICONA DELLA PAGINA)-->
+
 	<link rel="icon" type="image/png" sizes="16x16" href="/public/images/icons/site16x16.ico">
     <link rel="stylesheet" href="/public/css/chat.css">
 	<link rel="stylesheet" href="/public/css/widgets.css">
@@ -30,9 +31,13 @@
             $('#score').text('Score: 0');
 			blinkNotify('#score');
             // richiesta storia
+			// url_string prende l'url sotto forma di stringa della pagina html e con new URL la trasforma in un'url 
+			//in modo che si possa accedere ai parametri dell'url url.searchParams.get('id')
             var url_string = window.location.href;
             var url = new URL(url_string);
-            var id = url.searchParams.get("id");
+			var id = url.searchParams.get("id");
+			// $.ajax è una funzione che si usa per creare connessioni http
+			//get story by id 
             $.ajax({
                 type: 'GET',
                 url: '/stories/' + id,
@@ -64,7 +69,13 @@
                 if (!$('#helpPane textarea').val()) {
                     openHelpPane();
                 }
-        }, 10000);
+		}, 10000);
+		// è una funzione che serve a creare una connessione di tipo ajax
+		// prende i dati della storia setPlayer(data) li manda al server che crea (PUT)
+		// un file player nuovo e riceve l'id associato al nuovo player
+
+		/* si rifa ad una funzione di players.js 
+		identificata dall'url '/players/create_player'*/
 		function setPlayer(data) {
 			$.ajax({
 				url: '/players/create_player',
@@ -72,6 +83,7 @@
 				data: JSON.stringify(data),
 				contentType: 'application/json',
 				success: function (id) {
+					// questo comando serve a memorizzare l'id che è stato inviato dal server
 					player_id = id;
 					setWindow();
 					setCurrentQuest();
@@ -81,27 +93,38 @@
 				}
 			});
         }
-        //Make the notification mark blink
-        function blinkNotify(selector) {
-            var element = $(selector);
-            setInterval(function () {
-                element.fadeIn(500, function () {
-                    element.fadeOut(500, function () {
-                        element.fadeIn(1000);
-                    });
-                });
-            }, 2000);
-        }
-
+        //funzione che fa lampeggiare un elemento tramite #id(selector)
+		function blinkNotify(selector) {
+			var element = $(selector);
+			setInterval(function () {
+				element.fadeIn(500, function () {
+					element.fadeOut(500, function () {
+						element.fadeIn(1000);
+					});
+				});
+			}, 2000);
+		}
 		// Questa funzione serve a controllare l'eventuale input dell'attività attuale
 		function checkInput() {
 			let answer_data;
 			let score = 0;
-			let corrected_bool = true;
-			let questionArray = [];
+			// is_corrected è una variabile che indica se la risposta è stata valutata oppure no
+			// se deve ancora essere valutata is_corrected = false
+			let is_corrected = true;
+			// lista (array) dei componenti delle domande 
+			let questionComponents = [];
+			// indica che la risposta una volta corretta andrà notificata al player to_notify
 			let to_notify = false;
+			// type indica l'input type dell'attività attuale (testo, foto, numeri)
 			let type = storyJSON.activities[index].input_type;
+			//next_index non è dichiarata qui come variabile perchè è globale(dichiarata sopra)
+			//indice dell'attività successiva,i punti servono ad accedere a dei campi specifici.
+			//storyJSONè il contenuto della storia
+			//.per accedere ai campi della storia ---> .activities quindi per accedere alle attività 
+			// [index] per selezionare l'elemento dell'array in quella posizione
+			//.input_type indica il tipo di input dell'attività
 			next_index = storyJSON.activities[index].input.next_index;
+			//answer vuota nel caso in cui non ci fosse nessun tipo di input e viene riempita nel caso in cui l'input ci sia
 			answer = '';
             $('#err-msg').remove();
 			// storyJSON (è il file della storia trasformato in un'oggetto (JSON della storia)) . <--- serve per accedere ai campi delle storie
@@ -109,14 +132,15 @@
             if (type == 'photo') {
             	answer = '/public/images/uploads/' + $('#input-immagine')[0].files[0].name;
 				if (storyJSON.activities[index].input.evaluation_type == 'evaluator') {
-					corrected_bool = false;
+					is_corrected = false;
+                    to_notify = true;
 				}
-				to_notify = true;
 			}
 			else if (type == 'number') {
 				answer = $('#input-num').val();
 				if (storyJSON.activities[index].input.evaluation_type == 'correct') {
-					//Controllo se esiste un intervallo corretto di risposte che contiene quella data
+					//Controllo se la risposta data è corretta verificando che 
+					//sia compresa in un intervallo di numeri dato come opzione corretta
 					storyJSON.activities[index].input.correct_options.forEach(function (option) {
 						if (answer >= option.from && answer <= option.to) {
 							score = option.points;
@@ -134,7 +158,7 @@
 					}
 				} else {
 					//Evaluation_type == evaluator
-					corrected_bool = false;
+					is_corrected = false;
 					to_notify = true;
 				}
 			}
@@ -158,7 +182,7 @@
 				} else {
 					//Eval_type = evaluator
 					to_notify = true;
-					corrected_bool = false;
+					is_corrected = false;
 					next_index = storyJSON.activities[index].input.next_index;
 				}
 			}
@@ -175,13 +199,13 @@
             //Costruisce l'array della domanda posta al player
             storyJSON.activities[index].contents.forEach(function (elem) {
                 if (elem.type == 'text') {
-                    questionArray.push({
+                    questionComponents.push({
                         type: 'text',
                         content: elem.text
                     });
                 }
                 if (elem.type == 'video') {
-                    questionArray.push({
+                    questionComponents.push({
                         type: 'video',
                         content: {
                             url: elem.url,
@@ -190,7 +214,7 @@
                     });
                 }
                 if (elem.type == 'image') {
-                    questionArray.push({
+                    questionComponents.push({
                         type: 'image',
                         content: {
                             url: elem.url,
@@ -202,8 +226,8 @@
             answer_data = {
                 mission_name: mission_name,
 				activity_name: storyJSON.activities[next_index].name,
-				corrected: corrected_bool,
-				question: questionArray,
+				corrected: is_corrected,
+				question: questionComponents,
 				input_type: type,
                 answer: answer,
 				comment: '',
@@ -482,7 +506,8 @@
 
 		/**** Funzioni per la chat ****/
         //Sets the layout of the chat messages
-        function setChatView(data) {
+		function setChatView(data) {
+			console.log(data);
         	$('#chat-msgs').empty();
         	document.getElementById("chat").style.display = "block";
         	data.chat.forEach((chatlog) => {
@@ -502,7 +527,7 @@
         		url: '/players/player' + player_id,
         		success: function (data) {
         			setChatView(data);
-        			markAsSeen(id);
+        			markAsSeen('player' + player_id);
                     scrollToBottom('chat-msgs');
         			$('#new_msg_text').focus();
         		},
