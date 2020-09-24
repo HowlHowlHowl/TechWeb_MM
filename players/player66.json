@@ -1,0 +1,56 @@
+{
+  "id": 66,
+  "score": 0,
+  "username": "",
+  "current_quest_start_timestamp": [
+    21,
+    26
+  ],
+  "current_mission": "Introduzione",
+  "current_activity": "La storia dell'Antropologia",
+  "help": [],
+  "chat": [],
+  "pending_count": 0,
+  "story_name": "Uomo come soggetto o oggetto di studio",
+  "quest_list": [
+    {
+      "mission_name": "Inizio",
+      "activity_name": "Vediamo cosa sai sull'antropologia!",
+      "corrected": true,
+      "question": [
+        {
+          "type": "text",
+          "content": "L'antropologia è lo studio dell'uomo a 360°. Ogni aspetto dell'uomo e del suo ambiente circostante è di fondamentale importanza per la materia. L'antropologo deve tener presente il territorio, sia a livello geografico sia a livello politico-sociale, la lingua, le tradizioni, la storia e non solo!\nLa chiave del suo lavoro è la ricerca sul campo, che è fondamentale per raccogliere informazioni quanto più vicine alla realtà, deve tener presente che essendo un essere umano e venendo da una società e una cultura diversa da quella che andrà a studiare dovrà cercare il più possibile di eliminare pregiudizi per portare a termine una ricerca quanto più oggettiva."
+        },
+        {
+          "type": "image",
+          "content": {
+            "url": "/public/uploads/antropologia1.jpeg",
+            "descr": "Vignetta sull'antropologia"
+          }
+        }
+      ],
+      "input_type": "none",
+      "answer": "",
+      "comment": "",
+      "quest_score": 0,
+      "up_to_date": true
+    },
+    {
+      "mission_name": "",
+      "activity_name": "La storia dell'Antropologia",
+      "corrected": true,
+      "question": [
+        {
+          "type": "text",
+          "content": "Inizia col rispondere a questa semplice domanda:\n\nSecondo te l'uomo in antropologia è \"soggetto\" oppure \"oggetto\" di studio?\n"
+        }
+      ],
+      "input_type": "text",
+      "answer": "soggetto",
+      "comment": "",
+      "quest_score": 0,
+      "up_to_date": true
+    }
+  ]
+}
