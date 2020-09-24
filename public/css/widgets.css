@@ -96,19 +96,18 @@
 /* Widget pergamena */
 
 @font-face {
-        font-family: scrollFont;
-        src: url('/public/fonts/SCRIPTIN.ttf');
-        font-weight: normal;
-        font-style: normal;
-        font-display: auto;
+    font-family: "pergamena";
+    src: url('/public/fonts/pergamena.woff2') format('woff2'),url('public/fonts/pergamena.woff') format('woff'); 
+    font-weight: normal;
+    font-style: normal;
+    font-display: auto;
 }
 .scroll-container {
     width: 75vw;
     height: 100vw;
-    
     background: url('/public/images/scroll.png');
     background-size: 100% 100%;
-    font-family: scrollFont;
+    font-family: "pergamena";
     margin: auto;
 }
 
@@ -117,9 +116,10 @@
     top: 10vw;
     width: 55vw;
     height: 75vw;
-    font-size: 4vw;
+    font-size: 6vw;
     line-height: 7vw;
     margin: auto;
+    padding:6vh;
     background-color: transparent;
     outline: none;
     border: 0px;
