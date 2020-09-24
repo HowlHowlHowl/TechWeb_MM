@@ -4,10 +4,10 @@
   "style": "",
   "published": false,
   "canvas_offset": {
-    "x": -297.3191856323184,
-    "y": 90.95956872858648
+    "x": 144.32290439512826,
+    "y": 204.56573355904413
   },
-  "canvas_scale": 0.7290000000000001,
+  "canvas_scale": 0.275,
   "missions": [
     {
       "name": "Introduzione",
@@ -52,7 +52,7 @@
       "contents": [
         {
           "type": "text",
-          "text": "Missione compiuta, ottimo lavoro ragazzi, riceverete il vostro compenso al più presto!\nAbbiamo fatto un sacco di soldi e imparato qualcosa!\nCi risentiremo per il prossimo colpo!"
+          "text": "Missione compiuta, ottimo lavoro ragazzi, riceverete il vostro compenso al più presto!\nCi risentiremo per il prossimo colpo!"
         }
       ],
       "mission_index": null,
