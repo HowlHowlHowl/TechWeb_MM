@@ -1,6 +1,5 @@
 body {
     overflow: hidden;
-    background-color: #007bff;
 }
 
 .tab-content, .tab-pane{
@@ -10,6 +9,9 @@ body {
 @media only screen and (max-width: 1000px) {
     .nav-item > a {
         text-align: left !important;
+    }
+    #navbarSupportedContent {
+        top: 10vh !important;
     }
 }
 
@@ -75,6 +77,7 @@ body {
     width: 30vh;
     max-height: 40vh;
     overflow-y: auto;
+    position: initial !important;
 }
 
 .nav-item {
@@ -89,6 +92,9 @@ body {
 #navbarSupportedContent{
     padding:0;
     background:#007BFF;
+    position:fixed;
+    top:0;
+    width:100%;
 }
 /*Container correzioni*/
 .list-group {
@@ -162,7 +168,9 @@ body {
     border: transparent;
     margin: auto;
 }
-
+#user-space button {
+    font-size:2vh;
+}
 .user-info-tab:hover {
     background-color: transparent;
     border: transparent;
@@ -206,12 +214,14 @@ body {
 }
 
 .input1 {
+    z-index: 1;
     font-size: 2vh;
     float: left;
     margin-right: 5vw;
 }
 
 .input2 {
+    z-index: 0;
     font-size: 2vh;
     width: 100%;
 }
@@ -259,6 +269,7 @@ body {
     overflow-y: auto;
     vertical-align: top;
     margin-left: 1vw;
+    overflow-x:hidden;
 }
 
 .inline-divs:nth-child(3) {
@@ -390,12 +401,14 @@ body {
 }
 
 #rename-field {
+    font-size: 2vh;
     height: 4.5vh;
     min-width: 20vh;
     text-align: center;
 }
 
 #playername-label {
+    font-size:2vh;  
     height: 4.5vh;
     display: inline-block;
     width: 100%;

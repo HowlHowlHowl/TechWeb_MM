@@ -1,0 +1,21 @@
+Togliere gli alert
+Test storia Van Gogh
+
+AUTORE:
+ - Un po' di commenti random nel js
+
+VALUTATORE:
+ - Elimina player
+ - Togliere TODO in .js
+
+PLAYER:
+ - Fogli di stile
+ - Sei sicuro di voler uscire
+ - Togliere TODO in .js
+
+STORIE:
+ - Foto alla missione smeraldo
+ - Didattica alla missione smeraldo
+
+TEST SERVER UNIBO:
+ - Il player perde tutto in assenza di conn?

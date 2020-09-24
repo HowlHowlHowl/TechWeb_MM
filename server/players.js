@@ -7,42 +7,43 @@ var TOO_LONG_MINUTES = 15;
 
 module.exports = function (app) {
     var next_id = 0;
-    //Ritorna una lista dei player con l'informazione relativa all'ultimo messaggio inviato
+    //Ritorna una lista dei player con informazioni aggiuntive
     app.get('/players/', function (req, res) {
         fs.readdir('players', function (err, files) {
             let players = [];
-            if (!err) {
-                res.writeHead(200, { 'Content-Type': 'application/json' });
-                files.forEach(function (file) {
-                    let data = JSON.parse(fs.readFileSync('players/' + file));
-                    let player = {};
-                    player.id = data.id;
-                    player.urgent = false;
-                    player.username = data.username;
-                    player.score = data.score;
-                   
+            if (err) {
+                res.status(400).send();
+                res.end();
+            } else {
+                files.forEach(function (filename) {
+                    let player = JSON.parse(fs.readFileSync('players/' + filename));
+
+                    //Calcolo del tempo passato dall'inizio dell'attività attuale
                     let date = new Date();
-                    let elapsed_mins = (((date.getHours() * 60) + date.getMinutes()) - ((data.current_quest_start_timestamp[0] * 60) + data.current_quest_start_timestamp[1])) / 60;
+                    let elapsed_mins = (((date.getHours() * 60) + date.getMinutes()) - ((player.current_quest_start_timestamp[0] * 60) + player.current_quest_start_timestamp[1])) / 60;
                     let hours = Math.floor(elapsed_mins);
                     let minutes = (((elapsed_mins % 1) * 60).toFixed() < 0 ? 0 : ((elapsed_mins % 1) * 60).toFixed());
                     minutes = (minutes < 10 ? '0' + minutes : minutes);
-                    //Help requests
-                    player.to_help = false;
-                    data.help.forEach(function (dataHelpLog) {
-                        if(dataHelpLog.to_help==true){
-                            player.to_help=true;
-                        }
-                    });
-                    //Time alert
-                    player.too_long = (hours > TOO_LONG_HOURS || minutes > TOO_LONG_MINUTES);
-                    data.chat.forEach(function (dataChatLog) {
-                        if ((dataChatLog.auth).localeCompare("player" + data.id) == 0) {
-                            player.urgent = !dataChatLog.seen;
-                        }
-                    });
 
+                    //Info richieste d'aiuto
+                    player.to_help = false;
+                    player.help.forEach(function (helpLog) {
+                        if (helpLog.to_help == true) {
+                            player.to_help = true;
+                        }
+                    });
+                    //Info sul tempo
+                    player.too_long = (hours > TOO_LONG_HOURS || minutes > TOO_LONG_MINUTES);
+
+                    player.urgent = false;
+                    player.chat.forEach(function (chatLog) {
+                        if ((chatLog.auth).localeCompare("player" + player.id) == 0) {
+                            player.urgent = !chatLog.seen;
+                        }
+                    });
                     players.push(player);
                 });
+                res.writeHead(200, { 'Content-Type': 'application/json' });
                 res.write(JSON.stringify(players));
                 res.end();
             }
@@ -156,23 +157,38 @@ module.exports = function (app) {
         res.write(JSON.stringify(help));
         res.status(200).send();
     });
+    //Richiede update sullo score del player
     app.get('/players/update_score/:id', function (req, res) {
         let id = req.params.id;
         let path = 'players/' + id + '.json';
         let player = JSON.parse(fs.readFileSync(path));
         let quests = player.quest_list;
-        let to_send;
-        for (let i = 0; i < help.length; i++) {
-            if (!quests[i].up_to_date && quests[i].corrected) {
+        let to_send = null
+        for (let i = 0; i < quests.length; i++) {
+            if (!(quests[i].up_to_date) && quests[i].corrected) {
                 player.quest_list[i].up_to_date = true;
                 to_send = quests[i];
                 break;
             }
         }
-        fs.writeFile(path, JSON.stringify(player, null, 2), function (err) {
-            res.write(JSON.stringify(data));
-            res.status((err ? 500 : 200)).send();
-        });
+        if (to_send) {
+            fs.writeFile(path, JSON.stringify(player, null, 2), function (err) {
+                if (err) {
+                    res.status(500).send();
+                } else {
+                    res.writeHead(200, { 'Content-Type': 'application/json' });
+                    res.write(JSON.stringify({
+                        score: player.score,
+                        mission: to_send.mission_name,
+                        activity: to_send.activity_name,
+                        added: to_send.quest_score
+                    }));
+                    res.end();
+                }
+            });
+        } else {
+            res.status(200).send();
+        }
     });
     //Restituisce il vettore di richieste d'aiuto del player con nome e nome storia
     app.get('/players/get_help_request/:id', function (req, res) {
@@ -213,7 +229,7 @@ module.exports = function (app) {
     });
 
     //Aggiunge un messaggio in chat inviato dal valutatore
-    app.post('/players/:id', function (req, res) {
+    app.post('/players/send_msg/:id', function (req, res) {
         let id = req.params.id;
         let msg = req.body;
         let path = 'players/' + id + '.json';
@@ -249,9 +265,8 @@ module.exports = function (app) {
         content.chat.forEach(function (chatLog) {
             if (chatLog.auth != author) { chatLog.seen = true; }
         });
-        fs.writeFile(path, JSON.stringify(content, null, 2), function (err) {
-            res.status(err ? 500 : 200).send();
-        });
+        fs.writeFileSync(path, JSON.stringify(content, null, 2));
+        res.status(200).send();
         res.end();
     });
     //Aggiorna la correzione di una quest per player=id

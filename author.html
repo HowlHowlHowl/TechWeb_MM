@@ -171,6 +171,7 @@
                             <label for="input-style-photo">Stile widget di input di foto:</label>
                             <select class="custom-select input-style-photo" id="input-style-photo">
                                 <option value="" selected>Nessuno</option>
+								<option value="scanner">Scanner</option>
                             </select>
                         </div>
                     </div>
@@ -257,11 +258,11 @@
     
     <!-- template per editor missione -->
     <template id="template-mission">
-        <div class="p-3 mission-div m-1">
+        <div class="p-1 mission-div m-1">
             <div class="btn-group float-right" role="group">
-                <input class="mission-col" type="color" value="#563d7c" id="example-color-input">
+                <input class="mission-col" type="color" value="#563d7c" id="example-color-input" title="Colore">
                 <button class="mission-button mission-copy" title="Copia"><img class="mission-icon" src="/public/images/icons/copy.svg"></button>
-                <button class="mission-button mission-del" title="Elimina"><img class="mission-icon" src="/public/images/icons/crosswhite.png"></button>
+                <button class="mission-button mission-del" title="Elimina"><img class="mission-icon" src="/public/images/icons/cross.png"></button>
             </div>
             
             <div class="editable-name-div">
@@ -315,7 +316,7 @@
             <div>
                 <video controls>
                   <source src="">
-                    Your browser does not support HTML5 video.
+                  Il tuo browser non support i video HTML5
                 </video>
                 
                 <label class="file-upload-label btn btn-success btn-sm">
@@ -381,7 +382,7 @@
         <div class="node ui-widget-content">
             <div class="node-header">
                 <div class="btn-group float-right node-buttons">
-                    <button class="node-button copy" title="Copia"><img class="node-icon" src="/public/images/icons/copy.svg"></button>
+                    <button class="node-button copy" title="Copia"><img class="node-icon" src="/public/images/icons/copywhite.svg"></button>
                     <button class="node-button delete" title="Elimina"><img class="node-icon" src="/public/images/icons/crosswhite.png"></button>
                 </div>
                 

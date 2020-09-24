@@ -248,7 +248,8 @@
       "input_type": "photo",
       "input": {
         "evaluation_type": "any",
-        "next_index": 6
+        "next_index": 6,
+        "style": "scanner"
       },
       "position": {
         "x": 121.7007529882473,

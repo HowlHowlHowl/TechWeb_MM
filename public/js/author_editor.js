@@ -315,7 +315,11 @@ function setWrongInputElement(activity, node) {
                 input.wrong_next_index = null;
             }
             
-            clearAndSetNodeOutputs(activity, node);
+            //if we already had values for next index we keep it in the new input object
+            let old_next_index = input.next_index;
+            node.clearOutputs();
+            input.next_index = old_next_index;
+            setNodeOutputs(activity, node);
         });
     }
 }
@@ -461,11 +465,15 @@ function setInputElement(activity, node)
             editorDirty = true;
             
             let evaluation_type = select.val();
+            
+            //if we already had values for next index we keep it in the new input object
+            let old_next_index = activity.input.next_index;
             activity.input = {
                 style: "",
                 evaluation_type: evaluation_type,
-                next_index: null
+                next_index: old_next_index
             };
+            
             if(evaluation_type == "correct") {
                 if(type == "text") {
                     activity.input.correct_options = [ { points : 0, text : "" } ];
@@ -578,11 +586,14 @@ function openActivityEditor(activity, node) {
                 editorDirty = true;
                 activity.input_type = type;
                 
+                //if we already had values for next index we keep it in the new input object
+                let old_next_index = activity.input.next_index;
+                
                 activity.input = {};
                 if(type != "none") {
                     activity.input.evaluation_type = "any";
                 }
-                activity.input.next_index = null;
+                activity.input.next_index = old_next_index;
                 
                 setInputElement(activity, node);
                 clearAndSetNodeOutputs(activity, node);
@@ -986,7 +997,7 @@ function addStoryElement(s) {
     qr.on('click', () => {
         let qr = $(document.createElement('div'));
         qr.qrcode({
-            'text' : 'http://www.site.com/player?id=' + s.id,  // users will be redirected to this URL when scanning the QR-Code
+            'text' : window.location.origin + '/player?id=' + s.id,  // users will be redirected to this URL when scanning the QR-Code
             'size' : 150                                       // image width in pixel
         });
         
@@ -1196,12 +1207,11 @@ $(() => {
     updateStories();
 });
 
-/*
+
 $(window).bind('beforeunload', function() {
    if(editorDirty)
    {
        return 'Ci sono modifiche non salvate, procedere ugualmente?';
    }
 });
-*/
 

@@ -124,3 +124,67 @@
     outline: none;
     border: 0px;
 }
+
+/*Widget Scanner*/
+#scan-container {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+.widget-scan-label {
+    text-align: center;
+    border: 1vh #ed0000 outset;
+    background-color: #ed0000;
+    padding: 1vh;
+    padding-top: 20vh;
+    height:50vh;
+    font-size: 4vh;
+    margin:0;
+    color:black;
+}
+
+#scan-window {
+    width: 70vw;
+    height: 50vh;
+    background-color: black;
+    border: 2vh #787878 ridge;
+    position: relative;
+}
+.scan-immagine-input {
+    display:inline-block!important;
+    border:0;
+    padding:0;
+    font-size:0;
+    width:0;
+    margin:0;
+}
+#scan-window table {
+    border: .1px dotted #00ff21;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+
+#scan-window td {
+    border: .1px dotted #00ff21;
+}
+
+#o-word, #k-word{
+    max-width: 0;
+    color: #00ff21;
+    font-size: 15vh;
+    font-family: lcdFont;
+    text-align:center;
+    vertical-align:middle;
+}
+#o-word p, #k-word p {
+    display: none;
+    line-height: 0;
+}
+#scan-line {
+    position: absolute;
+    height: 100%;
+    width: 1vh;
+    left: 0;
+    background: radial-gradient(#00ff21, transparent);
+}

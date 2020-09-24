@@ -3,1051 +3,40 @@
 <head>
 	<meta charset="utf-8">
 	<title>Player</title>
+
+	<!--INCLUSIONE DI FILE ESTERNI (bootsrap, jquery)-->
 	<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css"> <!--codice boostrap per attivare le funzionalità bootstrap-->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
-	
+
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 
-	<!--INCLUSIONE DI FILE ESTERNI (ES. ICONA DELLA PAGINA)-->
 
+	<!--inclusione di file interni (icona, css chat, widget...)-->
 	<link rel="icon" type="image/png" sizes="16x16" href="/public/images/icons/site16x16.ico">
-    <link rel="stylesheet" href="/public/css/chat.css">
+	<link rel="stylesheet" href="/public/css/chat.css">
 	<link rel="stylesheet" href="/public/css/widgets.css">
-    
 	<script src="/public/js/widgets.js"></script>
-    
+	<script src="/public/js/player.js"></script>
+
+
 	<script type="text/javascript">
-		var player_id = null;
-		var index = null;
-		var next_index = 0;
-		var storyJSON = null;
-		var answer = "";
-		var isChatOpen = false;
-		var isHelpPaneOpen = false;
-		var isTextWindowOpen = false;
-		$(document).ready(function () {
-            $('#score').text('Score: 0');
-			blinkNotify('#score');
-            // richiesta storia
-			// url_string prende l'url sotto forma di stringa della pagina html e con new URL la trasforma in un'url 
-			//in modo che si possa accedere ai parametri dell'url url.searchParams.get('id')
-            var url_string = window.location.href;
-            var url = new URL(url_string);
-			var id = url.searchParams.get("id");
-			// $.ajax è una funzione che si usa per creare connessioni http
-			//get story by id 
-            $.ajax({
-                type: 'GET',
-                url: '/stories/' + id,
-                success: function (data) {
-                    storyJSON = data;
-				    setPlayer(storyJSON);
-                },
-                error: function (xhr, ajaxOptions, thrownError) {
-                    alert(xhr.status + ' - ' + thrownError);
-                }
-            });
-		});
-		//Update al secondo di nuovi messaggi e risposte a richieste d'aiuto 
-		setInterval(function () {
-			check4newMex();
-			checkReqHelp();
-
-		}, 1000);
-
-        //Chat update every second 
-        setInterval(function () {
-            if (isChatOpen) {
-                openChat();
-            }
-        }, 1000);
-        //Help pane update every 10 seconds
-        setInterval(function () {
-            if (isHelpPaneOpen)
-                if (!$('#helpPane textarea').val()) {
-                    openHelpPane();
-                }
-		}, 10000);
-		// è una funzione che serve a creare una connessione di tipo ajax
-		// prende i dati della storia setPlayer(data) li manda al server che crea (PUT)
-		// un file player nuovo e riceve l'id associato al nuovo player
-
-		/* si rifa ad una funzione di players.js 
-		identificata dall'url '/players/create_player'*/
-		function setPlayer(data) {
-			$.ajax({
-				url: '/players/create_player',
-				type: 'PUT',
-				data: JSON.stringify(data),
-				contentType: 'application/json',
-				success: function (id) {
-					// questo comando serve a memorizzare l'id che è stato inviato dal server
-					player_id = id;
-					setWindow();
-					setCurrentQuest();
-				},
-				error: function (xhr, ajaxOptions, thrownError) {
-					alert(xhr.status + ' - ' + thrownError);
-				}
-			});
-        }
-        //funzione che fa lampeggiare un elemento tramite #id(selector)
-		function blinkNotify(selector) {
-			var element = $(selector);
-			setInterval(function () {
-				element.fadeIn(500, function () {
-					element.fadeOut(500, function () {
-						element.fadeIn(1000);
-					});
-				});
-			}, 2000);
-		}
-		// Questa funzione serve a controllare l'eventuale input dell'attività attuale
-		function checkInput() {
-			let answer_data;
-			let score = 0;
-			// is_corrected è una variabile che indica se la risposta è stata valutata oppure no
-			// se deve ancora essere valutata is_corrected = false
-			let is_corrected = true;
-			// lista (array) dei componenti delle domande 
-			let questionComponents = [];
-			// indica che la risposta una volta corretta andrà notificata al player to_notify
-			let to_notify = false;
-			// type indica l'input type dell'attività attuale (testo, foto, numeri)
-			let type = storyJSON.activities[index].input_type;
-			//next_index non è dichiarata qui come variabile perchè è globale(dichiarata sopra)
-			//indice dell'attività successiva,i punti servono ad accedere a dei campi specifici.
-			//storyJSONè il contenuto della storia
-			//.per accedere ai campi della storia ---> .activities quindi per accedere alle attività 
-			// [index] per selezionare l'elemento dell'array in quella posizione
-			//.input_type indica il tipo di input dell'attività
-			next_index = storyJSON.activities[index].input.next_index;
-			//answer vuota nel caso in cui non ci fosse nessun tipo di input e viene riempita nel caso in cui l'input ci sia
-			answer = '';
-            $('#err-msg').remove();
-			// storyJSON (è il file della storia trasformato in un'oggetto (JSON della storia)) . <--- serve per accedere ai campi delle storie
-			// 'activities' è un'array [index] accedi all'attività attuale .input_type <--- è un campo dell'oggetto dell'array
-            if (type == 'photo') {
-            	answer = '/public/images/uploads/' + $('#input-immagine')[0].files[0].name;
-				if (storyJSON.activities[index].input.evaluation_type == 'evaluator') {
-					is_corrected = false;
-                    to_notify = true;
-				}
-			}
-			else if (type == 'number') {
-				answer = $('#input-num').val();
-				if (storyJSON.activities[index].input.evaluation_type == 'correct') {
-					//Controllo se la risposta data è corretta verificando che 
-					//sia compresa in un intervallo di numeri dato come opzione corretta
-					storyJSON.activities[index].input.correct_options.forEach(function (option) {
-						if (answer >= option.from && answer <= option.to) {
-							score = option.points;
-						}
-					});
-					//Se la risposta è sbagliata
-					if (score == 0) {
-                        if (storyJSON.activities[index].input.wrong_stay) {
-							next_index = index;
-							$('#div-grande').append('<p id="err-msg">' + (storyJSON.activities[index].input.wrong_message || 'Riprova') + '</p>');
-							scrollToBottom('div-grande');
-						} else {
-                            next_index = (storyJSON.activities[index].input.wrong_next_index || next_index);
-						}
-					}
-				} else {
-					//Evaluation_type == evaluator
-					is_corrected = false;
-					to_notify = true;
-				}
-			}
-			else if (type == 'text') {
-				answer = $('#input-text').val();
-				if (storyJSON.activities[index].input.evaluation_type == 'correct') {
-					storyJSON.activities[index].input.correct_options.forEach((option) => {
-						if (answer.trim().toLowerCase().replace(' ', '').localeCompare(option.text.trim().toLowerCase().replace(' ', ''))==0) {
-							score = option.points;
-						}
-					});
-					if (score == 0) {
-                        if (storyJSON.activities[index].input.wrong_stay) {
-                            next_index = index;
-							$('#div-grande').append('<p id="err-msg">' + (storyJSON.activities[index].input.wrong_message || 'Riprova') + '</p>');
-                            scrollToBottom('div-grande');
-						} else {
-							next_index = (storyJSON.activities[index].input.wrong_next_index || next_index);
-						}
-					}
-				} else {
-					//Eval_type = evaluator
-					to_notify = true;
-					is_corrected = false;
-					next_index = storyJSON.activities[index].input.next_index;
-				}
-			}
-            
-            //Se per caso la storia e' stata creata male dall'autore che non ha specificato tutti i percorsi saltiamo alla fine direttamente.
-            if(next_index === undefined || next_index === null){
-                next_index = 1;
-            }
-            
-            let mission_index = storyJSON.activities[next_index].mission_index;
-            let mission_name;
-            if (mission_index) { mission_name = storyJSON.missions[mission_index].name; } else { mission_name = (next_index == 1 ? 'Fine' : (index==0 ? 'Inizio' : '')); }
-
-            //Costruisce l'array della domanda posta al player
-            storyJSON.activities[index].contents.forEach(function (elem) {
-                if (elem.type == 'text') {
-                    questionComponents.push({
-                        type: 'text',
-                        content: elem.text
-                    });
-                }
-                if (elem.type == 'video') {
-                    questionComponents.push({
-                        type: 'video',
-                        content: {
-                            url: elem.url,
-                            descr: elem.description
-                        }
-                    });
-                }
-                if (elem.type == 'image') {
-                    questionComponents.push({
-                        type: 'image',
-                        content: {
-                            url: elem.url,
-                            descr: elem.description
-                        }
-                    });
-                }
-            });
-            answer_data = {
-                mission_name: mission_name,
-				activity_name: storyJSON.activities[next_index].name,
-				corrected: is_corrected,
-				question: questionComponents,
-				input_type: type,
-                answer: answer,
-				comment: '',
-				quest_score: Number(score),
-				up_to_date: to_notify
-            };
-			sendAnswerToServer(answer_data);
-		}
-		//Funzione per mandare il descrittore dell'attività completata al server ed aggiungerlo al file del player
-		function sendAnswerToServer(answer_data) {
-			$.ajax({
-				url: '/players/add_answer/player' + player_id,
-				type: 'PUT',
-				contentType: 'application/json',
-				data: JSON.stringify(answer_data),
-				success: function (data) {
-                    setWindow();
-                    setCurrentQuest();
-					$('#score').text('Score: ' + data.score);
-					blinkNotify('#score');
-				},
-                error: function (xhr, ajaxOptions, thrownError) {
-                    alert(xhr.status + ' - ' + thrownError);
-                }
-			});
-		}
-		// Questa funzione serve a impostare la finestra per la prossima attività
-		function setWindow() {
-			$('h1').text('(' + storyJSON.name + ')');
-			let mission_index = storyJSON.activities[next_index].mission_index;
-			$('#nome-attivita').text(storyJSON.activities[next_index].name);
-			if (mission_index != null) {
-               $('#nome-missione').text(storyJSON.missions[mission_index].name);
-            }
-			$('.testo-attivita').empty();
-			$('.to_del').remove();
-			storyJSON.activities[next_index].contents.forEach(function (elem) {
-                if (elem.type == 'text') {
-                    $('.testo-attivita').append(elem.text + '<br>');
-                }
-                if (elem.type == 'video') {
-					var video = document.createElement('video');
-                    var source = document.createElement('source');
-					source.setAttribute('src', elem.url);
-                    video.setAttribute('width', '400');
-                    video.setAttribute('controls', '');
-					video.appendChild(source);
-					video.setAttribute('class', 'to_del');
-					video.setAttribute('alt', elem.description);
-                    $('.testo-attivita').append(video);
-                }
-                if (elem.type == 'image') {
-					var image = document.createElement('img');
-                    image.setAttribute('src', elem.url);
-                    image.setAttribute('alt', elem.description);
-					image.setAttribute('width', '400');
-                    image.setAttribute('class', 'to_del');
-                    $('.testo-attivita').append(image);
-                }
-			});
-			$('#footer').empty();
-
-			let isSpecial = storyJSON.activities[next_index].special;
-			if (!isSpecial) {
-                let input_type = storyJSON.activities[next_index].input_type;
-                let input = storyJSON.activities[next_index].input;
-				if (input_type == 'photo') {
-                    $('#footer').append('<label for="input-immagine" class="input custom-file-upload">'
-                        + '<span class="glyphicon glyphicon-cloud-upload"></span> Carica Foto</label >'
-                        + '<input id="input-immagine" type="file" accept="image/*"/>');
-                    $('label[for="input-immagine"]').focus();
-				} else if (input_type == 'number') {
-                    if(input.style == "LCD") {
-                        $('#footer').append($($("#template-lcd").html()));
-					} else {
-                        $('#footer').append('<input id="input-num" class="input default-input-num" type="number">');
-                    }
-                    $('#input-num').focus();
-				} else if (input_type == 'text') {
-                    if(input.style == "scroll") {
-                        $('#footer').append($($("#template-scroll").html()));
-                    } else {
-                        $('#footer').append(
-                            `<div class="inner-addon left-addon">
-                                 <a id="icona-fullscreen" class="glyphicon glyphicon-fullscreen"></a>
-                            <input type="text" autocomplete="off" id="input-text" class="form-control input default-input-text" placeholder="Risposta"/>		  
-                        </div>`);
-                    }
-					$('#input-text').focus();
-				}
-				$('#footer').append('<button id="bottone-avanti" type="button" class="btn btn-light bottone-next">Avanti</button>');
-			} else if (isSpecial == "begin") {
-                $('#footer').append('<button id="bottone-avanti" type="button" class="btn btn-light bottone-next">Inizio</button>');
-			} else if (isSpecial == "end") {
-                $('#footer').append('<button id="bottone-fine" type="button" class="btn btn-light bottone-next">Fine</button>');
-            }
-		}
-		//Funzione per la notifica della chat
-		function check4newMex() {
-			$.ajax({
-				url: 'players/get_chat/player' + player_id,
-				success: function (chat) {
-					chat = JSON.parse(chat);
-					let count=0;
-					if (chat.length > 0) {
-						chat.forEach((chatLog) => {
-							if (chatLog.seen == false && chatLog.auth == 'Valutatore') {
-								count++;
-							}
-						});
-						if (count > 0 && !($('#chatDot').length)) {
-							$('#chat-button').append('<div id= "chatDot" class= "dot"></div>');
-							blinkNotify('#chatDot');
-						}
-					}
-                }
-			}); 
-		}
-		// funzione per la notifica degli aiuti
-		function checkReqHelp() {
-			$.ajax({
-				url: 'players/get_help/player' + player_id,
-				success: function (help) {
-					help = JSON.parse(help);
-					let count = 0;
-					if (help.length > 0) {
-						help.forEach((helpLog) => {
-							console.log(!helpLog.to_help + ' ' + !helpLog.seen);
-							if (!helpLog.to_help && !helpLog.seen) {
-								count++;
-							}
-						});
-						if (count > 0 && !($('#helpDot').length)) {
-							$('#help-button').append('<div id= "helpDot" class= "dot"></div>');
-							blinkNotify('#helpDot');
-						}
-					}
-				}
-			});
-		}
-		//Evento per la fine della storia
-		$(document).on('click', '#bottone-fine', function () {
-			$('.testo-attivita').empty();
-			$('#nome-missione').empty();
-			$('#nome-attivita').empty();
-			$('.testo-attivita').append('<p id="final-text">Grazie per aver giocato!</p>'); 
-			$('#bottone-fine').remove();
-
-		});
-		function setCurrentQuest() {
-            let date = new Date();
-            let h = date.getHours();
-            let m = date.getMinutes();
-            index = next_index;
-			let mission_index = storyJSON.activities[index].mission_index;
-			let mission_name = '';
-			if (mission_index != null) {
-				mission_name = storyJSON.missions[mission_index].name;
-			}
-			let data = {
-				minutes: m,
-				hour: h,
-				activity: storyJSON.activities[index].name,
-				mission: mission_name
-			};
-			$.ajax({
-				url: '/players/set_current_quest/player' + player_id,
-				type: 'PUT',
-				contentType: 'application/json',
-				data: JSON.stringify(data),
-				success: function () {},
-				error: function (xhr, ajaxOptions, thrownError) {
-                    alert(xhr.status + ' - ' + thrownError);
-                }
-			});
-		}
-		//Evento per mettere in fullscreen l'input di testo
-		$(document).on('click', '#icona-fullscreen', function () {
-			//Questo serve a ignorare la pressione del pulsante invio nel caso la finestra di testo sia aperta (isTextWindowOpen)
-            isTextWindowOpen = true;
-			$('#input-text').attr('disabled', true);
-			$('#bottone-avanti').attr('disabled', true);
-			$('#window-input-text').remove();
-			$('body').append(`<div id="window-input-text"><textarea></textarea><button>Fatto</button></div>`);
-			$('#window-input-text > textarea').val($('#input-text').val());
-			$('#window-input-text > textarea').focus();
-		});
-        //Evento per confermare il testo tramite il pulsante Fatto
-		$(document).on('click', '#window-input-text > button', function () {
-			//Questo serve a ignorare la pressione del pulsante invio nel caso la finestra di testo sia aperta (isTextWindowOpen)
-            isTextWindowOpen = false;
-			$('#input-text').attr('disabled', false);
-			$('#bottone-avanti').attr('disabled', false);
-			$('#input-text').val($('#window-input-text > textarea').val().replace('\n', ' '));	
-            $('#window-input-text').remove();
-        });
-		//Evento per cambiare attività
-		$(document).on('click', '#bottone-avanti', function () {
-			if (isInputValid()) {
-				if (storyJSON.activities[index].input_type == 'photo') {
-					//In caso di success di uploadFile vengono invocate check input e setWindows
-					uploadFile($('#input-immagine')[0].files[0]);
-				} else {
-					checkInput();
-				}
-			} else {
-				//Non accade nulla
-			}
-		});
-		function isInputValid() {
-			let input_type = storyJSON.activities[index].input_type;
-			switch (input_type) {
-				case 'photo':
-					if ($('#input-immagine')[0].files.length == 0)
-						return false;
-					else return true;
-                case 'none':
-                    return true;
-				default:
-					if ($('#input-num').val() || ($('#input-text').val()))
-						return true;
-					else return false;
-			}
-        }
-		//Evento per andare avanti fra le attività con invio
-		$(document).on('keypress', function (key) {
-			if (key.which == 13) {
-				if (!isChatOpen && !isTextWindowOpen && !isHelpPaneOpen) {
-					$('#bottone-avanti').click();
-				}
-			}
-		});
-		//Evento per inviare il messaggio in chat con invio
-		$(document).on('keydown', '#new_msg_text', function (event) {
-			if (event.which == 13) {
-				event.preventDefault();
-				$('#send-msg').click();
-			}
-		});
-		//Evento per mostrare una preview del file selezionato
-		$(document).on('change', '#input-immagine', function () {
-			$('#preview').remove();
-			let img = document.createElement('img');
-			img.setAttribute('alt','Your selected image');
-			img.setAttribute('src', (window.URL ? URL : webkitURL).createObjectURL($('#input-immagine')[0].files[0]));
-			img.setAttribute('id', 'preview');
-			document.getElementById('footer').insertBefore(img, document.getElementById('bottone-avanti'));
-            $('.custom-file-upload').css({
-                "border-top-right-radius": "0",
-				"border-bottom-right-radius": "0",
-				"margin-right": "0",	
-            });
-		});
-
-        function uploadFile(file) {
-			let fd = new FormData();
-            fd.append(file.name, file);
-			let path = '/players/upload_photo/' + 'player' + player_id;
-            $.ajax({
-				accepts: 'application/json',
-				url: path,
-                data: fd,
-                type: 'POST',
-                contentType: false,
-                processData: false,
-                success: function (data) {
-                	answer = data.url;
-                	checkInput();
-				},
-                error: function (xhr, ajaxOptions, thrownError) {
-                    alert(xhr.status + ' - ' + thrownError);
-                }
-            });
-        }
-
-
-		/**** Funzioni per la chat ****/
-        //Sets the layout of the chat messages
-		function setChatView(data) {
-			console.log(data);
-        	$('#chat-msgs').empty();
-        	document.getElementById("chat").style.display = "block";
-        	data.chat.forEach((chatlog) => {
-        		if ((chatlog.auth.localeCompare("Valutatore")) != 0) {
-        			$('#chat-msgs').append('<div class="row msg_container base_sent"><div class="col-md-10 col-xs-10"><div class="messages sent-msgs msg_sent"><p>' +
-					 chatlog.text + '</p><time>Tu - ' + chatlog.hour + ':' + chatlog.mins + '</time></div></div></div>');
-        		} else {
-        			$('#chat-msgs').append('<div class="row msg_container base_receive <div class="col-md-10 col-xs-10"><div class="messages msg_receive"><p>' +
-					 chatlog.text + '</p> <time>' + (data.username ? data.username : ('Player ' + data.id)) + ' - ' + chatlog.hour + ':' + chatlog.mins + '</time></div></div></div>');
-        		}
-        	});
-        }
-        //Open the pop-up chat with the selected player
-        function openChat() {
-        	isChatOpen = true;
-        	$.ajax({
-        		url: '/players/player' + player_id,
-        		success: function (data) {
-        			setChatView(data);
-        			markAsSeen('player' + player_id);
-                    scrollToBottom('chat-msgs');
-        			$('#new_msg_text').focus();
-        		},
-        		error: function (xhr, ajaxOptions, thrownError) {
-        			alert(xhr.status + ' - ' + thrownError);
-        		}
-        	});
-        }
-        //Close the pop-up chat
-        function closeChat() {
-        	isChatOpen = false;
-        	document.getElementById("chat").style.display = "none";
-        }
-        //Send chat message to the server
-        function sendMsg() {
-        	var str = $("#new_msg_text").val();
-        	$('#new_msg_text').val('');
-        	if (str) {
-        		let date = new Date();
-        		var hrs = String(date.getHours());
-        		var min = date.getMinutes();
-        		min = (min < 10 ? ("0" + String(min)) : (String(min)));
-        		var msg = {
-        			hour: hrs,
-        			mins: min,
-        			text: str,
-        			auth: "player" + player_id,
-        			seen: false
-        		};
-        		let id = 'player' + player_id;
-        		$.ajax({
-        			url: '/players/' + id,
-        			type: 'POST',
-        			contentType: 'application/json',
-        			data: JSON.stringify(msg),
-
-        			success: function (data) {
-        				openChat();
-        				$('#new_msg_text').focus();
-        			},
-        			error: function (xhr, ajaxOptions, thrownError) {
-        				alert(xhr.status + ' - ' + thrownError);
-        			}
-        		});
-        	}
-        }
-		//Change the state of the current chat last messages to 'seen'
-        function markAsSeen(id) {
-        	$.ajax({
-        		url: '/players/mark_as_seen/' + id,
-        		type: 'POST',
-        		contentType: 'application/json',
-        		data: JSON.stringify({ author: 'player'+player_id}),
-        		success: function () {
-        		},
-        		error: function (xhr, ajaxOptions, thrownError) {
-        			alert(xhr.status + ' - ' + thrownError);
-        		}
-        	});
-        }
-        //Scroll to the last received message in the current chat
-        function scrollToBottom(id) {
-        	let chatVBox = document.getElementById(id);
-        	chatVBox.scrollTop = chatVBox.scrollHeight;
-        }
-        //Event to open chat with selected player
-        $(document).on('click', '#chat-button', function() {
-        	openChat();
-		});
-		/* Funzioni per HELP */
-		//Evento per il pulsante help
-		$(document).on('click', '#help-button', function () {
-			openHelpPane();
-		});
-		//Connessione per aprire la finestra di aiuto
-		function openHelpPane() {
-			$.ajax({
-				url: '/players/get_help/player' + player_id,
-				success: function (help) {
-					isHelpPaneOpen = true;
-					setHelpPane(JSON.parse(help));
-					markHelpAsSeen();
-                },
-                error: function (xhr, ajaxOptions, thrownError) {
-                    alert(xhr.status + ' - ' + thrownError);
-                }
-			});
-		}
-		//Connessione per segnare come lette le risposte d'aiuto
-		function markHelpAsSeen() {
-            $.ajax({
-				url: '/players/mark_help_as_seen/player' + player_id,
-				type: 'POST',
-                success: function () {
-					$('#chatDot').remove();
-                },
-                error: function (xhr, ajaxOptions, thrownError) {
-                    alert(xhr.status + ' - ' + thrownError);
-                }
-            });
-        }
-		//Preparazione e visualizzazione della finestra degli aiuti
-		function setHelpPane(help) {
-			$('#helpPane').remove();
-			$('body').append(`<div id="helpPane">
-								<h3><span id="close-help-pane" class="glyphicon glyphicon-remove"></span>Aiuti</h3>
-								<div id="new-help-req">
-									<textarea placeholder="Scrivi qui la tua richiesta d'aiuto" id="new-help-req-text"></textarea>
-									<button id="send-new-req">Invia</button>
-								</div>
-							</div>`);
-			if (help.length > 0) {
-				help.forEach((req) => {
-					console.log('inside');
-					$('#helpPane').append('<hr><div><p><b>Missione</b>: ' + req.mission_name
-						+ '<br><b>Attività</b>: ' + req.activity_name
-						+ '<br><b>Domanda</b>: <p class="help-question">' + req.question
-						+ '</p><br><b>Risposta</b>: <p class="help-answer">'
-						+ (req.answer || '<i>Ancora nessuna risposta</i>') + '</p></div>');
-				});
-			} else {
-				$('#helpPane').append('<ip id="no-help-msg">Non hai effettuato richieste</p>');
-            }
-			$('#helpPane textarea').focus();
-		}
-		//Evento per chiudere la finestra degli aiuti
-		$(document).on('click', '#close-help-pane', function () {
-			isHelpPaneOpen = false;
-			$('#helpPane').remove();
-		});
-		//Evento per inviare la richiesta d'aiuto collegato al bottone 
-		$(document).on('click', '#send-new-req', function () {
-			let question = ($('#helpPane textarea').val())
-			if (question) {
-                let mission_index = storyJSON.activities[next_index].mission_index;
-                let mission_name;
-				if (mission_index) {
-					mission_name = storyJSON.missions[mission_index].name;
-				} else {
-					mission_name = (next_index == 1 ? 'Fine' : (index == 0 ? 'Inizio' : ''));
-				}
-                sendHelpReq({
-                    mission_name: $('#nome-missione').text().trim() || (index == 0 ? 'Inizio' : (index == 1 ? 'Fine' : ' --- ')),
-					activity_name: $('#nome-attivita').text(),
-					question: question,
-					answer: "",
-					to_help: true,
-					seen: false
-				});
-			} else {
-				$('#helpPane textarea').attr('placeholder', "Devi riempire questo campo per procedere con la richiesta d'aiuto");
-            }
-		});
-		//Connessione per inviare una nuova richiesta d'aiuto
-		function sendHelpReq(data) {
-			$.ajax({
-				url: '/players/send_help_req/player' + player_id,
-				type: 'POST',
-				contentType: 'application/json',
-				data: JSON.stringify(data),
-				success: function () {
-					$('#help-button').click();
-				},
-				error: function (xhr, ajaxOptions, thrownError) {
-					alert(xhr.status + ' - ' + thrownError);
-				}
-			});
-		}
-        //Richiede informazioni sulle correzioni effettuati per verificare se ci sono punteggi da notificare
-        function updateScore() {
-            $.ajax({
-                url: '/players/update_score/player9',
-                success: function (score) {
-                    $('body').append(`<div class="notification-bar"><h4>` + score.mission_name + `</h4><p class="details-new-score">Nell'attività ` + score.activity_name + `hai conseguito ` + score.score + ` punti</div>`);
-                },
-                error: function (xhr, ajaxOptions, thrownError) {
-                    alert(xhr.status + ' - ' + thrownError);
-                }
-            });
-        }
-
 	</script>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<style type="text/css">
-		@font-face {
-			font-family: 'All The Roll';
-			src: url('public/fonts/AllTheRollPersonalUse.woff2') format('woff2'), url('public/fonts/AllTheRollPersonalUse.woff') format('woff');
-			font-weight: normal;
-			font-style: normal;
-			font-display: swap;
-		}
-        /*Tag*/
-        img {
-            object-fit: contain;
-            width: 100%;
-            height: auto;
-        }
 
-        video {
-            width: 100%;
-        }
-
-        body {
-            background-color: #9932CC;
-        }
-		h1 {
-			font-size: 11vh;
-			text-align: center;
-			color: white;
-			font-family: "All The Roll";
-			line-height: .7;
-		}
-		/*classi e id*/
-        #div-grande {
-            border: 3px #9932CC solid;
-            height: 70vh;
-            overflow-y: auto;
-            background-color: white;
-            min-width: 80%;
-            max-width: 80%;
-            margin: auto;
-            padding: 1vh;
-            border-radius: 2vh;
-        }
-        .bottonecorrezioni {
-            font-size: 2.5vh;
-            margin-right: 0.5vw;
-            border-radius: 0;
-            border: 1px solid black;
-            border-top: 0;
-            border-left: 0;
-        }
-        .bottonehelp {
-            font-size: 2.5vh;
-            margin-right: 0.5vw;
-            border-radius: 0;
-            border: 1px solid black;
-            border-top: 0;
-            border-left: 0;
-        }
-		.bottonechat {
-			font-size: 2.5vh;
-			margin-right: 0.5vw;
-			border-radius: 0;
-			border: 1px solid black;
-			border-top: 0;
-			border-left: 0;
-		}
-		#nome-attivita {
-			text-align: center;
-			font-size: 2.5vh;
-			font-family: 'Helvetica Neue LT Std';
-		}
-
-		#nome-missione {
-			text-align: center;
-			font-size: 4vh;
-			font-family: 'Helvetica Neue LT Std';
-			margin-bottom: 0.5vh;
-		}
-
-		.testo-attivita {
-			margin-left: 1.5vh;
-			margin-right: 1.5vh;
-			margin-top: .5vh;
-			font-size: 2.5vh;
-			text-align: justify;
-			font-family: 'Helvetica Neue LT Std';
-		}
-		.testo-attivita img {
-			text-align: center;
-			vertical-align: middle;
-			border-style: none;
-		}
-		/*Messaggio di errore*/
-		#err-msg{
-			font-size: 2.5vh;
-			text-align:center;
-			color:red;
-		}
-        /*spazio che contiene gli input*/
-        #footer {
-            width: 100%;
-			text-align: center;
-			vertical-align: middle;
-        }
-		/*INPUT: */
-		.input { /*tutti gli input*/
-			margin: 2vh;
-			font-size: 2.5vh !important;
-			border: black solid 1px;
-		}
-        
-		/*input delle risposte*/
-		/*placeholder è la scritta inside all'input*/
-		.default-input-text::placeholder {
-			font-weight: bold;
-			font-style: italic;
-			text-align:center;
-		}
-	
-        .bottone-next {
-            border: 1px black solid;
-            font-size: 2.5vh;
-            border-radius: 0.5vh;
-            font-weight: bold;
-			margin: 2vh;
-			vertical-align: top;
-			height:5vh;
-        }
-		.default-input-num {
-			width: 20vh;
-			height:5vh;
-			margin: 2vh;
-			font-size: 2.5vh;
-			border-radius: 0.5vh;
-		}
-		.default-input-text {
-			margin:0;
-			height:5vh;
-			border: solid black 1px;
-			border-radius: 0.5vh;
-		}
-        #window-input-text > textarea {
-            width: 100%;
-            height: 34.5vh;
-            margin: auto;
-            background-color: #9932CC;
-            color: white;
-            font-weight: bold;
-            opacity: 0.7;
-            font-size: 3vh;
-        }
-        #window-input-text > button {
-            display: block;
-            width: 100%;
-            margin: auto;
-            font-weight: bold;
-            background-color: #9932CC;
-            color: white;
-            border: 1px solid black;
-            font-size: 2vh;
-            height: 5vh;
-        }
-        #window-input-text {
-            width: 70vw;
-            height: 40vh;
-            margin: auto;
-            position: fixed;
-            top: 37vh;
-			left: 15vw;
-            background-color: white;
-            border: 2px solid white;
-        }
-		/*Finestra per l'help*/
-        #helpPane {
-            width: 70vw;
-            height: 60vh;
-            position: fixed;
-			margin:auto;
-			top:35vh;
-			left:15vw;
-			background:white;
-			border:5px solid #9932CC;
-			padding:1vh;
-			overflow-y:auto;
-			font-size:2vh;
-			word-break:break-word;
-        }
-		#new-help-req {
-			text-align:center;
-		}
-		#no-help-msg {
-			margin-top:3vh;
-			font-size: 4vh;
-			text-align:center;
-			display:block;
-		}
-		#helpPane button{
-			width:40%;
-			font-size:2vh;
-			border-color: #9932CC;
-		}
-		#helpPane p {
-			margin-bottom:0;
-		}
-		#helpPane h3 {
-			text-align:center;
-		}
-		#helpPane textarea {
-			margin-bottom:1vh;
-			width:100%;
-			resize:none;
-			font-size:2vh;
-			text-align:left;
-		}
-		.help-answer, .help-question {
-			background-color:rgba(200,200,200, .5);
-			padding:.5vh;
-			display:block;
-			min-height: 5vh;
-			margin-bottom:1vh;
-		}
-		#close-help-pane{
-			float:right;
-			top:0;
-			margin-bottom:1vh;
-			position:relative;
-			color: #9932CC;
-		}
-        /*INPUT TEXT + GLYPHICON*/
-        /*Bootstrap layout per avere l'icona dentro all'input*/
-        .inner-addon {
-            position: relative;
-            width: 20vh;
-            margin: 2vh;
-            display: inline-block;
-        }
-        a.glyphicon-fullscreen:hover {
-            color: blue;
-            cursor: pointer;
-        }
-        .glyphicon-fullscreen.glyphicon-fullscreen:before {
-            bottom: 0.5vh;
-            position: relative;
-        }
-        /* style icon */
-        .inner-addon .glyphicon {
-            position: absolute;
-            padding: 10px;
-			font-size: 2.5vh !important;
-        }
-        /* align icon */
-        .left-addon .glyphicon {
-            left: 0;
-			top: 0;
-			padding-left:1.5vh;
-        }
-        /* add padding  */
-        .left-addon input {
-            padding-left: 30px;
-        }
-        /*UPLOAD dei FILE (immagini)*/
-        .custom-file-upload {
-            background: white;
-            display: inline-block;
-            cursor: pointer;
-            padding: 1px 6px;
-            border: 1px black solid;
-            font-weight: bold;
-            font-size: 2.5vh;
-            border-radius: 0.5vh;
-			height: 5vh;
-			padding-top:4px;
-        }
-		/*per nascondere l'input dell'immagine xkè se no è un obrobrio*/
-        input[type="file"] {
-            display: none;
-        }
-		/*preview dell'immagine caricata*/
-        #preview {
-            height: 5vh;
-            width: auto;
-            position: relative;
-            left: 0;
-            bottom: .8vh;
-            opacity: 0.9;
-            border: 1px solid black;
-            border-top-right-radius: 0.5vh;
-            border-bottom-right-radius: 0.5vh;
-        }	
-		#score {
-			float:right;
-			font-size: 3vh;
-			color:white;
-			margin-right:2vh;
-			margin-bottom:0;
-		}
-        #final-text {
-            font-size: 5vh;
-            color: #9932CC;
-			text-align:center;
-        }
-		/*Chat Viola*/
-		.panel-primary > .panel-heading {
-			background-color: #ae50dc;
-			border-color: #ae50dc;
-		}
-		#send-msg {
-			background-color: #ae50dc;
-		}
-		.sent-msgs {
-			background-color: #9932CC;
-		}
-		/*notifica nuovo messaggio chat*/
-		.dot {
-			min-width: 2vh;
-			min-height: 2vh;
-			margin: .2vh;
-			border-radius: 2vh;
-			font-size: 1vh;
-			vertical-align: middle;
-			text-align: center;
-			padding: 2.5px;
-			float: left;
-			clear: right;
-			background: radial-gradient(rebeccapurple 10%, transparent) !important;
-        }
-	</style>
+	<link rel="stylesheet" href="/public/css/player.css">
+	<link rel="stylesheet" href="/public/css/style_default.css">
 </head>
 <body>
 	<div id="generico">
 		<button type="button" id="help-button" class="btn btn-light bottonehelp bottone">Aiuto</button>
-		<button type="button" id="correzione" class="btn btn-light bottonecorrezioni bottone">Revisioni</button>
 		<button type="button" id="chat-button" class="btn btn-light bottonechat bottone">Chat</button>
 		<p id="score"></p>
 	</div>
 	<h1></h1>
-	<div id="div-grande">
+	<div role="main" id="div-grande">
 		<!--TITOLO MISSIONE-->
 		<div id="nome-missione">
 		</div>
@@ -1059,19 +48,34 @@
 	</div>
 	<div id="footer">
 	</div>
+
+	<!--AIUTO-->
+	<div role="dialog" id="helpPane" style="display: none;">
+		<button aria-label="chiudi aiuto" id="close-help-pane" class="btn bg-transparent" onclick="closeHelpPane()"><span class="glyphicon glyphicon-remove"></span></button>
+		<h2>Aiuti</h2>
+		<div id="new-help-req">
+			<textarea aria-label="Domanda di aiuto" placeholder="Scrivi qui la tua richiesta d'aiuto" id="new-help-req-text"></textarea>
+			<button id="send-new-req">Invia</button>
+		</div>
+		<div id="old-help-req">
+
+		</div>
+	</div>
+
 	<!--CHAT-->
-	<div class="chat-popup" id="chat">
-		<form autocomplete="off" class="form-container">
+	<div class="chat-popup" id="chat" role="dialog">
+		<div class="form-container">
 			<div class="container">
 				<div class="col-sm-8">
 					<div class="chatbody">
 						<div class="panel panel-primary">
 							<div class="panel-heading top-bar">
 								<div class="col-md-4 col-xs-4" style="text-align: right;">
-									<a onclick="closeChat()"><span class="glyphicon glyphicon-remove icon_close" data-id="chat_window_1"></span></a>
+									<button class="btn bg-transparent" aria-label="chiudi chat" onclick="closeChat()"><span class="glyphicon glyphicon-remove icon_close" data-id="chat_window_1"></span></button>
 								</div>
 								<div class="col-md-8 col-xs-8">
-									<p class="panel-title" id="chat-user"><!--Nome utente chat--></p>
+									<div class="glyphicon glyphicon-comment"></div>
+									<h2 id="chat-title">Valutatore</h5>
 								</div>
 							</div>
 							<div id="chat-msgs" class="panel-body msg_container_base">
@@ -1079,43 +83,59 @@
 							</div>
 							<div class="panel-footer">
 								<div class="input-group">
-									<input id="new_msg_text" type="text" autocomplete="off" class="form-control input-sm chat_input" placeholder="Scrivi il tuo messaggio..." />
-									<a id="send-msg" class="btn btn-info btn-sm" onclick="sendMsg()">
-										<span class="glyphicon glyphicon-send"></span> Send
-									</a>
+									<input aria-label="messaggio" id="new_msg_text" type="text" autocomplete="off" class="form-control input-sm chat_input" placeholder="Scrivi il tuo messaggio..." />
+									<button id="send-msg" class="btn btn-info btn-sm" onclick="sendMsg()">
+										<span class="glyphicon glyphicon-send"></span>Invia
+									</button>
 								</div>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-		</form>
+		</div>
 	</div>
-    
-    <!-- template widget LCD -->
-    <template id="template-lcd">
-        <div class="lcd-container">
-            <div class="lcd-button-container" style="grid-area: up1;"><button class="lcd-button" onClick="onLCDButtonClick(0, true)"><img src="/public/images/icons/lcd-tri-up.png"></button></div>
-            <div class="lcd-button-container" style="grid-area: up2;"><button class="lcd-button" onClick="onLCDButtonClick(1, true)"><img src="/public/images/icons/lcd-tri-up.png"></button></div>
-            <div class="lcd-button-container" style="grid-area: up3;"><button class="lcd-button" onClick="onLCDButtonClick(2, true)"><img src="/public/images/icons/lcd-tri-up.png"></button></div>
-            <div class="lcd-button-container" style="grid-area: up4;"><button class="lcd-button" onClick="onLCDButtonClick(3, true)"><img src="/public/images/icons/lcd-tri-up.png"></button></div>
-            
-            <div class="lcd-display">
-                <input id="input-num" type="number" value="0000" onchange="onLCDNumberChange()">
-            </div>
-            
-            <div class="lcd-button-container" style="grid-area: down1;"><button class="lcd-button" onClick="onLCDButtonClick(0, false)"><img src="/public/images/icons/lcd-tri-down.png"></button></div>
-            <div class="lcd-button-container" style="grid-area: down2;"><button class="lcd-button" onClick="onLCDButtonClick(1, false)"><img src="/public/images/icons/lcd-tri-down.png"></button></div>
-            <div class="lcd-button-container" style="grid-area: down3;"><button class="lcd-button" onClick="onLCDButtonClick(2, false)"><img src="/public/images/icons/lcd-tri-down.png"></button></div>
-            <div class="lcd-button-container" style="grid-area: down4;"><button class="lcd-button" onClick="onLCDButtonClick(3, false)"><img src="/public/images/icons/lcd-tri-down.png"></button></div>
-        </div>
-    </template>
-    
-    <!-- template widget pergamena -->
-    <template id="template-scroll">
-        <div class="scroll-container">
-            <textarea id="input-text" spellcheck="false" class="scroll-textarea"></textarea>
-        </div>
-    </template>
+
+	<!-- template widget LCD -->
+	<template id="template-lcd">
+		<div class="lcd-container">
+			<div aria-hidden="true" class="lcd-button-container" style="grid-area: up1;"><button tabindex="-1" class="lcd-button" onClick="onLCDButtonClick(0, true)"><img alt="" src="/public/images/icons/lcd-tri-up.png"></button></div>
+			<div aria-hidden="true" class="lcd-button-container" style="grid-area: up2;"><button tabindex="-1" class="lcd-button" onClick="onLCDButtonClick(1, true)"><img alt="" src="/public/images/icons/lcd-tri-up.png"></button></div>
+			<div aria-hidden="true" class="lcd-button-container" style="grid-area: up3;"><button tabindex="-1" class="lcd-button" onClick="onLCDButtonClick(2, true)"><img alt="" src="/public/images/icons/lcd-tri-up.png"></button></div>
+			<div aria-hidden="true" class="lcd-button-container" style="grid-area: up4;"><button tabindex="-1" class="lcd-button" onClick="onLCDButtonClick(3, true)"><img alt="" src="/public/images/icons/lcd-tri-up.png"></button></div>
+
+			<div class="lcd-display">
+				<input aria-label="lcd per numero di risposta, massimo 4 cifre" id="input-num" type="number" value="0000" onchange="onLCDNumberChange()">
+			</div>
+
+			<div aria-hidden="true" class="lcd-button-container" style="grid-area: down1;"><button tabindex="-1" class="lcd-button" onClick="onLCDButtonClick(0, false)"><img alt="" src="/public/images/icons/lcd-tri-down.png"></button></div>
+			<div aria-hidden="true" class="lcd-button-container" style="grid-area: down2;"><button tabindex="-1" class="lcd-button" onClick="onLCDButtonClick(1, false)"><img alt="" src="/public/images/icons/lcd-tri-down.png"></button></div>
+			<div aria-hidden="true" class="lcd-button-container" style="grid-area: down3;"><button tabindex="-1" class="lcd-button" onClick="onLCDButtonClick(2, false)"><img alt="" src="/public/images/icons/lcd-tri-down.png"></button></div>
+			<div aria-hidden="true" class="lcd-button-container" style="grid-area: down4;"><button tabindex="-1" class="lcd-button" onClick="onLCDButtonClick(3, false)"><img alt="" src="/public/images/icons/lcd-tri-down.png"></button></div>
+		</div>
+	</template>
+
+	<!-- template widget pergamena -->
+	<template id="template-scroll">
+		<div class="scroll-container">
+			<textarea aria-label="pergamena per testo di risposta" id="input-text" spellcheck="false" class="scroll-textarea"></textarea>
+		</div>
+	</template>
+
+	<!-- template widget scanner -->
+	<template id="template-scanner">
+		<div id="scan-container">
+			<label for="input-immagine" class="widget-scan-label">Scan</label>
+			<input id="input-immagine" type="file" accept="image/*" class="scan-immagine-input">
+			<div id="scan-window" aria-hidden="true">
+				<div id="scan-line"></div>
+				<table role = "presentation">
+					<tr><td></td><td></td><td></td><td></td></tr>
+					<tr><td></td><td id="o-word"><p>O</p></td><td id="k-word"><p>K</p></td><td></td></tr>
+					<tr><td></td><td></td><td></td><td></td></tr>
+				</table>
+			</div>
+		</div>
+	</template>
 </body>
 </html>
