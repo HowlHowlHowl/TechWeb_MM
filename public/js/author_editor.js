@@ -938,7 +938,7 @@ function selectStory(id) {
             loadActivities();
         },
         error: function (xhr, ajaxOptions, thrownError) {
-            alert(xhr.status + ' - ' + thrownError);
+            
         }
     });
 }
@@ -1082,7 +1082,7 @@ function uploadFileAndStoreURL(file, object, name)
             object[name] = data.url;
         },
         error: function (xhr, ajaxOptions, thrownError) {
-            alert(xhr.status + ' - ' + thrownError);
+           
         }
     });
 }
@@ -1099,7 +1099,7 @@ function updateStories() {
             data.forEach(addStoryElement);
         },
         error: function (xhr, ajaxOptions, thrownError) {
-            alert(xhr.status + ' - ' + thrownError);
+            
         }
     });
 }
@@ -1152,7 +1152,7 @@ function newStory(published)
             updateStories();
         },
         error: function (xhr, ajaxOptions, thrownError) {
-            alert(xhr.status + ' - ' + thrownError);
+            
         }
     });
 }
@@ -1176,7 +1176,7 @@ function saveSelectedStory()
                 updateStories();
             },
             error: function (xhr, ajaxOptions, thrownError) {
-                alert(xhr.status + ' - ' + thrownError);
+               
             }
         });
     }
@@ -1197,7 +1197,7 @@ function actionOnStory(id, action) {
             updateStories();
         },
         error: function (xhr, ajaxOptions, thrownError) {
-            alert(xhr.status + ' - ' + thrownError);
+            
         }
     });
 }

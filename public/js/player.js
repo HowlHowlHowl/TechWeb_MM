@@ -10,10 +10,14 @@ var isTextWindowOpen = false;
 $(document).ready(function () {
     $('#score').text('Score: 0');
     blinkNotify('#score');
-    // richiesta storia
+// richiesta storia
+// url_string prende l'url sotto forma di stringa della pagina html e con new URL la trasforma in un'url 
+//in modo che si possa accedere ai parametri dell'url url.searchParams.get('id')
     var url_string = window.location.href;
     var url = new URL(url_string);
     var id = url.searchParams.get("id");
+// $.ajax è una funzione che si usa per creare connessioni http
+//get story by id 
     if (id) {
         $.ajax({
             type: 'GET',
@@ -23,7 +27,7 @@ $(document).ready(function () {
                 setPlayer(storyJSON);
             },
             error: function (xhr, ajaxOptions, thrownError) {
-                alert(xhr.status + ' - ' + thrownError);
+               
             }
         });
         //Update al secondo di nuovi messaggi oppure chat, risposte a richieste d'aiuto e punteggio
@@ -36,7 +40,6 @@ $(document).ready(function () {
             checkReqHelp();
             updateScore();
         }, 1000);
-
 
         //Help pane update every 10 seconds
         setInterval(function () {
@@ -58,6 +61,11 @@ $(document).ready(function () {
 });
 
 //Funzione per inizializzare il file sul server e ricevere l'id associato
+// è una funzione che serve a creare una connessione di tipo ajax
+// prende i dati della storia setPlayer(data) li manda al server che crea (PUT)
+// un file player nuovo e riceve l'id associato al nuovo player
+/* si rifa ad una funzione di players.js
+identificata dall'url '/players/create_player'*/
 function setPlayer(data) {
     $.ajax({
         url: '/players/create_player',
@@ -65,16 +73,18 @@ function setPlayer(data) {
         data: JSON.stringify(data),
         contentType: 'application/json',
         success: function (id) {
+// questo comando serve a memorizzare l'id che è stato inviato dal server
             player_id = id;
             setWindow();
             setCurrentQuest();
         },
         error: function (xhr, ajaxOptions, thrownError) {
-            alert(xhr.status + ' - ' + thrownError);
+            
         }
     });
 }
 //Make the notification mark blink
+ //funzione che fa lampeggiare un elemento tramite #id(selector)
 function blinkNotify(selector) {
     var element = $(selector);
     setInterval(function () {
@@ -90,11 +100,23 @@ function blinkNotify(selector) {
 function checkInput() {
     let answer_data;
     let score = 0;
-    let corrected_bool = true;
-    let questionArray = [];
+// is_corrected è una variabile che indica se la risposta è stata valutata oppure no
+// se deve ancora essere valutata is_corrected = false
+    let is_corrected = true;
+    // lista (array) dei componenti delle domande
+    let questionComponents = [];
+    // indica che la risposta una volta corretta andrà notificata al player
     let up_to_date = true;
+    // type indica l'input type dell'attività attuale (testo, foto, numeri)
     let type = storyJSON.activities[index].input_type;
+    //next_index non è dichiarata qui come variabile perchè è globale(dichiarata sopra)
+			//indice dell'attività successiva,i punti servono ad accedere a dei campi specifici.
+			//storyJSONè il contenuto della storia
+			//.per accedere ai campi della storia ---> .activities quindi per accedere alle attività 
+			// [index] per selezionare l'elemento dell'array in quella posizione
+			//.input_type indica il tipo di input dell'attività
     next_index = storyJSON.activities[index].input.next_index;
+    //answer vuota nel caso in cui non ci fosse nessun tipo di input e viene riempita nel caso in cui l'input ci sia
     answer = '';
     $('#err-msg').remove();
     // storyJSON (è il file della storia trasformato in un'oggetto (JSON della storia)) . <--- serve per accedere ai campi delle storie
@@ -102,13 +124,14 @@ function checkInput() {
     if (type == 'photo') {
         answer = '/public/images/uploads/' + $('#input-immagine')[0].files[0].name;
         if (storyJSON.activities[index].input.evaluation_type == 'evaluator') {
-            corrected_bool = false;
+            is_corrected = false;
         }
     }
     else if (type == 'number') {
         answer = $('#input-num').val();
         if (storyJSON.activities[index].input.evaluation_type == 'correct') {
-            //Controllo se esiste un intervallo corretto di risposte che contiene quella data
+            //Controllo se la risposta data è corretta verificando che 
+					//sia compresa in un intervallo di numeri dato come opzione corretta
             storyJSON.activities[index].input.correct_options.forEach(function (option) {
                 if (answer >= option.from && answer <= option.to) {
                     score = option.points;
@@ -124,8 +147,9 @@ function checkInput() {
                     next_index = (storyJSON.activities[index].input.wrong_next_index || next_index);
                 }
             }
+            //Evaluation_type == evaluator
         } else if (storyJSON.activities[index].input.evaluation_type == 'evaluator') {
-            corrected_bool = false;
+            is_corrected = false;
         }
     }
     else if (type == 'text') {
@@ -146,7 +170,7 @@ function checkInput() {
                 }
             }
         } else if (storyJSON.activities[index].input.evaluation_type == 'evaluator') {
-            corrected_bool = false;
+            is_corrected = false;
         }
     }
 
@@ -162,13 +186,13 @@ function checkInput() {
     //Costruisce l'array della domanda posta al player
     storyJSON.activities[index].contents.forEach(function (elem) {
         if (elem.type == 'text') {
-            questionArray.push({
+            questionComponents.push({
                 type: 'text',
                 content: elem.text
             });
         }
         if (elem.type == 'video') {
-            questionArray.push({
+            questionComponents.push({
                 type: 'video',
                 content: {
                     url: elem.url,
@@ -177,7 +201,7 @@ function checkInput() {
             });
         }
         if (elem.type == 'image') {
-            questionArray.push({
+            questionComponents.push({
                 type: 'image',
                 content: {
                     url: elem.url,
@@ -186,13 +210,13 @@ function checkInput() {
             });
         }
     });
-    up_to_date = corrected_bool;
+    up_to_date = is_corrected;
 
     answer_data = {
         mission_name: mission_name,
         activity_name: storyJSON.activities[next_index].name,
-        corrected: corrected_bool,
-        question: questionArray,
+        corrected: is_corrected,
+        question: questionComponents,
         input_type: type,
         answer: answer,
         comment: '',
@@ -215,7 +239,7 @@ function sendAnswerToServer(answer_data) {
             blinkNotify('#score');
         },
         error: function (xhr, ajaxOptions, thrownError) {
-            alert(xhr.status + ' - ' + thrownError);
+           
         }
     });
 }
@@ -365,7 +389,7 @@ function setCurrentQuest() {
         data: JSON.stringify(data),
         success: function () {},
         error: function (xhr, ajaxOptions, thrownError) {
-            alert(xhr.status + ' - ' + thrownError);
+            
         }
     });
 }
@@ -463,7 +487,7 @@ function uploadFile(file) {
             checkInput();
         },
         error: function (xhr, ajaxOptions, thrownError) {
-            alert(xhr.status + ' - ' + thrownError);
+           
         }
     });
 }
@@ -502,7 +526,6 @@ function openChat(set_focus) {
             }
         },
         error: function (xhr, ajaxOptions, thrownError) {
-            alert(xhr.status + ' - ' + thrownError);
         }
     });
 }
@@ -539,7 +562,7 @@ function sendMsg() {
                 $('#new_msg_text').focus();
             },
             error: function (xhr, ajaxOptions, thrownError) {
-                alert(xhr.status + ' - ' + thrownError);
+               
             }
         });
     }
@@ -554,7 +577,7 @@ function markAsSeen(id) {
         success: function () {
         },
         error: function (xhr, ajaxOptions, thrownError) {
-            alert(xhr.status + ' - ' + thrownError);
+       
         }
     });
 }
@@ -586,7 +609,7 @@ function openHelpPane() {
             markHelpAsSeen();
         },
         error: function (xhr, ajaxOptions, thrownError) {
-            alert(xhr.status + ' - ' + thrownError);
+            
         }
     });
 }
@@ -599,7 +622,7 @@ function markHelpAsSeen() {
             $('#chatDot').remove();
         },
         error: function (xhr, ajaxOptions, thrownError) {
-            alert(xhr.status + ' - ' + thrownError);
+           
         }
     });
 }
@@ -659,7 +682,7 @@ function sendHelpReq(data) {
             $('#help-button').click();
         },
         error: function (xhr, ajaxOptions, thrownError) {
-            alert(xhr.status + ' - ' + thrownError);
+           
         }
     });
 }
@@ -679,18 +702,11 @@ function updateScore() {
             }
         },
         error: function (xhr, ajaxOptions, thrownError) {
-            alert(xhr.status + ' - ' + thrownError);
+            
         }
     });
 }
-//Remove notification bar TODO: controllare se funziona
-/*setInterval(function () {
-    let notifications = document.getElementsByClassName('notification-bar');
-    [].forEach.call(notifications, function (el) {
-        if (el.attr('display') == 'none') {
-            el.remove();
-        }
-    });
-}, 60000);
-*/
-//TODO: rimuv notif help
+//mostra un messaggio di conferma se ricarichi la pagina
+$(window).bind('beforeunload', function () {
+        return 'perderai i tuoi progressi, vuoi confermare?';
+})

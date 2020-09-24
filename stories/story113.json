@@ -53,6 +53,11 @@
         {
           "type": "text",
           "text": "Complimenti la tua prima avventura è finita, ci rivediamo alla tua prossima missione!!"
+        },
+        {
+          "type": "image",
+          "url": "/public/uploads/congr.png",
+          "description": ""
         }
       ],
       "mission_index": null,
@@ -63,8 +68,8 @@
         "next_index": null
       },
       "position": {
-        "x": 1807.6995516390932,
-        "y": 92.43830797055654
+        "x": 1868.0654037384259,
+        "y": 55.843107285779524
       }
     },
     {
@@ -72,11 +77,12 @@
       "contents": [
         {
           "type": "text",
-          "text": "Stiamo per entrare nella piramide del sole di smeraldo, dobbiamo recuperare il pendente della regina.\nHai con te dell'acqua, una torcia e questo blocchetto per gli appunti che stai leggendo. C'è un ultimo oggetto che avevi deciso di portare ma non si legge più qual è. Nella tua Jeep è rimasta una ruota di scorta, una pentola e una corda, cosa porti con te?"
+          "text": "Stiamo per entrare nella piramide del sole di smeraldo, dobbiamo recuperare il pendente della regina.\nHai con te dell'acqua, una torcia e questo blocchetto per gli appunti che stai leggendo. C'è un ultimo oggetto che avevi deciso di portare ma non si legge più qual è. Nella tua Jeep è rimasta una pianta, una pentola e una corda, cosa porti con te?"
         },
         {
-          "type": "text",
-          "text": "TODO IMMAGINI oggetti"
+          "type": "image",
+          "url": "/public/uploads/cose.png",
+          "description": "una pentola, una pianta e una corda"
         }
       ],
       "mission_index": 0,
@@ -115,13 +121,13 @@
           "text": "Hai scelto la corda, bravo! Sicuramente ti tornerà utile!\nTi avvicini all'ingresso ma la strada è chiusa da un'enorme porta di pietra."
         },
         {
-          "type": "image",
-          "url": "",
-          "description": "TODO porta pietra"
-        },
-        {
           "type": "text",
           "text": "Avvicinandoti noti che c'è inciso quel che sembra essere un indovinello, grazie alle tue conoscenze dei geroglifici, riesci a capire cosa recita:\n\"Con il sole a mezzogiorno quante facce della piramide sono illuminate?\""
+        },
+        {
+          "type": "image",
+          "url": "/public/uploads/345-3456792_vector-illustration-of.png",
+          "description": "immagine geroglifici"
         }
       ],
       "mission_index": 0,
@@ -151,6 +157,11 @@
         {
           "type": "text",
           "text": "Il pavimento sotto di te si apre e rotoli giù per un tunnel sotteraneo.\nTi ritrovi in una grotta completamente buia... forse non era la risposta giusta?\nNon c'è modo di risalire il tunnel quindi decidi di accendere la torcia e proseguire."
+        },
+        {
+          "type": "image",
+          "url": "/public/uploads/Cave1.svg",
+          "description": "immagine di una grotta buia"
         }
       ],
       "mission_index": 1,
@@ -170,6 +181,11 @@
         {
           "type": "text",
           "text": "Dopo un grande boato la porta si apre lentamente e tu puoi proseguire. Accendi la torcia, cammini dritto fino ad incontrare una passaggio fra due muri, decidi di attraversarlo "
+        },
+        {
+          "type": "image",
+          "url": "/public/uploads/9wyf_6osr_181129.jpg",
+          "description": "passaggio tra i muri"
         }
       ],
       "mission_index": 0,
@@ -189,6 +205,11 @@
         {
           "type": "text",
           "text": "Camminando trovi una scala di legno che sembra andare verso l'alto e una catena spezzata attaccata al soffitto.\nSembra che tu possa scegliere cosa usare per risalire. \nCosa decidi? Scala o catena?"
+        },
+        {
+          "type": "image",
+          "url": "/public/uploads/Senza titolo-4.png",
+          "description": "immagine di scale e catena"
         }
       ],
       "mission_index": 1,
@@ -221,12 +242,17 @@
         {
           "type": "text",
           "text": "Ti ritrovi in un salone enorme, pieno di antichi vasi e oggetti d'arte della famiglia reale. Ti fai strada stando attento a non toccare nulla e a metà della sala vedi in lontananza l'antico gioiello su di un piedistallo illuminato dalla luce del sole che filtra dalla cima della piramide.\nTI avvicini e ti rendi conto che il piedistallo è troppo alto per essere raggiunto,  noti quello che sembra essere un foglio di papiro ed un pennello con inchiostro fresco, cosa significherà?\nCercando qualche indizio nella stanza noti che il sole illumina  una piccola incisione sul piedistallo, vi è scritto: \n\"Scrivi sulla pergamena il colore dello smeraldo\""
+        },
+        {
+          "type": "image",
+          "url": "/public/uploads/pendant.png",
+          "description": "pendente "
         }
       ],
       "mission_index": 2,
       "input_type": "text",
       "input": {
-        "style": "",
+        "style": "scroll",
         "evaluation_type": "correct",
         "next_index": 8,
         "correct_options": [
@@ -253,6 +279,11 @@
         {
           "type": "text",
           "text": "La pergamena si alza a mezz'aria e brucia davanti ai tuoi occhi, il piedistallo si abbassa ma contemporaneamente tutta la piramide iniza a tremare.\nCorri verso il gioiello e che è ancora troppo in alto ma la piramide sta crollando! Per fortuna ti sei ricordato la corda, la lanci verso il pendente  e lo afferri al lazo, ottimo! Corri verso l'uscita più in fretta che puoi ed esci dalla piramide con un salto acrobatico. Ti giri e la vedi finire in macerie dietro di te... Appena in tempo!"
+        },
+        {
+          "type": "image",
+          "url": "/public/uploads/542q_p9by_180727.jpg",
+          "description": "un foro nelle rocce per poter uscire e scappare via dalla piramide che sta crollando"
         }
       ],
       "mission_index": 2,
@@ -272,6 +303,11 @@
         {
           "type": "text",
           "text": "La tua missione è giunta al termine, prima di portare il gioiello al museo affinché tutti possano leggere delle tue imprese, decidi di scrivere un resoconto di viaggio. \nAnnota qui sotto la parte migliore della tua avventura!"
+        },
+        {
+          "type": "image",
+          "url": "/public/uploads/ol.png",
+          "description": "immagine di un diario"
         }
       ],
       "mission_index": 3,

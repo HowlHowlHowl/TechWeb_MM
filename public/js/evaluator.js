@@ -123,7 +123,7 @@ function updatePlayersSetMenu(chatUpdate) {
             }
         },
         error: function (xhr, ajaxOptions, thrownError) {
-            alert(xhr.status + ' - ' + thrownError);
+           
         }
     });
 }
@@ -415,7 +415,7 @@ function setDownloadsWindow() {
             $('#player-checkbox-list').append(li);
         }
     });
-    /*TODO: recuperare i checkbox singolarmente*/
+    
     //If select all was selected then all the checkboxes become selected  
     if ($('#selectAllPlayersCheckbox').prop('checked')) {
         $('.player-download').each(function () {
@@ -544,7 +544,7 @@ function renamePlayer(id, str) {
             setPendingCorrectionList();
         },
         error: function (xhr, ajaxOptions, thrownError) {
-            alert(xhr.status + ' - ' + thrownError);
+            
         }
     });
 }
@@ -646,7 +646,7 @@ function sendMsg() {
                 updatePlayersSetMenu(true);
             },
             error: function (xhr, ajaxOptions, thrownError) {
-                alert(xhr.status + ' - ' + thrownError);
+                
             }
         });
     }
@@ -662,7 +662,7 @@ function markAsSeen() {
             $('#chatNotification').remove();
         },
         error: function (xhr, ajaxOptions, thrownError) {
-            alert(xhr.status + ' - ' + thrownError);
+            
         }
     });
 }
@@ -703,7 +703,7 @@ function openHelpPane(id) {
             currentHelpPlayerId = id;
         },
         error: function (xhr, ajaxOptions, thrownError) {
-            alert(xhr.status + ' - ' + thrownError);
+       
         }
     });
 }
@@ -762,7 +762,7 @@ function submitHelpAnswer(helpData) {
             setHelpPane(data);
         },
         error: function (xhr, ajaxOptions, thrownError) {
-            alert(xhr.status + ' - ' + thrownError);
+           
         }
     });
 }
@@ -822,7 +822,7 @@ function setPendingCorrectionList() {
             data.forEach(addPendingPlayer);
         },
         error: function (xhr, ajaxOptions, thrownError) {
-            alert(xhr.status + ' - ' + thrownError);
+            
         }
     });
 }
@@ -842,7 +842,7 @@ function openCorrectionPane(id) {
             currentCorrectionPlayerId = real_id;
         },
         error: function (xhr, ajaxOptions, thrownError) {
-            alert(xhr.status + ' - ' + thrownError);
+            
         }
     });
 }
@@ -974,7 +974,7 @@ function submitCorrection(data) {
             setPendingCorrectionList();
         },
         error: function (xhr, ajaxOptions, thrownError) {
-            alert(xhr.status + ' - ' + thrownError);
+            
         }
     });
 }
@@ -997,7 +997,7 @@ function openHistory(id) {
             setHistory(data);
         },
         error: function (xhr, ajaxOptions, thrownError) {
-            alert(xhr.status + ' - ' + thrownError);
+            
         }
     });
 }
@@ -1069,7 +1069,7 @@ function openClassification() {
             setClassification(data);
         },
         error: function (xhr, ajaxOptions, thrownError) {
-            alert(xhr.status + ' - ' + thrownError);
+            
         }
     });
 }
