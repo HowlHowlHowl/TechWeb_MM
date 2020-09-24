@@ -79,7 +79,7 @@ body {
 }
 
 /* Richiesta di aiuto */
-#helpPane {
+.help-color-border {
     background:white;
     border:5px solid #9932CC;
 }

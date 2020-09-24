@@ -50,15 +50,17 @@
 	</div>
 
 	<!--AIUTO-->
-	<div role="dialog" id="helpPane" style="display: none;">
-		<button aria-label="chiudi aiuto" id="close-help-pane" class="btn bg-transparent" onclick="closeHelpPane()"><span class="glyphicon glyphicon-remove"></span></button>
-		<h2>Aiuti</h2>
-		<div id="new-help-req">
-			<textarea aria-label="Domanda di aiuto" placeholder="Scrivi qui la tua richiesta d'aiuto" id="new-help-req-text"></textarea>
-			<button id="send-new-req">Invia</button>
-		</div>
-		<div id="old-help-req">
+	<div role="dialog" id="helpPane" style="display: none;" class="help-white-border">
+		<div class="help-color-border" id="innerHelpPane">
+			<button aria-label="chiudi aiuto" id="close-help-pane" class="btn bg-transparent" onclick="closeHelpPane()"><span class="glyphicon glyphicon-remove"></span></button>
+			<h2>Aiuti</h2>
+			<div id="new-help-req">
+				<textarea aria-label="Domanda di aiuto" placeholder="Scrivi qui la tua richiesta d'aiuto" id="new-help-req-text"></textarea>
+				<button id="send-new-req">Invia</button>
+			</div>
+			<div id="old-help-req">
 
+			</div>
 		</div>
 	</div>
 
@@ -70,7 +72,7 @@
 					<div class="chatbody">
 						<div class="panel panel-primary">
 							<div class="panel-heading top-bar">
-								<div class="col-md-4 col-xs-4" style="text-align: right;">
+								<div class="col-md-4 col-xs-4" id="close-chat-div">
 									<button class="btn bg-transparent" aria-label="chiudi chat" onclick="closeChat()"><span class="glyphicon glyphicon-remove icon_close" data-id="chat_window_1"></span></button>
 								</div>
 								<div class="col-md-8 col-xs-8">

@@ -9,8 +9,13 @@
     z-index: 100000;
 
 }
+#close-chat-div{
+    padding:0;
+    top:0;
+}
+
 #chat-title {
-    font-size:2.5vh;
+    font-size: 2.5vh;
     font-weight: normal;
 }
 .panel-primary > .panel-heading {
@@ -52,7 +57,8 @@
 }
 
 .glyphicon-send {
-    top: 2px
+    top: 2px;
+    padding-right:20%;
 }
 
 .col-md-2, .col-md-10 {

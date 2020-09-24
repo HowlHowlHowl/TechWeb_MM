@@ -512,6 +512,9 @@ function setChatView(data) {
 //Open the pop-up chat with the selected player
 function openChat(set_focus) {
     isChatOpen = true;
+    if (isHelpPaneOpen) {
+        closeHelpPane();
+    }
     $.ajax({
         url: '/players/player' + player_id,
         success: function (data) {
@@ -595,6 +598,9 @@ $(document).on('click', '#help-button', function () {
 
 //Connessione per aprire la finestra di aiuto
 function openHelpPane() {
+    if (isChatOpen) {
+        closeChat();
+    }
     $.ajax({
         url: '/players/get_help/player' + player_id,
         success: function (help) {

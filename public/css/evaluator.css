@@ -175,7 +175,6 @@ body {
     background-color: transparent;
     border: transparent;
 }
-
 .tab-pane {
     overflow-y: hidden;
 }
@@ -412,6 +411,10 @@ body {
     height: 4.5vh;
     display: inline-block;
     width: 100%;
+}
+
+.panel-title {
+    font-size: inherit;
 }
 
 #playername-container {
