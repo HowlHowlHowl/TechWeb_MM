@@ -75,7 +75,7 @@ body {
 
 .dropdown-menu {
     width: 30vh;
-    max-height: 40vh;
+    max-height: 20vh;
     overflow-y: auto;
     position: initial !important;
 }
@@ -95,6 +95,10 @@ body {
     position:fixed;
     top:0;
     width:100%;
+}
+#navbarSupportedContent {
+    overflow-x:hidden;
+    max-height: inherit;
 }
 /*Container correzioni*/
 .list-group {
@@ -170,6 +174,19 @@ body {
 }
 #user-space button {
     font-size:2vh;
+    height:5vh;
+}
+#delete-player {
+    padding:1vh;
+}
+.block-info:last-child {
+    margin-top: 1vh;
+    margin-bottom: 1vh;
+    font-size: 2vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    bottom:0;
 }
 .user-info-tab:hover {
     background-color: transparent;
@@ -336,9 +353,7 @@ body {
     border: white 2px solid;
 }
 #history-button {
-    bottom: 2vh;
-    left: 2vh;
-    position: absolute;
+    padding:1vh;
 }
 .pop-space {
     width: 100%;
@@ -401,14 +416,14 @@ body {
 
 #rename-field {
     font-size: 2vh;
-    height: 4.5vh;
+    height: 5vh;
     min-width: 20vh;
     text-align: center;
 }
 
 #playername-label {
     font-size:2vh;  
-    height: 4.5vh;
+    height: 5vh;
     display: inline-block;
     width: 100%;
 }
@@ -438,9 +453,7 @@ body {
 }
 
 #chat-button {
-    bottom: 2vh;
-    right: 2vh;
-    position: absolute;
+    padding:1vh;
 }
 
 #chatNotification {
