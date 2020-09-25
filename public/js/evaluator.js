@@ -229,17 +229,48 @@ $(document).on('click', '.player-download', function (event) {
 });
 //Download Classification
 function downloadClassification() {
-    let html = '<body><h1>Classifica</h1><table><thead><tr><th scope="col">ID</th>'
-    + '<th scope="col">Nome</th>'
-    + '<th scope="col">Punteggio</th></tr></thead><tbody>';
-    players_array.forEach((player) => {
-        html = html + '<tr><td>player' + player.id + '</td><td>' + (player.username || '---') + '</td><td>' + player.score + '</td></tr>';
+    let pdf = new jsPDF();
+    pdf.setFontSize(26);
+    pdf.text(pdf.internal.pageSize.width / 2, 20, 'Classifica dei Giocatori', 'center');
+    let table_body = [];
+    let i = 0;
+    players_array.sort((a, b) => { return (b.score - a.score); }).forEach((player) => {
+        table_body.push([
+            i,
+            'Player ' + player.id,
+            (player.username || '---'),
+            player.story_name,
+            player.score
+
+        ]);
+        i++;
+        console.log(players_array);
     });
-    html = html + '</tbody></table></body>';
-    let nodes = new DOMParser().parseFromString(html, "text/xml");
-    let doc = new jsPDF();
-    doc.fromHTML(html, 30, 15);
-    doc.save('classification.pdf');
+    pdf.autoTable({
+        head: [['#', 'ID', 'Nome Utente', 'Storia', 'Punteggio']],
+        body: table_body,
+        margin: { left: 15, right: 15 },
+        startY: pdf.pageCount > 1 ? pdf.autoTableEndPosY() + 10 : 30,
+        columnStyles: {
+            0: {
+                cellWidth: 10
+            },
+            1: {
+                cellWidth: 30
+            },
+            2: {
+                cellWidth: 50
+            },
+            3: {
+                cellWidth: 60
+            },
+            4: {
+                cellWidth: 30
+            }
+        },
+        theme: 'grid',
+    });
+    pdf.save('Classifica giocatori.pdf');
 }
 //Download del player tramite JSON
 function downloadPlayer(player) {
@@ -386,6 +417,7 @@ function getDataUrl(img) {
 function openDownloads() {
     downloadsOpen = true;
     if (currentUserTabID) { closeUserTab(); }
+    setDownloadsWindow();
     $('#downloads-window').css({ 'display': 'block' });
 }
 //Close download window
@@ -516,6 +548,52 @@ function setUserTab(data) {
 
 
 /** EVENTI E FUNZIONI LEGATE ALL'USER TAB **/
+
+//Event to delete player from server
+$(document).on('click', '#delete-player', function () {
+    $('body').append(
+        '<div id="black-focus">'
+        + '<div><p> Sei sicuro? I dati relativi al giocatore andranno persi per sempre.</p>'
+        + '<div id="button-div"><button id="delete-button">Elimina</button>'
+        + '<button id="back-button">Annulla</button></div>'
+        + '</div></div>');
+});
+
+//Event close the change from button and by clicking elsewhere
+$(document).on('click', '#black-focus', function (event) {
+    if (event.target.id != "delete-button") {
+        $('#black-focus').remove();
+    }
+});
+    
+//Event to confirm elimination
+$(document).on('click', '#delete-button', function () {
+    let id = $('#rename-field').attr('name').replace('player', '');
+    deletePlayer(id);
+});
+
+//Function to remove player
+function deletePlayer(id) {
+    $.ajax({
+        url: '/players/delete/player' + id,
+        type: 'DELETE',
+        success: function () {
+            $('#black-focus > div').empty();
+            $('#black-focus > div').append('<p>Fatto<span class="glyphicon glyphicon-ok-circle"></span></p>');
+            setTimeout(function () {
+                $('#black-focus').remove();
+            }, 1000);
+            closeUserTab();
+        },
+        error: function () {
+            $('#black-focus > div').empty();
+            $('#black-focus > div').append('<p>Errore<span class="glyphicon glyphicon-remove-circle"></span></p>');
+            setTimeout(function () {
+                $('#black-focus').remove();
+            }, 1000);
+        }
+    });
+}
 
 //Event to rename a player from user panel
 $(document).on('click', '#rename-button', function () {

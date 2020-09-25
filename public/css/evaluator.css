@@ -48,7 +48,7 @@ body {
 }
 
 .nav-link {
-    font-size: 2vh;
+    font-size: 2.5vh;
     color:white !important;
 }
 
@@ -137,12 +137,19 @@ body {
 .waiting-player:first-child {
     background: #007bff;
     color: white;
-    font-size: 2vh;
-    padding-top: 2vh;
-    padding-bottom: 2vh;
+    font-size: 3.5em;
+    padding: 2vh;
+    padding-bottom:0;
     border: #007bff;
-    height: 10vh;
     min-height: 50px;
+}
+@media only screen and (max-width:600px) {
+
+    .waiting-player:first-child {
+        font-size: 3vh;
+        padding: 2vh;
+        
+    }
 }
 .waiting-player:first-child a {
     margin: 0;
@@ -181,7 +188,6 @@ body {
 }
 .block-info:last-child {
     margin-top: 1vh;
-    margin-bottom: 1vh;
     font-size: 2vh;
     display: flex;
     flex-direction: row;
@@ -309,6 +315,7 @@ body {
     margin-right: 2vw;
     margin-top: 1vh;
     float: right;
+    padding:0;
     background-color: transparent;
     border-width: 0;
 }
@@ -344,16 +351,64 @@ body {
 /*User space*/
 .borders{
     display: none;
-    width: 60vw;
-    height: 50vh;
     position: fixed;
     top: 0;
     left: 0;
-    margin: 25vh 25vw 25vh 25vw;
+    width:50vw;
+    height: 50vh;
+    margin:20vh 25vw 20vh 25vw;
     border: white 2px solid;
+}
+#black-focus{
+    position:fixed;
+    margin:0;
+    width:100%;
+    height:100%;
+    background-color: rgba(0,0,0, .7);
+}
+#black-focus > div {
+    margin:auto;
+    margin-top:20vh; 
+    max-width:35vw;
+    background-color:white;
+    border-radius:2vh;
+    border-style: groove;
+    padding:2vh;
+    font-size:3vh;
+    text-align:center;
+}
+#black-focus .glyphicon {
+    font-size: 5vh;
+    vertical-align:sub;
+    margin-left: 1vw;
+    color: #007bff;
+
+}
+#black-div p {
+    font-weight:600;
+}
+#button-div{
+    display:flex;
+    flex-direction:row;
+    justify-content:space-around;
+}
+#button-div > button {
+    border-radius:.5vh;
 }
 #history-button {
     padding:1vh;
+}
+#delete-button{
+    background-color: red;
+    color:white;
+    font-size:3vh;
+}
+.glyphicon-remove {
+    line-height:0  !important;
+    font-size: 3vh !important;
+}
+#back-button{
+    font-size:3vh;
 }
 .pop-space {
     width: 100%;
@@ -412,6 +467,7 @@ body {
     text-align: center;
     vertical-align: middle;
     height: 4.5vh;
+    line-height:1vh;
 }
 
 #rename-field {
@@ -424,8 +480,10 @@ body {
 #playername-label {
     font-size:2vh;  
     height: 5vh;
+    line-height: 1vh;
     display: inline-block;
     width: 100%;
+    padding:2vh;
 }
 
 .panel-title {
@@ -554,15 +612,20 @@ td, th {
     background: gray;
 }
 #downloads-body label {
-    font-size:1.5vh;
+    font-size:2vh;
     margin-left:1vw;
-    vertical-align:middle;
+    vertical-align: top;
 }
 #downloads-body ul input{
     margin-left:1.5vw;
 }
+#downloads-body input[type="checkbox"] {
+    width:2vh;
+    height:2vh;
+}
 #download-files {
     width:100%;
+    font-size:2vh;
 }
 #downloads-content{
     padding:1vh;

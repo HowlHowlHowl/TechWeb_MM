@@ -49,6 +49,17 @@ module.exports = function (app) {
             }
         });
     });
+    //Elimina il player dal server
+    app.delete('/players/delete/:id', function (req, res) {
+        let id = req.params.id;
+        let path = 'players/' + id + '.json';
+        if (fs.existsSync(path)) {
+            fs.unlink(path, (err) => {
+                res.status(err ? 500 : 200).send();
+                res.end();
+            });
+        }
+    });
     //Risponde alla richiesta dei file pending_answers e ritorna una lista degli id presenti
     app.get('/pending_answers', function (req, res) {
         fs.readdir('players', function (err, files) {
@@ -114,7 +125,6 @@ module.exports = function (app) {
                         score: data.score
                     });
                 });
-                players.sort((a, b) => { return (b.score - a.score); });
                 res.write(JSON.stringify(players));
                 res.status(200).send();
             } else {
