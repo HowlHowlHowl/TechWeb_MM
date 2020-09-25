@@ -2,6 +2,7 @@ var fs = require('fs');
 var path = require('path');
 var formidable = require('formidable');
 var md5file = require('md5-file');
+var process = require('process');
 
 module.exports = function(app) {
     
@@ -16,7 +17,11 @@ module.exports = function(app) {
     });
     
     app.post('/upload', function(req, res) {
-        let form = new formidable.IncomingForm();
+        let form = new formidable.IncomingForm({ 
+          uploadDir: 'public/uploads/',
+          keepExtensions: true
+        });
+        
         form.parse(req);
         
         form.on('file', (name, file) => {
