@@ -32,7 +32,7 @@
       "contents": [
         {
           "type": "text",
-          "text": "Benvenuti! Siete stati scelti fra i migliori ladri d'Europa per portare a termine un furto da milioni di euro. \nNon potete fallire, quindi occhi ed orecchie ben aperti.\nNon sarete soli, l'organizzatore del colpo vi seguirà nella vostra missione, potete comunicare con lui tramite il bottone di aiuto qui sopra.\nDovrete inflitrarvi nel Van Gogh Museum, riceverete ulteriori indicazioni quando sarete dentro.\n"
+          "text": "Benvenuti! Siete stati scelti fra i migliori ladri d'Europa per portare a termine un furto da milioni di euro. \nNon potete fallire, quindi occhi ed orecchie ben aperti.\nNon sarete soli. L'organizzatore del colpo vi seguirà nella vostra missione, potete comunicare con lui tramite il bottone di aiuto qui sopra.\nDovrete infiltrarvi nel Van Gogh Museum, riceverete ulteriori indicazioni quando sarete dentro.\n"
         }
       ],
       "mission_index": null,
@@ -51,8 +51,13 @@
       "name": "Fine",
       "contents": [
         {
+          "type": "image",
+          "url": "/public\\uploads\\congr.png",
+          "description": "un'immagine con la scritta \"congratulazioni\""
+        },
+        {
           "type": "text",
-          "text": "Missione compiuta, ottimo lavoro ragazzi, riceverete il vostro compenso al più presto!\nCi risentiremo per il prossimo colpo!"
+          "text": "Missione compiuta, ottimo lavoro ragazzi.\nRiceverete il vostro compenso al più presto!\nCi risentiremo per il prossimo colpo!"
         }
       ],
       "mission_index": null,
@@ -72,7 +77,7 @@
       "contents": [
         {
           "type": "text",
-          "text": "La guardia sembra convinta e vi lascia entrare.\nSiete finalmente soli nel museo, il capo vuole che voi troviate  l'opera più preziosa dell'intera collezione, iniziate quindi a guardarvi intorno alla ricerca del vostro obbiettivo. \nTra i quadri che più vi saltano all'occhio ce ne sono due in particolare:"
+          "text": "La guardia sembra convinta e vi lascia entrare.\nSiete finalmente soli nel museo il capo vuole che troviate  l'opera più preziosa dell'intera collezione, iniziate quindi a guardarvi intorno alla ricerca del vostro obbiettivo. \nTra i quadri che più vi saltano all'occhio ce ne sono due in particolare:"
         },
         {
           "type": "image",
@@ -109,7 +114,7 @@
       "contents": [
         {
           "type": "text",
-          "text": "Siete appena arrivati davanti al museo, non c'è molta gente perchè oggi è chiuso al pubblico, notate però una guardia all'ingresso,  come previsto dal capo. Il piano è di fingersi dei ricercatori per ottenere  l'accesso al museo e poter agire indisturbati. Vi avvicinate e un uomo della sicurezza subito vi approccia e vi chiede cosa ci facciate lì. Dopo una breve spiegazione la guardia non sembra essere convinta, per verificare le vostre intenzioni vi domanda una cosa che uno di studioso di Van Gogh non può non sapere.\n\n\"Quale artista, molto amico di Van Gogh, finì il quadro dei girasoli?\""
+          "text": "Siete appena arrivati davanti al museo. Non c'è molta gente perché oggi è chiuso al pubblico, notate però una guardia all'ingresso come previsto dal capo.\nIl piano è di fingersi dei ricercatori per ottenere  l'accesso al museo e poter agire indisturbati; vi avvicinate e un uomo della sicurezza subito vi approccia e vi chiede cosa ci facciate lì, dopo una breve spiegazione la guardia non sembra essere convinta e per verificare le vostre intenzioni vi domanda una cosa che uno di studioso di Van Gogh non può non sapere:\n\n\"Quale artista, molto amico di Van Gogh, finì il quadro dei girasoli?\""
         }
       ],
       "mission_index": 1,
@@ -136,8 +141,8 @@
         "wrong_next_index": 5
       },
       "position": {
-        "x": 726.8516754311877,
-        "y": 94.52973673754796
+        "x": 726.8499200994318,
+        "y": 65.43401544744317
       }
     },
     {
@@ -145,12 +150,12 @@
       "contents": [
         {
           "type": "text",
-          "text": "Lo scopo della missione è rubare un quadro di Van Gogh e quale miglior posto del Van Gogh Museum di Amsterdam!\nSapete chi è Van Gogh vero? Facciamo un breve ripasso:\nVincent Willem Van Gogh nasce il 30 marzo 1853 a Groot Zundert ed ebbe, a causa della sua estrema sensibilità di artista, una vita molto tormentata.  Nel maggio del 1875 si trasferisce a Parig, si dedica esclusivamente a dipingere poveri minatori e tessitori. Più tardi nel corso dell'anno, intraprende studi formali di anatomia e prospettiva all'Accademia di Bruxelles. \nNel 1888 lascia Parigi in febbraio e si trasferisce ad Arles, nel Sud. All'inizio, il cattivo tempo invernale gli impedisce di lavorare, ma una volta arrivata la primavera inizia a dipingere i paesaggi in fiore della Provenza. Si trasferisce infine nella \"Casa Gialla\", una dimora che ha preso in affitto dove spera di stabilire una comunità di artisti. E' il momento in cui riesce a dipingere alcune delle sue opere migliori ma anche il momento delle sue già accennate violente tensioni con Gauguin. "
+          "text": "Lo scopo della missione è rubare un quadro di Van Gogh e quale miglior posto del Van Gogh Museum di Amsterdam!\nSapete chi è Van Gogh vero? Facciamo un breve ripasso:\nVincent Willem Van Gogh nasce il 30 marzo 1853 a Groot Zundert, in Olanda, ed ebbe a causa della sua estrema sensibilità di artista, una vita molto tormentata.  Nel maggio del 1875 si trasferisce a Parigi, si dedica esclusivamente a dipingere poveri minatori e tessitori E più tardi nel corso dell'anno, intraprende studi formali di anatomia e prospettiva all'Accademia di Bruxelles. \nNel 1888 lascia Parigi in febbraio e si trasferisce ad Arles, nel sud della Francia. All'inizio, il cattivo tempo invernale gli impedisce di lavorare, ma una volta arrivata la primavera inizia a dipingere i paesaggi in fiore della Provenza. Si trasferisce infine nella \"Casa Gialla\", una dimora che ha preso in affitto dove spera di stabilire una comunità di artisti. E' il momento in cui riesce a dipingere alcune delle sue opere migliori ma anche il momento delle sue violente tensioni con Paul Gauguin, intimo e forse unico amico del pittore."
         },
         {
           "type": "image",
           "url": "/public/uploads/Van_Gogh_Autoritratto_con_cappello_giallo.jpg",
-          "description": "Ritratto di Vincent van Gogh"
+          "description": "autoritratto di Vincent Van Gogh"
         }
       ],
       "mission_index": 0,
@@ -160,8 +165,8 @@
         "next_index": 3
       },
       "position": {
-        "x": 419.19499223666776,
-        "y": 103.10099122452745
+        "x": 419.1914506392045,
+        "y": 66.73628373579545
       }
     },
     {
@@ -169,7 +174,7 @@
       "contents": [
         {
           "type": "text",
-          "text": "\"Assolutamente no, siete sicuri di essere davvero dei ricercatori?\"\nLa guardia è sul punto di cacciarvi, e la missione andrebbe in fumo!\nPresto, provate a convincerla dicendo qualcosa da veri esperti!"
+          "text": "\"EHM... NO! Siete sicuri di essere davvero dei ricercatori?\"\nLa guardia è sul punto di cacciarvi e la missione andrebbe in fumo!\nPresto, provate a convincerla dicendo qualcosa da veri esperti...."
         }
       ],
       "mission_index": 1,
@@ -189,7 +194,7 @@
       "contents": [
         {
           "type": "text",
-          "text": "Esplorando il museo notete una stanza chiusa da una serratura elettronica, per aprire la porta serve un codice di quattro cifre. Il capo ha saputo da un informatore che la password è l'anno nel quale Van Gogh dipinse questo quadro: \"La casa gialla\".\nScoprite qual'è l'anno in cui il quadro è stato dipinto ed avrete accesso alla stanza."
+          "text": "Esplorando il museo notete una stanza chiusa da una serratura elettronica, per aprire la porta serve un codice di quattro cifre. Il capo ha saputo da un informatore che la password è l'anno nel quale Van Gogh dipinse il quadro \"La casa gialla\".\nScoprite l'anno in cui il quadro è stato dipinto ed avrete accesso alla stanza."
         },
         {
           "type": "image",
@@ -223,7 +228,7 @@
       "contents": [
         {
           "type": "text",
-          "text": "La porta si spalanca e riuscite ad entrare, ci sono molti quadri appesi alle pareti, voi dovete sceglierne uno solo, fate in modo di portare con voi il più costoso. Scegliete il più antico che trovate, probabilmente sarà quello che vale di più.\nPrima di prenderlo scannerizzatelo per assicurarvi che sia autentico."
+          "text": "La porta si spalanca e riuscite ad entrare, ci sono molti quadri appesi alle pareti,dovrete sceglierne uno, fate in modo di portare con voi il più costoso. \nScegliete il più antico che trovate, probabilmente sarà quello che vale di più.\nPrima di prenderlo scannerizzatelo per assicurarvi che sia autentico."
         }
       ],
       "mission_index": 2,
@@ -234,8 +239,8 @@
         "next_index": 8
       },
       "position": {
-        "x": 1908.8642638406634,
-        "y": 156.83948846510899
+        "x": 1912.4946732954545,
+        "y": 131.37883966619316
       }
     },
     {
@@ -243,7 +248,7 @@
       "contents": [
         {
           "type": "text",
-          "text": "Il quadro è autentico ma non appena lo afferrate scatta l'allarme della stanza, dovete disinnescarlo immediatamente!\nNotate un tastierino con un post-it attaccato vicino, c'è scritto: \n\"Gli astri della notte stellata\".\nCosa significa? Trovate una soluzione!"
+          "text": "Il quadro è autentico, ma non appena lo afferrate scatta l'allarme della stanza. Dovete disinnescarlo immediatamente!\nNotate un tastierino con un post-it attaccato vicino, c'è scritto: \n\"Gli astri della notte stellata\".\nCosa significa? Trovate una soluzione!"
         }
       ],
       "mission_index": 3,
@@ -277,7 +282,7 @@
       "contents": [
         {
           "type": "text",
-          "text": "L'allarme si è fermato, uscite dal museo prima che qualcuno vi noti!\nCorrete verso l'uscita con il quadro, la guardia sembra essere andata via, non si può essere più fortunati!\n"
+          "text": "Siete riusciti a disattivare l'allarme. \nPresto! Uscite dal museo prima che qualcuno vi noti.\nCorrete verso l'uscita con il quadro, la guardia sembra essere andata via... non si può essere più fortunati!\n"
         }
       ],
       "mission_index": 3,

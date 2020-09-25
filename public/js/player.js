@@ -32,21 +32,25 @@ $(document).ready(function () {
         });
         //Update al secondo di nuovi messaggi oppure chat, risposte a richieste d'aiuto e punteggio
         setInterval(function () {
-            if (isChatOpen) {
-                openChat(false);
-            } else {
-                check4newMex();
+            if (player_id) {
+                if (isChatOpen) {
+                    openChat(false);
+                } else {
+                    check4newMex();
+                }
+                checkReqHelp();
             }
-            checkReqHelp();
-            updateScore();
         }, 1000);
 
         //Help pane update every 10 seconds
         setInterval(function () {
-            if (isHelpPaneOpen)
-                if (!$('#helpPane textarea').val()) {
-                    openHelpPane();
-                }
+            if (player_id) {
+                if (isHelpPaneOpen)
+                    if (!$('#helpPane textarea').val()) {
+                        openHelpPane();
+                    }
+            }
+            updateScore();
         }, 10000);
     } else {
         $('#div-grande').text('Non è selezionata nessuna storia');
@@ -598,7 +602,7 @@ $(document).on('click', '#help-button', function () {
 
 //Connessione per aprire la finestra di aiuto
 function openHelpPane() {
-    if (isChatOpen) {
+     if (isChatOpen) {
         closeChat();
     }
     $.ajax({

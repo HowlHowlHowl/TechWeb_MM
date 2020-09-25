@@ -52,6 +52,11 @@
       "name": "Fine",
       "contents": [
         {
+          "type": "image",
+          "url": "/public\\uploads\\congr.png",
+          "description": ""
+        },
+        {
           "type": "text",
           "text": "Grazie per aver giocato. Speriamo tu abbia imparato qualcosa di nuovo e ti sia divertito!"
         }
