@@ -127,6 +127,7 @@
 
 /*Widget Scanner*/
 #scan-container {
+    margin-top: 1vh;
     align-items: center;
     display: flex;
     justify-content: center;

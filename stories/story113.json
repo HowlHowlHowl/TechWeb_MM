@@ -1,5 +1,5 @@
 {
-  "name": "Il Sole di Smeraldo",
+  "name": "La luna di Smeraldo",
   "accessible": true,
   "style": "",
   "published": false,
@@ -32,7 +32,7 @@
       "contents": [
         {
           "type": "text",
-          "text": "Benvenuto avventuriero questa è la tua prima missione! \nDevi andare a recuperare un gioiello nella antica piramide di una regina egizia."
+          "text": "Benvenuto avventuriero questa è la tua prima missione! \nDevi andare a recuperare un gioiello di grande importanza storica, nell'antica piramide di una regina egizia."
         }
       ],
       "mission_index": null,
@@ -57,7 +57,7 @@
         {
           "type": "image",
           "url": "/public/uploads/congr.png",
-          "description": ""
+          "description": "un'immagine con la scritta \"congratulazioni\""
         }
       ],
       "mission_index": null,
@@ -68,8 +68,8 @@
         "next_index": null
       },
       "position": {
-        "x": 1868.0654037384259,
-        "y": 55.843107285779524
+        "x": 2038.1948879135186,
+        "y": 110.72620746471954
       }
     },
     {
@@ -77,7 +77,7 @@
       "contents": [
         {
           "type": "text",
-          "text": "Stiamo per entrare nella piramide del sole di smeraldo, dobbiamo recuperare il pendente della regina.\nHai con te dell'acqua, una torcia e questo blocchetto per gli appunti che stai leggendo. C'è un ultimo oggetto che avevi deciso di portare ma non si legge più qual è. Nella tua Jeep è rimasta una pianta, una pentola e una corda, cosa porti con te?"
+          "text": "Stiamo per entrare nella piramide della Luna di Smeraldo, dobbiamo recuperare il pendente della regina.\nHai con te dell'acqua, una torcia e questo blocchetto per gli appunti che stai leggendo. C'è un ultimo oggetto che avevi deciso di portare ma non si legge più qual è. \nNella tua Jeep è rimasta una pianta, una pentola e una corda, cosa porti con te?"
         },
         {
           "type": "image",
@@ -118,11 +118,11 @@
       "contents": [
         {
           "type": "text",
-          "text": "Hai scelto la corda, bravo! Sicuramente ti tornerà utile!\nTi avvicini all'ingresso ma la strada è chiusa da un'enorme porta di pietra."
+          "text": "Hai scelto la corda, bravo! Sicuramente ti tornerà utile.\nTi avvicini all'ingresso ma la strada è chiusa da un'enorme porta di pietra."
         },
         {
           "type": "text",
-          "text": "Avvicinandoti noti che c'è inciso quel che sembra essere un indovinello, grazie alle tue conoscenze dei geroglifici, riesci a capire cosa recita:\n\"Con il sole a mezzogiorno quante facce della piramide sono illuminate?\""
+          "text": "Avvicinandoti noti che c'è inciso quel che sembra essere un indovinello. Grazie allea tua conoscenza dei geroglifici, riesci a capire cosa recita:\n\"Con il sole a mezzogiorno quante facce della piramide sono illuminate?\""
         },
         {
           "type": "image",
@@ -156,7 +156,7 @@
       "contents": [
         {
           "type": "text",
-          "text": "Il pavimento sotto di te si apre e rotoli giù per un tunnel sotteraneo.\nTi ritrovi in una grotta completamente buia... forse non era la risposta giusta?\nNon c'è modo di risalire il tunnel quindi decidi di accendere la torcia e proseguire."
+          "text": "Il pavimento sotto di te si apre e rotoli giù per un tunnel sotterraneo.\nTi ritrovi in una grotta completamente buia... forse non era la risposta giusta?\nNon c'è modo di risalire il tunnel quindi decidi di accendere la torcia e proseguire."
         },
         {
           "type": "image",
@@ -241,7 +241,7 @@
       "contents": [
         {
           "type": "text",
-          "text": "Ti ritrovi in un salone enorme, pieno di antichi vasi e oggetti d'arte della famiglia reale. Ti fai strada stando attento a non toccare nulla e a metà della sala vedi in lontananza l'antico gioiello su di un piedistallo illuminato dalla luce del sole che filtra dalla cima della piramide.\nTI avvicini e ti rendi conto che il piedistallo è troppo alto per essere raggiunto,  noti quello che sembra essere un foglio di papiro ed un pennello con inchiostro fresco, cosa significherà?\nCercando qualche indizio nella stanza noti che il sole illumina  una piccola incisione sul piedistallo, vi è scritto: \n\"Scrivi sulla pergamena il colore dello smeraldo\""
+          "text": "Ti ritrovi in un salone enorme circondato da antichi vasi e oggetti d'arte della famiglia reale.\nTi fai strada stando attento a non toccare nulla e a metà della sala, vedi in lontananza l'antico gioiello su di un piedistallo illuminato dalla luce della luna che filtra dalla cima della piramide.\nTI avvicini e ti rendi conto che il piedistallo è troppo alto per essere raggiunto ma noti quello che sembra essere un foglio di papiro ed un pennello con inchiostro fresco. Cosa significherà?\nCercando qualche indizio nella stanza noti che il fascio di luce proveniente dalla luna, illumina  una piccola incisione sul piedistallo, vi è scritto: \n\"Scrivi sulla pergamena il colore dello smeraldo\""
         },
         {
           "type": "image",
@@ -278,7 +278,7 @@
       "contents": [
         {
           "type": "text",
-          "text": "La pergamena si alza a mezz'aria e brucia davanti ai tuoi occhi, il piedistallo si abbassa ma contemporaneamente tutta la piramide iniza a tremare.\nCorri verso il gioiello e che è ancora troppo in alto ma la piramide sta crollando! Per fortuna ti sei ricordato la corda, la lanci verso il pendente  e lo afferri al lazo, ottimo! Corri verso l'uscita più in fretta che puoi ed esci dalla piramide con un salto acrobatico. Ti giri e la vedi finire in macerie dietro di te... Appena in tempo!"
+          "text": "La pergamena si alza a mezz'aria e brucia davanti ai tuoi occhi, il piedistallo si abbassa ma contemporaneamente tutta la piramide iniza a tremare. \nCorri verso il gioiello che è ancora troppo in alto, ma la piramide sta crollando! Per fortuna ti sei ricordato la corda, la lanci verso il pendente e lo afferri al volo, Ottimo! Corri verso l'uscita più in fretta che puoi ed esci dalla piramide con un salto acrobatico. \nTi giri e la vedi finire in macerie dietro di te... Appena in tempo!"
         },
         {
           "type": "image",
@@ -315,11 +315,35 @@
       "input": {
         "style": "",
         "evaluation_type": "evaluator",
-        "next_index": 1
+        "next_index": 10
       },
       "position": {
         "x": 1582.892457770781,
         "y": 74.36815413440476
+      }
+    },
+    {
+      "name": "Qualche curiosità ",
+      "contents": [
+        {
+          "type": "text",
+          "text": "LO SAPEVI CHE...\nFin dall’antichità le pietre, in particolare quelle usate per amuleti e talismani utilizzati per proteggersi dalla sfortuna e attirare le energie positive, hanno sempre generato una certa curiosità. \nUno dei popoli che più ammiravano questi elementi era quello egizio. Quest’ultimi ritenevano che le pietre fossero dotate di poteri e avevano sviluppato una loro classificazione basata perlopiù dal colore.\nLo Smeraldo, pietra estratta dalla famosa “Miniera di Cleopatra”, sorta nella zona del deserto orientale egiziano, era denominata così proprio per celebrare la Regina poiché si riteneva che lo smeraldo fosse l’unica pietra ad essere degna della sua bellezza. La miniera era avvolta da un’aura misteriosa e si pensava che solo chi comunicava con i morti fosse in grado di estrarre uno smeraldo da essa. Il popolo Egitto credeva che questa pietra portasse fortuna ed energia positiva."
+        },
+        {
+          "type": "image",
+          "url": "/public/uploads/cleopatra.jpg",
+          "description": "una raffigurazione della regina Cleopatra con indosso dei gioielli e ornamenti in smeraldo"
+        }
+      ],
+      "mission_index": 3,
+      "input_type": "none",
+      "input": {
+        "evaluation_type": "none",
+        "next_index": 1
+      },
+      "position": {
+        "x": 1798.366470246752,
+        "y": 260.3187307433832
       }
     }
   ],

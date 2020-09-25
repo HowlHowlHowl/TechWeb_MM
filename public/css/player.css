@@ -139,6 +139,7 @@ video {
     margin: 2vh;
     vertical-align: top;
     height:5vh;
+    line-height:.5vh;
 }
 .default-input-num {
     width: 20vh;
