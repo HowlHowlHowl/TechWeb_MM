@@ -896,7 +896,7 @@ function setPendingCorrectionList() {
         url: '/pending_answers',
         success: function (data) {
             $('#correction-list').empty();
-            $('#correction-list').append(' <a class="waiting-player list-group-item list-group-item-action disabled" data-toggle="list"  role="tab"><p>Risposte da correggere</p></a>');
+            $('#correction-list').append(' <a class="waiting-player list-group-item list-group-item-action disabled" data-toggle="list"  role="tab">Risposte da correggere</a>');
             data.forEach(addPendingPlayer);
         },
         error: function (xhr, ajaxOptions, thrownError) {
