@@ -1,0 +1,198 @@
+{
+  "id": 30,
+  "score": 6100,
+  "username": "",
+  "current_quest_start_timestamp": [
+    17,
+    19
+  ],
+  "current_mission": "",
+  "current_activity": "Fine",
+  "help": [],
+  "chat": [],
+  "pending_count": 1,
+  "story_name": "La luna di Smeraldo",
+  "quest_list": [
+    {
+      "mission_name": "Inizio",
+      "activity_name": "Una prima scelta",
+      "corrected": true,
+      "question": [
+        {
+          "type": "text",
+          "content": "Benvenuto avventuriero questa è la tua prima missione! \nDevi andare a recuperare un gioiello di grande importanza storica, nell'antica piramide di una regina egizia."
+        }
+      ],
+      "input_type": "none",
+      "answer": "",
+      "comment": "",
+      "quest_score": 0,
+      "up_to_date": true
+    },
+    {
+      "mission_name": "",
+      "activity_name": "Alla porta della piramide",
+      "corrected": true,
+      "question": [
+        {
+          "type": "text",
+          "content": "Stiamo per entrare nella piramide della Luna di Smeraldo, dobbiamo recuperare il pendente della regina.\nHai con te dell'acqua, una torcia e questo blocchetto per gli appunti che stai leggendo. C'è un ultimo oggetto che avevi deciso di portare ma non si legge più qual è. \nNella tua Jeep è rimasta una pianta, una pentola e una corda, cosa porti con te?"
+        },
+        {
+          "type": "image",
+          "content": {
+            "url": "/public/uploads/cose.png",
+            "descr": "una pentola, una pianta e una corda"
+          }
+        }
+      ],
+      "input_type": "text",
+      "answer": "corda",
+      "comment": "",
+      "quest_score": 100,
+      "up_to_date": true
+    },
+    {
+      "mission_name": "",
+      "activity_name": "Sembra essere giusto!",
+      "corrected": true,
+      "question": [
+        {
+          "type": "text",
+          "content": "Hai scelto la corda, bravo! Sicuramente ti tornerà utile.\nTi avvicini all'ingresso ma la strada è chiusa da un'enorme porta di pietra."
+        },
+        {
+          "type": "text",
+          "content": "Avvicinandoti noti che c'è inciso quel che sembra essere un indovinello. Grazie allea tua conoscenza dei geroglifici, riesci a capire cosa recita:\n\"Con il sole a mezzogiorno quante facce della piramide sono illuminate?\""
+        },
+        {
+          "type": "image",
+          "content": {
+            "url": "/public/uploads/345-3456792_vector-illustration-of.png",
+            "descr": "immagine geroglifici"
+          }
+        }
+      ],
+      "input_type": "number",
+      "answer": "4",
+      "comment": "",
+      "quest_score": 1000,
+      "up_to_date": true
+    },
+    {
+      "mission_name": "Nella sala del gioiello",
+      "activity_name": "Ecco il gioiello!",
+      "corrected": true,
+      "question": [
+        {
+          "type": "text",
+          "content": "Dopo un grande boato la porta si apre lentamente e tu puoi proseguire. Accendi la torcia, cammini dritto fino ad incontrare una passaggio fra due muri, decidi di attraversarlo "
+        },
+        {
+          "type": "image",
+          "content": {
+            "url": "/public/uploads/9wyf_6osr_181129.jpg",
+            "descr": "passaggio tra i muri"
+          }
+        }
+      ],
+      "input_type": "none",
+      "answer": "",
+      "comment": "",
+      "quest_score": 0,
+      "up_to_date": true
+    },
+    {
+      "mission_name": "Nella sala del gioiello",
+      "activity_name": "Prendi e scappa!",
+      "corrected": true,
+      "question": [
+        {
+          "type": "text",
+          "content": "Ti ritrovi in un salone enorme circondato da antichi vasi e oggetti d'arte della famiglia reale.\nTi fai strada stando attento a non toccare nulla e a metà della sala, vedi in lontananza l'antico gioiello su di un piedistallo illuminato dalla luce della luna che filtra dalla cima della piramide.\nTI avvicini e ti rendi conto che il piedistallo è troppo alto per essere raggiunto ma noti quello che sembra essere un foglio di papiro ed un pennello con inchiostro fresco. Cosa significherà?\nCercando qualche indizio nella stanza noti che il fascio di luce proveniente dalla luna, illumina  una piccola incisione sul piedistallo, vi è scritto: \n\"Scrivi sulla pergamena il colore dello smeraldo\""
+        },
+        {
+          "type": "image",
+          "content": {
+            "url": "/public/uploads/pendant.png",
+            "descr": "pendente "
+          }
+        }
+      ],
+      "input_type": "text",
+      "answer": "verde",
+      "comment": "",
+      "quest_score": 5000,
+      "up_to_date": true
+    },
+    {
+      "mission_name": "La fine dell'avventura",
+      "activity_name": "Diario di viaggio",
+      "corrected": true,
+      "question": [
+        {
+          "type": "text",
+          "content": "La pergamena si alza a mezz'aria e brucia davanti ai tuoi occhi, il piedistallo si abbassa ma contemporaneamente tutta la piramide iniza a tremare. \nCorri verso il gioiello che è ancora troppo in alto, ma la piramide sta crollando! Per fortuna ti sei ricordato la corda, la lanci verso il pendente e lo afferri al volo, Ottimo! Corri verso l'uscita più in fretta che puoi ed esci dalla piramide con un salto acrobatico. \nTi giri e la vedi finire in macerie dietro di te... Appena in tempo!"
+        },
+        {
+          "type": "image",
+          "content": {
+            "url": "/public/uploads/542q_p9by_180727.jpg",
+            "descr": "un foro nelle rocce per poter uscire e scappare via dalla piramide che sta crollando"
+          }
+        }
+      ],
+      "input_type": "none",
+      "answer": "",
+      "comment": "",
+      "quest_score": 0,
+      "up_to_date": true
+    },
+    {
+      "mission_name": "La fine dell'avventura",
+      "activity_name": "Qualche curiosità ",
+      "corrected": false,
+      "question": [
+        {
+          "type": "text",
+          "content": "La tua missione è giunta al termine, prima di portare il gioiello al museo affinché tutti possano leggere delle tue imprese, decidi di scrivere un resoconto di viaggio. \nAnnota qui sotto la parte migliore della tua avventura!"
+        },
+        {
+          "type": "image",
+          "content": {
+            "url": "/public/uploads/ol.png",
+            "descr": "immagine di un diario"
+          }
+        }
+      ],
+      "input_type": "text",
+      "answer": "blahhhh",
+      "comment": "",
+      "quest_score": 0,
+      "up_to_date": false
+    },
+    {
+      "mission_name": "Fine",
+      "activity_name": "Fine",
+      "corrected": true,
+      "question": [
+        {
+          "type": "text",
+          "content": "LO SAPEVI CHE...\nFin dall’antichità le pietre, in particolare quelle usate per amuleti e talismani utilizzati per proteggersi dalla sfortuna e attirare le energie positive, hanno sempre generato una certa curiosità. \nUno dei popoli che più ammiravano questi elementi era quello egizio. Quest’ultimi ritenevano che le pietre fossero dotate di poteri e avevano sviluppato una loro classificazione basata perlopiù dal colore.\nLo Smeraldo, pietra estratta dalla famosa “Miniera di Cleopatra”, sorta nella zona del deserto orientale egiziano, era denominata così proprio per celebrare la Regina poiché si riteneva che lo smeraldo fosse l’unica pietra ad essere degna della sua bellezza. La miniera era avvolta da un’aura misteriosa e si pensava che solo chi comunicava con i morti fosse in grado di estrarre uno smeraldo da essa. Il popolo Egitto credeva che questa pietra portasse fortuna ed energia positiva."
+        },
+        {
+          "type": "image",
+          "content": {
+            "url": "/public/uploads/cleopatra.jpg",
+            "descr": "una raffigurazione della regina Cleopatra con indosso dei gioielli e ornamenti in smeraldo"
+          }
+        }
+      ],
+      "input_type": "none",
+      "answer": "",
+      "comment": "",
+      "quest_score": 0,
+      "up_to_date": true
+    }
+  ]
+}

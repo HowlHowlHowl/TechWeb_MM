@@ -31,6 +31,7 @@ $(document).ready(function () {
 //Chat update every 1 second 
 setInterval(function () {
     updateChat();
+    setPendingCorrectionList();
 }, 1000);
 //Classification update every 10 seconds
 setInterval(function () {
@@ -44,7 +45,7 @@ setInterval(function () {
         openUserTab(currentUserTabID);
     }
 }, 60000);
-//Correction pane and Help pane update (if no input is given), every 20 seconds 
+//Correction pane and Help pane update (if no input is given), every 10 minutes 
 setInterval(function () {
     if (currentCorrectionPlayerId) {
         let i = 0;
@@ -88,7 +89,7 @@ setInterval(function () {
         } while (label.length > 0); 
      }
      updatePlayersSetMenu();
-}, 20000);
+}, 5 * 60000);
 
 
 
@@ -789,7 +790,7 @@ function openHelpPane(id) {
 function setHelpPane(data) {
     let body = '';
     $('#main-placeholder').empty();
-    let header = '<div class="panel-heading" id="correction-header">'
+    let header = '<div class="panel-heading">'
         + data.name + ' - ' + data.story_name
         + '<a id="user-info-tab-player' + data.id + '" class="user-info-tab btn btn-info btn-sm"><span class="glyphicon glyphicon-info-sign"></span></a>'
         + '</div><div class="panel-body" id="help-pane">';
@@ -990,6 +991,7 @@ function setCorrectionPane(data) {
                             $(this).css('height', 'auto');
                         }
                         $('#' + name).css('height', $(this).height());
+                        $('#' + name).css('overflow-y','hidden');
                     };
                     imgs[quest_index] = img;
                 } else {

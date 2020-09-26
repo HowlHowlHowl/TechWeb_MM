@@ -1,0 +1,131 @@
+{
+  "id": 31,
+  "score": 569,
+  "username": "",
+  "current_quest_start_timestamp": [
+    17,
+    20
+  ],
+  "current_mission": "",
+  "current_activity": "Fine",
+  "help": [],
+  "chat": [],
+  "pending_count": 1,
+  "story_name": "Le cose stanno così",
+  "quest_list": [
+    {
+      "mission_name": "Inizio",
+      "activity_name": "La tua prima missione",
+      "corrected": true,
+      "question": [
+        {
+          "type": "text",
+          "content": "Benvenuto in questa fantastica avventura, Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. \"Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat\". Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
+        }
+      ],
+      "input_type": "none",
+      "answer": "",
+      "comment": "",
+      "quest_score": 0,
+      "up_to_date": true
+    },
+    {
+      "mission_name": "",
+      "activity_name": "Che sventura!",
+      "corrected": true,
+      "question": [
+        {
+          "type": "text",
+          "content": "La tua prima missione determinerà il resto della tua campagna da avventuriero, se risponderai correttamente il futuro ti sorriderà, altrimenti la strada per la vittoria diventerà lunga e tortuosa. Da questa scelta capiremo se sei il prescelto.\nLa domanda è:\nIn quale anno ci troviamo, 2020 oppure 1469?"
+        }
+      ],
+      "input_type": "number",
+      "answer": "1469",
+      "comment": "",
+      "quest_score": 0,
+      "up_to_date": true
+    },
+    {
+      "mission_name": "Nel mezzo del cammin di nostra vita",
+      "activity_name": "In realtà è una tua scelta, va bene tutto!",
+      "corrected": true,
+      "question": [
+        {
+          "type": "text",
+          "content": "Il 1469 è un anno di merda detto sinceramente, speravo tu fossi uno di questi nuovi avventurieri hi-tech.\nC'è da dire che non sanno vivere, mentre tu, sei sicuramente più preparato alle sfide.\"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. \nDetto ciò, fuoco o acqua?"
+        },
+        {
+          "type": "video",
+          "content": {
+            "url": "/public/uploads/videoplayback.mp4",
+            "descr": "Elettricità!"
+          }
+        }
+      ],
+      "input_type": "photo",
+      "answer": "/public/images/uploads/mew bellissimo.png",
+      "comment": "",
+      "quest_score": 0,
+      "up_to_date": true
+    },
+    {
+      "mission_name": "Nel mezzo del cammin di nostra vita",
+      "activity_name": "Brv1 veramente, sei un avventuriero con le palle",
+      "corrected": true,
+      "question": [
+        {
+          "type": "text",
+          "content": "Hai scelto acqua? o invece fuoco? Non cambia un cazzo, siamo nel 1469 la vita è una merda e i poteri magici non esistono, però che la peste. Divertiti con i ratti e i cadaveri!!!!"
+        },
+        {
+          "type": "text",
+          "content": "Ho una domanda per te... Quanti bestie ha zio Tobia?"
+        }
+      ],
+      "input_type": "number",
+      "answer": "666",
+      "comment": "",
+      "quest_score": 500,
+      "up_to_date": true
+    },
+    {
+      "mission_name": "Arriviamo a conclusione",
+      "activity_name": "Storia che è un finale ma non arriva alla fine",
+      "corrected": true,
+      "question": [
+        {
+          "type": "text",
+          "content": "Tuttavia non comprendo, Hello kitty, è maschio o femmina?"
+        },
+        {
+          "type": "image",
+          "content": {
+            "url": "/public/uploads/hkg.jpg",
+            "descr": "Stai una crema."
+          }
+        }
+      ],
+      "input_type": "text",
+      "answer": " gay",
+      "comment": "",
+      "quest_score": 69,
+      "up_to_date": true
+    },
+    {
+      "mission_name": "Fine",
+      "activity_name": "Fine",
+      "corrected": false,
+      "question": [
+        {
+          "type": "text",
+          "content": "Questa è la storia\nDi uno di noi\nAnche lui nato per caso in via Gluck\nIn una casa, fuori città\nGente tranquilla, che lavorava\nLà dove c'era l'erba ora c'è\nUna città\nE quella casa in mezzo al verde ormai\nDove sarà\nQuesto ragazzo della via Gluck\nSi divertiva a giocare con me\nMa un giorno disse\nVado in città\nE lo diceva mentre piangeva\nIo gli domando amico\nNon sei contento\nVai finalmente a stare in città\nLà troverai le cose che non hai avuto qui\nPotrai lavarti in casa senza andar\nGiù nel cortile\nMio caro amico, disse\nQui sono nato\nIn questa strada\nOra lascio il mio cuore\nMa come fai a non capire\nÈ una fortuna, per voi che restate\nA piedi nudi a giocare nei prati\nMentre là in centro io respiro il cemento\nMa verrà un giorno che ritornerò\nAncora qui\nE sentirò l'amico treno\nChe fischia così\n\"Uah, uah\"\nPassano gli anni\nMa otto son lunghi\nPerò quel ragazzo ne ha fatta di strada\nMa non si scorda la sua prima casa\nOra coi soldi lui può comperarla\nTorna e non trova gli amici che aveva\nSolo case su case\nCatrame e cemento\nLà dove c'era l'erba ora c'è\nUna città, ah\nE quella casa in mezzo al verde ormai\nDove sarà, ah\nNon so, non so\nPerché continuano\nA costruire, le case\nE non lasciano l'erba\nNon lasciano l'erba\nNon lasciano l'erba\nNon lasciano l'erba\nEh no\nSe andiamo avanti così, chissà\nCome si farà\nChissà\nChissà\nCome si farà"
+        }
+      ],
+      "input_type": "photo",
+      "answer": "/public/images/uploads/leggendari.jpg",
+      "comment": "",
+      "quest_score": 0,
+      "up_to_date": false
+    }
+  ]
+}
