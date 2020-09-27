@@ -1,16 +1,16 @@
 {
-  "id": 28,
+  "id": "0010",
   "score": 0,
   "username": "",
   "current_quest_start_timestamp": [
-    17,
-    1
+    13,
+    56
   ],
   "current_mission": "",
-  "current_activity": "Introduzione all'antropologia culturale!",
+  "current_activity": "Inizio",
   "help": [],
   "chat": [],
   "pending_count": 0,
-  "story_name": "Uomo come soggetto o oggetto di studio",
+  "story_name": "Le cose stanno così",
   "quest_list": []
 }

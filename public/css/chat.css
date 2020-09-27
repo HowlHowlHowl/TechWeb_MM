@@ -52,15 +52,19 @@
 
 .glyphicon-remove {
     right: 0;
-    top: 10px;
+    top: 1em;
     font-size:2vh;
 }
 
 .glyphicon-send {
     top: 2px;
-    padding-right:20%;
+    padding-right:.5em;
 }
-
+.glyphicon-comment {
+    top: .5em;
+    font-size: 2em;
+    margin-bottom: 1em;
+}
 .col-md-2, .col-md-10 {
     padding: 0;
 }
@@ -120,15 +124,18 @@
 
 .messages > p {
     font-size: 3vh;
-    color: white;
+    color: black;
     margin: 0 0 0.2rem 0;
     max-width: 100%;
-    word-wrap:break-word;
+    word-wrap: break-word;
 }
 
 .messages > time {
     font-size: 2vh;
-    color: white;
+    color: black;
+    float:right;
+    position: relative;
+    bottom:1vh;
 }
 
 .msg_container {

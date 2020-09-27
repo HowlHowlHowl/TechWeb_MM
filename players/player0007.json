@@ -1,15 +1,39 @@
 {
-  "id": 31,
-  "score": 569,
+  "id": "0007",
+  "score": 1000,
   "username": "",
   "current_quest_start_timestamp": [
-    17,
-    20
+    13,
+    33
   ],
   "current_mission": "",
   "current_activity": "Fine",
-  "help": [],
-  "chat": [],
+  "help": [
+    {
+      "mission_name": "Fine",
+      "activity_name": "",
+      "question": "Halp\n",
+      "answer": "",
+      "to_help": true,
+      "seen": false
+    }
+  ],
+  "chat": [
+    {
+      "hour": "13",
+      "mins": "33",
+      "text": "Broooo",
+      "auth": "player0007",
+      "seen": true
+    },
+    {
+      "hour": "13",
+      "mins": "45",
+      "text": "Oi",
+      "auth": "Valutatore",
+      "seen": true
+    }
+  ],
   "pending_count": 1,
   "story_name": "Le cose stanno così",
   "quest_list": [
@@ -31,7 +55,7 @@
     },
     {
       "mission_name": "",
-      "activity_name": "Che sventura!",
+      "activity_name": "Ottimo, avventuriero!",
       "corrected": true,
       "question": [
         {
@@ -40,52 +64,9 @@
         }
       ],
       "input_type": "number",
-      "answer": "1469",
+      "answer": "2020",
       "comment": "",
-      "quest_score": 0,
-      "up_to_date": true
-    },
-    {
-      "mission_name": "Nel mezzo del cammin di nostra vita",
-      "activity_name": "In realtà è una tua scelta, va bene tutto!",
-      "corrected": true,
-      "question": [
-        {
-          "type": "text",
-          "content": "Il 1469 è un anno di merda detto sinceramente, speravo tu fossi uno di questi nuovi avventurieri hi-tech.\nC'è da dire che non sanno vivere, mentre tu, sei sicuramente più preparato alle sfide.\"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. \nDetto ciò, fuoco o acqua?"
-        },
-        {
-          "type": "video",
-          "content": {
-            "url": "/public/uploads/videoplayback.mp4",
-            "descr": "Elettricità!"
-          }
-        }
-      ],
-      "input_type": "photo",
-      "answer": "/public/images/uploads/mew bellissimo.png",
-      "comment": "",
-      "quest_score": 0,
-      "up_to_date": true
-    },
-    {
-      "mission_name": "Nel mezzo del cammin di nostra vita",
-      "activity_name": "Brv1 veramente, sei un avventuriero con le palle",
-      "corrected": true,
-      "question": [
-        {
-          "type": "text",
-          "content": "Hai scelto acqua? o invece fuoco? Non cambia un cazzo, siamo nel 1469 la vita è una merda e i poteri magici non esistono, però che la peste. Divertiti con i ratti e i cadaveri!!!!"
-        },
-        {
-          "type": "text",
-          "content": "Ho una domanda per te... Quanti bestie ha zio Tobia?"
-        }
-      ],
-      "input_type": "number",
-      "answer": "666",
-      "comment": "",
-      "quest_score": 500,
+      "quest_score": 1000,
       "up_to_date": true
     },
     {
@@ -95,20 +76,24 @@
       "question": [
         {
           "type": "text",
-          "content": "Tuttavia non comprendo, Hello kitty, è maschio o femmina?"
+          "content": "p1\nChe grande anno per vivere, magari un po' caotico ma sicuramente pieno di comfort per un avventuriero come te, non ti pare?\nQuis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?\n"
+        },
+        {
+          "type": "text",
+          "content": "p2\nLa domanda è: come fanno i delfini a sostare nella galassia per così tanto?"
         },
         {
           "type": "image",
           "content": {
-            "url": "/public/uploads/hkg.jpg",
-            "descr": "Stai una crema."
+            "url": "/public/uploads/pesce.jpg",
+            "descr": "La colpa è vostra e si sa, ma in tanti lo sapevano giààààààààààààà!!!\nAddio, addio addio e grazie, per tutto il pesceeeeeeeeeeeeeeeeeeeeeeee..."
           }
         }
       ],
       "input_type": "text",
-      "answer": " gay",
+      "answer": "Sisi",
       "comment": "",
-      "quest_score": 69,
+      "quest_score": 0,
       "up_to_date": true
     },
     {
@@ -122,7 +107,7 @@
         }
       ],
       "input_type": "photo",
-      "answer": "/public/images/uploads/leggendari.jpg",
+      "answer": "/public/images/uploads/mew bellissimo.png",
       "comment": "",
       "quest_score": 0,
       "up_to_date": false

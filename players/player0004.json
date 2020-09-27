@@ -1,13 +1,13 @@
 {
-  "id": 24,
+  "id": "0004",
   "score": 0,
   "username": "",
   "current_quest_start_timestamp": [
-    23,
-    45
+    13,
+    25
   ],
-  "current_mission": "",
-  "current_activity": "Inizio",
+  "current_mission": "Inizio",
+  "current_activity": "",
   "help": [],
   "chat": [],
   "pending_count": 0,

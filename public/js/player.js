@@ -318,6 +318,7 @@ function setWindow() {
     } else if (isSpecial == "end") {
         $('#footer').append('<button id="bottone-fine" type="button" class="btn btn-light bottone-next">Fine</button>');
     }
+    scrollToTop('div-grande');
 }
 //Funzione per la notifica della chat
 function check4newMex() {
@@ -515,6 +516,7 @@ function setChatView(data) {
 
 //Open the pop-up chat with the selected player
 function openChat(set_focus) {
+    console.log('open');
     isChatOpen = true;
     if (isHelpPaneOpen) {
         closeHelpPane();
@@ -587,8 +589,13 @@ function markAsSeen(id) {
 }
 //Scroll to the last received message in the current chat
 function scrollToBottom(id) {
-    let chatVBox = document.getElementById(id);
-    chatVBox.scrollTop = chatVBox.scrollHeight;
+    let VBox = document.getElementById(id);
+    VBox.scrollTop = VBox.scrollHeight;
+}
+//Scroll to top of content 
+function scrollToTop(id) {
+    let VBox = document.getElementById(id);
+    VBox.scrollTop = 0;
 }
 //Event to open chat with selected player
 $(document).on('click', '#chat-button', function() {

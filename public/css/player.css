@@ -292,7 +292,6 @@ input[type="file"] {
     position: relative;
     left: 0;
     bottom: .8vh;
-    opacity: 0.9;
     border: 1px solid black;
     border-top-right-radius: 0.5vh;
     border-bottom-right-radius: 0.5vh;

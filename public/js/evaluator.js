@@ -30,7 +30,7 @@ $(document).ready(function () {
 
 //Chat update every 1 second 
 setInterval(function () {
-    updateChat();
+   // updateChat();
     setPendingCorrectionList();
 }, 1000);
 //Classification update every 10 seconds
@@ -38,6 +38,7 @@ setInterval(function () {
     if (classificationOpen) {
         openClassification();
     }
+    updatePlayersSetMenu();
 }, 10000);
 //User Tab update every 1 minute 
 setInterval(function () {
@@ -173,6 +174,9 @@ function getPlayerByID(id) {
         }
     });
     return toReturn;
+}
+function getRealID() {
+    return (next_id < 10 ? '000' : (next_id < 100 ? '00' : next_id < 1000 ? '0' : '')) + id;
 }
 //Make the notification mark blink
 function blinkNotify(selector) {
@@ -496,8 +500,17 @@ function setUserTab(data) {
     minutes = (minutes < 10 ? '0' + minutes : minutes);
 
     let unread = 0;
-    data.chat.forEach((log => { if (!log.seen && log.auth != 'Valutatore') unread++; }));
-
+    data.chat.forEach((log) => {
+        if (!log.seen && log.auth != 'Valutatore') {
+            unread++;
+        }
+    });
+    let help_unread = 0;
+    data.help.forEach((log) => {
+        if (log.to_help) {
+            help_unread++;
+        }
+    });
     let prevID = players_array[((player_index + players_array.length - 1) % players_array.length)].id;
     let nextID = players_array[((player_index + 1) % players_array.length)].id;
     $(document).on('click', '#prevUser', function (event) {
@@ -510,7 +523,7 @@ function setUserTab(data) {
     });
 
     $('#user-space').empty();
-    $('#user-space').append('<a onclick="closeUserTab()"><span class="glyphicon glyphicon-remove icon-close"></span></a>'
+    $('#user-space').append('<a onclick="closeUserTab()"><span id="close-tab" class="glyphicon glyphicon-remove icon-close"></span></a>'
         + '<a id="prevUser" class="arrows_tab" data-toggle="tooltip" data-placement="top" title="Scheda utente precedente"><span class="glyphicon glyphicon-arrow-left" id="prev_tab"></span></a>'
         + '<a id="nextUser" class="arrows_tab" data-toggle="tooltip" data-placement="top" title="Scheda utente successivo"><span class="glyphicon glyphicon-arrow-right" id="next_tab"></span></a>'
         + '<div id = "user-space-input" class="input-group input-group-lg inline-info">'
@@ -530,18 +543,22 @@ function setUserTab(data) {
         + '<p>ID: player' + data.id + '</p>'
         + '</div>'
         + '</div>'
-        + '<div class="block-info">'
+        + '<div class="block-info button-block-info">'
         + '<button type="button" id="history-button" name="player' + data.id + '" class="user-space-button btn btn-primary btn-lg">Storico</button>'
         + '<button type="button" id="chat-button" class="user-space-button btn btn-primary btn-lg">Chat</button>'
         + '<button type="button" id="delete-player" name="' + data.id + '" class="user-space-button btn btn-primary btn-lg">Elimina</button>'
         + '</div>');
-    if (hours > 0 || minutes > 15) {
+    if (players_array[player_index].too_long ) {
         $('#time-count').append('<span class="glyphicon glyphicon-time" id="timeNotification">');
         blinkNotify('#timeNotification');
     }
     if (unread > 0) {
-        $('#user-chat-div').append('<label for="chat-button"><span class="badge badge-secondary" id="chatNotification">' + unread + ' Nuovi Messaggi</span></label>');
+        $('#user-chat-div').append('<label for="chat-button"><span class="badge badge-secondary" id="chatNotification">' + unread  + (unread > 1 ?  ' Nuovi' : ' Nuovo') + ' Messaggi</span></label>');
         blinkNotify('#chatNotification');
+    }
+    if (help_unread > 0) {
+        $('#user-space').append('<div class="block-info"><p id="help_msg">Hai ' + help_unread + (help_unread > 1 ? ' Richieste' : ' Richiesta') + ' d\'aiuto</p></div>');
+        blinkNotify('#help_msg');
     }
     document.getElementById('user-pane').style.display = 'block';
 }
@@ -599,7 +616,7 @@ function deletePlayer(id) {
 //Event to rename a player from user panel
 $(document).on('click', '#rename-button', function () {
     let new_name = $('#rename-field').val();
-    let id = $('#rename-field').attr('name');
+    let id = $('#rename-field').attr('name').replace('player', '');
     $('.unexpected-str').remove();
     if (!new_name.trim()) {
         $('#user-space-input').after('<div class="unexpected-str"><p>*Il nome non può essere vuoto</p></div>');
@@ -614,7 +631,7 @@ $(document).on('click', '#rename-button', function () {
 //Rename player on server
 function renamePlayer(id, str) {
     $.ajax({
-        url: '/rename_player/' + id,
+        url: '/rename_player/player' + id,
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify({ username: str }),
@@ -757,7 +774,7 @@ function scrollToBottom() {
 
 //Event to open the help window
 $(document).on('click', '.help-list-el', function (event) {
-    openHelpPane(event.currentTarget.id.replace('help-', ''));
+    openHelpPane(event.currentTarget.id.replace('help-player', ''));
 });
 //Event to submit the answer to the help required
 $(document).on('click', '.send-help', function (event) {
@@ -776,7 +793,7 @@ $(document).on('click', '.send-help', function (event) {
 function openHelpPane(id) {
     $.ajax({
         accepts: 'application/json',
-        url: '/players/get_help_request/' + id,
+        url: '/players/get_help_request/player' + id,
         success: function (data) {
             setHelpPane(JSON.parse(data));
             currentHelpPlayerId = id;
@@ -833,7 +850,7 @@ function setHelpPane(data) {
 //Send answer for help to the server
 function submitHelpAnswer(helpData) {
     $.ajax({
-        url: '/players/answer_help_request/' + currentHelpPlayerId,
+        url: '/players/answer_help_request/player' + currentHelpPlayerId,
         contentType: "application/json",
         type: 'POST',
         data: JSON.stringify(helpData),
@@ -912,10 +929,10 @@ function addPendingPlayer(data) {
 }
 //Request data for correction pane of selected player
 function openCorrectionPane(id) {
-    let real_id = id.replace('sidebar-player-', 'player');
+    let real_id = id.replace('sidebar-player-', '');
     $.ajax({
         accepts: 'application/json',
-        url: '/pending_answers/' + real_id,
+        url: '/pending_answers/player' + real_id,
         success: function (data) {
             setCorrectionPane(data);
             currentCorrectionPlayerId = real_id;
@@ -1046,7 +1063,7 @@ function submitCorrection(data) {
     $.ajax({
         type: "POST",
         contentType: "application/json",
-        url: "/submit_correction/" + currentCorrectionPlayerId,
+        url: "/submit_correction/player" + currentCorrectionPlayerId,
         data: JSON.stringify(data),
         success: function (data) {
             //In caso di successo riceve i dati del player aggiornati
@@ -1065,13 +1082,13 @@ function submitCorrection(data) {
 
 //Event to open history of selected player
 $(document).on('click', '#history-button', function (event) {
-    let id = $('#history-button').attr('name');
+    let id = $('#history-button').attr('name').replace('player', '');
     openHistory(id);
 });
 //Open the History pane for selected player
 function openHistory(id) {
     $.ajax({
-        url: '/players/' + id,
+        url: '/players/player' + id,
         accepts: 'application/json',
         success: function (data) {
             setHistory(data);

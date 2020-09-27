@@ -1,0 +1,59 @@
+{
+  "id": "0008",
+  "score": 0,
+  "username": "",
+  "current_quest_start_timestamp": [
+    13,
+    45
+  ],
+  "current_mission": "",
+  "current_activity": "Inizio",
+  "help": [],
+  "chat": [
+    {
+      "hour": "13",
+      "mins": "45",
+      "text": "Gvng",
+      "auth": "player0008",
+      "seen": true
+    },
+    {
+      "hour": "13",
+      "mins": "45",
+      "text": "Ok",
+      "auth": "Valutatore",
+      "seen": true
+    },
+    {
+      "hour": "13",
+      "mins": "47",
+      "text": "lk",
+      "auth": "player0008",
+      "seen": true
+    },
+    {
+      "hour": "13",
+      "mins": "47",
+      "text": "lol",
+      "auth": "Valutatore",
+      "seen": true
+    },
+    {
+      "hour": "13",
+      "mins": "49",
+      "text": "llllllllllllllllllll",
+      "auth": "Valutatore",
+      "seen": true
+    },
+    {
+      "hour": "13",
+      "mins": "49",
+      "text": "llllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllll",
+      "auth": "Valutatore",
+      "seen": true
+    }
+  ],
+  "pending_count": 0,
+  "story_name": "Le cose stanno così",
+  "quest_list": []
+}

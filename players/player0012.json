@@ -1,0 +1,52 @@
+{
+  "id": "0012",
+  "score": 0,
+  "username": "",
+  "current_quest_start_timestamp": [
+    17,
+    55
+  ],
+  "current_mission": "",
+  "current_activity": "Inizio",
+  "help": [],
+  "chat": [
+    {
+      "hour": "17",
+      "mins": "55",
+      "text": "lol",
+      "auth": "player0012",
+      "seen": false
+    },
+    {
+      "hour": "17",
+      "mins": "55",
+      "text": "lol",
+      "auth": "player0012",
+      "seen": false
+    },
+    {
+      "hour": "17",
+      "mins": "55",
+      "text": "lo",
+      "auth": "player0012",
+      "seen": false
+    },
+    {
+      "hour": "17",
+      "mins": "55",
+      "text": "lol",
+      "auth": "player0012",
+      "seen": false
+    },
+    {
+      "hour": "17",
+      "mins": "55",
+      "text": "lol",
+      "auth": "player0012",
+      "seen": false
+    }
+  ],
+  "pending_count": 0,
+  "story_name": "Le cose stanno così",
+  "quest_list": []
+}
