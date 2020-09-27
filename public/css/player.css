@@ -236,6 +236,11 @@ video {
     position:relative;
     border: 0px;
 }
+
+.glyphicon-remove {
+    font-size:2vh;
+}
+
 /*INPUT TEXT + GLYPHICON*/
 /*Bootstrap layout per avere l'icona dentro all'input*/
 .inner-addon {

@@ -516,7 +516,6 @@ function setChatView(data) {
 
 //Open the pop-up chat with the selected player
 function openChat(set_focus) {
-    console.log('open');
     isChatOpen = true;
     if (isHelpPaneOpen) {
         closeHelpPane();

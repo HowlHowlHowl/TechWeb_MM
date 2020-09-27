@@ -50,7 +50,7 @@
     top: 2px;
 }
 
-.glyphicon-remove {
+#close-chat-div .glyphicon-remove {
     right: 0;
     top: 1em;
     font-size:2vh;
