@@ -27,9 +27,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<link rel="stylesheet" href="/public/css/player.css">
-	<!--<link rel="stylesheet" href="/public/css/style_default.css">-->
+	<link rel="stylesheet" href="/public/css/style_default.css">
 	<!--<link rel="stylesheet" href="/public/css/style_egypt.css">-->
-	<link rel="stylesheet" href="/public/css/style_museum.css">	
+	<!--<link rel="stylesheet" href="/public/css/style_museum.css">-->
 
 </head>
 <body>
@@ -134,13 +134,80 @@
 			<input id="input-immagine" type="file" accept="image/*" class="scan-immagine-input">
 			<div id="scan-window" aria-hidden="true">
 				<div id="scan-line"></div>
-				<table role = "presentation">
+				<table role="presentation">
 					<tr><td></td><td></td><td></td><td></td></tr>
 					<tr><td></td><td id="o-word"><p>O</p></td><td id="k-word"><p>K</p></td><td></td></tr>
 					<tr><td></td><td></td><td></td><td></td></tr>
 				</table>
 			</div>
 		</div>
+	</template>
+	<!--Template modifiche css-->
+	<template id="template-css">
+		<style type="text/css">
+			/*
+				$chat -> $theme
+				activity_area diventa border
+			*/
+			h1 {
+				font-family: $title_font;
+				color: $title_font_color;
+			}
+
+			body {
+				background: $background;
+			}
+
+			#score {
+				color: $title_font_color;
+			}
+
+			#nome-attivita, #final-text, nome-missione {
+				font-family: $text_font;
+				color: $text_font_color;
+			}
+
+			#div-grande {
+				font-family: $text_font;
+				color: $text_font_color;
+				border: 3px solid $activity_area_color;
+			}
+
+			#chat-button, #help-button, #bottone-avanti {
+				background-color: $buttons_color;
+				color: $buttons_text_color;
+			}
+
+			#chat .panel-heading {
+				background-color: $chat_color;
+				color: $chat_text_color;
+				border-color: $chat_color;
+			}
+			#send-msg {
+				background-color: $chat_color;
+				color: $chat_text_color;
+			}
+			#window-input-text > textarea {
+				background-color: $chat_color;
+				color: $chat_text_color;
+			}
+
+			#window-input-text > button {
+				border: 1px solid $help_color;
+			}
+			
+			#send-new-req {
+				border-color: $help_color;
+			}
+
+			#close-help-pane {
+				color: $help_color;
+			}
+			.help-color-border {
+				border: 5px solid $chat_color;
+			}
+
+		</style>
 	</template>
 </body>
 </html>

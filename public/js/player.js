@@ -24,6 +24,7 @@ $(document).ready(function () {
             url: '/stories/' + id,
             success: function (data) {
                 storyJSON = data;
+                loadCustomCSS();
                 setPlayer(storyJSON);
             },
             error: function (xhr, ajaxOptions, thrownError) {
@@ -716,7 +717,65 @@ function updateScore() {
         }
     });
 }
+//tpl del prof modificato per aggiungere i css personalizzati 
+String.prototype.tpl = function (o) {
+    var r = this;
+    for (var i in o) {
+        r = r.replace(new RegExp("\\$" + i, 'g'), o[i]);
+    }
+    return r;
+}
+//Funzione per aggiungere il css personalizzato
+function loadCustomCSS() {
+    let style = storyJSON.style;
+    let $background = (style.use_background_image ? 'url(' + style.background_image + ')' : style.background_color);
+    let $chat_color, $chat_text_color, $help_color;
+    switch (style.chat_theme) {
+        case 'dark':
+            $help_color = 'black';
+            $chat_color = 'black';
+            $chat_text_color = 'white';
+            break;
+        case 'light':
+            $help_color = 'black';
+            $chat_color = 'white';
+            $chat_text_color = 'black';
+            break;
+        case 'pink':
+            $help_color = '#9932CC';
+            $chat_color = '#9932CC';
+            $chat_text_color = 'black';
+            break;
+    }
+    style['background'] = $background;
+    style['help_color'] = $help_color;
+    style['chat_color'] = $chat_color;
+    style['chat_text_color'] = $chat_text_color;
+    let css = document.getElementById('template-css').innerHTML.tpl(style);
+    console.log(css);
+    let additional_css = '';
+    switch (style.title_font) {
+        case 'All The Roll':
+            additional_css = `
+                        h1 {
+                            line-height: .7;
+                        }
+                        h1::before {
+                            content: '(';
+                        }
+                        h1::after {
+                            content: ')';
+                        }
+                        `
+            break;
+    }
+    css += additional_css;
+    $('head').append(css);
+
+}
+
 //mostra un messaggio di conferma se ricarichi la pagina
 $(window).bind('beforeunload', function () {
         return 'perderai i tuoi progressi, vuoi confermare?';
 })
+

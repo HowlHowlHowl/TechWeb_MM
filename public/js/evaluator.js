@@ -175,6 +175,7 @@ function getPlayerByID(id) {
     });
     return toReturn;
 }
+//Get id in the form of 000x/00xx/0xxx
 function getRealID() {
     return (next_id < 10 ? '000' : (next_id < 100 ? '00' : next_id < 1000 ? '0' : '')) + id;
 }
@@ -576,20 +577,17 @@ $(document).on('click', '#delete-player', function () {
         + '<button id="back-button">Annulla</button></div>'
         + '</div></div>');
 });
-
 //Event close the change from button and by clicking elsewhere
 $(document).on('click', '#black-focus', function (event) {
     if (event.target.id != "delete-button") {
         $('#black-focus').remove();
     }
 });
-    
 //Event to confirm elimination
 $(document).on('click', '#delete-button', function () {
     let id = $('#rename-field').attr('name').replace('player', '');
     deletePlayer(id);
 });
-
 //Function to remove player
 function deletePlayer(id) {
     $.ajax({
@@ -612,7 +610,6 @@ function deletePlayer(id) {
         }
     });
 }
-
 //Event to rename a player from user panel
 $(document).on('click', '#rename-button', function () {
     let new_name = $('#rename-field').val();
@@ -1150,8 +1147,8 @@ function setHistory(data) {
 $(document).on('click', '.close-on-click', function () {
     if ($('#navbarSupportedContent').hasClass('show')) {
         $('#collapse-button').click();
-        updatePlayersSetMenu();
     }
+    updatePlayersSetMenu();
 });
 //Open classification from navbar
 $(document).on('click', '#classification-button', function () {

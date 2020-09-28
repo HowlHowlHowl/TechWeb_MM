@@ -19,9 +19,6 @@
     font-weight: normal;
 }
 .panel-primary > .panel-heading {
-    color: #fff;
-    background-color: #428bca;
-    border-color: #428bca;
     padding-top: 2px;
     padding-bottom: 2px;
 }
@@ -124,7 +121,6 @@
 
 .messages > p {
     font-size: 3vh;
-    color: black;
     margin: 0 0 0.2rem 0;
     max-width: 100%;
     word-wrap: break-word;
@@ -132,8 +128,7 @@
 
 .messages > time {
     font-size: 2vh;
-    color: black;
-    float:right;
+    float:left;
     position: relative;
     bottom:1vh;
 }

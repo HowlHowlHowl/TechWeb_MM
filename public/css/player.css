@@ -1,4 +1,7 @@
 /*Tag*/
+h1 {
+    line-height: 1;
+}
 img {
     object-fit: contain;
     width: 100%;

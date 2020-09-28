@@ -1,76 +1,47 @@
-@font-face {
-    font-family: 'All The Roll';
-    src: url('/public/fonts/AllTheRollPersonalUse.woff2') format('woff2'), url('/public/fonts/AllTheRollPersonalUse.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-    font-display: swap;
-}
-
 /* Titolo storia */
 h1 {
     font-size: 11vh;
     text-align: center;
-    color: white;
-    font-family: "All The Roll";
-    line-height: .7;
-}
-h1::before {
-    content: '(';
-}
-h1::after {
-    content: ')';
+    line-height: 1;
 }
 
 /* Label dello score */
 #score {
     font-size: 3vh;
     font-weight: normal;
-    color:white;
 }
 
 /* Testo di fine storia */
 #final-text {
     font-size: 5vh;
-    color: #9932CC;
 }
 
 /* Corpo storia */
-body {
-    background-color: #9932CC;
-}
 
 #div-grande {
-    border: 3px #9932CC solid;
     background-color: white;
 }
 
 #nome-attivita {
     font-size: 2.5vh;
     font-weight: 600;
-    font-family: 'Helvetica Neue LT Std';
 }
 
 #nome-missione {
     font-size: 4vh;
-    font-family: 'Helvetica Neue LT Std';
 }
 
 .testo-attivita {
     font-size: 2.5vh;
-    font-family: 'Helvetica Neue LT Std';
 }
 
 /* Finestra per input testuale */
 #window-input-text > textarea {
-    background-color: #9932CC;
-    color: white;
     opacity: 0.7;
 }
 
 #window-input-text > button {
-    background-color: #9932CC;
     color: white;
-    border: 1px solid black;
 }
 
 #window-input-text {
@@ -80,34 +51,9 @@ body {
 
 /* Richiesta di aiuto */
 .help-color-border {
-    background:white;
-    border:5px solid #9932CC;
-}
-
-#send-new-req {
-    border-color: #9932CC;
+    background:white;   
 }
 
 .help-answer, .help-question {
     background-color:rgba(200,200,200, .5);
-}
-
-#close-help-pane{
-    color: #9932CC;
-}
-
-/* Chat */
-.panel-primary > .panel-heading {
-    background-color: #ae50dc;
-    border-color: #ae50dc;
-}
-#send-msg {
-    background-color: #ae50dc;
-}
-.sent-msgs {
-    background-color: #9932CC;
-}
-
-.icon_close {
-    color: white;
 }
