@@ -905,6 +905,7 @@ style: {
         },
 */
 
+//Converte un colore in hex rgb e un valore opacity tra 0 e 1 in una stringa rgba(r,g,b,a)
 function convertHex(hex,opacity){
     hex = hex.replace('#','');
     let r = parseInt(hex.substring(0,2), 16);
@@ -916,21 +917,26 @@ function convertHex(hex,opacity){
 
 function updateStylePreview(style)
 {
+    //Titolo storia
     let title = $("#preview-title");
     title.css("font-family", style.title_font);
     title.css("color", style.title_font_color);
     
+    //Area attività
     let text = $("#preview-mission-title, #preview-activity-title, #preview-activity-text");
     text.css("font-family", style.text_font);
     text.css("color", style.text_font_color);
     
     let area = $("#preview-activity-area");
     area.css('background-color', convertHex(style.activity_area_color, style.activity_area_opacity));
+    area.css('border-color', style.activity_area_border);
     
+    //Bottoni
     let button = $("#preview-button");
     button.css("background-color", style.buttons_color);
     button.css("color", style.buttons_text_color);
     
+    //Background
     if(style.use_background_image) {
         $("#preview-body").css("background-color", 'transparent');
         if(style.background_image)
@@ -939,6 +945,26 @@ function updateStylePreview(style)
         $("#preview-body").css("background-color", style.background_color);
         $("#preview-body").css("background-image", '');
     }
+    
+    //Chat preview
+    let chat_color;
+    let chat_text_color;
+    switch (style.chat_theme) {
+        case 'dark':
+            chat_color = 'black';
+            chat_text_color = 'white';
+            break;
+        case 'light':
+            chat_color = 'white';
+            chat_text_color = 'black';
+            break;
+        case 'pink':
+            chat_color = '#9932CC';
+            chat_text_color = 'black';
+            break;
+    }
+    $("#preview-chat-header").css("color", chat_text_color);
+    $("#preview-chat-header").css("background-color", chat_color);
 }
 
 function openStyleEditor() {
@@ -950,6 +976,7 @@ function openStyleEditor() {
     linkInputToProperty(style, "text_font_color",  $("#style-text-color"));
     
     linkInputToProperty(style, "activity_area_color",   $("#style-main-color"));
+    linkInputToProperty(style, "activity_area_border",  $("#style-main-border-color"));
     linkInputToProperty(style, "activity_area_opacity", $("#style-main-opacity"));
     
     linkInputToProperty(style, "buttons_color",      $("#style-buttons-color"));

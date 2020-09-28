@@ -3,17 +3,18 @@
   "accessible": false,
   "style": {
     "title_font": "Helvetica Neue LT Std",
-    "title_font_color": "#ffffff",
+    "title_font_color": "#000000",
     "text_font": "Helvetica Neue LT Std",
     "text_font_color": "",
     "activity_area_color": "#ffffff",
-    "activity_area_opacity": "0.85",
-    "buttons_color": "#1401e4",
-    "buttons_text_color": "#ffffff",
-    "chat_theme": "dark",
+    "activity_area_opacity": "1",
+    "buttons_color": "#ffffff",
+    "buttons_text_color": "#000000",
+    "chat_theme": "pink",
     "use_background_image": false,
-    "background_color": "#22c358",
-    "background_image": "/public/uploads/background-egypt.jpg"
+    "background_color": "#8b22c3",
+    "background_image": "/public/uploads/background-egypt.jpg",
+    "activity_area_border": "#45255b"
   },
   "published": true,
   "canvas_offset": {

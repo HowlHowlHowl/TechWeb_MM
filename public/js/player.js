@@ -717,6 +717,17 @@ function updateScore() {
         }
     });
 }
+
+//Converte un colore in hex rgb e un valore opacity tra 0 e 1 in una stringa rgba(r,g,b,a)
+function convertHex(hex,opacity){
+    hex = hex.replace('#','');
+    let r = parseInt(hex.substring(0,2), 16);
+    let g = parseInt(hex.substring(2,4), 16);
+    let b = parseInt(hex.substring(4,6), 16);
+    
+    return 'rgba(' + r + ',' + g + ',' + b + ',' + opacity + ')';
+}
+
 //tpl del prof modificato per aggiungere i css personalizzati 
 String.prototype.tpl = function (o) {
     var r = this;
@@ -747,12 +758,12 @@ function loadCustomCSS() {
             $chat_text_color = 'black';
             break;
     }
+    style['activity_area_color'] = convertHex(style.activity_area_color, style.activity_area_opacity);
     style['background'] = $background;
     style['help_color'] = $help_color;
     style['chat_color'] = $chat_color;
     style['chat_text_color'] = $chat_text_color;
     let css = document.getElementById('template-css').innerHTML.tpl(style);
-    console.log(css);
     let additional_css = '';
     switch (style.title_font) {
         case 'All The Roll':

@@ -30,15 +30,20 @@ module.exports = function(app) {
                 //Se il file e' gia' presente sul server
                 for(let u of uploaded_files) {
                     if(u.hash == hash) {
-                        var oldfile = fs.readFileSync(u.path);
-                        var newfile = fs.readFileSync(file.path);
-                        if(oldfile.equals(newfile)) 
-                        {                       
-                            fs.unlinkSync(file.path);
-                            res.writeHead(200, {'Content-Type': 'application/json'});
-                            res.write(JSON.stringify({url: "/" + u.path}));
-                            res.end();
-                            return;
+                        try {
+                            let oldfile = fs.readFileSync(u.path);
+                            let newfile = fs.readFileSync(file.path);
+                            
+                            if(oldfile.equals(newfile)) 
+                            {                       
+                                fs.unlinkSync(file.path);
+                                res.writeHead(200, {'Content-Type': 'application/json'});
+                                res.write(JSON.stringify({url: "/" + u.path}));
+                                res.end();
+                                return;
+                            }
+                        } catch(err) {
+                            //If we fail to compare we fall back to create a new file
                         }
                     }
                 }
