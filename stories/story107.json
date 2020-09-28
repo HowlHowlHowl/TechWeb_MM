@@ -1,13 +1,26 @@
 {
   "name": "Big storia",
   "accessible": false,
-  "style": "",
+  "style": {
+    "title_font": "Helvetica Neue LT Std",
+    "title_font_color": "#ffffff",
+    "text_font": "Helvetica Neue LT Std",
+    "text_font_color": "",
+    "activity_area_color": "#ffffff",
+    "activity_area_opacity": "0.85",
+    "buttons_color": "#cccccc",
+    "buttons_text_color": "#000000",
+    "chat_theme": "dark",
+    "use_background_image": false,
+    "background_color": "#b022c3",
+    "background_image": "/public/uploads/background-egypt.jpg"
+  },
   "published": true,
   "canvas_offset": {
-    "x": 353.1706608704196,
-    "y": 414.38114953711766
+    "x": 299.6458915550399,
+    "y": 368.2187311250653
   },
-  "canvas_scale": 0.5475244788874036,
+  "canvas_scale": 0.44349482789879696,
   "missions": [
     {
       "name": "Missione A",

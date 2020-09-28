@@ -230,6 +230,64 @@ html, body {
     min-height: 100px;
 }
 
+/* preview for the style editor */
+#preview-title {
+    text-align: center;
+}
+
+#preview-body {
+    border: 2px solid black;
+    border-radius: 3px;
+    background-size: 100% 100%;
+    position: relative;
+}
+
+#preview-activity-area {
+    width: 75%;
+    margin: auto;
+    border-radius: 10px;
+    border: 1px solid black;
+}
+
+#preview-mission-title {
+    font-size: 14pt;
+    text-align: center;
+}
+
+#preview-activity-title {
+    font-size: 13pt;
+    text-align: center;
+}
+
+#preview-activity-text {
+    font-size: 11pt;
+}
+
+#preview-footer {
+    padding: 10px;
+}
+
+#preview-button {
+    margin: auto;
+    display: block;
+    border: 0px;
+}
+
+#preview-chat {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    width: 75px;
+    height: 100px;
+    background-color: white;
+    border: 1px solid black;
+}
+
+#preview-chat-header {
+    background-color: pink;
+}
+
+/* icons */
 .story-icon, .mission-icon, .content-icon, .node-icon {
     user-drag: none; 
     user-select: none;

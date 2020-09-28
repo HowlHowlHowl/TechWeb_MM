@@ -1,13 +1,25 @@
 {
   "name": "Uomo come soggetto o oggetto di studio",
   "accessible": true,
-  "style": "",
+  "style": {
+    "title_font": "",
+    "title_font_color": "",
+    "text_font": "",
+    "text_font_color": "",
+    "activity_area_color": "",
+    "activity_area_opacity": "",
+    "buttons_color": "",
+    "buttons_text_color": "",
+    "chat_theme": "",
+    "use_background_image": false,
+    "background_color": ""
+  },
   "published": false,
   "canvas_offset": {
-    "x": 304.7173252884889,
-    "y": 214.51445518937487
+    "x": 314.9005150064176,
+    "y": 454.51317299137474
   },
-  "canvas_scale": 0.4679824677196933,
+  "canvas_scale": 0.49949121249054595,
   "missions": [
     {
       "name": "Introduzione",

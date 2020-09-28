@@ -17,6 +17,7 @@
 	<!-- Internal -->
 	<link rel="icon" type="image/png" sizes="16x16" href="/public/images/icons/site16x16.ico">
 	<link rel="stylesheet" href="/public/css/author.css">
+	<link rel="stylesheet" href="/public/css/story_fonts.css">
 	<script src="/public/js/author_nodes.js"></script>
 	<script src="/public/js/author_editor.js"></script>
 </head>
@@ -48,7 +49,6 @@
             <div class="flex-container">
                 <div class="flex-header m-1">
                     <input type="text" class="editable-name" id="editor-name">
-                    <button class="btn btn-primary float-right btn-lg" onclick="saveSelectedStory()">Salva</button>
                     <div class="form-row align-items-center m-1">
                         <div class="col-2">
                             <div class="custom-control custom-checkbox mr-sm-2">
@@ -56,12 +56,13 @@
                                 <label class="custom-control-label" for="editor-accessible">Accessibile</label>
                             </div>
                         </div>
-                        <div class="col-3">
-                            <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#style-modal">Modifica stile</button>
+                        <div class="col-2">
+                            <button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#style-modal" onclick="openStyleEditor()">Modifica stile</button>
                         </div>
                     </div>
+                    <hr>
                 
-                    
+                    <button class="btn btn-primary float-right btn-lg" onclick="saveSelectedStory()">Salva</button>
                     <button class="btn btn-primary" onclick="editorNewActivity()">Nuova attività</button>
                     <button id="activity-paste" class="btn btn-primary" onclick="editorPasteActivity()" disabled>Incolla attività</button>
                 </div>
@@ -224,16 +225,16 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col-6">
-                    
                         <div class="form-row">
                             <div class="form-group col-4">
                                 <label for="style-title-font">Font titolo storia:</label>
                             </div>
                             <div class="form-group col-7">
                                 <select class="form-control" id="style-title-font">
-                                    <option>Font 1</option>
-                                    <option>Font 2</option>
-                                    <option>Font 3</option>
+                                    <option>Helvetica Neue LT Std</option>
+                                    <option>All The Roll</option>
+                                    <option>ArtistikDemoVersio</option>
+                                    <option>Egypt</option>
                                 </select>
                             </div>
                             <div class="form-group col-1">
@@ -247,9 +248,10 @@
                             </div>
                             <div class="form-group col-7">
                                 <select class="form-control" id="style-text-font">
-                                    <option>Font 1</option>
-                                    <option>Font 2</option>
-                                    <option>Font 3</option>
+                                    <option>Helvetica Neue LT Std</option>
+                                    <option>All The Roll</option>
+                                    <option>ArtistikDemoVersio</option>
+                                    <option>Egypt</option>
                                 </select>
                             </div>
                             <div class="form-group col-1">
@@ -269,23 +271,23 @@
                                 <label for="style-main-opacity">Opacità</label>
                             </div>
                             <div class="form-group col-4">
-                                <input type="range" class="form-control-range" id="style-main-opacity">
+                                <input type="range" class="form-control-range" id="style-main-opacity" min="0" max="1" step="0.01">
                             </div>
                         </div>
                         
                         <div class="form-row">
                             <div class="form-group col-4">
-                                <label for="style-secondary-color">Colore bottoni:</label>
+                                <label for="style-buttons-color">Colore bottoni:</label>
                             </div>
                             <div class="form-group col-1">
-                                <input class="w-100 h-100" type="color" id="style-button-color">
+                                <input class="w-100 h-100" type="color" id="style-buttons-color">
                             </div>
                             <div class="form-group col-1"></div>
                             <div class="form-group col-2">
-                                <label for="style-button-text-color">Testo</label>
+                                <label for="style-buttons-text-color">Testo</label>
                             </div>
                             <div class="form-group col-1">
-                                <input class="w-100 h-100" type="color" id="style-button-text-color">
+                                <input class="w-100 h-100" type="color" id="style-buttons-text-color">
                             </div>
                         </div>
                         
@@ -309,12 +311,20 @@
                             </div>
                         </div>
                         
-                        <div class="form-group">
-                            <label id="style-background-upload-label" class="btn btn-success">
-                                <input type="file" name="file[]" accept="image/*" style="display: none;">
+                        <div id="style-background-color-div" class="form-row">
+                            <div class="form-group col-4">
+                                <label for="style-background-color">Colore sfondo:</label>
+                            </div>
+                            <div class="form-group col-1">
+                                <input class="w-100 h-100" type="color" id="style-background-color">
+                            </div>
+                        </div>
+                        
+                        <div id="style-background-image-div" class="form-group">
+                            <label class="btn btn-success">
+                                <input id="style-background-upload" type="file" name="file[]" accept="image/*" style="display: none;">
                                 Carica sfondo
                             </label>
-                            <span id="style-background-upload-name"></span>
                         </div>
                     </div>
                     
@@ -325,15 +335,19 @@
                         <hr>
                         <div id="preview-body">
                             <h1 id="preview-title">Titolo</h1>
-                            <div id="preview-div">
+                            <div id="preview-activity-area">
                                 <!--TITOLO MISSIONE-->
                                 <div id="preview-mission-title">Titolo missione</div>
                                 <div id="preview-activity-title">Titolo attivita</div>
                                 <!--TESTO ATTIVITA VISUALIZZATA-->
-                                <div class="preview-activity-text">Testo attività</div>
+                                <div id="preview-activity-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</div>
                             </div>
                             <div id="preview-footer">
                                 <button id="preview-button">Avanti</button>
+                            </div>
+                            
+                            <div id="preview-chat">
+                                <div id="preview-chat-header">Chat</div>
                             </div>
                         </div>
                     </div>

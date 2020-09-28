@@ -1,0 +1,23 @@
+@font-face {
+    font-family: 'All The Roll';
+    src: url('/public/fonts/AllTheRollPersonalUse.woff2') format('woff2'), url('/public/fonts/AllTheRollPersonalUse.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'ArtistikDemoVersio';
+    src: url('/public/fonts/ArtistikDemoVersio.woff2') format('woff2'), url('/public/fonts/ArtistikDemoVersio.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Egypt';
+    src: url('/public/fonts/EgyptianNights.woff2') format('woff2'), url('/public/fonts/EgyptianNights.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}

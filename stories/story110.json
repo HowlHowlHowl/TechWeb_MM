@@ -1,13 +1,25 @@
 {
   "name": "Le cose stanno così",
   "accessible": false,
-  "style": "",
+  "style": {
+    "title_font": "",
+    "title_font_color": "",
+    "text_font": "",
+    "text_font_color": "",
+    "activity_area_color": "",
+    "activity_area_opacity": "",
+    "buttons_color": "",
+    "buttons_text_color": "",
+    "chat_theme": "",
+    "use_background_image": false,
+    "background_color": ""
+  },
   "published": true,
   "canvas_offset": {
-    "x": 314.0170902756625,
-    "y": 67.45493828351725
+    "x": 357.62531019235496,
+    "y": 72.32673776117528
   },
-  "canvas_scale": 0.25,
+  "canvas_scale": 0.5835920535225005,
   "missions": [
     {
       "name": "Iniziamo",
