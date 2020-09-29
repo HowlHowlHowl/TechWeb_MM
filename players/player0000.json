@@ -1,0 +1,24 @@
+{
+  "id": "0000",
+  "score": 0,
+  "username": "",
+  "current_quest_start_timestamp": [
+    12,
+    8
+  ],
+  "current_mission": "",
+  "current_activity": "Inizio",
+  "help": [],
+  "chat": [
+    {
+      "hour": "12",
+      "mins": "08",
+      "text": "Ehi",
+      "auth": "player0000",
+      "seen": true
+    }
+  ],
+  "pending_count": 0,
+  "story_name": "Big storia",
+  "quest_list": []
+}

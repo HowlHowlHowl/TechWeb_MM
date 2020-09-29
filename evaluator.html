@@ -16,9 +16,9 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<!-- Internal -->
 	<link rel="stylesheet" href="/public/css/evaluator.css">
-	<link rel="stylesheet" href="/public/css/chat.css">
 	<link rel="stylesheet" href="/public/css/story_fonts.css">
-	
+	<link rel="stylesheet" href="/public/css/chat.css">
+
 	<script src="/public/js/evaluator.js" charset="utf-8"></script>
 	<title>Evaluator</title>
 
@@ -91,7 +91,7 @@
 						<div class="panel panel-primary">
 							<div class="panel-heading top-bar">
 								<div class="col-md-4 col-xs-4" id="close-chat-div">
-									<a onclick="closeChat()"><span class="glyphicon glyphicon-remove icon_close" data-id="chat_window_1"></span></a>
+									<button class="btn bg-transparent" aria-label="chiudi chat" onclick="closeChat()"><span class="glyphicon glyphicon-remove icon_close" data-id="chat_window_1"></span></button>
 								</div>
 								<div class="col-md-8 col-xs-8">
 									<p class="panel-title" id="chat-user"><!--Nome utente chat--></p>

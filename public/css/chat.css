@@ -9,10 +9,6 @@
     z-index: 100000;
 
 }
-#close-chat-div{
-    padding:0;
-    top:0;
-}
 
 #chat-title {
     font-size: 2.5vh;
@@ -44,12 +40,12 @@
 .col-md-4 {
     width: 10%;
     float: right;
-    top: 2px;
 }
 
 #close-chat-div .glyphicon-remove {
-    right: 0;
-    top: 1em;
+    right: .5em;
+    padding: 0;
+    color: white;
     font-size:2vh;
 }
 

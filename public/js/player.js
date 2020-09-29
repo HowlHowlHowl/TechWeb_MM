@@ -35,7 +35,7 @@ $(document).ready(function () {
         setInterval(function () {
             if (player_id) {
                 if (isChatOpen) {
-                    openChat(false);
+                 //TODO   openChat(false);
                 } else {
                     check4newMex();
                 }
@@ -509,7 +509,7 @@ function setChatView(data) {
             $('#chat-msgs').append('<div class="row msg_container base_sent"><div class="col-md-10 col-xs-10"><div class="messages sent-msgs msg_sent"><p>' +
              chatlog.text + '</p><time>Tu - ' + chatlog.hour + ':' + chatlog.mins + '</time></div></div></div>');
         } else {
-            $('#chat-msgs').append('<div class="row msg_container base_receive <div class="col-md-10 col-xs-10"><div class="messages msg_receive"><p>' +
+            $('#chat-msgs').append('<div class="row msg_container base_receive"> <div class="col-md-10 col-xs-10"><div class="messages msg_receive"><p>' +
              chatlog.text + '</p> <time>' + (data.username ? data.username : ('Player ' + data.id)) + ' - ' + chatlog.hour + ':' + chatlog.mins + '</time></div></div></div>');
         }
     });
@@ -787,6 +787,6 @@ function loadCustomCSS() {
 
 //mostra un messaggio di conferma se ricarichi la pagina
 $(window).bind('beforeunload', function () {
-        return 'perderai i tuoi progressi, vuoi confermare?';
+        return 'Perderai i tuoi progressi, vuoi confermare?';
 })
 
