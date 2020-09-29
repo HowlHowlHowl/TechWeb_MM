@@ -1,7 +1,21 @@
 {
   "name": "Ladri al Van Gogh Museum",
   "accessible": false,
-  "style": "",
+  "style": {
+    "title_font": "Helvetica Neue LT Std",
+    "title_font_color": "#000000",
+    "text_font": "Helvetica Neue LT Std",
+    "text_font_color": "",
+    "activity_area_color": "#ffffff",
+    "activity_area_opacity": "1",
+    "buttons_color": "#ffffff",
+    "buttons_text_color": "#000000",
+    "chat_theme": "pink",
+    "use_background_image": false,
+    "background_color": "#8b22c3",
+    "background_image": "",
+    "activity_area_border": "#45255b"
+  },
   "published": false,
   "canvas_offset": {
     "x": -69.05873564885218,

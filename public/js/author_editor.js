@@ -17,7 +17,9 @@ var nodesArray = [];
 
 
 
-/* Example options:
+/*  Utility function to create and open a modal with the specified title, text, body and buttons
+
+Example options:
     {
         title: "title",
         text: "text",
@@ -53,11 +55,13 @@ function openModal(opt) {
     $("#mod").modal();
 }
 
+//Change the accessibility boolean of the story
 function editorStoryAccessibleChange(element) {
     loadedStory.accessible = element.checked;
     editorDirty = true;
 }
 
+//Make all the up and down buttons of given class in a container disabled if they are the first or last respectively
 function updateAllUpDownButtons(container, up_class, down_class) {
     up_array = container.find(up_class);
     for (i = 0; i < up_array.length; i++) {
@@ -70,6 +74,7 @@ function updateAllUpDownButtons(container, up_class, down_class) {
     }
 }
 
+//Set the input value to the property of the object specified by name, also set the handler to update the property on input change
 function linkInputToProperty(object, name, input) {
     //Clear previous handlers
     input.off("change");
@@ -81,9 +86,11 @@ function linkInputToProperty(object, name, input) {
     });
 }
 
+//Add the html element to edit the content to the container for the specified activity
 function addContentElement(content, container, activity) {
     let content_div = $($("#template-content").html());
     
+    //Add the correct elements based on the content type
     let item_div = content_div.find(".content-item");
     switch(content.type) {
         case "text": {
@@ -153,6 +160,7 @@ function addContentElement(content, container, activity) {
         } break;
     }
     
+    //Side buttons to delete or move the content
     let del = content_div.find(".content-del");
     del.on("click", () => {
         removeFromArray(activity.contents, content);
@@ -204,6 +212,7 @@ function addContentElement(content, container, activity) {
     content_div.appendTo(container);
 }
 
+//Add a new content to the activity and the respective elements to edit it
 function editorNewContent(content, container, activity)
 {
     editorDirty = true;
@@ -211,6 +220,7 @@ function editorNewContent(content, container, activity)
     addContentElement(content, container, activity);
 }
 
+//Get the color of the activity based on its mission index or its special attribute
 function activityColor(a) {
     if(a.special) {
         return "#000000";
@@ -221,16 +231,9 @@ function activityColor(a) {
     }
 }
 
-function refreshOptions(options, activity) {
-    options.find("button").each( (j, e) => {
-        if(j == 0) {
-            $(e).toggleClass("active", activity.mission_index == null);
-        } else {
-            $(e).toggleClass("active", (j - 1) == activity.mission_index);
-        }
-    });
-}
-
+//Add an output to the node and a connection if needed.
+//The object's property will be updated automatically with the activity index or null
+//when the node is connected or disconnected respectively
 function makeOutput(object, property, node, color) {
     let output = node.addOutput({
         single: true, 
@@ -260,6 +263,7 @@ function makeOutput(object, property, node, color) {
     }
 }
 
+//Set all the node outputs based, 1 for normal activities, 2 for activities that can also be failed, 0 for the end activity.
 function setNodeOutputs(activity, node) {
     let type = activity.input_type;
     let input = activity.input;
@@ -275,11 +279,13 @@ function setNodeOutputs(activity, node) {
     }
 }
 
+//Clear all the node outputs and then set them
 function clearAndSetNodeOutputs(activity, node) {
     node.clearOutputs();
     setNodeOutputs(activity, node);
 }
 
+//Set the elements required to edit the case in which the player gives a wrong answer
 function setWrongInputElement(activity, node) {
     let input = activity.input;
     
@@ -290,6 +296,7 @@ function setWrongInputElement(activity, node) {
     } else {
         wrong_div.toggle(true);
         
+        //Message displayed on wrong answer
         let wrong_message = $("#wrong-message");
         wrong_message.toggle(input.wrong_stay);
         
@@ -297,6 +304,7 @@ function setWrongInputElement(activity, node) {
         if(input.wrong_stay)
             linkInputToProperty(input, "wrong_message", wrong_text);
         
+        //Checkbox to decide if the player should continue trying or go the next activity in case of a wrong answer
         let wrong_checkbox = $("#wrong-stay");
         wrong_checkbox[0].checked = input.wrong_stay;
         wrong_checkbox.off();
@@ -324,6 +332,7 @@ function setWrongInputElement(activity, node) {
     }
 }
 
+//Set the elements required to edit the range or value for a correct number answer
 function setNumberOption(element, option, checked) {
     element.find(".option-range").toggle(checked);
     element.find(".option-single").toggle(!checked);
@@ -344,6 +353,7 @@ function setNumberOption(element, option, checked) {
     }
 }
 
+//Set the elements required to edit the correct answers to an activity
 function addCorrectOptionElement(activity, option) {
     let element;
     if(activity.input_type == "text") {
@@ -495,6 +505,16 @@ function setInputElement(activity, node)
     }
 }
 
+//Set the correct mission option as active based on the mission index
+function refreshMissionOptions(options, activity) {
+    options.find("button").each( (j, e) => {
+        if(j == 0) {
+            $(e).toggleClass("active", activity.mission_index == null);
+        } else {
+            $(e).toggleClass("active", (j - 1) == activity.mission_index);
+        }
+    });
+}
 
 function openActivityEditor(activity, node) {
     let editor = $("#activity-modal");
@@ -523,7 +543,7 @@ function openActivityEditor(activity, node) {
             activity.mission_index = null;
             node.setColor(activityColor(activity));
             select.text("Nessuna missione");
-            refreshOptions(options, activity);
+            refreshMissionOptions(options, activity);
         }
     });
     
@@ -542,7 +562,7 @@ function openActivityEditor(activity, node) {
                 activity.mission_index = i;
                 node.setColor(activityColor(activity));
                 select.text(m.name);
-                refreshOptions(options, activity);
+                refreshMissionOptions(options, activity);
             }
         });
         button.appendTo(options);
@@ -889,22 +909,6 @@ function editorNewMission() {
     addMissionElement(mission);
 }
 
-/*
-style: {
-            title_font: "",
-            title_font_color: "",
-            text_font: "",
-            text_font_color: "",
-            activity_area_color: "",
-            activity_area_opacity: "",
-            buttons_color: "",
-            buttons_text_color: "",
-            chat_theme: "",
-            use_background_image: false,
-            background_color: "",
-        },
-*/
-
 //Converte un colore in hex rgb e un valore opacity tra 0 e 1 in una stringa rgba(r,g,b,a)
 function convertHex(hex,opacity){
     hex = hex.replace('#','');
@@ -1246,17 +1250,19 @@ function newStory(published)
         name: "Nuova storia",
         accessible: false,
         style: {
-            title_font: "",
-            title_font_color: "",
-            text_font: "",
+            title_font: "Helvetica Neue LT Std",
+            title_font_color: "#000000",
+            text_font: "Helvetica Neue LT Std",
             text_font_color: "",
-            activity_area_color: "",
-            activity_area_opacity: "",
-            buttons_color: "",
-            buttons_text_color: "",
-            chat_theme: "",
+            activity_area_color: "#ffffff",
+            activity_area_opacity: "1",
+            buttons_color: "#ffffff",
+            buttons_text_color: "#000000",
+            chat_theme: "pink",
             use_background_image: false,
-            background_color: "",
+            background_color: "#8b22c3",
+            background_image: "",
+            activity_area_border: "#45255b"
         },
         published: published,
         canvas_offset: { x: 0, y: 0 },
