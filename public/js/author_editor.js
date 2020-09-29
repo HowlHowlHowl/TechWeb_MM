@@ -889,6 +889,139 @@ function editorNewMission() {
     addMissionElement(mission);
 }
 
+/*
+style: {
+            title_font: "",
+            title_font_color: "",
+            text_font: "",
+            text_font_color: "",
+            activity_area_color: "",
+            activity_area_opacity: "",
+            buttons_color: "",
+            buttons_text_color: "",
+            chat_theme: "",
+            use_background_image: false,
+            background_color: "",
+        },
+*/
+
+//Converte un colore in hex rgb e un valore opacity tra 0 e 1 in una stringa rgba(r,g,b,a)
+function convertHex(hex,opacity){
+    hex = hex.replace('#','');
+    let r = parseInt(hex.substring(0,2), 16);
+    let g = parseInt(hex.substring(2,4), 16);
+    let b = parseInt(hex.substring(4,6), 16);
+    
+    return 'rgba(' + r + ',' + g + ',' + b + ',' + opacity + ')';
+}
+
+function updateStylePreview(style)
+{
+    //Titolo storia
+    let title = $("#preview-title");
+    title.css("font-family", style.title_font);
+    title.css("color", style.title_font_color);
+    
+    //Area attività
+    let text = $("#preview-mission-title, #preview-activity-title, #preview-activity-text");
+    text.css("font-family", style.text_font);
+    text.css("color", style.text_font_color);
+    
+    let area = $("#preview-activity-area");
+    area.css('background-color', convertHex(style.activity_area_color, style.activity_area_opacity));
+    area.css('border-color', style.activity_area_border);
+    
+    //Bottoni
+    let button = $("#preview-button");
+    button.css("background-color", style.buttons_color);
+    button.css("color", style.buttons_text_color);
+    
+    //Background
+    if(style.use_background_image) {
+        $("#preview-body").css("background-color", 'transparent');
+        if(style.background_image)
+            $("#preview-body").css("background-image", 'url(' + style.background_image + ')');
+    } else {
+        $("#preview-body").css("background-color", style.background_color);
+        $("#preview-body").css("background-image", '');
+    }
+    
+    //Chat preview
+    let chat_color;
+    let chat_text_color;
+    switch (style.chat_theme) {
+        case 'dark':
+            chat_color = 'black';
+            chat_text_color = 'white';
+            break;
+        case 'light':
+            chat_color = 'white';
+            chat_text_color = 'black';
+            break;
+        case 'pink':
+            chat_color = '#9932CC';
+            chat_text_color = 'black';
+            break;
+    }
+    $("#preview-chat-header").css("color", chat_text_color);
+    $("#preview-chat-header").css("background-color", chat_color);
+}
+
+function openStyleEditor() {
+    let style = loadedStory.style;
+    linkInputToProperty(style, "title_font",       $("#style-title-font"));
+    linkInputToProperty(style, "title_font_color", $("#style-title-color"));
+    
+    linkInputToProperty(style, "text_font",        $("#style-text-font"));
+    linkInputToProperty(style, "text_font_color",  $("#style-text-color"));
+    
+    linkInputToProperty(style, "activity_area_color",   $("#style-main-color"));
+    linkInputToProperty(style, "activity_area_border",  $("#style-main-border-color"));
+    linkInputToProperty(style, "activity_area_opacity", $("#style-main-opacity"));
+    
+    linkInputToProperty(style, "buttons_color",      $("#style-buttons-color"));
+    linkInputToProperty(style, "buttons_text_color", $("#style-buttons-text-color"));
+    
+    linkInputToProperty(style, "chat_theme", $("#style-chat-theme"));
+    
+    //Background
+    linkInputToProperty(style, "background_color", $("#style-background-color"));
+    
+    $("#style-background-color-div").toggle(!style.use_background_image);
+    $("#style-background-image-div").toggle(style.use_background_image);
+    
+    let background_checkbox = $("#style-has-background");
+    background_checkbox[0].checked = style.use_background_image;
+    background_checkbox.off();
+    background_checkbox.on("change", (e) => {
+        editorDirty = true;
+        style.use_background_image = background_checkbox[0].checked;
+        $("#style-background-color-div").toggle(!style.use_background_image);
+        $("#style-background-image-div").toggle(style.use_background_image);
+    });
+    
+    let upload = $("#style-background-upload");
+    upload.off();
+    upload.on("change", () => {
+        editorDirty = true;
+        let image_url = URL.createObjectURL(upload[0].files[0]);
+        uploadFileAndStoreURL(upload[0].files[0], style, "background_image", (url) => {
+            updateStylePreview(style);
+        });
+    });
+    
+    $("#style-modal").find("select, input").on("change", () => {
+        updateStylePreview(style);
+    });
+    
+    //make sure color and range inputs update also while dragging
+    $("#style-modal").find('input[type="color"], input[type="range"]').on("input", (e) => {
+        $(e.target).change();
+    });
+    
+    updateStylePreview(style);
+}
+
 function clearSelectedStory() {
     if(selectedStoryButton) {
         selectedStoryButton.removeClass("active");
@@ -1065,7 +1198,7 @@ function addStoryElement(s) {
 }
 
 
-function uploadFileAndStoreURL(file, object, name)
+function uploadFileAndStoreURL(file, object, name, callback)
 {   
     let fd = new FormData();
     fd.append(file.name, file);
@@ -1080,6 +1213,9 @@ function uploadFileAndStoreURL(file, object, name)
         
         success: function(data) {
             object[name] = data.url;
+            if(callback) {
+                callback(data.url);
+            }
         },
         error: function (xhr, ajaxOptions, thrownError) {
            
@@ -1109,7 +1245,19 @@ function newStory(published)
     let story = {
         name: "Nuova storia",
         accessible: false,
-        style: "",
+        style: {
+            title_font: "",
+            title_font_color: "",
+            text_font: "",
+            text_font_color: "",
+            activity_area_color: "",
+            activity_area_opacity: "",
+            buttons_color: "",
+            buttons_text_color: "",
+            chat_theme: "",
+            use_background_image: false,
+            background_color: "",
+        },
         published: published,
         canvas_offset: { x: 0, y: 0 },
         canvas_scale: 1.0,

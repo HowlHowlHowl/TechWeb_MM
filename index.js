@@ -54,5 +54,11 @@ app.get('/evaluator', function (req, res) {
     res.sendFile(path.join(__dirname + "/evaluator.html")); 
 });
 
+//Handler in caso di richieste inesistenti
+app.use(function(req, res){
+    res.writeHead(404, {'Content-Type': 'text/html'});
+    return res.end("<h1>404 Not Found</h1>");
+});
+
 app.listen(port, function() {});
 console.log("Server Started");

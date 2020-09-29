@@ -3,6 +3,8 @@ Test storia Van Gogh
 
 AUTORE:
  - Un po' di commenti random nel js
+ - Preview chat quando Gabri ha fatto la magia nera
+ - Piu' font (helvetica non funzia da me)
 
 VALUTATORE
  - con il server viene caricato un messaggio vuoto in chat con chat=[](player1)

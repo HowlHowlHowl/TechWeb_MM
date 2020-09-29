@@ -2,66 +2,37 @@ body {
     overflow: hidden;
 }
 
-.tab-content, .tab-pane{
-    width:100%;
-}
 /*Navbar*/
-@media only screen and (max-width: 1000px) {
-    .nav-item > a {
-        text-align: left !important;
-    }
-    #navbarSupportedContent {
-        top: 10vh !important;
-    }
-}
 
-#collapse-button{
-    margin-left:0;
-}
 .navbar-toggler:focus,
 .navbar-toggler:active,
 .navbar-toggler-icon:focus {
     outline: none;
     box-shadow: none;
 }
-.nav-item > a {
-    text-align:center;
+nav {
+    margin-left:20vw;
+    border-left:0;
+}
+.navbar{
+    margin-bottom:0;
+}
+#collapse-button{
+    margin-left:0;
 }
 .navbar-dark .navbar-toggler {
     color: white;
     padding:0;
     margin:0 auto;
 }
-.navbar-nav, navbar-nav.collapse, navbar-nav.collapsing, navbar-collapse.collapse, navbar-collapse.show {
-    background: #007bff;
-    padding: 0;
-    margin: 0;
-    max-height:70vh;
-    overflow-y: auto;
-}
 .dropdown {
     max-height:60vh;
 }
-.navbar-nav > li {
-    color: white;
-    margin-left: 1vw;
-}
-
 .nav-link {
-    font-size: 2.5vh;
     color:white !important;
 }
-
-.dropdown-item {
-    font-size: 2vh;
-}
-
-.navbar {
-    margin-bottom: 0;
-    left: 20vw;
-    width: 80vw;
-    height: 10vh;
-    border-radius: 0;
+#navTimeNotification{
+    vertical-align: top;
 }
 
 .badge-secondary {
@@ -77,11 +48,13 @@ body {
     width: 30vh;
     max-height: 20vh;
     overflow-y: auto;
+    margin:auto;
     position: initial !important;
+    font-size:1.5rem;
 }
 
 .nav-item {
-    width: 15vw;
+    font-size:1.7em;
     color:white;
 }
 .navbar-toggler-icon {
@@ -89,17 +62,7 @@ body {
     font-size:5vh;
     margin:auto;
 }
-#navbarSupportedContent{
-    padding:0;
-    background:#007BFF;
-    position:fixed;
-    top:0;
-    width:100%;
-}
-#navbarSupportedContent {
-    overflow-x:hidden;
-    max-height: inherit;
-}
+
 /*Container correzioni*/
 .list-group {
     width: 15%;
@@ -139,21 +102,29 @@ body {
     color: white;
     font-size: 3.5em;
     padding: 2vh;
-    padding-bottom:0;
     border: #007bff;
-    min-height: 50px;
+    min-height: 100px;
+    
 }
-@media only screen and (max-width:600px) {
+
+@media only screen and (max-width:1000px) {
 
     .waiting-player:first-child {
         font-size: 3vh;
         padding: 2vh;
-        
     }
 }
+
+@media only screen and (max-width:560px) {
+
+    .waiting-player:first-child {
+        font-size: 1.7em;
+    }
+}
+
 .waiting-player:first-child a {
-    margin: 0;
-    vertical-align: middle;
+margin: 0;
+vertical-align: middle;
 }
 .waiting-player:nth-child(2) {
     border-top: 1px solid #007bff;
@@ -169,6 +140,9 @@ body {
     padding: 0.5vw;
 }
 /*Correction Pane*/
+#main-placeholder {
+    height: 100%;
+}
 .quest_header {
     text-align:center;
     font-size:3vh;
@@ -179,20 +153,29 @@ body {
     border: transparent;
     margin: auto;
 }
+#help_msg {
+    width:100%;
+    margin-top:2vh;
+    text-align:center;
+    font-size:2.5vh;
+}
 #user-space button {
     font-size:2vh;
     height:5vh;
 }
+#close-tab {
+    top: .3em;
+}
 #delete-player {
     padding:1vh;
 }
-.block-info:last-child {
+.button-block-info {
     margin-top: 1vh;
     font-size: 2vh;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    bottom:0;
+    bottom: 0;
 }
 .user-info-tab:hover {
     background-color: transparent;
@@ -201,12 +184,15 @@ body {
 .tab-pane {
     overflow-y: hidden;
 }
+.tab-content > .active{
+    overflow-y: hidden;
+    height:100%;
+}
+.tab-content {
+    height:calc(100vh - 62.7px);
+}
 .panel-default {
     margin-left: 20vw;
-}
-.panel-body {
-    height:80vh;
-    overflow-y:auto;
 }
 .history-table {
     margin-bottom:3vh;
@@ -221,9 +207,9 @@ body {
 #correction-pane {
     padding-left: 1vw;
     padding-right: 1vw;
-    height: 80vh;
     overflow-y: auto;
     overflow-x: hidden;
+    height: calc(100% - 73px);
 }
 
 .description-div {
@@ -355,7 +341,7 @@ body {
     top: 0;
     left: 0;
     width:50vw;
-    height: 50vh;
+    min-height: 50vh;
     margin:20vh 25vw 20vh 25vw;
     border: white 2px solid;
 }
@@ -413,6 +399,7 @@ body {
 .pop-space {
     width: 100%;
     height: 100%;
+    position: absolute;
     top: 0;
     left: 0;
     border: #007bff 10px solid;
@@ -523,18 +510,18 @@ body {
 }
 
 #timeNotification {
-    color: black;
+    color: #007bff;
     text-align: center;
     padding-top: 0.2vh;
     padding-left: 0.2vh;
     border-radius: 0.5vh;
-    font-size: 1.5vh;
+    font-size:1.5rem;
 }
 
 /*Notifications dot*/
 .dot {
-    min-width: 2vh;
-    min-height: 2vh;
+    min-width: 1.5vh;
+    min-height: 1.5vh;
     margin: .2vh;
     border-radius: 2vh;
     color: white;
@@ -628,7 +615,7 @@ td, th {
     font-size:2vh;
 }
 #downloads-content{
-    padding:1vh;
+    padding:0;
 }
 /*Help pane*/
 .help-comment{

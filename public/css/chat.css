@@ -19,9 +19,6 @@
     font-weight: normal;
 }
 .panel-primary > .panel-heading {
-    color: #fff;
-    background-color: #428bca;
-    border-color: #428bca;
     padding-top: 2px;
     padding-bottom: 2px;
 }
@@ -50,17 +47,21 @@
     top: 2px;
 }
 
-.glyphicon-remove {
+#close-chat-div .glyphicon-remove {
     right: 0;
-    top: 10px;
+    top: 1em;
     font-size:2vh;
 }
 
 .glyphicon-send {
     top: 2px;
-    padding-right:20%;
+    padding-right:.5em;
 }
-
+.glyphicon-comment {
+    top: .5em;
+    font-size: 2em;
+    margin-bottom: 1em;
+}
 .col-md-2, .col-md-10 {
     padding: 0;
 }
@@ -120,15 +121,16 @@
 
 .messages > p {
     font-size: 3vh;
-    color: white;
     margin: 0 0 0.2rem 0;
     max-width: 100%;
-    word-wrap:break-word;
+    word-wrap: break-word;
 }
 
 .messages > time {
     font-size: 2vh;
-    color: white;
+    float:left;
+    position: relative;
+    bottom:1vh;
 }
 
 .msg_container {

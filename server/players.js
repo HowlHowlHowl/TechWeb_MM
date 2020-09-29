@@ -358,10 +358,12 @@ module.exports = function (app) {
         } else {
             next_id = next_id + 1;
         }
-        console.log('ID assigned to new player: ' + next_id);
+        let file_id = (next_id < 10 ? '000' : (next_id < 100 ? '00' : next_id < 1000 ? '0' : '')) + next_id;
+        console.log('ID assigned to new player: ' + next_id + ', ID assigned to file: ' + file_id);
+
         var date = new Date();
         var player = {
-            id: next_id,
+            id: file_id,
             score: 0,
             username: '',
             current_quest_start_timestamp: [
@@ -376,9 +378,9 @@ module.exports = function (app) {
             story_name: data.name,
             quest_list: []
         };    
-        fs.writeFileSync('players/player' + next_id + '.json', JSON.stringify(player, null, 2));
+        fs.writeFileSync('players/player' + file_id + '.json', JSON.stringify(player, null, 2));
         res.writeHead(200, { 'Content-Type': 'text/plain' });
-        res.write(next_id.toString());
+        res.write(file_id);
         res.end();
     });  
     //serve al valutatore per capire da quanto tempo stai giocando ad un'attività (per es. se sei bloccato)

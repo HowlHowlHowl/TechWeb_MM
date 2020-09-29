@@ -24,6 +24,7 @@ $(document).ready(function () {
             url: '/stories/' + id,
             success: function (data) {
                 storyJSON = data;
+                loadCustomCSS();
                 setPlayer(storyJSON);
             },
             error: function (xhr, ajaxOptions, thrownError) {
@@ -328,6 +329,7 @@ function setWindow() {
     } else if (isSpecial == "end") {
         $('#footer').append('<button id="bottone-fine" type="button" class="btn btn-light bottone-next">Fine</button>');
     }
+    scrollToTop('div-grande');
 }
 //Funzione per la notifica della chat
 function check4newMex() {
@@ -597,8 +599,13 @@ function markAsSeen(id) {
 }
 //Scroll to the last received message in the current chat
 function scrollToBottom(id) {
-    let chatVBox = document.getElementById(id);
-    chatVBox.scrollTop = chatVBox.scrollHeight;
+    let VBox = document.getElementById(id);
+    VBox.scrollTop = VBox.scrollHeight;
+}
+//Scroll to top of content 
+function scrollToTop(id) {
+    let VBox = document.getElementById(id);
+    VBox.scrollTop = 0;
 }
 //Event to open chat with selected player
 $(document).on('click', '#chat-button', function() {
@@ -720,7 +727,76 @@ function updateScore() {
         }
     });
 }
+
+//Converte un colore in hex rgb e un valore opacity tra 0 e 1 in una stringa rgba(r,g,b,a)
+function convertHex(hex,opacity){
+    hex = hex.replace('#','');
+    let r = parseInt(hex.substring(0,2), 16);
+    let g = parseInt(hex.substring(2,4), 16);
+    let b = parseInt(hex.substring(4,6), 16);
+    
+    return 'rgba(' + r + ',' + g + ',' + b + ',' + opacity + ')';
+}
+
+//tpl del prof modificato per aggiungere i css personalizzati 
+String.prototype.tpl = function (o) {
+    var r = this;
+    for (var i in o) {
+        r = r.replace(new RegExp("\\$" + i, 'g'), o[i]);
+    }
+    return r;
+}
+//Funzione per aggiungere il css personalizzato
+function loadCustomCSS() {
+    let style = storyJSON.style;
+    let $background = (style.use_background_image ? 'url(' + style.background_image + ')' : style.background_color);
+    let $chat_color, $chat_text_color, $help_color;
+    switch (style.chat_theme) {
+        case 'dark':
+            $help_color = 'black';
+            $chat_color = 'black';
+            $chat_text_color = 'white';
+            break;
+        case 'light':
+            $help_color = 'black';
+            $chat_color = 'white';
+            $chat_text_color = 'black';
+            break;
+        case 'pink':
+            $help_color = '#9932CC';
+            $chat_color = '#9932CC';
+            $chat_text_color = 'black';
+            break;
+    }
+    style['activity_area_color'] = convertHex(style.activity_area_color, style.activity_area_opacity);
+    style['background'] = $background;
+    style['help_color'] = $help_color;
+    style['chat_color'] = $chat_color;
+    style['chat_text_color'] = $chat_text_color;
+    let css = document.getElementById('template-css').innerHTML.tpl(style);
+    let additional_css = '';
+    switch (style.title_font) {
+        case 'All The Roll':
+            additional_css = `
+                        h1 {
+                            line-height: .7;
+                        }
+                        h1::before {
+                            content: '(';
+                        }
+                        h1::after {
+                            content: ')';
+                        }
+                        `
+            break;
+    }
+    css += additional_css;
+    $('head').append(css);
+
+}
+
 //mostra un messaggio di conferma se ricarichi la pagina
 $(window).bind('beforeunload', function () {
         return 'perderai i tuoi progressi, vuoi confermare?';
 })
+
