@@ -27,7 +27,6 @@ $(document).ready(function () {
                 setPlayer(storyJSON);
             },
             error: function (xhr, ajaxOptions, thrownError) {
-               
             }
         });
         //Update al secondo di nuovi messaggi oppure chat, risposte a richieste d'aiuto e punteggio
@@ -151,7 +150,7 @@ function checkInput() {
                     next_index = (storyJSON.activities[index].input.wrong_next_index || next_index);
                 }
             }
-            //Evaluation_type == evaluator
+            //Evaluation_type == evaluator se è da mandare al valutatore is_corrected -> false
         } else if (storyJSON.activities[index].input.evaluation_type == 'evaluator') {
             is_corrected = false;
         }
@@ -160,16 +159,23 @@ function checkInput() {
         answer = $('#input-text').val();
         if (storyJSON.activities[index].input.evaluation_type == 'correct') {
             storyJSON.activities[index].input.correct_options.forEach((option) => {
+                //trim toglie spazi ai lati, toLowerCase trasforma maiusc in minusc, replace toglie tutti gli spazi esistenti
+                //localCompare è ==, tutte queste funzionalità servono per eliminare eventuali spazi e maiuscole nelle risposte 
+                //(errori di battitura)
                 if (answer.trim().toLowerCase().replace(' ', '').localeCompare(option.text.trim().toLowerCase().replace(' ', '')) == 0) {
                     score = option.points;
                 }
             });
             if (score == 0) {
+                //riprova in caso di errore
                 if (storyJSON.activities[index].input.wrong_stay) {
                     next_index = index;
                     $('#div-grande').append('<p id="err-msg">' + (storyJSON.activities[index].input.wrong_message || 'Riprova') + '</p>');
                     scrollToBottom('div-grande');
                 } else {
+                    //in caso di risposta sbagliata
+                    //se esiste un'indice che porta ad un'attività secondaria prevista per gli errori prendiamo quella (perc diramato)
+                    //se non esiste prendiamo l'attività successiva (percorso lineare)
                     next_index = (storyJSON.activities[index].input.wrong_next_index || next_index);
                 }
             }
@@ -182,19 +188,22 @@ function checkInput() {
     if(next_index === undefined || next_index === null){
         next_index = 1;
     }
-
+    // let mission_index serve per prendere l'indice della missione a cui appartiene l'attività corrente
     let mission_index = storyJSON.activities[next_index].mission_index;
     let mission_name;
     if (mission_index) { mission_name = storyJSON.missions[mission_index].name; } else { mission_name = (next_index == 1 ? 'Fine' : (index==0 ? 'Inizio' : '')); }
 
     //Costruisce l'array della domanda posta al player
+    //per ogni elemento salviamo il tipo e ne creiamo uno con type e content corrispondenti
     storyJSON.activities[index].contents.forEach(function (elem) {
+        // se l'elemento è di tipo testo salviamo in type 'text' e in content il testo dell'elemento
         if (elem.type == 'text') {
             questionComponents.push({
                 type: 'text',
                 content: elem.text
             });
-        }
+        } 
+        //in caso di immagini e video ci salviamo l'url e la descrizione in content
         if (elem.type == 'video') {
             questionComponents.push({
                 type: 'video',
@@ -214,6 +223,7 @@ function checkInput() {
             });
         }
     });
+    //up_to_date 
     up_to_date = is_corrected;
 
     answer_data = {
