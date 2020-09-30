@@ -516,6 +516,7 @@ function refreshMissionOptions(options, activity) {
     });
 }
 
+//Open the modal window for the activity editor
 function openActivityEditor(activity, node) {
     let editor = $("#activity-modal");
     
@@ -630,6 +631,7 @@ function openActivityEditor(activity, node) {
     editor.modal();
 }
 
+//Update the property of an object when the activity at index has been deleted
 function updateIndexAfterDelete(object, property, index) {
     if(object[property] !== null) {
         if(object[property] == index) {
@@ -642,6 +644,7 @@ function updateIndexAfterDelete(object, property, index) {
     }
 }
 
+//Delete an activity
 function deleteActivity(activity) {
     let index = loadedStory.activities.indexOf(activity);
     if(index != -1) {
@@ -657,6 +660,7 @@ function deleteActivity(activity) {
     }
 }
 
+//Paste an activity in the canvas
 function editorPasteActivity() {
     if(copiedActivity) {
         editorDirty = true;
@@ -671,13 +675,14 @@ function editorPasteActivity() {
         if(a.input.wrong_next_index !== undefined) a.input.wrong_next_index = null;
         a.position = getNextAvailablePoint();
         
-        
+        //Push the activity in the activities array and add a node for it
         loadedStory.activities.push(a);
         let node = addActivityNode(a);
         setNodeOutputs(a, node);
     }
 }
 
+//Add a node for an activity to the canvas
 function addActivityNode(activity) {
     let n = new Node(activity.name, activity.position, {
         onCopy:  () => {
@@ -721,6 +726,7 @@ function addActivityNode(activity) {
     return n;
 }
 
+//Create a new activity and add it to the story and the canvas
 function editorNewActivity() {
     editorDirty = true;
     let activity = {
@@ -740,6 +746,7 @@ function editorNewActivity() {
     setNodeOutputs(activity, node);
 }
 
+//Paste a mission
 function editorPasteMission() {
     if(copiedMission) {
         editorDirty = true;
@@ -802,6 +809,7 @@ function editorPasteMission() {
     }
 }
 
+//Delete a mission
 function deleteMission(mission_div, mission) {
     mission_div.remove();
     
@@ -832,10 +840,14 @@ function deleteMission(mission_div, mission) {
     });
 }
 
+//Add an element for a mission
 function addMissionElement(mission) {
     let mission_div = $($("#template-mission").html());
     
+    //Name
     linkInputToProperty(mission, "name", mission_div.find(".mission-name"));
+    
+    //Color
     let color = mission_div.find(".mission-col");
     linkInputToProperty(mission, "color", color);
     color.on("change", () => {
@@ -855,6 +867,7 @@ function addMissionElement(mission) {
     });
     mission_div.css("border-color", color.val());
     
+    //Delete button
     let del = mission_div.find(".mission-del");
     del.on("click", () => {
         openModal({
@@ -876,6 +889,7 @@ function addMissionElement(mission) {
         });
     });
     
+    //Copy button
     let copy = mission_div.find(".mission-copy");
     copy.on("click", () => {
         copiedMission = {};
@@ -899,6 +913,7 @@ function addMissionElement(mission) {
     mission_div.appendTo("#editor-missions");
 }
 
+//Create a new mission for the story
 function editorNewMission() {
     editorDirty = true;
     let mission = {
@@ -909,7 +924,7 @@ function editorNewMission() {
     addMissionElement(mission);
 }
 
-//Converte un colore in hex rgb e un valore opacity tra 0 e 1 in una stringa rgba(r,g,b,a)
+//Convert an RGB color in hex and an opacity value between 0 and 1 in a rgba(r,g,b,a) string
 function convertHex(hex,opacity){
     hex = hex.replace('#','');
     let r = parseInt(hex.substring(0,2), 16);
@@ -919,14 +934,15 @@ function convertHex(hex,opacity){
     return 'rgba(' + r + ',' + g + ',' + b + ',' + opacity + ')';
 }
 
+//Update the preview of the story style
 function updateStylePreview(style)
 {
-    //Titolo storia
+    //Story title
     let title = $("#preview-title");
     title.css("font-family", style.title_font);
     title.css("color", style.title_font_color);
     
-    //Area attività
+    //Activity area
     let text = $("#preview-mission-title, #preview-activity-title, #preview-activity-text");
     text.css("font-family", style.text_font);
     text.css("color", style.text_font_color);
@@ -935,7 +951,7 @@ function updateStylePreview(style)
     area.css('background-color', convertHex(style.activity_area_color, style.activity_area_opacity));
     area.css('border-color', style.activity_area_border);
     
-    //Bottoni
+    //Buttons
     let button = $("#preview-button");
     button.css("background-color", style.buttons_color);
     button.css("color", style.buttons_text_color);
@@ -971,6 +987,7 @@ function updateStylePreview(style)
     $("#preview-chat-header").css("background-color", chat_color);
 }
 
+//Open the modal window to edit the style of the story
 function openStyleEditor() {
     let style = loadedStory.style;
     linkInputToProperty(style, "title_font",       $("#style-title-font"));
@@ -1004,6 +1021,7 @@ function openStyleEditor() {
         $("#style-background-image-div").toggle(style.use_background_image);
     });
     
+    //Upload of background image
     let upload = $("#style-background-upload");
     upload.off();
     upload.on("change", () => {
@@ -1026,6 +1044,7 @@ function openStyleEditor() {
     updateStylePreview(style);
 }
 
+//Clear the selection of the current story
 function clearSelectedStory() {
     if(selectedStoryButton) {
         selectedStoryButton.removeClass("active");
@@ -1038,6 +1057,7 @@ function clearSelectedStory() {
     $("#editor-area-missions").addClass("d-none");
 }
 
+//Create nodes for all the existing activities and connect them
 function loadActivities() {
     clearCanvas();
     nodesArray = [];
@@ -1051,6 +1071,7 @@ function loadActivities() {
     });
 }
 
+//Open the story with the selected id and initialize the editor and the node canvas
 function selectStory(id) {
     $.ajax({
         accepts: 'application/json',
@@ -1063,14 +1084,16 @@ function selectStory(id) {
             $("#editor-area-missions").removeClass("d-none");
             $("#editor-accessible").prop("checked", loadedStory.accessible);
             
+            //Story name
             linkInputToProperty(loadedStory, "name", $("#editor-name"));
-            linkInputToProperty(loadedStory, "style", $("#editor-style"));
             
+            //Load missions
             $("#editor-missions").empty();
             loadedStory.missions.forEach((m) => {
                 addMissionElement(m);
             });
             
+            //Load canvas and nodes
             setCanvasOffsetAndScale(loadedStory.canvas_offset, loadedStory.canvas_scale);
             loadActivities();
         },
@@ -1080,9 +1103,11 @@ function selectStory(id) {
     });
 }
 
+//Add an element for a story in the story lister and initialize the dropdown buttons
 function addStoryElement(s) {
     let story_div = $($("#template-story").html());
     
+    //Story item
     let item = story_div.find(".list-group-item");
     item.text(s.name);
     let openStory = function () {
@@ -1130,12 +1155,13 @@ function addStoryElement(s) {
         item.addClass("active");
     }
     
+    //QR code button
     let qr = story_div.find(".story-qr");
     qr.on('click', () => {
         let qr = $(document.createElement('div'));
         qr.qrcode({
             'text' : window.location.origin + '/player?id=' + s.id,  // users will be redirected to this URL when scanning the QR-Code
-            'size' : 150                                       // image width in pixel
+            'size' : 150                                             // image width in pixel
         });
         
         openModal({
@@ -1164,6 +1190,7 @@ function addStoryElement(s) {
         });
     });
     
+    //Delete button
     let del = story_div.find(".story-del");
     del.on("click", (event) => {
         openModal( {
@@ -1184,13 +1211,14 @@ function addStoryElement(s) {
         });
     });
     
-    
+    //Archive/Pubblish button
     let swap = story_div.find(".story-swap");
     swap.on("click", () => actionOnStory(s.id, s.published ? "archive" : "publish"));
     let swap_publish = '<img class="story-icon" src="/public/images/icons/publish.png">Pubblica';
     let swap_archive = '<img class="story-icon" src="/public/images/icons/archive.png">Archivia';
     swap.html(s.published ? swap_archive : swap_publish);
     
+    //Duplicate button
     let dup = story_div.find(".story-dup");
     dup.on("click", () => actionOnStory(s.id, "duplicate"));
     
@@ -1201,7 +1229,7 @@ function addStoryElement(s) {
     }
 }
 
-
+//Upload a file and store the returned URL in object[name], also call the callback with the URL as parameter if given
 function uploadFileAndStoreURL(file, object, name, callback)
 {   
     let fd = new FormData();
@@ -1227,7 +1255,7 @@ function uploadFileAndStoreURL(file, object, name, callback)
     });
 }
 
-
+//Update the story lister
 function updateStories() {
     $.ajax({
         accepts: 'application/json',
@@ -1244,6 +1272,7 @@ function updateStories() {
     });
 }
 
+//Create a new story
 function newStory(published)
 {
     let story = {
@@ -1311,6 +1340,7 @@ function newStory(published)
     });
 }
 
+//Save the currently selected story
 function saveSelectedStory()
 {
     if(loadedStory)
@@ -1336,6 +1366,7 @@ function saveSelectedStory()
     }
 }
 
+//Execute the specified action on a story: duplicate, archive, pubblish or delete
 function actionOnStory(id, action) {
     let action_url = action == "delete" ? "" : ("/" + action);
     let method = action == "delete" ? "DELETE" : "POST";
@@ -1356,12 +1387,12 @@ function actionOnStory(id, action) {
     });
 }
 
+//Load stories
 $(() => {
-    //Load stories
     updateStories();
 });
 
-
+//Creates an alert if the user is leaving the page with unsaved changes
 $(window).bind('beforeunload', function() {
    if(editorDirty)
    {
