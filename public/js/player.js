@@ -434,7 +434,9 @@ $(document).on('click', '#bottone-avanti', function () {
     if (isInputValid()) {
         if (storyJSON.activities[index].input_type == 'photo') {
             //In caso di success di uploadFile vengono invocate check input e setWindows
-            uploadFile($('#input-immagine')[0].files[0]);
+            if ($('#input-immagine')[0].files[0].length > 0) {
+                uploadFile($('#input-immagine')[0].files[0]);
+            }
         } else {
             checkInput();
         }
