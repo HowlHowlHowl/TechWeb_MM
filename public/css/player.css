@@ -4,6 +4,12 @@ h1 {
     text-align: center;
     line-height: 1;
 }
+body {
+    background-repeat: no-repeat !important;
+    background-size: cover !important;
+    background-position: center !important;
+    height: 100%;
+}
 img {
     object-fit: contain;
     width: 60vmin;
@@ -319,11 +325,12 @@ input[type="file"] {
     border-bottom-right-radius: 0.5vh;
 }
 #score {
-    float:right;
-    margin-right:2vh;
-    margin-bottom:0;
+    float: right;
+    margin-right: 2vh;
+    margin-bottom: 0;
     font-size: 3vh;
-    font-weight: normal;
+    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
+    font-weight: bold;
 }
 #final-text {
     text-align:center;
