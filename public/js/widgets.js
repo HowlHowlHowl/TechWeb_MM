@@ -23,20 +23,22 @@ function onLCDNumberChange() {
    
 //Widget scanner
 $(document).on('change', '.scan-immagine-input', function () {
-    let src = (window.URL ? URL : webkitURL).createObjectURL($('#input-immagine')[0].files[0]);
-    $('#scan-window').css({
-        'background-image': 'url(' + src + ')',
-        'height': '50vh',
-        'background-position': 'center',
-        'background-repeat': 'no-repeat',
-        'background-size': 'contain'
-    });
-
-    lineAnimation();
-    blinkWord('#o-word p');
-    blinkWord('#k-word p');
-//    $('#scan-line').remove();
-//    $('#scan-window').append('<div id="scan-line"></div>')
+    if (isInputValid()) {
+        //Se limmagine è cambiata, l'input attuale è pieno e metto la preview
+        if ($('#input-immagine')[0].files[0]) {
+                let src = (window.URL ? URL : webkitURL).createObjectURL($('#input-immagine')[0].files[0]);
+                $('#scan-window').css({
+                'background-image': 'url(' + src + ')',
+                'height': '50vh',
+                'background-position': 'center',
+                'background-repeat': 'no-repeat',
+                'background-size': 'contain'
+        });
+        lineAnimation();
+        blinkWord('#o-word p');
+        blinkWord('#k-word p');
+       }
+    }
 });
 
 //Make the notification mark blink

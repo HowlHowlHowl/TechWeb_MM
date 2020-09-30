@@ -1,4 +1,5 @@
 var player_id = null;
+var validPhoto = null;
 var index = null;
 var next_index = 0;
 var storyJSON = null;
@@ -126,7 +127,8 @@ function checkInput() {
     // storyJSON (è il file della storia trasformato in un'oggetto (JSON della storia)) . <--- serve per accedere ai campi delle storie
     // 'activities' è un'array [index] accedi all'attività attuale .input_type <--- è un campo dell'oggetto dell'array
     if (type == 'photo') {
-        answer = '/public/images/uploads/' + $('#input-immagine')[0].files[0].name;
+        answer = '/public/images/uploads/' + validPhoto.name;
+        validPhoto = null;
         if (storyJSON.activities[index].input.evaluation_type == 'evaluator') {
             is_corrected = false;
         }
@@ -225,7 +227,6 @@ function checkInput() {
             });
         }
     });
-    //up_to_date 
     up_to_date = is_corrected;
 
     answer_data = {
@@ -434,15 +435,11 @@ $(document).on('click', '#window-input-text > button', function () {
 $(document).on('click', '#bottone-avanti', function () {
     if (isInputValid()) {
         if (storyJSON.activities[index].input_type == 'photo') {
-            //In caso di success di uploadFile vengono invocate check input e setWindows
-            if ($('#input-immagine')[0].files[0].size > 0) {
-                uploadFile($('#input-immagine')[0].files[0]);
-            }
+                //In caso di successo di uploadFile viene invocato checkInput
+                uploadFile(validPhoto);
         } else {
             checkInput();
         }
-    } else {
-        //Non accade nulla
     }
 });
 function isInputValid() {
@@ -450,22 +447,20 @@ function isInputValid() {
     switch (input_type) {
         case 'photo':
             let file = $('#input-immagine')[0].files[0];
-            console.log(file);
-            if (file && file.size > 0)
-            {
-                console.log("file yo");
+            if (file && file.size > 0) {
+                validPhoto = file;
                 return true;
+            } else {
+                if (validPhoto) return true;
+                else return false;
             }
-            else 
-                return false;
-        case 'none':
-            return true;
+        case 'none': return true;
         default:
-            if ($('#input-num').val() || ($('#input-text').val()))
-                return true;
+            if ($('#input-num').val() || ($('#input-text').val())) return true;
             else return false;
     }
 }
+/* NON ACCESSIBILE
 //Evento per andare avanti fra le attività con invio
 $(document).on('keypress', function (key) {
     if (key.which == 13) {
@@ -474,6 +469,7 @@ $(document).on('keypress', function (key) {
         }
     }
 });
+*/
 //Evento per inviare il messaggio in chat con invio
 $(document).on('keydown', '#new_msg_text', function (event) {
     if (event.which == 13) {
@@ -483,24 +479,27 @@ $(document).on('keydown', '#new_msg_text', function (event) {
 });
 //Evento per mostrare una preview del file selezionato
 $(document).on('change', '.standard-input-img', function () {
-    $('#preview').remove();
-    let img = document.createElement('img');
-    img.setAttribute('alt','Your selected image');
-    img.setAttribute('src', (window.URL ? URL : webkitURL).createObjectURL($('#input-immagine')[0].files[0]));
-    img.setAttribute('id', 'preview');
-    document.getElementById('footer').insertBefore(img, document.getElementById('bottone-avanti'));
-    $('.custom-file-upload').css({
-        "border-top-right-radius": "0",
-        "border-bottom-right-radius": "0",
-        "margin-right": "0",
-    });
+    if (isInputValid()) {
+        if ($('#input-immagine')[0].files[0]) {
+            $('#preview').remove();
+            let img = document.createElement('img');
+            img.setAttribute('alt', 'Your selected image');
+            img.setAttribute('src', (window.URL ? URL : webkitURL).createObjectURL($('#input-immagine')[0].files[0]));
+            img.setAttribute('id', 'preview');
+            document.getElementById('footer').insertBefore(img, document.getElementById('bottone-avanti'));
+            $('.custom-file-upload').css({
+                "border-top-right-radius": "0",
+                "border-bottom-right-radius": "0",
+                "margin-right": "0",
+            });
+        }
+    }
 });
 
 function uploadFile(file) {
     let fd = new FormData();
     fd.append(file.name, file);
     let path = '/players/upload_photo/' + 'player' + player_id;
-    console.log("uploading yo");
     $.ajax({
         accepts: 'application/json',
         url: path,
