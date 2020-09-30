@@ -13,7 +13,7 @@
     "chat_theme": "pink",
     "use_background_image": false,
     "background_color": "#8b22c3",
-    "background_image": "/public/uploads/background-egypt.jpg",
+    "background_image": "",
     "activity_area_border": "#45255b"
   },
   "published": true,
