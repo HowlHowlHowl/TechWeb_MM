@@ -185,6 +185,7 @@ function checkInput() {
         }
     }
 
+    console.log("yo next index is " + next_index);
     //Se per caso la storia e' stata creata male dall'autore che non ha specificato tutti i percorsi saltiamo alla fine direttamente.
     if(next_index === undefined || next_index === null){
         next_index = 1;
@@ -434,7 +435,7 @@ $(document).on('click', '#bottone-avanti', function () {
     if (isInputValid()) {
         if (storyJSON.activities[index].input_type == 'photo') {
             //In caso di success di uploadFile vengono invocate check input e setWindows
-            if ($('#input-immagine')[0].files[0].length > 0) {
+            if ($('#input-immagine')[0].files[0].size > 0) {
                 uploadFile($('#input-immagine')[0].files[0]);
             }
         } else {
@@ -448,9 +449,15 @@ function isInputValid() {
     let input_type = storyJSON.activities[index].input_type;
     switch (input_type) {
         case 'photo':
-            if ($('#input-immagine')[0].files.length == 0)
+            let file = $('#input-immagine')[0].files[0];
+            console.log(file);
+            if (file && file.size > 0)
+            {
+                console.log("file yo");
+                return true;
+            }
+            else 
                 return false;
-            else return true;
         case 'none':
             return true;
         default:
@@ -493,6 +500,7 @@ function uploadFile(file) {
     let fd = new FormData();
     fd.append(file.name, file);
     let path = '/players/upload_photo/' + 'player' + player_id;
+    console.log("uploading yo");
     $.ajax({
         accepts: 'application/json',
         url: path,
@@ -505,7 +513,7 @@ function uploadFile(file) {
             checkInput();
         },
         error: function (xhr, ajaxOptions, thrownError) {
-           
+            console.log("xhr" + " - " + thrownError);
         }
     });
 }
