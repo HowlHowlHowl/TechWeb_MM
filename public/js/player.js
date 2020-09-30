@@ -34,7 +34,7 @@ $(document).ready(function () {
         setInterval(function () {
             if (player_id) {
                 if (isChatOpen) {
-                 //TODO   openChat(false);
+                   openChat(false);
                 } else {
                     check4newMex();
                 }
@@ -742,7 +742,7 @@ function convertHex(hex,opacity){
 String.prototype.tpl = function (o) {
     var r = this;
     for (var i in o) {
-        r = r.replace(new RegExp("\\$" + i, 'g'), o[i]);
+        r = r.replace(new RegExp("\\$\\b" + i + '\\b', 'g'), o[i]);
     }
     return r;
 }
@@ -765,7 +765,7 @@ function loadCustomCSS() {
         case 'pink':
             $help_color = '#9932CC';
             $chat_color = '#9932CC';
-            $chat_text_color = 'black';
+            $chat_text_color = 'white';
             break;
     }
     style['activity_area_color'] = convertHex(style.activity_area_color, style.activity_area_opacity);
@@ -779,6 +779,7 @@ function loadCustomCSS() {
         case 'All The Roll':
             additional_css = `
                         h1 {
+                            font-size:10vh;
                             line-height: .7;
                         }
                         h1::before {
@@ -790,8 +791,10 @@ function loadCustomCSS() {
                         `
             break;
     }
+    css = css.replace('</style>', '');
     css += additional_css;
-    $('head').append(css);
+    $('head').append(css + '</style>');
+    console.log(css);
 
 }
 
