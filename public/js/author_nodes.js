@@ -1,12 +1,15 @@
+//Represents the current connection being dragged with the cursor
 var currentConnection = null;
 
+//Current offset and scale of the canvas
 var canvasOffset = new Point(0, 0);
 var canvasScale = 1.0;
 
+//Current offset and starting position of a drag on the canvas
 var canvasDragOffset = null;
 var canvasDragPosition = null;
 
-
+//Create a connection between input and output
 function Connection(input, output) {
     let begin = getCenter(output.element);
     let end = getCenter(input.element);
@@ -16,6 +19,7 @@ function Connection(input, output) {
     this.line = addSpline(begin, end, this);
 }
 
+//Begin the creation of a connection being dragged with the cursor
 function beginConnection(begin_inout, begin_is_input, point) {        
     currentConnection = {};
     currentConnection.line = begin_is_input ? addSpline(point, getCenter(begin_inout.element)) : addSpline(getCenter(begin_inout.element), point);
@@ -23,11 +27,13 @@ function beginConnection(begin_inout, begin_is_input, point) {
     currentConnection.begin_inout = begin_inout;
 }
 
+//End the creation of a connection
 function endConnection() {
     currentConnection.line.remove();
     currentConnection = null;
 }
 
+//Return the center of the element e in canvas space
 function getCenter(e) {
     let x = e.offset().left + e.outerWidth() * canvasScale / 2;
     let y = e.offset().top + e.outerHeight() * canvasScale / 2;
@@ -35,6 +41,7 @@ function getCenter(e) {
     return viewToCanvas(new Point(x, y));
 }
 
+//Transform point p from view space to canvas space
 function viewToCanvas(p) {
     p.x = (p.x - $("#node-canvas").offset().left - canvasOffset.x) / canvasScale;
     p.y = (p.y - $("#node-canvas").offset().top  - canvasOffset.y) / canvasScale;
@@ -42,6 +49,7 @@ function viewToCanvas(p) {
     return p;
 }
 
+//Redraw all the connections in the array
 function redrawConnections(connections) {
     connections.forEach( (c) => {
         c.line.remove();
@@ -49,6 +57,7 @@ function redrawConnections(connections) {
     });
 }
 
+//Remove element from array, if present
 function removeFromArray(array, element) {
     let index = array.indexOf(element);
     if(index != -1) {
@@ -56,6 +65,7 @@ function removeFromArray(array, element) {
     }
 }
 
+//Remove connection c, calling the events on the connected nodes if present
 function removeConnection(c) {
     c.line.remove();
     
@@ -66,6 +76,7 @@ function removeConnection(c) {
     removeFromArray(c.output.connections, c);
 }
 
+//Create an output with the specified options and events for the node
 function Output(node, single, color, onConnect, onDisconnect) {
     this.element = $('<div class="output input-output"></div>');
     this.node = node;
@@ -85,6 +96,7 @@ function Output(node, single, color, onConnect, onDisconnect) {
         return false;
     });
     
+    //Create a connection when the mouse is released on the node while dragging a new connection
     this.element.on('mouseup', (e) => {
         if(currentConnection) {
             if (currentConnection.begin_inout.node == this.node) {
@@ -105,12 +117,15 @@ function Output(node, single, color, onConnect, onDisconnect) {
         }
     });
     
+    
     this.addConnection = (connection) => {
+        //Remove other connections if single
         if(this.single && this.connections.length >= 1) {
             removeConnection(this.connections[0]);
             this.connections = [];
         }
         
+        //Call the onConnect events when connected
         this.connections.push(connection);
         if(this.onConnect) {
             this.onConnect(connection);
@@ -118,6 +133,7 @@ function Output(node, single, color, onConnect, onDisconnect) {
     };
 }
 
+//Create an input with the specified options and events for the node
 function Input(node, single, color, onConnect, onDisconnect) {
     this.element = $('<div class="input input-output"></div>');
     this.node = node;
@@ -137,6 +153,7 @@ function Input(node, single, color, onConnect, onDisconnect) {
         return false;
     });
     
+    //Create a connection when the mouse is released on the node while dragging a new connection
     this.element.on('mouseup', (e) => {
         if(currentConnection) {
             if (currentConnection.begin_inout.node == this.node) {
@@ -158,11 +175,13 @@ function Input(node, single, color, onConnect, onDisconnect) {
     });
     
     this.addConnection = (connection) => {
+        //Remove other connections if single
         if(this.single && this.connections.length >= 1) {
             removeConnection(this.connections[0]);
             this.connections = [];
         }
         
+        //Call the onConnect events when connected
         this.connections.push(connection);
         if(this.onConnect) {
             this.onConnect(connection);
@@ -170,19 +189,18 @@ function Input(node, single, color, onConnect, onDisconnect) {
     };
 }
 
+//Redraw all the connections for the inputs and outputs of a node
 function redrawNodeConnections(node) {
     node.inputs.forEach( (i) => redrawConnections(i.connections));
     node.outputs.forEach( (o) => redrawConnections(o.connections));
 }
 
-function deleteNode(n) {
-    
-}
-
+//Create a new node at the specified position with the specified callbacks and add it to the canvas
 function Node(name, pos, callbacks) {
     let element = $($("#template-node").html());
     let canvas = $("#canvas-transform");
     
+    //Dragging
     var dragBegin;
     element.draggable({
         start: (event) => {
@@ -210,23 +228,29 @@ function Node(name, pos, callbacks) {
         }
     });
     
+    //Starting position
     element.css({ left: pos.x, top: pos.y });
+    
+    //Name
     let name_input = element.find('.node-name');
     name_input.val(name);
     name_input.on("change", () => {
         if(this.onNameChange) this.onNameChange(name_input.val());
     });
     
+    //Delete button
     element.find('.delete').on("click", (e) => {
         this.remove();
     });
     
+    //Copy button
     element.find('.copy').on("click", (e) => {
         if(this.onCopy) this.onCopy();
     });
     
     element.appendTo(canvas);
     
+    //Initialization of the node and callbacks
     this.element = element;
     this.inputs = [];
     this.outputs = [];
@@ -235,7 +259,7 @@ function Node(name, pos, callbacks) {
     this.onNameChange = callbacks.onNameChange;
     this.onPositionChange = callbacks.onPositionChange;
     
-    
+    //Methods on the node to add and remove inputs and outputs
     this.addInput = (info) => {
         let input = new Input(this, info.single, info.color, info.onConnect, info.onDisconnect);
         this.inputs.push(input);
@@ -276,6 +300,7 @@ function Node(name, pos, callbacks) {
         this.element.find(".node-outputs").empty();
     };
     
+    //Operations on the nodes
     this.setName = (name) => {
         this.element.find(".node-name").val(name);
     };
@@ -316,6 +341,7 @@ function Point(x, y) {
     this.y = y;
 }
 
+//Create an svg element with a path element that draws the spline specified by control points a b c d, when clicked the connection can be moved
 function addSplineFromControlPoints(a, b, c, d, connection) {
     let spline = $('<svg class="svg-connection"> <path class="connection" d="M' + a.x + ' ' + a.y + 'C ' + b.x + ' ' + b.y + ', ' + c.x + ' ' + c.y + ', ' + d.x + ' ' + d.y + '" /> </svg>');
     if(connection) {
@@ -331,6 +357,7 @@ function addSplineFromControlPoints(a, b, c, d, connection) {
     return spline;
 }
 
+//Add a spline specified by start and end position, control points are computed based on the distance of the points
 function addSpline(a, b, connection) {
     //Clamp the delta if negative or the spline looks bad
     let delta = Math.abs(Math.max(-600, b.x - a.x));
@@ -339,16 +366,19 @@ function addSpline(a, b, connection) {
     return addSplineFromControlPoints(a, new Point(c1, a.y), new Point(c2, b.y), b, connection);
 }
 
+//Update the css properties of the canvas transform
 function updateCanvasTransform() {
     $("#canvas-transform").css("transform", "translate(" + canvasOffset.x + "px, " + canvasOffset.y +"px) scale(" + canvasScale + ")");
 }
 
+//Update offset and scale of the canvas
 function setCanvasOffsetAndScale(offset, scale) {
     canvasOffset = offset;
     canvasScale = scale;
     updateCanvasTransform();
 }
 
+//Return the center of the canvas in canvas space
 function getCanvasCenter() {
     let canvas_rect = $("#node-canvas")[0].getBoundingClientRect();
     let x = window.pageXOffset + canvas_rect.left + canvas_rect.width / 2;
@@ -358,6 +388,7 @@ function getCanvasCenter() {
     return p;
 }
 
+//Return a point on the top left of the canvas, if a node is already there then return a point slightly lower-right
 function getNextAvailablePoint() {
     let canvas_rect = $("#node-canvas")[0].getBoundingClientRect();
     let x = window.pageXOffset + canvas_rect.left + 20;
@@ -366,7 +397,7 @@ function getNextAvailablePoint() {
     p.x = Math.trunc(p.x);
     p.y = Math.trunc(p.y);
     
-    //Try up to 20 times
+    //Try up to 50 times
     let nodes = $(".node");
     for (let i = 0; i < 50; i++) {
         let free = true;
@@ -391,36 +422,16 @@ function getNextAvailablePoint() {
     return p;
 }
 
-function onClickNewNode() {
-    let point = getNextAvailablePoint();
-    let n = new Node("Hello!", point, () => console.log("Copied"), () => console.log("Deleted"));
-    
-    n.addOutput({ 
-        single: true, 
-        onConnect: (c) => {
-            console.log("Output Connect!");
-            n.setColor("darkblue");
-        },
-        onDisconnect: (c) => {
-            console.log ("Output Disconnect!");
-            n.setColor("darkred");
-        }
-    });
-    
-    n.addInput({
-        single: false,
-        onConnect: (c) => console.log("Input Connect!"),
-        onDisconnect: (c) => console.log ("Input Disconnect!"),
-    });
-}
-
+//Clear the whole canvas
 function clearCanvas() {
     $("#canvas-transform").empty();
 }
 
 $( () => {
-    //Initialize canvas
-    $("#node-canvas").on("mousemove", (e) => {
+    let canvas = $("#node-canvas");
+    
+    //Dragging of a new connection on the canvas
+    canvas.on("mousemove", (e) => {
         if(currentConnection) {
             currentConnection.line.remove();
             
@@ -437,7 +448,7 @@ $( () => {
         }
     });
     
-    let canvas = $("#node-canvas");
+    //Begin a drag operation on the canvas
     canvas.on("mousedown", (e) => {
         if(e.target == canvas[0]) {
             canvasDragOffset = new Point(canvasOffset.x, canvasOffset.y);
@@ -446,6 +457,7 @@ $( () => {
         }
     });
     
+    //Drag the canvas
     canvas.on("mousemove", (e) => { 
         if(canvasDragPosition) {
             let delta = new Point(canvasDragPosition.x - e.pageX, canvasDragPosition.y - e.pageY);
@@ -454,6 +466,7 @@ $( () => {
         }
     });
     
+    //Change the canvas scale on wheel event
     canvas.on('wheel', function(event){
         let deltaWheel = event.originalEvent.deltaY;
         
@@ -477,7 +490,8 @@ $( () => {
         event.preventDefault();
     });
     
-   $(document).on("mouseup", (e) => {
+    //Stop the current connection if the mouse cursor is released anywhere in the document
+    $(document).on("mouseup", (e) => {
         if(currentConnection) {
             endConnection();
         }
