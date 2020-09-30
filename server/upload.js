@@ -12,9 +12,11 @@ module.exports = function(app) {
     //Aggiorna la tabella dei file uploadati
     fs.readdirSync('public/uploads/').forEach((f) => {
         let p = path.join('public/uploads', f);
+        p = p.split(path.sep).join(path.posix.sep);
         let hash = md5file.sync(p);
         uploaded_files.push({path: p, hash: hash});
     });
+    
     
     app.post('/upload', function(req, res) {
         let form = new formidable.IncomingForm({ 

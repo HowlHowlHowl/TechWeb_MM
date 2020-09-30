@@ -11,9 +11,9 @@
     "buttons_color": "#000000",
     "buttons_text_color": "#ffffff",
     "chat_theme": "dark",
-    "use_background_image": false,
+    "use_background_image": true,
     "background_color": "#87848b",
-    "background_image": "/public\\uploads\\background-egypt.jpg",
+    "background_image": "/public/uploads/background-egypt.jpg",
     "activity_area_border": "#45255b"
   },
   "published": false,

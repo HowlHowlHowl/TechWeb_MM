@@ -960,7 +960,10 @@ function updateStylePreview(style)
     if(style.use_background_image) {
         $("#preview-body").css("background-color", 'transparent');
         if(style.background_image)
-            $("#preview-body").css("background-image", 'url(' + style.background_image + ')');
+        {
+            let url = 'url(\'' + style.background_image + '\')';
+            $("#preview-body").css("background-image", url);
+        }
     } else {
         $("#preview-body").css("background-color", style.background_color);
         $("#preview-body").css("background-image", '');
@@ -1024,6 +1027,7 @@ function openStyleEditor() {
     //Upload of background image
     let upload = $("#style-background-upload");
     upload.off();
+    upload[0].value = null; //clear the current value of the input
     upload.on("change", () => {
         editorDirty = true;
         let image_url = URL.createObjectURL(upload[0].files[0]);
