@@ -103,6 +103,12 @@ function blinkNotify(selector) {
 
 // Questa funzione serve a controllare l'eventuale input dell'attività attuale
 function checkInput() {
+    // let mission_index serve per prendere l'indice della missione a cui appartiene l'attività corrente
+    let mission_index = storyJSON.activities[index].mission_index;
+    let mission_name;
+    if (mission_index) { mission_name = storyJSON.missions[mission_index].name; } else { mission_name = (index == 1 ? 'Fine' : (index == 0 ? 'Inizio' : '')); }
+    let activity_name = storyJSON.activities[index].name;
+
     let answer_data;
     let score = 0;
 // is_corrected è una variabile che indica se la risposta è stata valutata oppure no
@@ -192,11 +198,7 @@ function checkInput() {
     if(next_index === undefined || next_index === null){
         next_index = 1;
     }
-    // let mission_index serve per prendere l'indice della missione a cui appartiene l'attività corrente
-    let mission_index = storyJSON.activities[next_index].mission_index;
-    let mission_name;
-    if (mission_index) { mission_name = storyJSON.missions[mission_index].name; } else { mission_name = (next_index == 1 ? 'Fine' : (index==0 ? 'Inizio' : '')); }
-
+    
     //Costruisce l'array della domanda posta al player
     //per ogni elemento salviamo il tipo e ne creiamo uno con type e content corrispondenti
     storyJSON.activities[index].contents.forEach(function (elem) {
@@ -231,7 +233,7 @@ function checkInput() {
 
     answer_data = {
         mission_name: mission_name,
-        activity_name: storyJSON.activities[next_index].name,
+        activity_name: storyJSON.activities[index].name,
         corrected: is_corrected,
         question: questionComponents,
         input_type: type,
@@ -240,6 +242,7 @@ function checkInput() {
         quest_score: Number(score),
         up_to_date: up_to_date
     };
+    console.log(answer_data);
     sendAnswerToServer(answer_data);
 }
 //Funzione per mandare il descrittore dell'attività completata al server ed aggiungerlo al file del player
