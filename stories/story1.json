@@ -4,7 +4,7 @@
   "style": {
     "title_font": "All The Roll",
     "title_font_color": "#ffffff",
-    "text_font": "Helvetica Neue LT Std",
+    "text_font": "Serif",
     "text_font_color": "",
     "activity_area_color": "#ffffff",
     "activity_area_opacity": "1",
@@ -15,7 +15,7 @@
     "background_color": "#9932cc",
     "activity_area_border": "#9932cc"
   },
-  "published": false,
+  "published": true,
   "canvas_offset": {
     "x": 314.9005150064176,
     "y": 454.51317299137474
@@ -270,5 +270,5 @@
       }
     }
   ],
-  "id": 111
+  "id": 1
 }

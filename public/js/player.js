@@ -193,7 +193,6 @@ function checkInput() {
         }
     }
 
-    console.log("yo next index is " + next_index);
     //Se per caso la storia e' stata creata male dall'autore che non ha specificato tutti i percorsi saltiamo alla fine direttamente.
     if(next_index === undefined || next_index === null){
         next_index = 1;
@@ -242,7 +241,6 @@ function checkInput() {
         quest_score: Number(score),
         up_to_date: up_to_date
     };
-    console.log(answer_data);
     sendAnswerToServer(answer_data);
 }
 //Funzione per mandare il descrittore dell'attività completata al server ed aggiungerlo al file del player
@@ -515,7 +513,6 @@ function uploadFile(file) {
             checkInput();
         },
         error: function (xhr, ajaxOptions, thrownError) {
-            console.log("xhr" + " - " + thrownError);
         }
     });
 }
@@ -746,7 +743,6 @@ function convertHex(hex,opacity){
     let r = parseInt(hex.substring(0,2), 16);
     let g = parseInt(hex.substring(2,4), 16);
     let b = parseInt(hex.substring(4,6), 16);
-    console.log('rgba(' + r + ',' + g + ',' + b + ',' + opacity + ')');
     return 'rgba(' + r + ',' + g + ',' + b + ',' + opacity + ')';
 }
 
@@ -806,7 +802,6 @@ function loadCustomCSS() {
                         `
             break;
     }
-    console.log(style.title_font_color);
     if (style.title_font_color == '#ffffff') {
         additional_css +=
             `#score {
@@ -816,7 +811,6 @@ function loadCustomCSS() {
     css = css.replace('</style>', '');
     css += additional_css;
     $('head').append(css + '</style>');
-    console.log(css);
 
 }
 
