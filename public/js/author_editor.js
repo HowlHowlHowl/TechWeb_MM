@@ -1285,7 +1285,7 @@ function newStory(published)
         style: {
             title_font: "All The Roll",
             title_font_color: "#FFFFFF",
-            text_font: "Helvetica Neue LT Std",
+            text_font: "Serif",
             text_font_color: "#000000",
             activity_area_color: "#FFFFFF",
             activity_area_opacity: 1,

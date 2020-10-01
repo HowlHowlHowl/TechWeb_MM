@@ -4,7 +4,7 @@
   "style": {
     "title_font": "Egypt",
     "title_font_color": "#ffffff",
-    "text_font": "Helvetica Neue LT Std",
+    "text_font": "Serif",
     "text_font_color": "",
     "activity_area_color": "#ffffff",
     "activity_area_opacity": "1",
@@ -16,7 +16,7 @@
     "background_image": "/public/uploads/EgyptianPyramids_1.jpg",
     "activity_area_border": "#45255b"
   },
-  "published": false,
+  "published": true,
   "canvas_offset": {
     "x": 231.23755085517607,
     "y": 219.19765970045108
@@ -361,5 +361,5 @@
       }
     }
   ],
-  "id": 113
+  "id": 2
 }

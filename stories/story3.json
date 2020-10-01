@@ -4,7 +4,7 @@
   "style": {
     "title_font": "ArtistikDemoVersio",
     "title_font_color": "#000000",
-    "text_font": "Helvetica Neue LT Std",
+    "text_font": "Serif",
     "text_font_color": "",
     "activity_area_color": "#ffffff",
     "activity_area_opacity": "0.77",
@@ -16,7 +16,7 @@
     "background_image": "/public/uploads/o.png",
     "activity_area_border": "#45255b"
   },
-  "published": false,
+  "published": true,
   "canvas_offset": {
     "x": -69.05873564885218,
     "y": 192.551269554176
@@ -311,5 +311,5 @@
       }
     }
   ],
-  "id": 115
+  "id": 3
 }

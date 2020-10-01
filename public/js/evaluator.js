@@ -250,7 +250,6 @@ function downloadClassification() {
 
         ]);
         i++;
-        console.log(players_array);
     });
     pdf.autoTable({
         head: [['#', 'ID', 'Nome Utente', 'Storia', 'Punteggio']],
