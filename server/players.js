@@ -327,6 +327,7 @@ module.exports = function (app) {
     //Upload photo to the server and return full path
     app.post('/players/upload_photo/:id', function (req, res) {
         let form = new formidable.IncomingForm({ 
+          uploadDir: 'public/images/uploads',
           keepExtensions: true
         });
         let name = req.params.id;
