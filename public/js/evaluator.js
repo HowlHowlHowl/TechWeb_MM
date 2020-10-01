@@ -570,6 +570,7 @@ function setUserTab(data) {
 
 //Event to delete player from server
 $(document).on('click', '#delete-player', function () {
+    $('#black-focus').remove();
     $('body').append(
         '<div id="black-focus">'
         + '<div><p> Sei sicuro? I dati relativi al giocatore andranno persi per sempre.</p>'

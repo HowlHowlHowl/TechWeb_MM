@@ -346,11 +346,13 @@ vertical-align: middle;
     border: white 2px solid;
 }
 #black-focus{
-    position:fixed;
-    margin:0;
-    width:100%;
-    height:100%;
+    position: fixed;
+    margin: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
     background-color: rgba(0,0,0, .7);
+    z-index: 3000;
 }
 #black-focus > div {
     margin:auto;
