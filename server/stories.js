@@ -12,7 +12,7 @@ module.exports = function(app) {
         }
     });
 
-    //Get list of stories
+    //Ritorna una lista di storie
     app.get('/stories', function(req, res) {
         res.writeHead(200, {'Content-Type': 'application/json'});
         fs.readdir('stories', function(err, files) {
@@ -33,7 +33,7 @@ module.exports = function(app) {
         });
     });
     
-    //Get story by id
+    //Ritorna la storia con l'id richiesto
     app.get('/stories/:id', function(req, res) {
         let id = req.params.id;
         let path = "stories/story" + id + ".json";
@@ -48,7 +48,7 @@ module.exports = function(app) {
         });
     });
     
-    //Create new story
+    //Crea una nuova storia
     app.post('/stories', function(req, res) {
         let story = req.body;
         new_id = nextStoryId++;
@@ -58,7 +58,7 @@ module.exports = function(app) {
         });
     });
 
-    //Update existing story
+    //Aggiorna una storia esistente
     app.put('/stories/:id', function(req, res) {
         let story = req.body;
         let id = req.params.id;
@@ -72,6 +72,7 @@ module.exports = function(app) {
         }
     });
 
+    //Elimina una storia
     app.delete('/stories/:id', function(req, res) {
         let id = req.params.id;
         let path = "stories/story" + id + ".json";
@@ -82,6 +83,7 @@ module.exports = function(app) {
         }
     });
     
+    //Effettua una azione sulla storia: duplicazione, archiviazione o pubblicazione.
     app.post('/stories/:id/:action', function(req, res) {
         let id = req.params.id;
         let path = "stories/story" + id + ".json";

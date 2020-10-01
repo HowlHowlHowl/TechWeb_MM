@@ -17,7 +17,7 @@ module.exports = function(app) {
         uploaded_files.push({path: p, hash: hash});
     });
     
-    
+    //Upload di file
     app.post('/upload', function(req, res) {
         let form = new formidable.IncomingForm({ 
           uploadDir: 'public/uploads/',
@@ -45,13 +45,15 @@ module.exports = function(app) {
                                 return;
                             }
                         } catch(err) {
-                            //If we fail to compare we fall back to create a new file
+                            //Se non si riesce a controllare che i file siano uguali procediamo comunque a salvarlo nuovamente
                         }
                     }
                 }
                 
                 //Altrimenti salva il file
                 let save_path = dir + name;
+                
+                //Se gia' esiste un file con lo stesso nome aggiungiamo un suffisso
                 if(fs.existsSync(save_path)) {
                     let suffix = 1;
                     let ext = path.extname(file.name);
