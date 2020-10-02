@@ -9,8 +9,6 @@ var isHelpPaneOpen = false;
 var isTextWindowOpen = false;
 
 $(document).ready(function () {
-    $('#score').text('Score: 0');
-    blinkNotify('#score');
 // richiesta storia
 // url_string prende l'url sotto forma di stringa della pagina html e con new URL la trasforma in un'url 
 //in modo che si possa accedere ai parametri dell'url url.searchParams.get('id')
@@ -25,45 +23,69 @@ $(document).ready(function () {
             url: '/stories/' + id,
             success: function (data) {
                 storyJSON = data;
+                //Invoco la funzione per caricare il css della storia
                 loadCustomCSS();
-                setPlayer(storyJSON);
+                //Se la storia è accessibile aggiungo la label
+                if (storyJSON.accessible) {
+                    $('#generico').append('<span id="accessibility">Storia accessibile</span>');
+                }
+                //Se la storia è stata pubblicata setto il player, altrimenti blocco l'app
+                if (storyJSON.published) {
+                    $('#score').text('Score: 0');
+                    blinkNotify('#score');
+                    setPlayer(storyJSON);
+                } else {
+                    blockApplication('La storia risulta archiviata, per tanto non è possibile giocarci');
+                }
+               
             },
+            //Non è stata trovata la storia
             error: function (xhr, ajaxOptions, thrownError) {
+                blockApplication('La storia selezionata non esiste');
             }
         });
-        //Update al secondo di nuovi messaggi oppure chat, risposte a richieste d'aiuto e punteggio
-        setInterval(function () {
-            if (player_id) {
-                if (isChatOpen) {
-                   openChat(false);
-                } else {
-                    check4newMex();
-                }
-                checkReqHelp();
-            }
-        }, 1000);
-
-        //Help pane update every 10 seconds
-        setInterval(function () {
-            if (player_id) {
-                if (isHelpPaneOpen)
-                    if (!$('#helpPane textarea').val()) {
-                        openHelpPane();
-                    }
-            }
-            updateScore();
-        }, 10000);
     } else {
-        $('#div-grande').text('Non è selezionata nessuna storia');
-        $('#div-grande').css({
-            'font-size': '5vh',
-            'text-align': 'center'
-        })
-        $('#chat-button').prop('disabled', true);
-        $('#help-button').prop('disabled', true);
-       
+        //Non c'è l'id nel url
+        blockApplication('Non è selezionata nessuna storia')
     }
 });
+//Funzione per bloccare l'applicazione
+function blockApplication(msg) {
+    $('#div-grande').text(msg);
+    $('#div-grande').css({
+        'font-size': '5vh',
+        'text-align': 'center'
+    });
+    $('#score').remove();
+    $('#chat-button').prop('disabled', true);
+    $('#help-button').prop('disabled', true);
+}
+//funzione per invocare gli intervalli
+function setAllIntervals() {
+    //Update al secondo di nuovi messaggi oppure chat, risposte a richieste d'aiuto e punteggio
+    setInterval(function () {
+        if (player_id) {
+            if (isChatOpen) {
+                openChat(false);
+            } else {
+                check4newMex();
+            }
+            checkReqHelp();
+        }
+    }, 1000);
+
+    //Help pane update every 10 seconds
+    setInterval(function () {
+        if (player_id) {
+            if (isHelpPaneOpen)
+                if (!$('#helpPane textarea').val()) {
+                    openHelpPane();
+                }
+        }
+        updateScore();
+    }, 10000);
+}
+
 
 //Funzione per inizializzare il file sul server e ricevere l'id associato
 // è una funzione che serve a creare una connessione di tipo ajax
@@ -82,6 +104,7 @@ function setPlayer(data) {
             player_id = id;
             setWindow();
             setCurrentQuest();
+            setAllIntervals();
         },
         error: function (xhr, ajaxOptions, thrownError) {
             

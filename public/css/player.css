@@ -32,14 +32,6 @@ video {
     overflow-y: auto;
 }
 
-.bottonecorrezioni {
-    font-size: 2.5vh;
-    margin-right: 0.5vw;
-    border-radius: 0;
-    border: 1px solid black;
-    border-top: 0;
-    border-left: 0;
-}
 .bottonehelp {
     font-size: 2.5vh;
     margin-right: 0.5vw;
@@ -47,6 +39,7 @@ video {
     border: 1px solid black;
     border-top: 0;
     border-left: 0;
+    margin-bottom: 1vh;
 }
 .bottonechat {
     font-size: 2.5vh;
@@ -55,8 +48,20 @@ video {
     border: 1px solid black;
     border-top: 0;
     border-left: 0;
+    margin-bottom: 1vh;
 }
-
+#accessibility {
+    font-size: 2.5vh;
+    color: white;
+    max-width: max-content;
+    background-color: red;
+    border-radius: 5px;
+    line-height: 1.5;
+    text-align:center;
+    padding: .375rem .75rem;
+    display:inline-block;
+    margin-bottom:1.5vh;
+}
 #nome-attivita {
     text-align: center;
     font-size: 2.5vh;
