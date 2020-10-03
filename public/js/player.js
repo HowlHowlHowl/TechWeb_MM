@@ -558,6 +558,9 @@ function setChatView(data) {
 }
 
 //Open the pop-up chat with the selected player
+//TODO Coordinare notifiche e aperture 
+//TODO Update richieste d'aiuto a pane aperto, pulire input testo a pane aperto
+//TODO Check notifica dropdown size
 function openChat(set_focus) {
     isChatOpen = true;
     if (isHelpPaneOpen) {

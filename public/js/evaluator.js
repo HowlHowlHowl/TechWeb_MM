@@ -30,8 +30,9 @@ $(document).ready(function () {
 
 //Chat update every 1 second 
 setInterval(function () {
-   // updateChat();
+    updateChat();
     setPendingCorrectionList();
+
 }, 1000);
 //Classification update every 10 seconds
 setInterval(function () {
@@ -115,7 +116,7 @@ function updatePlayersSetMenu(chatUpdate) {
 
             players_array.forEach(setPlayerList);
             if (players_array.length < 1) {
-                $('#playersDropdown').append('<a class="dropdown-item">Non ci sono chat disponibili</a>');
+                $('#playersDropdown').append('<a class="dropdown-item">Non ci sono player in gioco</a>');
             }
             if (newMsgsLength == 0) {
                 $('#new_msgDropdown').append('<a class="dropdown-item">Non ci sono nuovi messaggi</a>');
@@ -521,7 +522,11 @@ function setUserTab(data) {
         openUserTab(nextID);
         event.stopPropagation();
     });
-
+    //TODO glitch con punteggio, abbassare z-index punteggio
+    //TODO in help inviato l'aiuto il titolo eesplode
+    //TODO change textfield only if textfield doesnt exist
+    //TODO Aggiornare aiuto  ad una nuova richiesta
+    //TODO E' rotto lo storico
     $('#user-space').empty();
     $('#user-space').append('<a onclick="closeUserTab()"><span id="close-tab" class="glyphicon glyphicon-remove icon-close"></span></a>'
         + '<a id="prevUser" class="arrows_tab" data-toggle="tooltip" data-placement="top" title="Scheda utente precedente"><span class="glyphicon glyphicon-arrow-left" id="prev_tab"></span></a>'
@@ -839,7 +844,7 @@ function setHelpPane(data) {
         }
     });
     if (!body) {
-        body += '<p class="quest_header">Non ci sono risposte in attesa di valutazione per questo giocatore</p>';
+        body += '<p class="quest_header">Non ci sono richieste d\'aiuto da parte di questo giocatore</p>';
     }
     $('#main-placeholder').append(header + body);
     $('#' + $('#help-input-label-0').attr('for')).focus();

@@ -87,7 +87,7 @@ module.exports = function (app) {
     app.get('/pending_answers/:id', function (req, res) {
         let id = req.params.id;
         let path = 'players/' + id + '.json';
-        fs.readFile(path, (err, data) => {
+        fs.readFileSync(path, (err, data) => {
             if (!err) {
                 res.writeHead(200, { 'Content-Type': 'application/json' });
                 res.write(data);
@@ -101,7 +101,7 @@ module.exports = function (app) {
     app.get('/players/:id', function (req, res) {
         let id = req.params.id;
         let path = 'players/' + id + '.json';
-        fs.readFile(path, function (err, data) {
+        fs.readFileSync(path, function (err, data) {
             if (err) {
                 res.status(400).send();
             } else {
@@ -182,7 +182,7 @@ module.exports = function (app) {
             }
         }
         if (to_send) {
-            fs.writeFile(path, JSON.stringify(player, null, 2), function (err) {
+            fs.writeFileSync(path, JSON.stringify(player, null, 2), function (err) {
                 if (err) {
                     res.status(500).send();
                 } else {
@@ -220,7 +220,7 @@ module.exports = function (app) {
         let path = 'players/' + id + '.json';
         let player = JSON.parse(fs.readFileSync(path));
         player.help.unshift(data);
-        fs.writeFile(path, JSON.stringify(player, null, 2), function (err) {
+        fs.writeFileSync(path, JSON.stringify(player, null, 2), function (err) {
             res.status((err ? 500 : 200)).send();
         });
         res.end();
@@ -232,7 +232,7 @@ module.exports = function (app) {
         let body = req.body;
         let data = JSON.parse(fs.readFileSync(path));
         data.username = body.username;
-        fs.writeFile(path, JSON.stringify(data, null, 2), function (err) {
+        fs.writeFileSync(path, JSON.stringify(data, null, 2), function (err) {
             res.status((err ? 500 : 200)).send();
         });
         res.end();
@@ -245,7 +245,7 @@ module.exports = function (app) {
         let path = 'players/' + id + '.json';
         let content = JSON.parse(fs.readFileSync(path));
         content.chat.push(msg);
-        fs.writeFile(path, JSON.stringify(content, null, 2), function (err) {
+        fs.writeFileSync(path, JSON.stringify(content, null, 2), function (err) {
             res.status(err ? 500 : 200).send();
         });
         res.end();
@@ -260,7 +260,7 @@ module.exports = function (app) {
         content.help.forEach(function (helpLog) {
             if (!helpLog.to_help) { helpLog.seen = true; }
         });
-        fs.writeFile(path, JSON.stringify(content, null, 2), function (err) {
+        fs.writeFileSync(path, JSON.stringify(content, null, 2), function (err) {
             res.status(err ? 500 : 200).send();
         });
         res.end();
@@ -290,7 +290,7 @@ module.exports = function (app) {
         content.quest_list[data.index].comment = data.comment;
         content.pending_count -= 1;
         content.score += Number(data.score);
-        fs.writeFile(path, JSON.stringify(content, null, 2), function (err) {
+        fs.writeFileSync(path, JSON.stringify(content, null, 2), function (err) {
             if (err) {
                 res.status(500).send();
             } else {
@@ -314,7 +314,7 @@ module.exports = function (app) {
             story_name: player.story_name,
             id: player.id
         };
-        fs.writeFile(path, JSON.stringify(player, null, 2), function (err) {
+        fs.writeFileSync(path, JSON.stringify(player, null, 2), function (err) {
             if (err) {
                 res.status(500).send();
             } else {
@@ -398,7 +398,7 @@ module.exports = function (app) {
         data.current_mission = body.mission;
         data.current_activity = body.activity;
 
-        fs.writeFile(path, JSON.stringify(data, null, 2), function (err) {
+        fs.writeFileSync(path, JSON.stringify(data, null, 2), function (err) {
             if (err) {
                 res.status(500).send();
             }
@@ -419,7 +419,7 @@ module.exports = function (app) {
         } else {
             data.score += body.quest_score;
         }
-        fs.writeFile(path, JSON.stringify(data, null, 2), function (err) {
+        fs.writeFileSync(path, JSON.stringify(data, null, 2), function (err) {
             if (err) {
                 res.status(500).send();
             } else {
