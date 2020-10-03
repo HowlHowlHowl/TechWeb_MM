@@ -198,11 +198,15 @@ vertical-align: middle;
     margin-bottom:3vh;
     margin-right:3vh;
 }
-#correction-header, #history-header {
+#correction-header, #history-header, #help-header {
     text-align: center;
     font-size: 4vh;
     background-color: rgba(66, 139, 202, 0.77);
     color: white;
+}
+#history-pane, #help-pane, #classification-pane {
+    overflow-y: auto;
+    height: calc(100vh - 140px);
 }
 #correction-pane {
     padding-left: 1vw;
@@ -222,7 +226,7 @@ vertical-align: middle;
 }
 
 .input1 {
-    z-index: 1;
+    z-index: 0;
     font-size: 2vh;
     float: left;
     margin-right: 5vw;

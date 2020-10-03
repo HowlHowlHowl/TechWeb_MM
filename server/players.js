@@ -54,10 +54,9 @@ module.exports = function (app) {
         let id = req.params.id;
         let path = 'players/' + id + '.json';
         if (fs.existsSync(path)) {
-            fs.unlink(path, (err) => {
-                res.status(err ? 500 : 200).send();
-                res.end();
-            });
+            fs.unlinkSync(path);
+            res.status(200).send();
+            res.end();
         }
     });
     //Risponde alla richiesta dei file pending_answers e ritorna una lista degli id presenti
@@ -87,29 +86,20 @@ module.exports = function (app) {
     app.get('/pending_answers/:id', function (req, res) {
         let id = req.params.id;
         let path = 'players/' + id + '.json';
-        fs.readFileSync(path, (err, data) => {
-            if (!err) {
-                res.writeHead(200, { 'Content-Type': 'application/json' });
-                res.write(data);
-                res.end();
-            } else {
-                res.status(400).send();
-            }
-        });
+        let data = fs.readFileSync(path)     
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.write(data);
+        res.end();
+            
     });
     //Ritorna l'oggetto player:id
     app.get('/players/:id', function (req, res) {
         let id = req.params.id;
         let path = 'players/' + id + '.json';
-        fs.readFileSync(path, function (err, data) {
-            if (err) {
-                res.status(400).send();
-            } else {
-                res.writeHead(200, { 'Content-Type': 'application/json' });
-                res.write(data);
-                res.end();
-            }
-        });
+        let data = fs.readFileSync(path);
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.write(data);
+        res.end();
     });
     //Genera il file classifica per il download
     app.get('/players/downloads/classification', function (req, res) {
@@ -182,20 +172,15 @@ module.exports = function (app) {
             }
         }
         if (to_send) {
-            fs.writeFileSync(path, JSON.stringify(player, null, 2), function (err) {
-                if (err) {
-                    res.status(500).send();
-                } else {
-                    res.writeHead(200, { 'Content-Type': 'application/json' });
-                    res.write(JSON.stringify({
-                        score: player.score,
-                        mission: to_send.mission_name,
-                        activity: to_send.activity_name,
-                        added: to_send.quest_score
-                    }));
-                    res.end();
-                }
-            });
+            fs.writeFileSync(path, JSON.stringify(player, null, 2));
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.write(JSON.stringify({
+                score: player.score,
+                mission: to_send.mission_name,
+                activity: to_send.activity_name,
+                added: to_send.quest_score
+            }));
+            res.end();
         } else {
             res.status(200).send();
         }
@@ -220,9 +205,8 @@ module.exports = function (app) {
         let path = 'players/' + id + '.json';
         let player = JSON.parse(fs.readFileSync(path));
         player.help.unshift(data);
-        fs.writeFileSync(path, JSON.stringify(player, null, 2), function (err) {
-            res.status((err ? 500 : 200)).send();
-        });
+        fs.writeFileSync(path, JSON.stringify(player, null, 2));
+        res.status(200).send();
         res.end();
     });
     //Associa un username ad un player
@@ -232,9 +216,8 @@ module.exports = function (app) {
         let body = req.body;
         let data = JSON.parse(fs.readFileSync(path));
         data.username = body.username;
-        fs.writeFileSync(path, JSON.stringify(data, null, 2), function (err) {
-            res.status((err ? 500 : 200)).send();
-        });
+        fs.writeFileSync(path, JSON.stringify(data, null, 2));
+        res.status(200).send();
         res.end();
     });
 
@@ -245,9 +228,8 @@ module.exports = function (app) {
         let path = 'players/' + id + '.json';
         let content = JSON.parse(fs.readFileSync(path));
         content.chat.push(msg);
-        fs.writeFileSync(path, JSON.stringify(content, null, 2), function (err) {
-            res.status(err ? 500 : 200).send();
-        });
+        fs.writeFileSync(path, JSON.stringify(content, null, 2));
+        res.status(200).send();
         res.end();
     });
     
@@ -260,9 +242,8 @@ module.exports = function (app) {
         content.help.forEach(function (helpLog) {
             if (!helpLog.to_help) { helpLog.seen = true; }
         });
-        fs.writeFileSync(path, JSON.stringify(content, null, 2), function (err) {
-            res.status(err ? 500 : 200).send();
-        });
+        fs.writeFileSync(path, JSON.stringify(content, null, 2));
+        res.status(200).send();
         res.end();
     });
     //Segna come letti i chatlog del player specificato
@@ -290,15 +271,10 @@ module.exports = function (app) {
         content.quest_list[data.index].comment = data.comment;
         content.pending_count -= 1;
         content.score += Number(data.score);
-        fs.writeFileSync(path, JSON.stringify(content, null, 2), function (err) {
-            if (err) {
-                res.status(500).send();
-            } else {
-                res.writeHead(200, { 'Content-Type': 'application/json' });
-                res.write(JSON.stringify(content, null, 2));
-                res.end();
-            }
-        });
+        fs.writeFileSync(path, JSON.stringify(content, null, 2));
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.write(JSON.stringify(content, null, 2));
+        res.end();        
     });
     //Aggiorna le richieste d'aiuto con la risposta fornita dal valutatore
     app.post('/players/answer_help_request/:id', function (req, res) {
@@ -314,15 +290,11 @@ module.exports = function (app) {
             story_name: player.story_name,
             id: player.id
         };
-        fs.writeFileSync(path, JSON.stringify(player, null, 2), function (err) {
-            if (err) {
-                res.status(500).send();
-            } else {
-                res.writeHead(200, { 'Content-Type': 'application/json' });
-                res.write(JSON.stringify(content, null, 2));
-                res.end();
-            }
-        });
+        fs.writeFileSync(path, JSON.stringify(player, null, 2));
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.write(JSON.stringify(content, null, 2));
+        res.end();
+
     });
     //Upload photo to the server and return full path
     app.post('/players/upload_photo/:id', function (req, res) {
@@ -334,17 +306,11 @@ module.exports = function (app) {
         form.parse(req);
         form.on('file', (name, file) => {
             let save_path = "public/images/uploads/" + name;
-            fs.rename(file.path, save_path, function (err) {
-                if (err) {
-                    res.status(500).send();
-                } else {
-                    res.writeHead(200, { 'Content-Type': 'application/json' });
-                    res.write(JSON.stringify({ url: "/" + save_path }));
-                    res.end();
-                }
-            });
+            fs.renameSync(file.path, save_path);
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.write(JSON.stringify({ url: "/" + save_path }));
+            res.end();    
         });
-
     });
     //Crea il file del player quando accede all'applicazione
     app.put('/players/create_player', function (req, res) {
@@ -398,14 +364,8 @@ module.exports = function (app) {
         data.current_mission = body.mission;
         data.current_activity = body.activity;
 
-        fs.writeFileSync(path, JSON.stringify(data, null, 2), function (err) {
-            if (err) {
-                res.status(500).send();
-            }
-            else {
-                res.status(200).send();
-            }
-        });
+        fs.writeFileSync(path, JSON.stringify(data, null, 2));
+        res.status(200).send();
     });
     // serve al player per inviare le risposte da valutare
     app.put("/players/add_answer/:id", function (req, res) {
@@ -419,14 +379,9 @@ module.exports = function (app) {
         } else {
             data.score += body.quest_score;
         }
-        fs.writeFileSync(path, JSON.stringify(data, null, 2), function (err) {
-            if (err) {
-                res.status(500).send();
-            } else {
-                res.writeHead(200, { 'Content-Type': 'application/json' });
-                res.write(JSON.stringify(data, null, 2));
-                res.end();
-            }
-        });
+        fs.writeFileSync(path, JSON.stringify(data, null, 2));
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.write(JSON.stringify(data, null, 2));
+        res.end();            
     });
 };

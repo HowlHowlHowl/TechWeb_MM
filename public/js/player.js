@@ -64,23 +64,18 @@ function blockApplication(msg) {
 function setAllIntervals() {
     //Update al secondo di nuovi messaggi oppure chat, risposte a richieste d'aiuto e punteggio
     setInterval(function () {
-        if (player_id) {
-            if (isChatOpen) {
-                openChat(false);
-            } else {
-                check4newMex();
-            }
-            checkReqHelp();
+        if (isChatOpen) {
+            openChat(false);
+        } else {
+            check4newMex();
         }
+        checkReqHelp();
     }, 1000);
 
-    //Help pane update every 10 seconds
+    //Help pane update every 10 seconds and new score
     setInterval(function () {
-        if (player_id) {
-            if (isHelpPaneOpen)
-                if (!$('#helpPane textarea').val()) {
-                    openHelpPane();
-                }
+        if (isHelpPaneOpen) {
+            openHelpPane();
         }
         updateScore();
     }, 10000);
@@ -374,6 +369,9 @@ function check4newMex() {
                     $('#chat-button').append('<div id= "chatDot" class= "dot"></div>');
                     blinkNotify('#chatDot');
                 }
+                if (count == 0) {
+                    $('#chatDot').remove();
+                }
             }
         }
     });
@@ -394,6 +392,9 @@ function checkReqHelp() {
                 if (count > 0 && !($('#helpDot').length)) {
                     $('#help-button').append('<div id= "helpDot" class= "dot"></div>');
                     blinkNotify('#helpDot');
+                }
+                if (count == 0) {
+                    $('#helpDot').remove();
                 }
             }
         }
@@ -558,8 +559,6 @@ function setChatView(data) {
 }
 
 //Open the pop-up chat with the selected player
-//TODO Coordinare notifiche e aperture 
-//TODO Update richieste d'aiuto a pane aperto, pulire input testo a pane aperto
 //TODO Check notifica dropdown size
 function openChat(set_focus) {
     isChatOpen = true;
@@ -660,6 +659,7 @@ function openHelpPane() {
     $.ajax({
         url: '/players/get_help/player' + player_id,
         success: function (help) {
+            $('#helpDot').remove();
             isHelpPaneOpen = true;
             setHelpPane(JSON.parse(help));
             markHelpAsSeen();
@@ -723,6 +723,7 @@ $(document).on('click', '#send-new-req', function () {
             to_help: true,
             seen: false
         });
+        $('#helpPane textarea').val('');
     } else {
         $('#helpPane textarea').attr('placeholder', "Devi riempire questo campo per procedere con la richiesta d'aiuto");
     }

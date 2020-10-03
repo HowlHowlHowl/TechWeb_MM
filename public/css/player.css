@@ -105,11 +105,11 @@ video {
     animation-fill-mode: forwards;
 }
 .score-notif-text-pos {
-    font-size:3vh;
+    font-size:1.5em;
     color: #07b100;
 }
 .score-notif-text-neg {
-    font-size: 3vh;
+    font-size: 1.5em;
     color: red;
 }
 @keyframes notification {

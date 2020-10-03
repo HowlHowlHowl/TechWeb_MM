@@ -1,18 +1,19 @@
 var playersLength = 0;
 var newMsgsLength = 0;
 var currentChatPlayerID = null;
-var currentCorrectionPlayerId = null;
-var currentHelpPlayerId = null;
+var currentCorrectionPlayerID = null;
+var currentHelpPlayerID = null;
 var currentUserTabID = null;
+var currentHistoryPlayerID = null;
 var classificationOpen = false;
 var downloadsOpen = false;
 var players_array = [];
 
 /*The displayed elements can be:
-- Correction Pane
-- History Pane
-- Help Pane
-- Classification Pane
+- Correction Pane  -> help = history = null
+- History Pane -> help = correction = null
+- Help Pane -> correction = history = null
+- Classification Pane -> correction = history = help = null
 - Downloads Window
 - User Window
 - Chat
@@ -39,17 +40,20 @@ setInterval(function () {
     if (classificationOpen) {
         openClassification();
     }
+    if (currentHistoryPlayerID) {
+        openHistory(currentHistoryPlayerID);
+    }
     updatePlayersSetMenu();
-}, 10000);
-//User Tab update every 1 minute 
+}, 5000);
+//User Tab update every 10 secs
 setInterval(function () {
     if (currentUserTabID) {
         openUserTab(currentUserTabID);
     }
-}, 60000);
+}, 10000);
 //Correction pane and Help pane update (if no input is given), every 10 minutes 
 setInterval(function () {
-    if (currentCorrectionPlayerId) {
+    if (currentCorrectionPlayerID) {
         let i = 0;
         let update = true;
         let label1;
@@ -72,11 +76,11 @@ setInterval(function () {
             i++
         } while (label1.length > 0 && label2.length > 0);
         if (update) {
-            openCorrectionPane(currentCorrectionPlayerId);
+            openCorrectionPane(currentCorrectionPlayerID);
         }
     }
     update = true;
-     if (currentHelpPlayerId) {
+     if (currentHelpPlayerID) {
         let i = 0;
         let label;
         do {
@@ -88,7 +92,10 @@ setInterval(function () {
                 break;
             }
             i++;
-        } while (label.length > 0); 
+        } while (label.length > 0);
+        if (update) {
+            openHelpPane(currentHelpPlayerID);
+        }
      }
      updatePlayersSetMenu();
 }, 5 * 60000);
@@ -522,11 +529,9 @@ function setUserTab(data) {
         openUserTab(nextID);
         event.stopPropagation();
     });
-    //TODO glitch con punteggio, abbassare z-index punteggio
-    //TODO in help inviato l'aiuto il titolo eesplode
-    //TODO change textfield only if textfield doesnt exist
-    //TODO Aggiornare aiuto  ad una nuova richiesta
-    //TODO E' rotto lo storico
+    let rename_exist = $('#rename-field').length > 0;
+    let textfield_value = (rename_exist ? $('#rename-field').val() : '');
+
     $('#user-space').empty();
     $('#user-space').append('<a onclick="closeUserTab()"><span id="close-tab" class="glyphicon glyphicon-remove icon-close"></span></a>'
         + '<a id="prevUser" class="arrows_tab" data-toggle="tooltip" data-placement="top" title="Scheda utente precedente"><span class="glyphicon glyphicon-arrow-left" id="prev_tab"></span></a>'
@@ -535,7 +540,7 @@ function setUserTab(data) {
         + '<div class="input-group-prepend" id="playername-container">'
         + '<div class="input-group-text" id="playername-label">Nome del Player</div>'
         + '</div>'
-        + '<input value="' + name + '" name="player' + data.id + '" id="rename-field" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">'
+        + '<input name="player' + data.id + '" id="rename-field" type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">'
         + '<button type="button" id="rename-button" class="btn btn-primary btn-lg">Rinomina</button>'
         + '</div>'
         + '<div class="block-info">'
@@ -566,6 +571,11 @@ function setUserTab(data) {
         blinkNotify('#help_msg');
     }
     document.getElementById('user-pane').style.display = 'block';
+
+    let val = ((textfield_value != name) && rename_exist ? textfield_value : name);
+    $('#rename-field').val('');
+    $('#rename-field').val(val);
+    $('#rename-field').focus();
 }
 
 
@@ -798,7 +808,7 @@ function openHelpPane(id) {
         url: '/players/get_help_request/player' + id,
         success: function (data) {
             setHelpPane(JSON.parse(data));
-            currentHelpPlayerId = id;
+            currentHelpPlayerID = id;
         },
         error: function (xhr, ajaxOptions, thrownError) {
        
@@ -807,9 +817,11 @@ function openHelpPane(id) {
 }
 //Set help pane 
 function setHelpPane(data) {
+    currentCorrectionPlayerID = null;
+    currentHistoryPlayerID = null;
     let body = '';
     $('#main-placeholder').empty();
-    let header = '<div class="panel-heading">'
+    let header = '<div class="panel-heading" id="help-header">'
         + data.name + ' - ' + data.story_name
         + '<a id="user-info-tab-player' + data.id + '" class="user-info-tab btn btn-info btn-sm"><span class="glyphicon glyphicon-info-sign"></span></a>'
         + '</div><div class="panel-body" id="help-pane">';
@@ -852,7 +864,7 @@ function setHelpPane(data) {
 //Send answer for help to the server
 function submitHelpAnswer(helpData) {
     $.ajax({
-        url: '/players/answer_help_request/player' + currentHelpPlayerId,
+        url: '/players/answer_help_request/player' + currentHelpPlayerID,
         contentType: "application/json",
         type: 'POST',
         data: JSON.stringify(helpData),
@@ -937,7 +949,7 @@ function openCorrectionPane(id) {
         url: '/pending_answers/player' + real_id,
         success: function (data) {
             setCorrectionPane(data);
-            currentCorrectionPlayerId = real_id;
+            currentCorrectionPlayerID = real_id;
         },
         error: function (xhr, ajaxOptions, thrownError) {
             
@@ -947,7 +959,8 @@ function openCorrectionPane(id) {
 //Sets layout of correction panel
 function setCorrectionPane(data) {
     classificationOpen = false;
-    currentHelpPlayerId = null;
+    currentHelpPlayerID = null;
+    currentHistoryPlayerID = null;
     $('#main-placeholder').empty();
     let header = '<div class="panel-heading" id="correction-header">'
         + (data.username ? data.username : 'Player ' + data.id) + ' - ' + data.story_name
@@ -1065,7 +1078,7 @@ function submitCorrection(data) {
     $.ajax({
         type: "POST",
         contentType: "application/json",
-        url: "/submit_correction/player" + currentCorrectionPlayerId,
+        url: "/submit_correction/player" + currentCorrectionPlayerID,
         data: JSON.stringify(data),
         success: function (data) {
             //In caso di successo riceve i dati del player aggiornati
@@ -1093,6 +1106,7 @@ function openHistory(id) {
         url: '/players/player' + id,
         accepts: 'application/json',
         success: function (data) {
+            currentHistoryPlayerID = id;
             setHistory(data);
         },
         error: function (xhr, ajaxOptions, thrownError) {
@@ -1103,7 +1117,8 @@ function openHistory(id) {
 //Sets layout of history panel
 function setHistory(data) {
     classificationOpen = false;
-    currentCorrectionPlayerId = null;
+    currentCorrectionPlayerID = null;
+    currentHelpPlayerID = null;
     $('#main-placeholder').empty();
     let header = '<div class="panel-heading" id="history-header">'
         + (data.username ? data.username : 'Player ' + data.id) + ' - Storico'
@@ -1176,8 +1191,9 @@ function openClassification() {
 function setClassification(data) {
     $('#main-placeholder').empty();
     classificationOpen = true;
-    currentHelpPlayerId = null;
-    currentCorrectionPlayerId = null;
+    currentHelpPlayerID = null;
+    currentCorrectionPlayerID = null;
+    currentHistoryPlayerID = null;
     let header = '<div class="panel-heading" id="history-header">'
         + 'Classifica'
         + '</div><div class="panel-body" id="classification-pane">'
