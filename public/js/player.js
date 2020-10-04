@@ -780,17 +780,19 @@ String.prototype.tpl = function (o) {
 function loadCustomCSS() {
     let style = storyJSON.style;
     let $background = (style.use_background_image ? 'url(' + style.background_image + ')' : style.background_color);
-    let $chat_color, $chat_text_color, $help_color;
+    let $chat_color, $chat_text_color, $chat_sent_color, $help_color;
     let additional_css = "";
     switch (style.chat_theme) {
         case 'dark':
             $help_color = 'black';
             $chat_color = '#575b5f';
+            $chat_sent_color = '#6c757d'
             $chat_text_color = 'white';
             break;
         case 'light':
             $help_color = 'black';
             $chat_color = 'white';
+            $chat_sent_color = '#c7c7c7';
             $chat_text_color = 'black';
             additional_css = `#chat .panel-primary {
                                 border: black solid 2px;
@@ -799,12 +801,15 @@ function loadCustomCSS() {
         case 'pink':
             $help_color = '#9932CC';
             $chat_color = '#9932CC';
+            $chat_sent_color = '#761ea0';
             $chat_text_color = 'white';
             break;
     }
+
     style['activity_area_color'] = convertHex(style.activity_area_color, style.activity_area_opacity);
     style['background'] = $background;
     style['help_color'] = $help_color;
+    style['chat_sent_color'] = $chat_sent_color;
         style['chat_color'] = $chat_color;
         style['chat_text_color'] = $chat_text_color;
         let css = document.getElementById('template-css').innerHTML.tpl(style);
