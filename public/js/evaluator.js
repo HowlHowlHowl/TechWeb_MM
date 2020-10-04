@@ -29,12 +29,12 @@ $(document).ready(function () {
 
 /*** APPLICATION UPDATES ***/
 
-//Chat update every 1 second 
+//Chat update every 2 second 
 setInterval(function () {
     updateChat();
     setPendingCorrectionList();
 
-}, 1000);
+}, 2000);
 //Classification update every 10 seconds
 setInterval(function () {
     if (classificationOpen) {
@@ -44,14 +44,14 @@ setInterval(function () {
         openHistory(currentHistoryPlayerID);
     }
     updatePlayersSetMenu();
-}, 5000);
-//User Tab update every 10 secs
+}, 10000);
+//User Tab update every 10 seconds
 setInterval(function () {
     if (currentUserTabID) {
         openUserTab(currentUserTabID);
     }
 }, 10000);
-//Correction pane and Help pane update (if no input is given), every 10 minutes 
+//Correction pane and Help pane update (if no input is given), every 15 seconds 
 setInterval(function () {
     if (currentCorrectionPlayerID) {
         let i = 0;
@@ -98,7 +98,7 @@ setInterval(function () {
         }
      }
      updatePlayersSetMenu();
-}, 5 * 60000);
+}, 15000);
 
 
 

@@ -25,10 +25,14 @@ $(document).ready(function () {
                 storyJSON = data;
                 //Invoco la funzione per caricare il css della storia
                 loadCustomCSS();
-                //Se la storia è accessibile aggiungo la label
+                
+                //Label accessibilita' storia
                 if (storyJSON.accessible) {
-                    $('#generico').append('<span id="accessibility">Storia accessibile</span>');
+                    $('#generico').append('<span id="accessibility" class="accessibility-true">Storia accessibile</span>');
+                } else {
+                    $('#generico').append('<span id="accessibility" class="accessibility-false">Storia non accessibile</span>');
                 }
+                
                 //Se la storia è stata pubblicata setto il player, altrimenti blocco l'app
                 if (storyJSON.published) {
                     $('#score').text('Score: 0');
@@ -485,16 +489,7 @@ function isInputValid() {
             else return false;
     }
 }
-/* NON ACCESSIBILE
-//Evento per andare avanti fra le attività con invio
-$(document).on('keypress', function (key) {
-    if (key.which == 13) {
-        if (!isChatOpen && !isTextWindowOpen && !isHelpPaneOpen) {
-            $('#bottone-avanti').click();
-        }
-    }
-});
-*/
+
 //Evento per inviare il messaggio in chat con invio
 $(document).on('keydown', '#new_msg_text', function (event) {
     if (event.which == 13) {
