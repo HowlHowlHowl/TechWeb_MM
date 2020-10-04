@@ -23,16 +23,20 @@
 </head>
 <body>
     <!-- Area principale -->
+    <div class="row m-0 p-1" id="mmbar" style="background-color:#007bff; color: white">
+        <h1>M&amp;M Autore</h1>
+    </div>
+    
     <div class="row m-0 p-2" id="editor">
         <!-- Area gestione storie -->
         <div class="col-2" id="editor-stories">
-            <h4>Pubblicate</h4>
+            <h4>Storie Pubblicate</h4>
             <button class="btn btn-primary mb-1 btn-block" onclick="newStory(true)">Crea nuova storia</button>
             <div class="list-group" id="stories-published"> </div> 
             
             <div class="p-3"></div>
             
-            <h4>Archiviate</h4>
+            <h4>Storie Archiviate</h4>
             <button class="btn btn-primary mb-1 btn-block" onclick="newStory(false)">Crea nuova storia</button>
             <div class="list-group" id="stories-archived"> </div>
         </div>
@@ -40,7 +44,7 @@
         
         <!-- Placeholder per area editor -->
         <div class="col-10" id="editor-placeholder">
-            <p>Seleziona una storia da modificare</p>
+            <p id="editor-placeholder-text">Seleziona una storia da modificare</p>
         </div>
         
         

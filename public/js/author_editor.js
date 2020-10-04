@@ -974,7 +974,7 @@ function updateStylePreview(style)
     let chat_text_color;
     switch (style.chat_theme) {
         case 'dark':
-            chat_color = 'black';
+            chat_color = '#575b5f';
             chat_text_color = 'white';
             break;
         case 'light':
@@ -983,7 +983,7 @@ function updateStylePreview(style)
             break;
         case 'pink':
             chat_color = '#9932CC';
-            chat_text_color = 'black';
+            chat_text_color = 'white';
             break;
     }
     $("#preview-chat-header").css("color", chat_text_color);
