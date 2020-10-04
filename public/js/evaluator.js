@@ -521,14 +521,7 @@ function setUserTab(data) {
     });
     let prevID = players_array[((player_index + players_array.length - 1) % players_array.length)].id;
     let nextID = players_array[((player_index + 1) % players_array.length)].id;
-    $(document).on('click', '#prevUser', function (event) {
-        openUserTab(prevID);
-        event.stopPropagation();
-    });
-    $(document).on('click', '#nextUser', function (event) {
-        openUserTab(nextID);
-        event.stopPropagation();
-    });
+   
     let rename_exist = $('#rename-field').length > 0;
     let textfield_value = (rename_exist ? $('#rename-field').val() : '');
 
@@ -571,6 +564,15 @@ function setUserTab(data) {
         blinkNotify('#help_msg');
     }
     document.getElementById('user-pane').style.display = 'block';
+
+    $('#prevUser').on('click', function (event) {
+        openUserTab(prevID);
+        event.stopPropagation();
+    });
+    $('#nextuser').on('click', function (event) {
+        openUserTab(nextID);
+        event.stopPropagation();
+    });
 
     let val = ((textfield_value != name) && rename_exist ? textfield_value : name);
     $('#rename-field').val('');
