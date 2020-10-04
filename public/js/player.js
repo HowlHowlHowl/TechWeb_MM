@@ -548,7 +548,7 @@ function setChatView(data) {
              chatlog.text + '</p><time>Tu - ' + chatlog.hour + ':' + chatlog.mins + '</time></div></div></div>');
         } else {
             $('#chat-msgs').append('<div class="row msg_container base_receive"> <div class="col-md-10 col-xs-10"><div class="messages msg_receive"><p>' +
-             chatlog.text + '</p> <time>' + (data.username ? data.username : ('Player ' + data.id)) + ' - ' + chatlog.hour + ':' + chatlog.mins + '</time></div></div></div>');
+             chatlog.text + '</p> <time> Valutatore - ' + chatlog.hour + ':' + chatlog.mins + '</time></div></div></div>');
         }
     });
 }

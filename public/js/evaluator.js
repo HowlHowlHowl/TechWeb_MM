@@ -48,7 +48,7 @@ setInterval(function () {
 //User Tab update every 10 seconds
 setInterval(function () {
     if (currentUserTabID) {
-        openUserTab(currentUserTabID);
+        openUserTab(currentUserTabID, false);
     }
 }, 10000);
 //Correction pane and Help pane update (if no input is given), every 15 seconds 
@@ -476,20 +476,20 @@ function setDownloadsWindow() {
 //Event to open user tab of selected player
 $(document).on('click', '.player-list-el', function (event) {
     let id = event.currentTarget.id.replace('player', '');
-    openUserTab(id);
+    openUserTab(id, true);
 });
 //Event to open user pane from correction pane
 $(document).on('click', '.user-info-tab', function (event) {
     let id = event.currentTarget.id.replace('user-info-tab-player', '');
-    openUserTab(id);
+    openUserTab(id, true);
 });
 //Request data for user tab
-function openUserTab(id) {
+function openUserTab(id, refresh) {
     currentUserTabID = id;
     if (downloadsOpen) {
         closeDownloads();
     }
-    setUserTab(getPlayerByID(currentUserTabID));
+    setUserTab(getPlayerByID(currentUserTabID), refresh);
 }
 //Chiude la tab con le info utente
 function closeUserTab() {
@@ -497,7 +497,7 @@ function closeUserTab() {
     currentUserTabID = null;
 }
 //Apre la tab con le info utente
-function setUserTab(data) {
+function setUserTab(data, refresh) {
     let name = (data.username ? data.username : 'Player ' + data.id);
     let player_index = players_array.indexOf(data);
 
@@ -521,12 +521,11 @@ function setUserTab(data) {
     });
     let prevID = players_array[((player_index + players_array.length - 1) % players_array.length)].id;
     let nextID = players_array[((player_index + 1) % players_array.length)].id;
-   
-    let rename_exist = $('#rename-field').length > 0;
-    let textfield_value = (rename_exist ? $('#rename-field').val() : '');
+
+    let text_field_val = $('#rename-field').val() || name;
 
     $('#user-space').empty();
-    $('#user-space').append('<a onclick="closeUserTab()"><span id="close-tab" class="glyphicon glyphicon-remove icon-close"></span></a>'
+    $('#user-space').append('<a id="closeUser" ><span id="close-tab" class="glyphicon glyphicon-remove icon-close"></span></a>'
         + '<a id="prevUser" class="arrows_tab" data-toggle="tooltip" data-placement="top" title="Scheda utente precedente"><span class="glyphicon glyphicon-arrow-left" id="prev_tab"></span></a>'
         + '<a id="nextUser" class="arrows_tab" data-toggle="tooltip" data-placement="top" title="Scheda utente successivo"><span class="glyphicon glyphicon-arrow-right" id="next_tab"></span></a>'
         + '<div id = "user-space-input" class="input-group input-group-lg inline-info">'
@@ -551,12 +550,12 @@ function setUserTab(data) {
         + '<button type="button" id="chat-button" class="user-space-button btn btn-primary btn-lg">Chat</button>'
         + '<button type="button" id="delete-player" name="' + data.id + '" class="user-space-button btn btn-primary btn-lg">Elimina</button>'
         + '</div>');
-    if (players_array[player_index].too_long ) {
+    if (players_array[player_index].too_long) {
         $('#time-count').append('<span class="glyphicon glyphicon-time" id="timeNotification">');
         blinkNotify('#timeNotification');
     }
     if (unread > 0) {
-        $('#user-chat-div').append('<label for="chat-button"><span class="badge badge-secondary" id="chatNotification">' + unread  + (unread > 1 ?  ' Nuovi' : ' Nuovo') + ' Messaggi</span></label>');
+        $('#user-chat-div').append('<label for="chat-button"><span class="badge badge-secondary" id="chatNotification">' + unread + (unread > 1 ? ' Nuovi' : ' Nuovo') + ' Messaggi</span></label>');
         blinkNotify('#chatNotification');
     }
     if (help_unread > 0) {
@@ -566,15 +565,23 @@ function setUserTab(data) {
     document.getElementById('user-pane').style.display = 'block';
 
     $('#prevUser').on('click', function (event) {
-        openUserTab(prevID);
+        openUserTab(prevID, true);
         event.stopPropagation();
     });
-    $('#nextuser').on('click', function (event) {
-        openUserTab(nextID);
+    $('#nextUser').on('click', function (event) {
+        openUserTab(nextID, true);
         event.stopPropagation();
     });
-
-    let val = ((textfield_value != name) && rename_exist ? textfield_value : name);
+    $('#closeUser').on('click', function (event) {
+        closeUserTab();
+        event.stopPropagation();
+    });
+    let val;
+    if (refresh) {
+        val = name; 
+    } else {
+        val = text_field_val;
+    }
     $('#rename-field').val('');
     $('#rename-field').val(val);
     $('#rename-field').focus();
