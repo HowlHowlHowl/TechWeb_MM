@@ -54,7 +54,6 @@ video {
     font-size: 2.5vh;
     color: white;
     max-width: max-content;
-    background-color: red;
     border-radius: 5px;
     line-height: 1.5;
     text-align:center;
@@ -62,6 +61,15 @@ video {
     display:inline-block;
     margin-bottom:1.5vh;
 }
+
+.accessibility-true {
+    background-color: green;
+}
+
+.accessibility-false {
+    background-color: red;
+} 
+
 #nome-attivita {
     text-align: center;
     font-size: 2.5vh;
